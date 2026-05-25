@@ -1,0 +1,8 @@
+/target
+/result
+/dist
+/logs
+/*.tar.xz
+/.direnv
+/.envrc
+/parakeet-tdt-0.6b-v3-onnx

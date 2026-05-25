@@ -1,0 +1,28 @@
+# Transcrust configuration
+# Default location: ~/.config/transcrust/config.toml
+
+[hotkey]
+key = "Space"
+modifiers = ["LeftAlt"]
+# device = "/dev/input/event3"
+
+[audio]
+# device = "default"
+
+[model]
+# Optional override for the int8 Parakeet model directory.
+# Preferred default location:
+#   ~/.local/share/transcrust/models/parakeet-tdt-0.6b-v3-int8
+# Required files in that directory:
+#   encoder-model.int8.onnx
+#   decoder_joint-model.int8.onnx
+#   vocab.txt
+# path = "/home/user/.local/share/transcrust/models/parakeet-tdt-0.6b-v3-int8"
+
+[output]
+wtype = true
+clipboard = true
+
+[observe]
+desktop_notifications = true
+sample_chars = 120

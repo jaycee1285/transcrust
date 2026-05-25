@@ -1,0 +1,31 @@
+project: transcrust
+status: active
+summary: >
+  Parakeet-only dictation app stabilized around a vendored TDT-only parakeet-rs path,
+  matched to ort 2.0.0-rc.10 to avoid the rc12/runtime mismatch that previously wedged
+  session creation before model parse. The Parakeet worker/model now load on demand,
+  keeping the daemon under 40 MB RSS until first transcription instead of paying the
+  prior steady-state model cost at startup.
+current_focus:
+  - model-load UX signaling during first-use warmup
+  - home-manager / packaging verification after release wiring
+  - decide whether to keep vendored parakeet-rs or replace it with a smaller loader
+runtime_lock:
+  ort: 2.0.0-rc.10
+  parakeet_rs: vendored local path trimmed to TDT stack
+  model_layout: int8 only, resolved from ~/.local/share/transcrust/models/parakeet-tdt-0.6b-v3-int8
+human_smoke:
+  date: 2026-03-29
+  command:
+    - nix develop -c cargo run --offline -- --doctor
+    - nix develop -c cargo run --offline -- --smoke
+  verify:
+    - doctor resolved ~/.local/share/transcrust/models/parakeet-tdt-0.6b-v3-int8
+    - daemon stayed under 40 MB RSS before first transcription
+    - tray menu showed a single Exit entry
+    - lazy-load behavior removed the old eager 1.3 GB-ish startup footprint
+known_gaps:
+  - pure Nix build/install behavior still needs end-to-end verification in the config repo
+  - first-use model warmup is now visible as latency and should get explicit tray/icon UX
+  - startup logs can still be tightened for steady-state use
+manual_blockers: []
