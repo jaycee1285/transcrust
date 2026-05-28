@@ -8,7 +8,7 @@
   #   cp flake.nix.bak flake.nix && rm flake.nix.bak
 
   inputs = {
-    config.url = "path:/home/john/repos/config-canary";
+    config.url = "github:jaycee1285/config";
     nixpkgs.follows = "config/nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
   };
