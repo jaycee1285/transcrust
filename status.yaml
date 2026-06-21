@@ -1,29 +1,64 @@
 project: transcrust
 status: active
 summary: >
-  Parakeet-only dictation app stabilized around a vendored TDT-only parakeet-rs path,
+  Parakeet-only dictation app built on the crates.io `parakeet-rs` 0.3.5 TDT path,
   matched to ort 2.0.0-rc.10 to avoid the rc12/runtime mismatch that previously wedged
-  session creation before model parse. The Parakeet worker/model now load on demand,
-  keeping the daemon under 40 MB RSS until first transcription instead of paying the
-  prior steady-state model cost at startup.
+  session creation before model parse. Functionality is added on top of the crate, not
+  by forking it. The Parakeet worker/model now load on demand, keeping the daemon under
+  40 MB RSS until first transcription instead of paying the prior steady-state model
+  cost at startup.
 current_focus:
   - model-load UX signaling during first-use warmup
   - home-manager / packaging verification after release wiring
-  - decide whether to keep vendored parakeet-rs or replace it with a smaller loader
+postprocessing:
+  # Signed off by John, 2026-06-08. This is what exists.
+  pipeline_order:
+    - course_correction        # "no wait" / "scratch that" mid-sentence rewrites
+    - clean_repetitions        # stutter / duplicated phrase collapse
+    - remove_fillers           # uh, um, you know
+    - spoken_punctuation       # "period" -> ".", "new line" -> "\n"
+    - phonetic_dictionary      # LAST: Beider-Morse rare-vocab correction
+  phonetic_dictionary:
+    crate: rphonetic 3.0.6 (feature "embedded_bm", rules compiled into binary)
+    rules: generic name type, plain language-agnostic encode() — English-only, no language set
+    user_file: ~/.config/transcrust/dictionary.txt  # one term/line, '#' comments; no-op if absent
+    source: ported from murmure leg 3 (see murmure.md)
+    behavior: whole-token phonetic swap; preserves all whitespace/punctuation; min token len 3
+  harper:
+    in_pipeline: false
+    reason: >
+      Harper re-ranks tokens toward general English before the dictionary can claim
+      them (it caused the "tori -> tor i" mangle). Removing it unblocked "tori -> Tauri".
+      Known-good config kept as dead code in postprocess.rs for a possible future
+      purpose-built grammar/punctuation pass. No capitalization/punctuation grammar now.
+  known_limits:
+    - short dictionary entries clobber common words (observed: "Vue" rewrote "with"); keep entries 4+ chars
+    - multi-token / fused targets unreachable by whole-token swap ("sink thing" -/> Syncthing)
+    - spelled-out acronyms do not fuse ("g t k" -/> GTK)
+    - casing left as spoken; words already correct are not re-cased ("parakeet" stays lowercase)
+  future_idea:
+    - small local post-processor (~100 MB) toggled by a separate hotkey for grammar/punct, John's call if/when
 runtime_lock:
   ort: 2.0.0-rc.10
-  parakeet_rs: vendored local path trimmed to TDT stack
-  model_layout: int8 only, resolved from ~/.local/share/transcrust/models/parakeet-tdt-0.6b-v3-int8
+  parakeet_rs: crates.io 0.3.5 (default-features off, "cpu" feature); TDT decode used as-shipped, not vendored
+  model_layout: >
+    int8 preferred, int4 supported; resolved from ~/.local/share/transcrust/models/
+    (parakeet-tdt-0.6b-v3-int8 or -int4). Decoder_joint is int8 in both layouts.
 human_smoke:
-  date: 2026-03-29
+  date: 2026-06-08
+  writeup: Smoke-Human-2026-06-08.md
   command:
-    - nix develop -c cargo run --offline -- --doctor
-    - nix develop -c cargo run --offline -- --smoke
+    - nix develop -c cargo run -- --doctor
+    - nix develop -c cargo run -- --fix "<text>"
+    - nix develop -c cargo run
   verify:
-    - doctor resolved ~/.local/share/transcrust/models/parakeet-tdt-0.6b-v3-int8
-    - daemon stayed under 40 MB RSS before first transcription
-    - tray menu showed a single Exit entry
-    - lazy-load behavior removed the old eager 1.3 GB-ish startup footprint
+    - doctor reported the dictionary path and entry count
+    - "kubernetis -> Kubernetes, weyland -> Wayland, svelt -> Svelte, tori -> Tauri"
+    - natural speech not over-corrected ("Atari" left as spoken — the desired conservative behavior)
+    - 33 unit tests green under nix
+  prior:
+    date: 2026-03-29
+    note: int8 model resolution, <40 MB idle RSS, single Exit tray entry, lazy load
 known_gaps:
   - pure Nix build/install behavior still needs end-to-end verification in the config repo
   - first-use model warmup is now visible as latency and should get explicit tray/icon UX

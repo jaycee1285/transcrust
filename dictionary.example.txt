@@ -1,0 +1,59 @@
+# Transcrust phonetic dictionary
+# Default location: ~/.config/transcrust/dictionary.txt
+#
+# One term per line. Blank lines and lines starting with '#' are ignored.
+# Edits take effect on the next run. If this file is absent, the pass is a no-op.
+#
+# ---------------------------------------------------------------------------
+# WHAT IT DOES
+# ---------------------------------------------------------------------------
+# Each transcribed word is phonetically encoded (Beider-Morse) and compared to
+# the entries below. A word whose phonetic code collides with an entry is
+# replaced by that entry. This fixes jargon/names/identifiers the local model
+# was never trained on and mis-hears into something phonetically adjacent.
+#
+# This is a SMOOTHING layer, not a guarantee. It cannot beat information theory.
+# Some things it will fix, some it structurally cannot. Curate accordingly.
+#
+# ---------------------------------------------------------------------------
+# WHAT WORKS WELL  (put these here)
+# ---------------------------------------------------------------------------
+#   * Long, distinctive SINGLE tokens.
+#       "kubernetis"  -> Kubernetes      (near-zero competing decode)
+#       "weyland"     -> Wayland
+#       "svelt"       -> Svelte
+#       "tori"        -> Tauri           (works now that Harper is out of the loop)
+#
+# ---------------------------------------------------------------------------
+# WHAT IT STRUCTURALLY CANNOT DO  (don't expect these)
+# ---------------------------------------------------------------------------
+#   * Merge multiple spoken tokens into one fused name. The swap is whole-token.
+#       "sink thing"  stays "sink thing"   (won't become Syncthing)
+#       "way land"    stays "way land"     (won't become Wayland)
+#   * Fuse spelled-out acronyms.
+#       "g t k" / "gee tee kay"  stay as-is (won't become GTK)
+#   * Capitalize or punctuate. Casing is left exactly as the model emitted it.
+#     Harper (the grammar checker) is intentionally NOT in the pipeline — it was
+#     re-ranking tokens toward general English before the dictionary could claim
+#     them (it was the cause of the old "tori -> tor i" mangle).
+#   * Fix a word that is ALREADY a real word. An entry that equals the spoken
+#     word (case-insensitively) is left untouched — e.g. "parakeet" stays
+#     lowercase, it is not promoted to "Parakeet".
+#
+# ---------------------------------------------------------------------------
+# KNOWN FOOT-GUN: short entries clobber common words
+# ---------------------------------------------------------------------------
+# Short entries have promiscuous phonetic codes and will eat ordinary vocabulary.
+# Observed: an entry "Vue" rewrote the common word "with" -> "Vue".
+# Rule of thumb: keep entries 4+ characters and distinctive. If a term is short
+# or common-sounding, leave it out — the cost (corrupting normal dictation) is
+# worse than the miss.
+#
+# ---------------------------------------------------------------------------
+# Starter entries (long, distinctive — safe):
+Kubernetes
+Wayland
+Svelte
+Tauri
+Syncthing
+transcrust

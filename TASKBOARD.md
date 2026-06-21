@@ -10,12 +10,15 @@
 - Human smoke confirmed the repo-root app, local-share int8 model resolution, tray icons, and live quit flow.
 - Move Parakeet worker/model load to first use so idle daemon startup stays under `40 MB` RSS.
 - Simplify the tray menu to a single `Exit` entry.
+- Port murmure's phonetic vocabulary corrector (leg 3): `rphonetic` + embedded Beider-Morse rules, English-only, as the last post-processing step. Wired, tested, signed off 2026-06-08.
+- Pull Harper out of the post-processing loop (it re-ranked tokens toward general English before the dictionary could claim them). Added `--fix <text>` debug surface and a `--doctor` dictionary report.
 
 ## Next
+- Decide on a minimum-entry-length guard for the dictionary, or keep it raw and curate the dictionary file by hand (current choice: raw + documented in `dictionary.example.txt`).
+- If a grammar/punctuation pass is wanted back, build a small purpose-built deterministic one (or the future small-LM toggle) rather than re-adding Harper.
 - Add explicit first-load tray/icon feedback so users can see model warmup instead of only paying hidden latency on first transcription.
 - Tighten startup/log ergonomics so steady-state smoke logs stay high-signal.
 - Verify the `transcrust` `tauri.nix` entry in the config repo against the published release asset.
-- Decide whether to keep the vendored `parakeet-rs` fork or replace it with a smaller in-repo loader.
 
 ## Risks
 - Pure Nix builds still need scrutiny because `ort` binary provisioning is touchy across environments.

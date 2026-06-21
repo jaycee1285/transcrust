@@ -1,6 +1,7 @@
 mod audio;
 mod config;
 mod control;
+mod dictionary;
 mod hotkey;
 mod inject;
 mod model;
@@ -94,6 +95,15 @@ fn main() {
             run_doctor();
             return;
         }
+        Some("--fix") => {
+            let input = args[2..].join(" ");
+            if input.is_empty() {
+                eprintln!("Usage: transcrust --fix <text>");
+                std::process::exit(1);
+            }
+            println!("{}", postprocess::fix_transcription(&input));
+            return;
+        }
         Some("--list-devices") => {
             hotkey::list_devices();
             println!();
@@ -119,6 +129,7 @@ fn main() {
             println!("  --smoke                     Run with terminal phase logging enabled");
             println!("  --quit                      Ask a running transcrust instance to exit");
             println!("  --doctor                    Print phase-relevant environment info");
+            println!("  --fix <TEXT>                Run the post-processing pipeline on TEXT and print it");
             println!("  --download-model [MODEL]    Download a Parakeet model");
             println!();
             println!("Available models for --download-model:");
@@ -373,6 +384,19 @@ fn run_doctor() {
     println!("Required int8 files:");
     for file in model::required_int8_files() {
         println!("  {file}");
+    }
+    let dict_path = dictionary::dictionary_path();
+    let dict_entries = std::fs::read_to_string(&dict_path)
+        .map(|c| {
+            c.lines()
+                .map(str::trim)
+                .filter(|l| !l.is_empty() && !l.starts_with('#'))
+                .count()
+        })
+        .ok();
+    match dict_entries {
+        Some(n) => println!("Phonetic dictionary: {} ({n} entries)", dict_path.display()),
+        None => println!("Phonetic dictionary: {} (absent — pass-through)", dict_path.display()),
     }
     println!("Quit pid file: {}", control::pid_file_path().display());
     for cmd in ["wtype", "dotool", "notify-send"] {

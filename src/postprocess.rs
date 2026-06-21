@@ -257,7 +257,15 @@ fn replace_spoken_punctuation(text: &str) -> String {
 /// Full post-processing pipeline for transcription output.
 ///
 /// Order: course correction → repetition cleaning → filler removal →
-/// spoken punctuation → harper grammar/style fixes.
+/// spoken punctuation → phonetic dictionary.
+///
+/// **Harper is intentionally out of the loop.** It is a probabilistic grammar
+/// black box that re-ranks tokens toward general English *before* the dictionary
+/// can claim them — directly working against this app's whole purpose (exact
+/// non-standard vocabulary). murmure, the pipeline this is ported from, never
+/// ran a grammar pass at this stage either. If a deterministic capitalization /
+/// punctuation pass turns out to be wanted, it should be a small purpose-built
+/// thing, not a 20 MB linter. [`apply_harper`] is kept for reference only.
 pub fn fix_transcription(text: &str) -> String {
     if text.is_empty() {
         return String::new();
@@ -267,7 +275,16 @@ pub fn fix_transcription(text: &str) -> String {
     let text = clean_repetitions(&text);
     let text = remove_fillers(&text);
     let text = replace_spoken_punctuation(&text);
+    crate::dictionary::correct(&text)
+}
 
+/// Apply harper's curated grammar/style fixes, minus the rules that fight voice
+/// transcription. Auto-applies the first suggestion of each remaining lint.
+///
+/// Not wired into [`fix_transcription`] — see that function's note. Kept so the
+/// known-good harper config isn't lost if we decide we want a grammar loop back.
+#[allow(dead_code)]
+fn apply_harper(text: &str) -> String {
     let dict = FstDictionary::curated();
     let mut linter = LintGroup::new_curated(dict, Dialect::American);
 
@@ -279,8 +296,11 @@ pub fn fix_transcription(text: &str) -> String {
     linter.config.set_rule_enabled("BoringWords", false);
     linter.config.set_rule_enabled("DiscourseMarkers", false);
     linter.config.set_rule_enabled("UnclosedQuotes", false);
+    // SpellCheck would "correct" injected jargon/proper nouns toward its curated
+    // dictionary, clobbering the phonetic dictionary pass that runs after this.
+    linter.config.set_rule_enabled("SpellCheck", false);
 
-    let doc = Document::new_plain_english_curated(&text);
+    let doc = Document::new_plain_english_curated(text);
     let mut lints = linter.lint(&doc);
     remove_overlaps(&mut lints);
 
@@ -288,7 +308,7 @@ pub fn fix_transcription(text: &str) -> String {
     lints.retain(|l| !l.suggestions.is_empty());
 
     if lints.is_empty() {
-        return text;
+        return text.to_string();
     }
 
     // Sort by span start descending so we can apply fixes back-to-front
@@ -475,21 +495,20 @@ mod tests {
     // -- Full pipeline --
 
     #[test]
-    fn capitalizes_sentence() {
+    fn casing_left_as_spoken() {
+        // Harper is out of the loop, so we no longer capitalize sentences.
+        // Casing is whatever the model emitted — that's the deliberate tradeoff
+        // for not letting a grammar black box touch the text.
         let result = fix_transcription("there is no way she is not guilty");
-        assert!(
-            result.starts_with('T'),
-            "Expected capitalized first letter, got: {result}"
-        );
+        assert_eq!(result, "there is no way she is not guilty");
     }
 
     #[test]
-    fn fixes_personal_pronoun() {
+    fn lone_i_not_capitalized() {
+        // Without harper, "i" stays "i". A purpose-built capitalization pass
+        // could fix this later if wanted; we don't fake it here.
         let result = fix_transcription("i went to the store");
-        assert!(
-            result.contains('I'),
-            "Expected capitalized I, got: {result}"
-        );
+        assert_eq!(result, "i went to the store");
     }
 
     #[test]
@@ -506,9 +525,9 @@ mod tests {
 
     #[test]
     fn full_pipeline() {
+        // Spoken punctuation still resolves; casing is left untouched.
         let result = fix_transcription("i think this is really great period and i hope it works");
         assert!(result.contains('.'), "Expected period, got: {result}");
-        assert!(result.contains('I'), "Expected capitalized I, got: {result}");
     }
 
     #[test]

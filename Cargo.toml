@@ -20,6 +20,7 @@ parakeet-rs = { version = "0.3.5", default-features = false, features = ["cpu"] 
 ort = { version = "2.0.0-rc.10", default-features = false, features = ["std", "ndarray", "download-binaries", "tls-native"] }
 regex = "1"
 fancy-regex = "0.14"
+rphonetic = { version = "3.0.6", default-features = false, features = ["embedded_bm"] }
 
 [profile.release]
 lto = "fat"
