@@ -130,6 +130,43 @@ pub fn resample_to_16k(input: &[f32], from_rate: u32) -> Vec<f32> {
     }
 }
 
+/// Decode a WAV to mono `f32` at its own sample rate.
+///
+/// Only the offline paths use this — `--bench <WAV>` and
+/// `--parakeet-direct <DIR> <WAV>`. The rate comes back untouched so each engine resamples it
+/// with the same function the live capture path uses, which is the whole point
+/// of benchmarking through a file: everything downstream of here is identical
+/// to a real dictation.
+pub fn read_wav_mono(path: &std::path::Path) -> Result<(Vec<f32>, u32), String> {
+    let mut reader = hound::WavReader::open(path)
+        .map_err(|e| format!("failed to open {}: {e}", path.display()))?;
+    let spec = reader.spec();
+    let samples: Vec<f32> = match spec.sample_format {
+        hound::SampleFormat::Float => reader
+            .samples::<f32>()
+            .collect::<Result<Vec<_>, _>>()
+            .map_err(|e| format!("failed to read {}: {e}", path.display()))?,
+        hound::SampleFormat::Int => {
+            let scale = 1.0 / (1i64 << (spec.bits_per_sample - 1)) as f32;
+            reader
+                .samples::<i32>()
+                .map(|sample| sample.map(|value| value as f32 * scale))
+                .collect::<Result<Vec<_>, _>>()
+                .map_err(|e| format!("failed to read {}: {e}", path.display()))?
+        }
+    };
+    let mono: Vec<f32> = if spec.channels > 1 {
+        let channels = spec.channels as usize;
+        samples
+            .chunks(channels)
+            .map(|frame| frame.iter().sum::<f32>() / channels as f32)
+            .collect()
+    } else {
+        samples
+    };
+    Ok((mono, spec.sample_rate))
+}
+
 fn resample(input: &[f32], from_rate: u32, to_rate: u32) -> Vec<f32> {
     let ratio = to_rate as f64 / from_rate as f64;
     let output_len = (input.len() as f64 * ratio) as usize;
