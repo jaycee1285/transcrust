@@ -14,6 +14,12 @@
 - Pull Harper out of the post-processing loop (it re-ranked tokens toward general English before the dictionary could claim them). Added `--fix <text>` debug surface and a `--doctor` dictionary report.
 
 ## Next
+- **Granite as a command channel** — see `TASKBOARD-next.md`. The bet:
+  Parakeet needs none of murmure's correction machinery for *dictation* because
+  it emits grownup English natively; that machinery is worth pointing at
+  commands, where the vocabulary is closed and output shape is irrelevant. It
+  runs on Parakeet itself — the logits were always there, `parakeet-rs` just
+  hid them. See `Parakeet-v3.md` for why this model fits on-device control.
 - Decide on a minimum-entry-length guard for the dictionary, or keep it raw and curate the dictionary file by hand (current choice: raw + documented in `dictionary.example.txt`).
 - If a grammar/punctuation pass is wanted back, build a small purpose-built deterministic one (or the future small-LM toggle) rather than re-adding Harper.
 - Add explicit first-load tray/icon feedback so users can see model warmup instead of only paying hidden latency on first transcription.
