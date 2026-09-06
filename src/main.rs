@@ -1,15 +1,21 @@
 mod audio;
 mod config;
 mod control;
+mod corpus;
 mod dictionary;
 mod hotkey;
+mod granite;
 mod inject;
+mod mode;
 mod model;
 mod observe;
 mod parakeet;
+mod parakeet_ort;
 mod postprocess;
 mod state;
 mod tray;
+mod trayicon;
+mod transcription;
 
 use std::sync::{Arc, OnceLock};
 use tokio::runtime::Runtime;
@@ -77,6 +83,109 @@ fn main() {
             run_probe_suite(&paths);
             return;
         }
+        Some("--granite-smoke") => {
+            let Some(path) = args.get(2) else {
+                eprintln!("Usage: transcrust --granite-smoke /path/to/granite-model-dir");
+                std::process::exit(1);
+            };
+            init_ort_default();
+            match model::granite_onnx_path(std::path::Path::new(path)) {
+                Some(graph) => println!("Granite model: {}", graph.display()),
+                None => {
+                    eprintln!("No Granite ONNX graph in {path}");
+                    std::process::exit(1);
+                }
+            }
+            match granite::run_model_smoke(std::path::Path::new(path)) {
+                Ok(text) => {
+                    // Run the shared post-transcription pipeline here too, so this
+                    // path shows the same text the live hotkey path would inject.
+                    println!("Granite smoke passed; synthetic-audio transcript: {text:?}");
+                    println!("  post-processed: {:?}", postprocess::fix_transcription(&text));
+                }
+                Err(error) => {
+                    eprintln!("Granite smoke failed: {error}");
+                    std::process::exit(1);
+                }
+            }
+            return;
+        }
+        Some("--record") => {
+            // Capture through the same cpal device the hotkey path uses, so a
+            // clip banked here is byte-comparable with one banked live.
+            let _ = runtime();
+            runtime().block_on(run_record());
+            return;
+        }
+        Some("--bench") => {
+            let paths: Vec<std::path::PathBuf> =
+                args.iter().skip(2).map(std::path::PathBuf::from).collect();
+            if paths.is_empty() {
+                eprintln!("Usage: transcrust --bench audio.wav [audio2.wav ...]");
+                std::process::exit(1);
+            }
+            init_ort_default();
+            let _ = runtime();
+            runtime().block_on(run_bench(&paths));
+            return;
+        }
+        Some("--parakeet-direct") => {
+            // Drives encoder + joint through `ort` instead of `parakeet-rs`,
+            // and prints the per-token evidence the crate discards.
+            let Some(path) = args.get(2) else {
+                eprintln!("Usage: transcrust --parakeet-direct /path/to/parakeet-model-dir [audio.wav]");
+                std::process::exit(1);
+            };
+            let wav = args.get(3).map(std::path::Path::new);
+            init_ort_default();
+            let dir = std::path::Path::new(path);
+            match model::parakeet_direct_graphs(dir) {
+                Some(graphs) => {
+                    println!("preprocessor: {}", graphs.preprocessor.display());
+                    println!("encoder:      {}", graphs.encoder.display());
+                    println!("joint:        {}", graphs.decoder_joint.display());
+                }
+                None => {
+                    eprintln!("No direct-drive graph set in {path}.");
+                    eprintln!("It needs nemo128.onnx alongside the encoder and decoder_joint:");
+                    eprintln!("  curl -L -o {path}/nemo128.onnx \\");
+                    eprintln!("    https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx/resolve/main/nemo128.onnx");
+                    std::process::exit(1);
+                }
+            }
+            match parakeet_ort::run_model_smoke(dir, wav) {
+                Ok(decoded) => {
+                    let mut model = match parakeet_ort::LoadedParakeet::load(dir) {
+                        Ok(model) => model,
+                        Err(error) => {
+                            eprintln!("{error}");
+                            std::process::exit(1);
+                        }
+                    };
+                    println!("text: {:?}", decoded.text);
+                    println!("post-processed: {:?}", postprocess::fix_transcription(&decoded.text));
+                    println!("{} tokens", decoded.tokens.len());
+                    if let Some(first) = decoded.tokens.first() {
+                        let last = decoded.tokens.last().unwrap_or(first);
+                        println!(
+                            "  speech spans {:.2}s–{:.2}s",
+                            parakeet_ort::frame_to_seconds(first.frame),
+                            parakeet_ort::frame_to_seconds(last.frame)
+                        );
+                    }
+                    println!("  word confidences (min over sub-tokens):");
+                    for (word, confidence) in decoded.word_confidences(model.vocabulary()) {
+                        println!("    {confidence:>6.3}  {word}");
+                    }
+                    let _ = &mut model;
+                }
+                Err(error) => {
+                    eprintln!("Parakeet direct drive failed: {error}");
+                    std::process::exit(1);
+                }
+            }
+            return;
+        }
         Some("--download-model") => {
             let model_name = args.get(2).map(|s| s.as_str());
             let _ = runtime();
@@ -104,6 +213,19 @@ fn main() {
             println!("{}", postprocess::fix_transcription(&input));
             return;
         }
+        Some("--fix-long") => {
+            // What `Granite — Long` would inject: the mode profile, then the
+            // shared pipeline, in that order.
+            let input = args[2..].join(" ");
+            if input.is_empty() {
+                eprintln!("Usage: transcrust --fix-long <text>");
+                std::process::exit(1);
+            }
+            let shaped = mode::apply_profile(mode::Profile::Long, &input);
+            println!("profile:  {shaped}");
+            println!("injected: {}", postprocess::fix_transcription(&shaped));
+            return;
+        }
         Some("--list-devices") => {
             hotkey::list_devices();
             println!();
@@ -119,17 +241,22 @@ fn main() {
             return;
         }
         Some("--help" | "-h") => {
-            println!("transcrust — Observable Parakeet-only push-to-talk voice input");
+            println!("transcrust — Observable push-to-talk voice input");
             println!();
             println!("Usage: transcrust [OPTION]");
             println!();
             println!("Options:");
             println!("  --probe-onnx <PATH>         Probe a single ONNX file across builder variants");
             println!("  --probe-suite <PATH...>     Probe multiple ONNX files across builder variants");
+            println!("  --granite-smoke <DIR>       Run Granite frontend, ONNX, CTC, and tokenizer");
+            println!("  --parakeet-direct <DIR> [WAV]  Drive Parakeet's graphs directly; print confidences");
             println!("  --smoke                     Run with terminal phase logging enabled");
             println!("  --quit                      Ask a running transcrust instance to exit");
             println!("  --doctor                    Print phase-relevant environment info");
             println!("  --fix <TEXT>                Run the post-processing pipeline on TEXT and print it");
+            println!("  --fix-long <TEXT>           Same, but through the \"— Long\" mode profile first");
+            println!("  --bench <WAV...>            Time every installed engine on the same recordings");
+            println!("  --record                    Record a clip to the corpus dir; Enter to stop");
             println!("  --download-model [MODEL]    Download a Parakeet model");
             println!();
             println!("Available models for --download-model:");
@@ -207,17 +334,26 @@ async fn run(config: config::Config, run_mode: RunMode) {
         }
     };
 
-    let model_path = match model::find_model_path(config.model.path.as_deref()) {
-        Some(path) => path,
-        None => {
-            observer.error("startup", "No Parakeet model found");
-            for path in model::explain_search_paths() {
-                observer.phase("startup", &format!("searched: {path}"));
-            }
-            return;
+    // Modes, not models: `Granite — Long` is the same directory with a
+    // different profile, so the switchable unit carries both.
+    let installed = mode::discover_modes(config.model.path.as_deref());
+    if installed.is_empty() {
+        observer.error("startup", "No supported ASR model found");
+        for path in model::explain_search_paths() {
+            observer.phase("startup", &format!("searched: {path}"));
         }
-    };
+        return;
+    }
+    for found in &installed {
+        observer.phase(
+            "startup",
+            &format!("found {}: {}", found.label, found.model.path.display()),
+        );
+    }
 
+    // Head of the list is the default; the tray can move to any other entry.
+    let mut active_engine = 0usize;
+    let model_path = installed[active_engine].model.path.clone();
     observer.phase("startup", &format!("model: {}", model_path.display()));
     for result in model::probe_model_files(&model_path) {
         observer.phase("startup.probe", &result);
@@ -232,22 +368,23 @@ async fn run(config: config::Config, run_mode: RunMode) {
     };
 
     let state = Arc::new(state::StateMachine::new());
+    let (engine_request_tx, mut engine_request_rx) = tokio::sync::mpsc::unbounded_channel();
+    let (active_engine_tx, active_engine_rx) = tokio::sync::watch::channel(active_engine);
     spawn(tray::run_tray(
         state.rx.clone(),
         observer.log_path().display().to_string(),
+        installed.iter().map(|model| model.label.clone()).collect(),
+        active_engine_rx,
+        engine_request_tx,
     ));
     let mut hotkey_rx = hotkey::listen(&config.hotkey).await;
-    let transcription =
-        match parakeet::ParakeetService::new(
-            model_path.to_string_lossy().into_owned(),
-            config.observe.idle_timeout_secs,
-        ) {
-            Ok(service) => service,
-            Err(e) => {
-                observer.error("startup", &e);
-                return;
-            }
-        };
+    let mut transcription = match build_service(&installed[active_engine].model, &config) {
+        Ok(service) => service,
+        Err(e) => {
+            observer.error("startup", &e);
+            return;
+        }
+    };
     let mut active_audio_rx: Option<std::sync::mpsc::Receiver<Vec<f32>>> = None;
 
     loop {
@@ -260,6 +397,41 @@ async fn run(config: config::Config, run_mode: RunMode) {
                             observer.notify("Transcrust", "Recording started");
                             state.transition(state::AppState::Recording);
                             active_audio_rx = Some(audio.start_recording());
+                        }
+                    }
+                    hotkey::HotkeyEvent::CycleMode => {
+                        // Same contract as the tray radio: only when idle, and
+                        // the watch channel is what tells the tray where we
+                        // actually landed.
+                        if installed.len() < 2 {
+                            observer.phase("engine.switch", "only one mode installed");
+                        } else if state.current() != state::AppState::Idle {
+                            observer.phase("engine.switch", "ignored: not idle");
+                            observer.notify("Transcrust", "Busy — finish the current dictation first");
+                        } else {
+                            let next = (active_engine + 1) % installed.len();
+                            let target = &installed[next];
+                            // Two modes over one model share a service; no
+                            // reload, no 527 MB round trip.
+                            let same_model = installed[active_engine].model.path == target.model.path;
+                            let outcome = if same_model {
+                                Ok(transcription.clone())
+                            } else {
+                                build_service(&target.model, &config)
+                            };
+                            match outcome {
+                                Ok(service) => {
+                                    transcription = service;
+                                    active_engine = next;
+                                    let _ = active_engine_tx.send(active_engine);
+                                    observer.phase("engine.switch", &format!("active: {}", target.label));
+                                    observer.notify("Transcrust", &format!("Mode: {}", target.label));
+                                }
+                                Err(e) => {
+                                    observer.error("engine.switch", &e);
+                                    let _ = active_engine_tx.send(active_engine);
+                                }
+                            }
                         }
                     }
                     hotkey::HotkeyEvent::Released => {
@@ -279,6 +451,10 @@ async fn run(config: config::Config, run_mode: RunMode) {
                             let sample_rate = audio.sample_rate();
                             let state = state.clone();
                             let output_cfg = config.output.clone();
+                            let profile = installed[active_engine].profile;
+                            let mode_label = installed[active_engine].label.clone();
+                            let engine_name = installed[active_engine].model.kind.display_name().to_string();
+                            let corpus_enabled = config.observe.corpus;
                             let transcription = transcription.clone();
                             let observer = observer.clone();
 
@@ -289,10 +465,58 @@ async fn run(config: config::Config, run_mode: RunMode) {
                                     audio_rx,
                                     sample_rate,
                                     output_cfg,
+                                    profile,
+                                    mode_label,
+                                    engine_name,
+                                    corpus_enabled,
                                     state,
                                 ).await;
                             });
                         }
+                    }
+                }
+            }
+            Some(requested) = engine_request_rx.recv() => {
+                // Refuse mid-utterance: swapping the service under a running job
+                // would strand the audio receiver the worker is draining.
+                // The tray moves its radio optimistically, so every path that
+                // declines the switch has to put it back or the menu will claim
+                // an engine that was never loaded.
+                if state.current() != state::AppState::Idle {
+                    observer.phase("engine.switch", "ignored: not idle");
+                    observer.notify("Transcrust", "Busy — finish the current dictation first");
+                    let _ = active_engine_tx.send(active_engine);
+                    continue;
+                }
+                let Some(target) = installed.get(requested) else {
+                    observer.error("engine.switch", &format!("no model at index {requested}"));
+                    let _ = active_engine_tx.send(active_engine);
+                    continue;
+                };
+                if requested == active_engine {
+                    continue;
+                }
+                observer.phase("engine.switch", &format!("switching to {}", target.label));
+                let same_model = installed[active_engine].model.path == target.model.path;
+                let outcome = if same_model {
+                    Ok(transcription.clone())
+                } else {
+                    build_service(&target.model, &config)
+                };
+                match outcome {
+                    Ok(service) => {
+                        // The outgoing worker holds its model until its own idle
+                        // timeout fires; nothing here forces it out early.
+                        transcription = service;
+                        active_engine = requested;
+                        let _ = active_engine_tx.send(active_engine);
+                        observer.phase("engine.switch", &format!("active: {}", target.label));
+                        observer.notify("Transcrust", &format!("Engine: {}", target.label));
+                    }
+                    Err(e) => {
+                        observer.error("engine.switch", &e);
+                        // Put the radio back on the model that is really loaded.
+                        let _ = active_engine_tx.send(active_engine);
                     }
                 }
             }
@@ -304,24 +528,61 @@ async fn run(config: config::Config, run_mode: RunMode) {
     }
 }
 
+fn build_service(
+    model: &model::InstalledModel,
+    config: &config::Config,
+) -> Result<transcription::TranscriptionService, String> {
+    transcription::TranscriptionService::new(
+        model.path.to_string_lossy().into_owned(),
+        model.kind,
+        config.observe.idle_timeout_secs,
+    )
+}
+
 async fn run_transcription_pipeline(
     observer: observe::Observer,
-    transcription: parakeet::ParakeetService,
+    transcription: transcription::TranscriptionService,
     audio_rx: std::sync::mpsc::Receiver<Vec<f32>>,
     sample_rate: u32,
     output_cfg: config::OutputConfig,
+    profile: mode::Profile,
+    mode_label: String,
+    engine_name: String,
+    corpus_enabled: bool,
     state: Arc<state::StateMachine>,
 ) {
-    observer.phase("transcription", "starting Parakeet transcription");
+    observer.phase("transcription", &format!("starting {} transcription", transcription.name()));
+
+    // Tee the audio before the engine drains it. Recording has already been
+    // stopped by the caller, so the channel is fully buffered and this does not
+    // block; the engines collect the whole utterance anyway, so nothing about
+    // their behaviour changes.
+    let (audio_rx, banked) = if corpus_enabled {
+        let mut samples: Vec<f32> = Vec::new();
+        while let Ok(chunk) = audio_rx.recv() {
+            samples.extend_from_slice(&chunk);
+        }
+        let (tx, rx) = std::sync::mpsc::channel();
+        let _ = tx.send(samples.clone());
+        drop(tx);
+        (rx, Some(samples))
+    } else {
+        (audio_rx, None)
+    };
+
+    let started = std::time::Instant::now();
+    // The ceiling is the engine's, not a global constant: VibeVoice decodes at
+    // roughly real time and 45s would abort any dictation over a minute.
+    let budget = transcription.timeout();
     let result = match tokio::time::timeout(
-        std::time::Duration::from_secs(45),
+        budget,
         transcription.transcribe(observer.clone(), audio_rx, sample_rate),
     )
     .await
     {
         Ok(result) => result,
         Err(_) => {
-            observer.error("transcription", "timed out after 45s");
+            observer.error("transcription", &format!("timed out after {}s", budget.as_secs()));
             state.transition(state::AppState::Error);
             tokio::time::sleep(std::time::Duration::from_secs(2)).await;
             state.transition(state::AppState::Idle);
@@ -329,10 +590,19 @@ async fn run_transcription_pipeline(
         }
     };
 
+    let transcribe_secs = started.elapsed().as_secs_f32();
+
     match result {
         Ok(text) if !text.is_empty() => {
             observer.sample("transcription.raw", &text);
-            let fixed = postprocess::fix_transcription(&text);
+            // The profile runs before the shared seam, per the post-processing
+            // contract: anything engine- or mode-specific belongs here, not
+            // inside fix_transcription.
+            let shaped = mode::apply_profile(profile, &text);
+            if shaped != text {
+                observer.sample("transcription.profile", &shaped);
+            }
+            let fixed = postprocess::fix_transcription(&shaped);
             observer.sample("transcription.postprocess", &fixed);
             state.transition(state::AppState::Injecting);
             observer.phase("inject", "injecting transcript");
@@ -345,6 +615,10 @@ async fn run_transcription_pipeline(
                 return;
             }
 
+            if let Some(samples) = banked {
+                bank(&observer, &samples, sample_rate, &mode_label, &engine_name,
+                     &text, &fixed, transcribe_secs);
+            }
             observer.notify("Transcrust", &format!("Injected: {}", fixed.chars().take(60).collect::<String>()));
             observer.phase("inject", "inject complete");
             state.transition(state::AppState::Complete);
@@ -365,6 +639,203 @@ async fn run_transcription_pipeline(
     }
 }
 
+/// Run every installed engine over the same recordings and print what each one
+/// cost.
+///
+/// This goes through `TranscriptionService::transcribe`, the same call the
+/// hotkey path makes, so the numbers include resampling and the shared
+/// post-processing — not just the ONNX graph.
+///
+/// Load is timed separately because it is paid once per engine, not once per
+/// utterance. The workers load lazily on their first job, so each engine gets a
+/// throwaway half-second of silence first; that call is the load measurement,
+/// and every clip after it is warm.
+async fn run_bench(paths: &[std::path::PathBuf]) {
+    const WARMUP_RATE: u32 = 48_000;
+
+    let config = config::load();
+    let observer = observe::Observer::new(config.observe.sample_chars, false, false)
+        .expect("Failed to initialize bench observer");
+    // Modes, not models: `Granite — Long` is the same directory with a
+    // different profile, so the switchable unit carries both.
+    let installed = mode::discover_modes(config.model.path.as_deref());
+    if installed.is_empty() {
+        eprintln!("No supported ASR model found");
+        std::process::exit(1);
+    }
+
+    let mut clips = Vec::new();
+    for path in paths {
+        match audio::read_wav_mono(path) {
+            Ok((samples, rate)) => clips.push((path.clone(), samples, rate)),
+            Err(error) => {
+                eprintln!("{error}");
+                std::process::exit(1);
+            }
+        }
+    }
+
+    async fn feed(
+        service: &transcription::TranscriptionService,
+        observer: &observe::Observer,
+        samples: &[f32],
+        rate: u32,
+    ) -> (Result<String, String>, std::time::Duration) {
+        let (tx, rx) = std::sync::mpsc::channel();
+        // The live path streams chunks from the capture thread and the worker
+        // drains until the sender drops; one chunk then drop reproduces that.
+        tx.send(samples.to_vec()).expect("bench receiver is alive");
+        drop(tx);
+        let started = std::time::Instant::now();
+        let result = service.transcribe(observer.clone(), rx, rate).await;
+        (result, started.elapsed())
+    }
+
+    println!(
+        "{:<46} {:>8} {:>10} {:>7}",
+        "engine / clip", "audio", "wall", "RTF"
+    );
+    for found in &installed {
+        let service = match build_service(&found.model, &config) {
+            Ok(service) => service,
+            Err(error) => {
+                println!("{:<46} {error}", found.label);
+                continue;
+            }
+        };
+
+        let silence = vec![0.0f32; WARMUP_RATE as usize / 2];
+        let (_, load) = feed(&service, &observer, &silence, WARMUP_RATE).await;
+        println!(
+            "{:<46} {:>8} {:>9.2}s {:>7}",
+            format!("{} / cold load", found.label),
+            "-",
+            load.as_secs_f64(),
+            "-"
+        );
+
+        for (path, samples, rate) in &clips {
+            let (result, elapsed) = feed(&service, &observer, samples, *rate).await;
+            let seconds = samples.len() as f64 / *rate as f64;
+            let name = path
+                .file_name()
+                .map(|n| n.to_string_lossy().into_owned())
+                .unwrap_or_default();
+            match result {
+                Ok(text) => {
+                    println!(
+                        "{:<46} {:>7.2}s {:>9.2}s {:>7.2}",
+                        format!("{} / {name}", found.label),
+                        seconds,
+                        elapsed.as_secs_f64(),
+                        elapsed.as_secs_f64() / seconds
+                    );
+                    println!("      {:?}", postprocess::fix_transcription(&text));
+                }
+                Err(error) => println!("{:<46} {error}", format!("{} / {name}", found.label)),
+            }
+        }
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn bank(
+    observer: &observe::Observer,
+    samples: &[f32],
+    sample_rate: u32,
+    mode_label: &str,
+    engine_name: &str,
+    raw: &str,
+    injected: &str,
+    transcribe_secs: f32,
+) {
+    let entry = corpus::Entry {
+        recorded: corpus::stamp(),
+        mode: mode_label.to_string(),
+        engine: engine_name.to_string(),
+        device_sample_rate: sample_rate,
+        duration_secs: corpus::duration_of(samples.len(), sample_rate).as_secs_f32(),
+        raw: raw.to_string(),
+        injected: injected.to_string(),
+        transcribe_secs,
+        reference: None,
+    };
+    match corpus::save(samples, sample_rate, &entry) {
+        Ok(path) => observer.phase(
+            "corpus",
+            &format!(
+                "banked {} ({:.1}s) — fill `reference` in the .json if this one came out wrong",
+                path.display(),
+                entry.duration_secs
+            ),
+        ),
+        Err(error) => observer.error("corpus", &error),
+    }
+}
+
+/// Record one clip into the corpus directory, with a per-second status line.
+/// Enter stops it. No transcription, no model load.
+async fn run_record() {
+    let capture = match audio::AudioCapture::new(config::load().audio.device.as_deref()) {
+        Ok(capture) => capture,
+        Err(error) => {
+            eprintln!("{error}");
+            std::process::exit(1);
+        }
+    };
+    let sample_rate = capture.sample_rate();
+    println!("Recording at {sample_rate} Hz mono (channel 0 of the device).");
+    println!("Press Enter to stop.");
+
+    let rx = capture.start_recording();
+    let started = std::time::Instant::now();
+
+    // stdin read has to be off the async runtime; a blocking task is the
+    // supported way to park a thread on it.
+    let stop = tokio::task::spawn_blocking(|| {
+        let mut line = String::new();
+        let _ = std::io::stdin().read_line(&mut line);
+    });
+    tokio::pin!(stop);
+
+    let mut ticker = tokio::time::interval(std::time::Duration::from_secs(1));
+    loop {
+        tokio::select! {
+            _ = &mut stop => break,
+            _ = ticker.tick() => {
+                print!("\r  ● recording  {}   ", corpus::clock(started.elapsed()));
+                use std::io::Write;
+                let _ = std::io::stdout().flush();
+            }
+        }
+    }
+    capture.stop_recording();
+
+    let mut samples = Vec::new();
+    while let Ok(chunk) = rx.recv() {
+        samples.extend_from_slice(&chunk);
+    }
+    let duration = corpus::duration_of(samples.len(), sample_rate);
+
+    if let Err(error) = std::fs::create_dir_all(corpus::dir()) {
+        eprintln!("\nfailed to create corpus dir: {error}");
+        std::process::exit(1);
+    }
+    let path = corpus::dir().join(format!("{}.wav", corpus::stamp()));
+    match corpus::write_wav(&path, &samples, sample_rate) {
+        Ok(()) => println!(
+            "\r  ✓ saved  {}  ({}, {} samples)      ",
+            path.display(),
+            corpus::clock(duration),
+            samples.len()
+        ),
+        Err(error) => {
+            eprintln!("\n{error}");
+            std::process::exit(1);
+        }
+    }
+}
+
 fn run_doctor() {
     let config = config::load();
     println!("Config path: {}", config::config_path().display());
@@ -372,19 +843,67 @@ fn run_doctor() {
         "Model override: {}",
         config.model.path.as_deref().unwrap_or("<auto>")
     );
-    match model::find_model_path(config.model.path.as_deref()) {
+    let resolved = model::find_model_path(config.model.path.as_deref());
+    match &resolved {
         Some(path) => println!("Resolved model: {}", path.display()),
         None => println!("Resolved model: <missing>"),
+    }
+    match resolved.as_deref().and_then(model::model_kind) {
+        Some(model::ModelKind::Parakeet) => println!("Engine: Parakeet TDT"),
+        Some(model::ModelKind::Granite) => println!("Engine: Granite Speech 5 TurboCTC"),
+        None => println!("Engine: <none>"),
     }
     println!("Search paths:");
     for path in model::explain_search_paths() {
         println!("  {path}");
     }
+    // Same list, same order, that the tray's Engine submenu offers. Modes, not
+    // models: a `— Long` entry is the same directory with a repair profile.
+    let modes = mode::discover_modes(config.model.path.as_deref());
+    println!("Modes ({}):", modes.len());
+    for (index, found) in modes.iter().enumerate() {
+        let marker = if index == 0 { "*" } else { " " };
+        let profile = match found.profile {
+            mode::Profile::Raw => "raw",
+            mode::Profile::Long => "long-form repair",
+        };
+        println!(
+            "  {marker} {} [{profile}] — {}",
+            found.label,
+            found.model.path.display()
+        );
+    }
+    if modes.len() < 2 {
+        println!("  (tray Engine switcher appears once two or more are installed)");
+    }
+    match resolved.as_deref() {
+        Some(path) if model::has_parakeet_direct(path) => {
+            println!("Parakeet direct drive: available (nemo128 present)")
+        }
+        Some(_) => println!(
+            "Parakeet direct drive: unavailable (needs nemo128.onnx; see --parakeet-direct)"
+        ),
+        None => {}
+    }
+    match (config.hotkey.mode_key.as_deref(), config.hotkey.mode_modifiers.as_slice()) {
+        (Some(key), mods) if !mods.is_empty() => {
+            println!("Mode toggle: {}+{key}", mods.join("+"))
+        }
+        (Some(key), _) => println!("Mode toggle: {key}"),
+        (None, _) => println!("Mode toggle: <unbound> (set hotkey.mode_key to enable)"),
+    }
     println!("Preferred int8 model dir: {}", model::preferred_int8_model_dir().display());
-    println!("Required int8 files:");
+    println!("Required Parakeet files:");
     for file in model::required_int8_files() {
         println!("  {file}");
     }
+    println!("Required Granite files:");
+    for file in model::required_granite_files() {
+        println!("  {file}");
+    }
+    // The correction/vocabulary leg is engine-agnostic: both engines return raw
+    // text and main.rs runs postprocess::fix_transcription on it exactly once.
+    println!("Post-processing: shared by all engines (postprocess::fix_transcription)");
     let dict_path = dictionary::dictionary_path();
     let dict_entries = std::fs::read_to_string(&dict_path)
         .map(|c| {

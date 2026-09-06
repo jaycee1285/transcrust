@@ -94,7 +94,13 @@ fn split_codes(encoded: &str) -> Vec<String> {
 /// Replace any transcribed word that phonetically matches a dictionary entry.
 /// All whitespace and punctuation between words is preserved exactly.
 pub fn correct(text: &str) -> String {
-    if CORRECTOR.encoded.is_empty() {
+    correct_with(text, &CORRECTOR)
+}
+
+/// The body of [`correct`], with the dictionary passed in so tests can supply
+/// one instead of depending on the user's `dictionary.txt`.
+fn correct_with(text: &str, corrector: &Corrector) -> String {
+    if corrector.encoded.is_empty() {
         return text.to_string();
     }
 
@@ -107,22 +113,23 @@ pub fn correct(text: &str) -> String {
             word.push(ch);
         } else {
             if !word.is_empty() {
-                result.push_str(&map_word(&word, &bm));
+                result.push_str(&map_word_with(&word, &bm, corrector));
                 word.clear();
             }
             result.push(ch);
         }
     }
     if !word.is_empty() {
-        result.push_str(&map_word(&word, &bm));
+        result.push_str(&map_word_with(&word, &bm, corrector));
     }
 
     result
 }
 
 /// Return the dictionary replacement for `word` if one collides phonetically,
-/// otherwise `word` unchanged.
-fn map_word(word: &str, bm: &BeiderMorse) -> String {
+/// otherwise `word` unchanged. `corrector` is passed in rather than read from
+/// the global so tests can supply a dictionary of their own.
+fn map_word_with(word: &str, bm: &BeiderMorse, corrector: &Corrector) -> String {
     if word.chars().count() < MIN_WORD_LEN {
         return word.to_string();
     }
@@ -133,10 +140,16 @@ fn map_word(word: &str, bm: &BeiderMorse) -> String {
     }
     let candidate_codes = split_codes(&candidate);
 
-    for (dict_word, dict_codes) in &CORRECTOR.encoded {
-        // Already the canonical spelling — nothing to do.
+    for (dict_word, dict_codes) in &corrector.encoded {
+        // Same word already — take the dictionary's casing and stop before any
+        // phonetic neighbour can claim it. Returning `word` here instead would
+        // leave engine casing in place, which diverges the two ASR backends:
+        // Parakeet TDT emits "Wayland" itself, Granite's CTC head emits
+        // "wayland", and only the dictionary knows which spelling is canonical.
+        // Sentence-initial case is not a concern — `capitalize_sentences` runs
+        // after this pass.
         if word.eq_ignore_ascii_case(dict_word) {
-            return word.to_string();
+            return dict_word.clone();
         }
         if dict_codes
             .iter()
@@ -159,12 +172,19 @@ mod tests {
         assert_eq!(parse_dictionary(raw), vec!["Kubernetes", "Svelte"]);
     }
 
+    fn empty_corrector() -> Corrector {
+        Corrector {
+            encoded: Vec::new(),
+        }
+    }
+
     #[test]
     fn empty_dictionary_is_identity() {
-        // CORRECTOR is empty in the test process (no dictionary.txt), so correct
-        // must be a faithful pass-through, punctuation and all.
+        // With no entries this pass must be a faithful pass-through, punctuation
+        // and all. Built explicitly rather than relying on the test process
+        // having no `~/.config/transcrust/dictionary.txt`.
         let input = "deploy to kubernetes, please.";
-        assert_eq!(correct(input), input);
+        assert_eq!(correct_with(input, &empty_corrector()), input);
     }
 
     #[test]
@@ -187,10 +207,25 @@ mod tests {
     }
 
     #[test]
+    fn exact_match_takes_dictionary_casing() {
+        // Engine parity: Parakeet TDT emits "Wayland", Granite's CTC head emits
+        // "wayland". Both must land on the dictionary's canonical spelling.
+        let bm = BeiderMorseBuilder::new(&CONFIG).build();
+        let dict_word = "Wayland".to_string();
+        let dict_codes = split_codes(&bm.encode(&dict_word));
+        let corrector = Corrector {
+            encoded: vec![(dict_word, dict_codes)],
+        };
+        for heard in ["wayland", "WAYLAND", "Wayland"] {
+            assert_eq!(map_word_with(heard, &bm, &corrector), "Wayland");
+        }
+    }
+
+    #[test]
     fn preserves_newlines_and_punctuation() {
         // With no dictionary loaded this is identity; the point is that the
         // tokenizer never collapses structure.
         let input = "line one\n\nline two — done.";
-        assert_eq!(correct(input), input);
+        assert_eq!(correct_with(input, &empty_corrector()), input);
     }
 }

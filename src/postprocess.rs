@@ -251,21 +251,63 @@ fn replace_spoken_punctuation(text: &str) -> String {
 }
 
 // ---------------------------------------------------------------------------
+// Deterministic capitalization
+// ---------------------------------------------------------------------------
+
+static LOWERCASE_I: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\bi\b").unwrap());
+
+/// Capitalize the first letter of the transcript and the first letter after a
+/// sentence terminator or newline. Existing casing is preserved everywhere
+/// else; this pass never lowercases acronyms or dictionary replacements.
+fn capitalize_sentences(text: &str) -> String {
+    let mut result = String::with_capacity(text.len());
+    let mut capitalize_next = true;
+    let mut chars = text.chars().peekable();
+
+    while let Some(ch) = chars.next() {
+        if capitalize_next && ch.is_alphabetic() {
+            result.extend(ch.to_uppercase());
+            capitalize_next = false;
+        } else {
+            result.push(ch);
+        }
+
+        match ch {
+            '?' | '!' | '\n' => capitalize_next = true,
+            '.' if chars.peek().is_none_or(|next| next.is_whitespace()) => {
+                capitalize_next = true;
+            }
+            // Keep looking through whitespace and opening punctuation for the
+            // first actual letter: `hello. "goodbye"` -> `Hello. "Goodbye"`.
+            _ if capitalize_next
+                && !ch.is_whitespace()
+                && !matches!(ch, '"' | '\'' | '(' | '[' | '{' | '“' | '‘') =>
+            {
+                capitalize_next = false;
+            }
+            _ => {}
+        }
+    }
+
+    LOWERCASE_I.replace_all(&result, "I").into_owned()
+}
+
+// ---------------------------------------------------------------------------
 // Public pipeline
 // ---------------------------------------------------------------------------
 
 /// Full post-processing pipeline for transcription output.
 ///
 /// Order: course correction → repetition cleaning → filler removal →
-/// spoken punctuation → phonetic dictionary.
+/// spoken punctuation → phonetic dictionary → deterministic capitalization.
 ///
 /// **Harper is intentionally out of the loop.** It is a probabilistic grammar
 /// black box that re-ranks tokens toward general English *before* the dictionary
 /// can claim them — directly working against this app's whole purpose (exact
 /// non-standard vocabulary). murmure, the pipeline this is ported from, never
-/// ran a grammar pass at this stage either. If a deterministic capitalization /
-/// punctuation pass turns out to be wanted, it should be a small purpose-built
-/// thing, not a 20 MB linter. [`apply_harper`] is kept for reference only.
+/// ran a grammar pass at this stage either. Capitalization is therefore a small
+/// purpose-built pass rather than a 20 MB linter. [`apply_harper`] is kept for
+/// reference only.
 pub fn fix_transcription(text: &str) -> String {
     if text.is_empty() {
         return String::new();
@@ -275,7 +317,8 @@ pub fn fix_transcription(text: &str) -> String {
     let text = clean_repetitions(&text);
     let text = remove_fillers(&text);
     let text = replace_spoken_punctuation(&text);
-    crate::dictionary::correct(&text)
+    let text = crate::dictionary::correct(&text);
+    capitalize_sentences(&text)
 }
 
 /// Apply harper's curated grammar/style fixes, minus the rules that fight voice
@@ -495,20 +538,44 @@ mod tests {
     // -- Full pipeline --
 
     #[test]
-    fn casing_left_as_spoken() {
-        // Harper is out of the loop, so we no longer capitalize sentences.
-        // Casing is whatever the model emitted — that's the deliberate tradeoff
-        // for not letting a grammar black box touch the text.
+    fn capitalizes_leading_letter() {
         let result = fix_transcription("there is no way she is not guilty");
-        assert_eq!(result, "there is no way she is not guilty");
+        assert_eq!(result, "There is no way she is not guilty");
     }
 
     #[test]
-    fn lone_i_not_capitalized() {
-        // Without harper, "i" stays "i". A purpose-built capitalization pass
-        // could fix this later if wanted; we don't fake it here.
+    fn capitalizes_lone_i() {
         let result = fix_transcription("i went to the store");
-        assert_eq!(result, "i went to the store");
+        assert_eq!(result, "I went to the store");
+    }
+
+    #[test]
+    fn capitalizes_after_sentence_punctuation_and_newlines() {
+        assert_eq!(
+            capitalize_sentences("hello. goodbye? yes! absolutely\nnext line"),
+            "Hello. Goodbye? Yes! Absolutely\nNext line"
+        );
+    }
+
+    #[test]
+    fn capitalizes_through_opening_quote() {
+        assert_eq!(
+            capitalize_sentences("hello. \"goodbye, friend\""),
+            "Hello. \"Goodbye, friend\""
+        );
+    }
+
+    #[test]
+    fn comma_does_not_start_a_sentence() {
+        assert_eq!(capitalize_sentences("first, second"), "First, second");
+    }
+
+    #[test]
+    fn preserves_existing_acronyms_and_decimal_points() {
+        assert_eq!(
+            capitalize_sentences("use ONNX Runtime 1.24 today"),
+            "Use ONNX Runtime 1.24 today"
+        );
     }
 
     #[test]
@@ -525,9 +592,8 @@ mod tests {
 
     #[test]
     fn full_pipeline() {
-        // Spoken punctuation still resolves; casing is left untouched.
         let result = fix_transcription("i think this is really great period and i hope it works");
-        assert!(result.contains('.'), "Expected period, got: {result}");
+        assert_eq!(result, "I think this is really great. And I hope it works");
     }
 
     #[test]
@@ -556,5 +622,30 @@ mod tests {
             !result.contains("the the"),
             "Expected stutter cleaned, got: {result}"
         );
+    }
+
+    // -- Engine parity --
+    //
+    // Both engines feed this same function (main.rs::run_transcription_pipeline)
+    // but hand it differently shaped raw text: Parakeet TDT emits its own casing
+    // and punctuation, Granite's CTC head emits bare lowercase. These two cases
+    // lock in that the correction/vocabulary passes fire either way.
+
+    #[test]
+    fn handles_granite_shaped_bare_lowercase_output() {
+        // Granite CTC: no casing, no punctuation, spoken punctuation only.
+        let result = fix_transcription(
+            "i uh deployed to the the cluster period no wait i rolled it back period",
+        );
+        assert_eq!(result, "I rolled it back.");
+    }
+
+    #[test]
+    fn handles_parakeet_shaped_cased_punctuated_output() {
+        // Parakeet TDT: already cased and punctuated. The same passes must fire
+        // and must not fight the casing the model already produced.
+        let result =
+            fix_transcription("I uh deployed to the the cluster. No wait, I rolled it back.");
+        assert_eq!(result, "I rolled it back.");
     }
 }

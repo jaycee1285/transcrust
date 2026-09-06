@@ -36,9 +36,15 @@ impl Clone for ParakeetService {
 
 impl ParakeetService {
     pub fn new(model_dir: impl Into<String>, idle_timeout_secs: u64) -> Result<Self, String> {
+        let model_dir = model_dir.into();
+        // Matches `GraniteService::new`: fail at construction with a named
+        // directory rather than 20s later on the worker-startup timeout.
+        if !crate::model::has_parakeet_model(std::path::Path::new(&model_dir)) {
+            return Err(format!("incomplete Parakeet model directory: {model_dir}"));
+        }
         Ok(Self {
             inner: Arc::new(ServiceInner {
-                model_dir: model_dir.into(),
+                model_dir,
                 tx: Mutex::new(None),
                 idle_timeout_secs,
             }),
@@ -476,13 +482,15 @@ fn worker_main(
     loop {
         match rx.recv_timeout(WORKER_IDLE_CHECK_INTERVAL) {
             Ok(job) => {
-                last_activity = Instant::now();
                 let result = transcribe_with_loaded_model(
                     &job.observer,
                     &mut model,
                     job.audio_rx,
                     job.source_sample_rate,
                 );
+                // Inactivity begins after the transcription loop completes,
+                // not when the job first arrives.
+                last_activity = Instant::now();
                 let _ = job.reply_tx.send(result);
             }
             Err(mpsc::RecvTimeoutError::Timeout) => {

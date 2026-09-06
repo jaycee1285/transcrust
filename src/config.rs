@@ -22,6 +22,12 @@ pub struct HotkeyConfig {
     #[serde(default = "default_modifiers")]
     pub modifiers: Vec<String>,
     pub device: Option<String>,
+    /// Key that cycles to the next mode. Unset by default: a keyboard-driven
+    /// desktop already has a full keymap and this should not claim a chord
+    /// without being asked.
+    pub mode_key: Option<String>,
+    #[serde(default)]
+    pub mode_modifiers: Vec<String>,
 }
 
 fn default_key() -> String {
@@ -38,6 +44,8 @@ impl Default for HotkeyConfig {
             key: default_key(),
             modifiers: default_modifiers(),
             device: None,
+            mode_key: None,
+            mode_modifiers: Vec::new(),
         }
     }
 }
@@ -97,6 +105,11 @@ pub struct ObserveConfig {
     /// Seconds of inactivity before the model is unloaded from memory (default: 60).
     #[serde(default = "default_idle_timeout_secs")]
     pub idle_timeout_secs: u64,
+    /// Bank every dictation to `~/.local/share/transcrust/corpus/` as a WAV
+    /// plus a JSON sidecar. Off by default — it writes ~10 MB/minute and
+    /// records your speech to disk.
+    #[serde(default)]
+    pub corpus: bool,
 }
 
 fn default_sample_chars() -> usize {
@@ -113,13 +126,14 @@ impl Default for ObserveConfig {
             desktop_notifications: true,
             sample_chars: default_sample_chars(),
             idle_timeout_secs: default_idle_timeout_secs(),
+            corpus: false,
         }
     }
 }
 
 pub fn load() -> Config {
     let path = config_path();
-    match std::fs::read_to_string(&path) {
+    let mut config: Config = match std::fs::read_to_string(&path) {
         Ok(contents) => toml::from_str(&contents).unwrap_or_else(|e| {
             eprintln!("Config parse error: {e}, using defaults");
             toml::from_str("").unwrap()
@@ -127,7 +141,11 @@ pub fn load() -> Config {
         Err(_) => {
             toml::from_str("").unwrap()
         }
+    };
+    if let Ok(model_path) = std::env::var("TRANSCRUST_MODEL_PATH") {
+        config.model.path = Some(model_path);
     }
+    config
 }
 
 pub fn config_path() -> PathBuf {
