@@ -10,6 +10,9 @@ use crate::config::HotkeyConfig;
 pub enum HotkeyEvent {
     Pressed,
     Released,
+    /// Advance to the next mode. Fires on key-down only; the main loop
+    /// declines it unless idle, exactly as the tray radio does.
+    CycleMode,
 }
 
 fn parse_key(name: &str) -> Option<Key> {
@@ -99,6 +102,35 @@ pub async fn listen(config: &HotkeyConfig) -> mpsc::Receiver<HotkeyEvent> {
         })
         .collect();
 
+    // The mode toggle rides the *same* evdev stream: a device can only be
+    // turned into one event stream, and opening it twice would race.
+    // Unbound by default — a keyboard-driven desktop has a curated keymap and
+    // this should not stomp it. Set hotkey.mode_key to enable.
+    let mode_key = config.mode_key.as_deref().and_then(|name| {
+        let key = parse_key(name);
+        if key.is_none() {
+            eprintln!("Unknown mode_key: {name}");
+        }
+        key
+    });
+    let mode_modifier_keys: Vec<Key> = config
+        .mode_modifiers
+        .iter()
+        .filter_map(|m| {
+            let k = parse_key(m);
+            if k.is_none() {
+                eprintln!("Unknown mode modifier key: {m}");
+            }
+            k
+        })
+        .collect();
+    // Every key whose held state has to be tracked, from either binding.
+    let tracked: Vec<Key> = modifier_keys
+        .iter()
+        .chain(mode_modifier_keys.iter())
+        .copied()
+        .collect();
+
     let device = find_keyboard_device(config.device.as_deref())
         .expect("Failed to find keyboard device");
 
@@ -114,11 +146,23 @@ pub async fn listen(config: &HotkeyConfig) -> mpsc::Receiver<HotkeyEvent> {
                 let value = event.value(); // 0=release, 1=press, 2=repeat
 
                 // Track modifier state
-                if modifier_keys.contains(&key) {
+                if tracked.contains(&key) {
                     match value {
                         1 => { mods_held.insert(key); }
                         0 => { mods_held.remove(&key); }
                         _ => {}
+                    }
+                }
+
+                // Mode toggle, checked before the trigger so the two can share
+                // a key with different modifiers if the user wants that.
+                if let Some(mode_key) = mode_key {
+                    if key == mode_key && value == 1 {
+                        let all_mods = mode_modifier_keys.iter().all(|m| mods_held.contains(m));
+                        if all_mods {
+                            let _ = tx.send(HotkeyEvent::CycleMode).await;
+                            continue;
+                        }
                     }
                 }
 
