@@ -107,6 +107,7 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
 - `src/parakeet_ort.rs`: direct-drive Parakeet — three graphs, TDT greedy decode, per-token confidence
 - `src/mode.rs`: modes as (model, profile); the `— Long` repair profile
 - `src/wav.rs`: `--wav` — offline files through the live seam, plus the windowing
+- `src/audio.rs`: capture, and the polyphase resampler every engine feeds through
 - `src/dictionary.rs` + `src/postprocess.rs`: post-transcription pipeline (see contract below)
 - TDT greedy decode (incl. duration-head frame-skip) lives in the `parakeet-rs` crate's
   `model_tdt.rs`; transcrust uses it as-is — see Mutation Notes for the decode decision.
@@ -124,6 +125,28 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
 - `ort 2.0.0-rc.12` plus the Nix-provided runtime wedged before model open.
 - A matched `ort 2.0.0-rc.10` stack loaded `nemo128`, Whisper, and the Parakeet encoder/decoder normally.
 - The custom ORT logger callback also caused probe crashes and is intentionally not used now.
+
+## The Resampler
+- `audio.rs::resample` is a **band-limited polyphase decimator** as of
+  2026-09-09, replacing linear interpolation that had no anti-aliasing filter at
+  all. Cutoff 0.45 × the lower Nyquist, 16 sinc zero crossings, Blackman window.
+- **Linear interpolation is a filter, just a terrible one** — a two-tap average
+  whose first null sits at the input rate. On 44100 Hz capture it attenuated
+  12 kHz by 2.1 dB and folded it onto 4 kHz, mid speech band.
+- The bank is precomputed per rate pair. 44100→16000 reduces by gcd 100 to
+  **160 phases**, so the inner loop is a dot product with no `sin` in it. Without
+  that the naive form calls `sin` once per tap — 98 taps per output sample — and
+  the cost stops being ignorable. Measured **18 ms per 10-second clip**.
+- **Do not read this as a quality win.** A.2 in `TASKBOARD-next.md` measured it
+  on 18 minutes of real speech: 0.87% of words changed, and no reference could
+  tell which version was better (7.43% vs 7.39% WER against auto-captions). It
+  removes a confound; it is not itself an improvement, and nothing downstream
+  should cite it as one. The open question is whether real microphone audio,
+  which carries the 10-14 kHz energy a lossy codec has already discarded,
+  behaves differently.
+- Tests pin the *defect*, not the implementation: `alias_band_is_rejected`
+  demands ≥40 dB at 10/12/14 kHz, where the replaced code sat at −1.5/−2.1/−2.8 dB.
+  Any future rewrite has to clear the same bar.
 
 ## Post-Processing Contract
 - The post-transcription pipeline lives in `src/postprocess.rs::fix_transcription`,

@@ -167,25 +167,235 @@ pub fn read_wav_mono(path: &std::path::Path) -> Result<(Vec<f32>, u32), String> 
     Ok((mono, spec.sample_rate))
 }
 
+/// Zero crossings of the sinc kernel kept either side of centre. Sets the
+/// transition width and stopband depth; 16 with a Blackman window puts the
+/// stopband near -70 dB, far below anything the mel frontend can see.
+const SINC_ZERO_CROSSINGS: f64 = 16.0;
+
+/// Cutoff as a fraction of the *lower* Nyquist. 0.45 leaves a transition band
+/// between 7.2 kHz and 8 kHz when decimating to 16 kHz — above the speech
+/// energy that matters and below the fold point.
+const CUTOFF_FRACTION: f64 = 0.45;
+
+/// Band-limited resampling by windowed-sinc interpolation.
+///
+/// **The lowpass is the point, not the interpolation.** The previous
+/// implementation was linear interpolation with no anti-aliasing filter, which
+/// on this machine's 44100 Hz capture attenuated 12 kHz by only 2.2 dB and
+/// folded it onto 4 kHz — the middle of the speech band, exactly where sibilant
+/// and plosive-burst cues live. Linear interpolation *is* a filter, just a
+/// terrible one: a two-tap average whose first null sits at the input rate.
+///
+/// One pass does both jobs. Each output sample is a sum of input samples
+/// weighted by a sinc kernel centred on the fractional source position and cut
+/// off below the output Nyquist, so the signal is band-limited before it is
+/// ever decimated. Upsampling keeps the input's own Nyquist as the cutoff,
+/// which is why the fraction is taken against whichever rate is lower.
 fn resample(input: &[f32], from_rate: u32, to_rate: u32) -> Vec<f32> {
-    let ratio = to_rate as f64 / from_rate as f64;
-    let output_len = (input.len() as f64 * ratio) as usize;
+    if from_rate == to_rate || input.is_empty() {
+        return input.to_vec();
+    }
+
+    let from = from_rate as f64;
+    let to = to_rate as f64;
+    let step = from / to;
+    let output_len = (input.len() as f64 / step) as usize;
+
+    // Cutoff in cycles per *input* sample.
+    let cutoff = CUTOFF_FRACTION * from.min(to) / from;
+    // Kernel half-width in input samples: enough to hold the requested number
+    // of zero crossings, which get wider as the cutoff drops.
+    let half_width = (SINC_ZERO_CROSSINGS / (2.0 * cutoff)).ceil() as isize;
+
+    // Polyphase: the fractional part of the source position cycles through a
+    // fixed set of phases, so every kernel the loop will ever need can be built
+    // once. Without this the inner loop calls `sin` per tap — ~1.7 billion of
+    // them for 18 minutes of audio, which measured 38 s of pure filter time and
+    // would put ~0.36 s of latency on a ten-second dictation.
+    let phases = (to_rate / gcd(from_rate, to_rate)) as usize;
+    let taps = (2 * half_width) as usize;
+    let mut bank = vec![0.0f64; phases * taps];
+    let mut gains = vec![0.0f64; phases];
+    for (p, gain) in gains.iter_mut().enumerate() {
+        let frac = p as f64 / phases as f64;
+        let mut sum = 0.0;
+        for k in 0..taps {
+            // Tap k sits at input offset (k - half_width + 1) from the floor of
+            // the source position, so its distance from the true centre is that
+            // offset minus the fractional part.
+            let t = (k as isize - half_width + 1) as f64 - frac;
+            let w = sinc(2.0 * cutoff * t) * blackman(t, half_width as f64);
+            bank[p * taps + k] = w;
+            sum += w;
+        }
+        *gain = sum;
+    }
+
     let mut output = Vec::with_capacity(output_len);
-
     for i in 0..output_len {
-        let src_pos = i as f64 / ratio;
-        let idx = src_pos as usize;
-        let frac = src_pos - idx as f64;
+        let centre = i as f64 * step;
+        let base = centre.floor() as isize;
+        // Recovering the phase from the position keeps this exact for any rate
+        // pair, including ones where `step` is irrational in binary.
+        let p = (((centre - base as f64) * phases as f64).round() as usize) % phases;
+        let kernel = &bank[p * taps..(p + 1) * taps];
 
-        let sample = if idx + 1 < input.len() {
-            input[idx] * (1.0 - frac as f32) + input[idx + 1] * frac as f32
-        } else if idx < input.len() {
-            input[idx]
+        let mut acc = 0.0f64;
+        for (k, &w) in kernel.iter().enumerate() {
+            let j = base - half_width + 1 + k as isize;
+            // Outside the clip is silence rather than a clamped edge sample,
+            // which would smear a DC step across the first and last few ms.
+            if j >= 0 && (j as usize) < input.len() {
+                acc += input[j as usize] as f64 * w;
+            }
+        }
+        // Normalising by the window sum holds unity gain wherever the
+        // fractional centre lands between taps.
+        let gain = gains[p];
+        output.push(if gain.abs() > f64::EPSILON {
+            (acc / gain) as f32
         } else {
             0.0
-        };
-        output.push(sample);
+        });
     }
 
     output
+}
+
+/// Greatest common divisor, for reducing a rate pair to its phase count.
+fn gcd(a: u32, b: u32) -> u32 {
+    if b == 0 { a } else { gcd(b, a % b) }
+}
+
+/// Normalised sinc, `sin(pi x) / (pi x)`, defined as 1 at the origin.
+fn sinc(x: f64) -> f64 {
+    if x.abs() < 1e-9 {
+        1.0
+    } else {
+        let pix = std::f64::consts::PI * x;
+        pix.sin() / pix
+    }
+}
+
+/// Blackman window over `[-half_width, half_width]`, zero outside.
+///
+/// Blackman rather than Hann because the extra stopband depth is nearly free
+/// here and aliasing that folds into the speech band is the whole defect being
+/// fixed.
+fn blackman(t: f64, half_width: f64) -> f64 {
+    if t.abs() > half_width {
+        return 0.0;
+    }
+    let x = std::f64::consts::PI * (t + half_width) / half_width;
+    0.42 - 0.5 * (x).cos() + 0.08 * (2.0 * x).cos()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn tone(freq_hz: f64, rate: u32, secs: f64) -> Vec<f32> {
+        let n = (rate as f64 * secs) as usize;
+        (0..n)
+            .map(|i| {
+                let t = i as f64 / rate as f64;
+                (2.0 * std::f64::consts::PI * freq_hz * t).sin() as f32
+            })
+            .collect()
+    }
+
+    fn rms(x: &[f32]) -> f64 {
+        if x.is_empty() {
+            return 0.0;
+        }
+        // Skip the kernel-length edges, where the half-covered window rolls the
+        // amplitude off legitimately and would drag the average down.
+        let skip = (x.len() / 10).min(2000);
+        let body = &x[skip..x.len() - skip];
+        (body.iter().map(|&v| (v as f64) * (v as f64)).sum::<f64>() / body.len() as f64).sqrt()
+    }
+
+    /// Speech-band content must come through at full level.
+    #[test]
+    fn passband_tone_survives_decimation() {
+        let input = tone(1000.0, 44_100, 1.0);
+        let out = resample(&input, 44_100, 16_000);
+        let ratio = rms(&out) / rms(&input);
+        assert!(
+            (0.95..=1.05).contains(&ratio),
+            "1 kHz should pass at unity, got {ratio:.3}"
+        );
+    }
+
+    /// The defect this replaced. 12 kHz at 44100 folds onto 4 kHz when
+    /// decimated to 16 kHz — the middle of the speech band. Linear
+    /// interpolation attenuated it by 2.2 dB, so the alias arrived at roughly
+    /// three quarters amplitude. It has to be gone, not merely reduced.
+    #[test]
+    fn alias_band_is_rejected() {
+        for freq in [10_000.0, 12_000.0, 14_000.0] {
+            let input = tone(freq, 44_100, 1.0);
+            let out = resample(&input, 44_100, 16_000);
+            let ratio = rms(&out) / rms(&input);
+            assert!(
+                ratio < 0.01,
+                "{freq} Hz must be at least 40 dB down after decimation, got {ratio:.4}"
+            );
+        }
+    }
+
+    /// A rate that needs no conversion must not be filtered at all.
+    #[test]
+    fn identity_when_rates_match() {
+        let input = tone(1000.0, 16_000, 0.1);
+        assert_eq!(resample(&input, 16_000, 16_000), input);
+        assert_eq!(resample_to_16k(&input, 16_000), input);
+    }
+
+    #[test]
+    fn output_length_tracks_the_ratio() {
+        let input = tone(440.0, 44_100, 1.0);
+        let out = resample(&input, 44_100, 16_000);
+        let expected = (44_100.0f64 / (44_100.0 / 16_000.0)) as usize;
+        assert!(
+            out.len().abs_diff(expected) <= 1,
+            "expected ~{expected} samples, got {}",
+            out.len()
+        );
+    }
+
+    /// Upsampling takes its cutoff from the input's Nyquist, so a tone well
+    /// inside the source band must survive going the other way too.
+    #[test]
+    fn upsampling_preserves_the_passband() {
+        let input = tone(1000.0, 16_000, 1.0);
+        let out = resample(&input, 16_000, 44_100);
+        let ratio = rms(&out) / rms(&input);
+        assert!(
+            (0.95..=1.05).contains(&ratio),
+            "1 kHz should survive upsampling at unity, got {ratio:.3}"
+        );
+    }
+
+    #[test]
+    fn empty_input_is_empty_output() {
+        assert!(resample(&[], 44_100, 16_000).is_empty());
+    }
+
+    /// Not an assertion about speed so much as a guard on the shape of the
+    /// cost: this runs on the dictation path, so a ten-second clip must
+    /// resample in single-digit milliseconds, not hundreds.
+    #[test]
+    fn resampling_a_dictation_clip_is_cheap() {
+        let input = tone(1000.0, 44_100, 10.0);
+        let start = std::time::Instant::now();
+        let out = resample(&input, 44_100, 16_000);
+        let elapsed = start.elapsed();
+        assert_eq!(out.len(), 160_000);
+        println!("10s of 44.1kHz -> 16kHz took {:?}", elapsed);
+        assert!(
+            elapsed < std::time::Duration::from_millis(150),
+            "resampling 10s took {elapsed:?}; the polyphase bank should keep this in single-digit ms"
+        );
+    }
 }

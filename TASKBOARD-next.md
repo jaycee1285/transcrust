@@ -50,23 +50,43 @@ band, and precisely where sibilant and plosive-burst cues live. That is a
 credible mechanism for the proper-noun errors that actually hurt
 (`Met Gala` → `Meg Calendar`, `recognition` → `dilation`).
 
-- [ ] **A.1 — Decimate properly.** Windowed-sinc or a polyphase FIR lowpass at
-      0.45 × target rate before downsampling. `rubato` is not in the lock; a
-      hand-rolled decimator is ~50 lines and avoids a dependency, but either is
-      fine. Applies to `resample_to_16k` and any future rate.
-- [ ] **A.2 — Prove it on real audio.** Replay corpus WAVs (stored
-      *pre-resample*, exactly for this) through old and new resamplers into the
-      same engine and diff the transcripts. This is the one experiment on the
-      board that needs no ground truth to be informative — a changed word is a
-      changed word.
+- [x] **A.1 — Decimate properly.** Done 2026-09-09. Windowed-sinc via a
+      polyphase bank, no new dependency. Cutoff 0.45 × the lower Nyquist, 16
+      zero crossings, Blackman window. The bank is built once per rate pair —
+      44100→16000 reduces to 160 phases — so the inner loop is a dot product
+      with no transcendentals. **Cost: 18 ms for a 10-second clip**, 1.8 ms per
+      second of audio, which is nothing on either the dictation or `--wav` path.
+      - Tests pin the defect rather than the implementation:
+        `alias_band_is_rejected` requires ≥40 dB at 10/12/14 kHz. The replaced
+        code measures −1.5/−2.1/−2.8 dB there, reproducing the table above from
+        an independent implementation, so the bar discriminates by a factor of 79.
+- [x] **A.2 — Prove it on real audio.** Done 2026-09-09, and the answer is
+      **the resampler is not the proper-noun problem.**
+      - Material: an 18-minute technical talk, native 48 kHz, resampled to
+        44.1 kHz with soxr, then fed through both resamplers into Parakeet. The
+        corpus is still empty (0 WAVs), so this is *not* the replay the item
+        asked for — see the caveat below.
+      - **The change is real in the transcript**: 8 differing spans, 0.87% of
+        words. So the kill criterion as written does not fire.
+      - **The direction is not measurable.** Against yt-dlp's auto-captions:
+        old 7.43%, new 7.39% WER — a one-word difference across 2,673 words.
+        Against a soxr-16 kHz control the old resampler was *closer* (1.64% vs
+        1.90%). Inspecting the spans is a wash: `rhe`→`rel` is better,
+        `whilst there's`→`while still` is worse.
+      - **Keep the change anyway.** Its stated purpose was removing a confound
+        from every later measurement, and it does that. It is simply not itself
+        an improvement, and nothing downstream should be justified by it.
 
 **Why first:** it is not the highest-value item in isolation. It is the item
 that makes every later measurement mean something. Improve the dictionary on
 top of a broken audio path and you cannot tell which change helped.
 
-**Kill criterion:** if A.2 changes no transcripts across the corpus, the
-resampler is not your problem. Say so in `traverse/` and stop — that is a real
-result and it retires a suspicion I have raised three times.
+**The caveat that keeps A.2 half-open.** The audio above is YouTube-sourced,
+band-limited by a lossy codec long before it reached 44.1 kHz, so it may simply
+not carry the 10–14 kHz energy the aliasing argument depends on. A real
+microphone in a real room does. Re-run this against actual `--record` captures
+once C.2 has volume; until then, read the result as *"not demonstrated on
+codec-limited speech"* rather than *"the resampler never mattered."*
 
 ---
 

@@ -2,9 +2,13 @@
 //!
 //! The point is that this rides the **live path**. Audio recorded by a separate
 //! tool would come off the device at a different rate, through a different
-//! downmix, and would not exercise `audio.rs`'s resampler — which on this
-//! machine is a 44100→16000 linear interpolation with no anti-aliasing filter,
-//! and is the leading suspect for the proper-noun errors worth measuring.
+//! downmix, and would not exercise `audio.rs`'s resampler — which since
+//! 2026-09-09 is a band-limited polyphase decimator rather than the unfiltered
+//! linear interpolation it replaced. That resampler was the leading suspect for
+//! the proper-noun errors; fixing it changed 0.87% of words on 18 minutes of
+//! codec-limited speech in no measurable direction, so the suspicion now needs
+//! real microphone captures to settle. See `TASKBOARD-next.md` A.2 — this
+//! corpus is how it gets settled.
 //!
 //! Each dictation writes a pair:
 //!
