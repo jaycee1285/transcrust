@@ -20,7 +20,21 @@
   commands, where the vocabulary is closed and output shape is irrelevant. It
   runs on Parakeet itself — the logits were always there, `parakeet-rs` just
   hid them. See `Parakeet-v3.md` for why this model fits on-device control.
-- Decide on a minimum-entry-length guard for the dictionary, or keep it raw and curate the dictionary file by hand (current choice: raw + documented in `dictionary.example.txt`).
+- **Guard the dictionary against common English words.** Settled 2026-09-09 by a
+  live collision: `Tauri` in `~/.config/transcrust/dictionary.txt` was claiming
+  every `they're` — 7 hits and 0 surviving `they're` across one transcript, 100%
+  and deterministic via `--fix`. `there` and `their` were unaffected, so only the
+  contraction collides. `Tauri` has been removed from the local dictionary; the
+  code guard is still open.
+  - **Minimum entry length is the wrong axis** and this kills that idea: `Tauri`
+    is 5 chars, `they're` is 7. The axis is *commonness* — the design assumes
+    entries are rare jargon, so the guard belongs on the **source token**: skip
+    the phonetic swap when the word the model emitted is already common English.
+  - This is murmure's failure mode inverted — the corrector claiming a common
+    word instead of rescuing a rare one. `murmure.md` covers the intended
+    direction; this is the one it does not.
+  - Whatever the guard, keep the dictionary file itself raw and hand-curated
+    (documented in `dictionary.example.txt`).
 - If a grammar/punctuation pass is wanted back, build a small purpose-built deterministic one (or the future small-LM toggle) rather than re-adding Harper.
 - Add explicit first-load tray/icon feedback so users can see model warmup instead of only paying hidden latency on first transcription.
 - Tighten startup/log ergonomics so steady-state smoke logs stay high-signal.

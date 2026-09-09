@@ -16,6 +16,7 @@ mod state;
 mod tray;
 mod trayicon;
 mod transcription;
+mod wav;
 
 use std::sync::{Arc, OnceLock};
 use tokio::runtime::Runtime;
@@ -127,6 +128,33 @@ fn main() {
             init_ort_default();
             let _ = runtime();
             runtime().block_on(run_bench(&paths));
+            return;
+        }
+        Some("--wav") => {
+            // Offline twin of the hotkey path: same engine seam, same
+            // post-processing, no injection. Writes `<name>.md` beside each WAV.
+            let mut paths: Vec<std::path::PathBuf> = Vec::new();
+            let mut mode_filter: Option<String> = None;
+            let mut rest = args.iter().skip(2);
+            while let Some(arg) = rest.next() {
+                if arg == "--mode" {
+                    let Some(value) = rest.next() else {
+                        eprintln!("--mode needs a value, e.g. --mode granite");
+                        std::process::exit(1);
+                    };
+                    mode_filter = Some(value.clone());
+                } else {
+                    paths.push(std::path::PathBuf::from(arg));
+                }
+            }
+            if paths.is_empty() {
+                eprintln!("Usage: transcrust --wav audio.wav [audio2.wav ...] [--mode <substring>]");
+                std::process::exit(1);
+            }
+            init_ort_default();
+            let _ = runtime();
+            let config = config::load();
+            runtime().block_on(wav::run(&paths, mode_filter.as_deref(), &config));
             return;
         }
         Some("--parakeet-direct") => {
@@ -255,6 +283,7 @@ fn main() {
             println!("  --doctor                    Print phase-relevant environment info");
             println!("  --fix <TEXT>                Run the post-processing pipeline on TEXT and print it");
             println!("  --fix-long <TEXT>           Same, but through the \"— Long\" mode profile first");
+            println!("  --wav <WAV...> [--mode M]   Transcribe files offline; write <name>.md beside each");
             println!("  --bench <WAV...>            Time every installed engine on the same recordings");
             println!("  --record                    Record a clip to the corpus dir; Enter to stop");
             println!("  --download-model [MODEL]    Download a Parakeet model");

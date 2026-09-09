@@ -106,6 +106,7 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
 - `src/parakeet.rs`: service boundary, worker startup, direct ORT preflight
 - `src/parakeet_ort.rs`: direct-drive Parakeet — three graphs, TDT greedy decode, per-token confidence
 - `src/mode.rs`: modes as (model, profile); the `— Long` repair profile
+- `src/wav.rs`: `--wav` — offline files through the live seam, plus the windowing
 - `src/dictionary.rs` + `src/postprocess.rs`: post-transcription pipeline (see contract below)
 - TDT greedy decode (incl. duration-head frame-skip) lives in the `parakeet-rs` crate's
   `model_tdt.rs`; transcrust uses it as-is — see Mutation Notes for the decode decision.
@@ -170,6 +171,91 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
 - Consequence: no capitalization/punctuation grammar. Casing is left as the model
   emitted it. If that becomes a problem, the answer is a small purpose-built
   deterministic pass (or a toggled local post-processor), not re-adding Harper.
+
+## Offline Files (`--wav`)
+- `src/wav.rs` is the offline twin of the hotkey path, and adds exactly one
+  thing the live path does not need: **windowing**. Everything else — engine
+  selection via `discover_modes`, the `transcribe(observer, rx, rate)` seam,
+  `apply_profile` then `fix_transcription` — is the live path's, unchanged.
+  It never injects; it writes `<name>.md` beside the WAV with a YAML header
+  carrying engine, duration, wall time and RTF. `--mode <substring>` picks the
+  engine; the head of `discover_modes` is the default.
+- **Parakeet does not degrade past a long window, it throws.** At 600s in one
+  call the encoder dies in ORT: `Add node /layers.0/self_attn/Add_2 … Attempting
+  to broadcast an axis by a dimension other than 1. 2501 by 7501` — a positional
+  table sized for ~2500 frames meeting 7500. 300s still runs. So the ceiling is
+  a cliff between 300s and 600s, not a slope, and windowing is what keeps the
+  app off it. Its RTF also worsens with window length well before the cliff
+  (45s → 0.18, 90s → 0.20, 180s → 0.26, 300s → 0.32), so short windows are
+  faster *and* safer.
+- **Granite improves with length, and memory is what stops it.** It is CTC —
+  pure forward pass, no decode loop — so length costs it nothing per second.
+  `Parakeet-v3.md` §1 has the cost model: `ceil(dur / 10.24s) × 0.53s`, a hard
+  512-frame quantum. That quantum is a *floor*, so RTF falls as the partial
+  final block amortises: 0.070 at 45s, 0.068 at 90s, 0.066 at 180s, 0.064 at
+  600s, asymptotic by about three minutes. A ~9% gain — small beside Parakeet's
+  78% degradation over the same range, which is the real story: **the gap widens
+  with every second of window.**
+- What caps Granite is memory, at roughly **19 MB of peak RSS per extra second
+  of window**. One 1200s call peaks at **10.5 GB**; the same audio in windows
+  peaks at 1.6-1.9 GB. On a 16 GB laptop that is the whole argument.
+- Net: **one 60s constant serves both engines for two unrelated reasons** —
+  Parakeet because long windows are slower and eventually fatal, Granite because
+  long windows are expensive. 60s sits past the knee of Granite's amortisation
+  and well under Parakeet's cliff. If a per-engine budget is ever wanted,
+  `TranscriptionService::timeout()` is the idiom to copy.
+- **Cut in a pause, do not overlap-and-stitch.** Windows are cut at the quietest
+  20ms frame within ±7s of each 45s boundary. The alternative — fixed windows
+  with overlap, joined by text-level dedup — needs a heuristic on every seam,
+  and a wrong guess there silently deletes real words. `wav.rs`'s
+  `windows_tile_the_clip_without_gaps_or_overlap` pins that windows tile the
+  clip exactly: no sample dropped, none heard twice.
+- The worker's idle timeout is floored at 300s here. Windows land back to back,
+  so nothing is ever idle; the floor only stops a reload between files.
+
+### Measured 2026-09-09 — 36:35 YouTube talk
+| Mode | Window | Wall | RTF | Peak RSS | WER vs auto-captions |
+|---|---|---|---|---|---|
+| Parakeet TDT (int4) | 45s | 7:37 | 0.208 | 1.36 GB | **4.86%** |
+| Parakeet TDT (int4) | 60s | — | 0.20 | 1.21 GB | — |
+| Granite TurboCTC (int8) | 45s | 2:17 | 0.062 | 1.60 GB | 13.71% |
+| Granite — Long | 45s | 2:19 | 0.063 | 1.60 GB | 10.11% |
+| Granite — Long | **60s** | 2:24 | 0.065 | **1.75 GB** | 10.15% |
+
+Going 45s → 60s drops 52 windows to 39 and leaves WER and RTF unmoved, for
+150 MB. That is the whole trade: **longer windows buy fewer seams, not speed.**
+
+- **`— Long` is now measured, and it earns its place**: 13.71% → 10.11% on the
+  same audio, a 26% relative cut, entirely from restoring contractions. This is
+  the deterministic baseline the mode exists to provide. What it cannot reach is
+  the possessive: Granite emits `today is sponsor` and `when is the last time`,
+  and `today is` → `today's` is not safely reversible (`today is Tuesday`), the
+  same wall `mode.rs` already documents for `I have`.
+- **Granite trades away exactly the words worth transcribing.** Its WER is 2×
+  Parakeet's, and the excess lands on proper nouns rather than function words.
+  Counting the same terms across both transcripts: `Claude Code` 5 → 1,
+  `Kimi` 13 → 5, `Grok` 13 → 9, `browserbase` 4 → 2, `Okta` 1 → 0. Granite wrote
+  `kimmy`, `kimmyk 3`, `kimik 3`, `clcode`, `cl code`, `cloud code` where
+  Parakeet wrote `Kimi K3` and `Claude Code`. Granite also emits no punctuation
+  at all, so a long transcript arrives as one run-on per window.
+- Consequence for callers: **use Granite when you want the audio skimmed cheaply,
+  Parakeet when the nouns are the payload.** Anything that mines a transcript for
+  names, products or numbers wants Parakeet and the extra five minutes.
+- These mis-hearings are precisely the case `dictionary.rs` was ported for —
+  `kimmy` → `Kimi` is a textbook Beider-Morse collision. A populated
+  `~/.config/transcrust/dictionary.txt` would recover much of Granite's proper-noun
+  gap, at the cost of knowing the vocabulary in advance. Untested here.
+- **The shared pipeline is a dictation pipeline, and `--wav` inherits that.**
+  Filler removal deletes a speaker's real `you know`, and the spoken-punctuation
+  pass turns a literal spoken "question mark" into `?`. Both are correct when
+  you are dictating and wrong when you are transcribing someone else. On the
+  clip above it cost ~10 words in 7569 (0.13%), so it is not the WER driver —
+  but on a rambling speaker it would be. If that becomes a problem the answer is
+  a `Verbatim` profile in `mode.rs`, not a special case inside `postprocess`.
+- The WER figures measure agreement with **yt-dlp's auto-captions, not truth**.
+  Sampling Parakeet's disagreements, most are yt-dlp's errors: it wrote `codeex`,
+  `grock`, `octa`, `kimmy`, `browser base`. Read 4.86% as a ceiling on Parakeet's
+  real error rate, and the Parakeet-to-Granite ratio as the reliable signal.
 
 ## Mutation Notes
 - `parakeet-rs` is consumed from crates.io (0.3.5), not vendored. The earlier vendored

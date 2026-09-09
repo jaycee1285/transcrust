@@ -134,6 +134,33 @@ fn map_word_with(word: &str, bm: &BeiderMorse, corrector: &Corrector) -> String 
         return word.to_string();
     }
 
+    // Exact match is identity, not a collision, so it gets its own full pass.
+    // Take the dictionary's casing: leaving engine casing in place would diverge
+    // the two ASR backends, since Parakeet TDT emits "Wayland" itself and
+    // Granite's CTC head emits "wayland", and only the dictionary knows which
+    // spelling is canonical. Sentence-initial case is not a concern —
+    // `capitalize_sentences` runs after this pass.
+    //
+    // This runs before the phonetic pass rather than inside it because a single
+    // interleaved loop only protects an exact match from entries *after* it: an
+    // earlier entry's phonetic neighbourhood could claim the word first, and
+    // which entry won depended on dictionary line order.
+    for (dict_word, _) in &corrector.encoded {
+        if word.eq_ignore_ascii_case(dict_word) {
+            return dict_word.clone();
+        }
+    }
+
+    // The phonetic pass exists to rescue rare words the model never learned. A
+    // word that is already ordinary English was not mis-heard, so nothing here
+    // can improve it and a collision can only do damage — `Tauri` in the
+    // dictionary claimed every `they're`, deterministically, until this guard.
+    // Length is the wrong axis for that: `Tauri` is 5 characters and `they're`
+    // is 7.
+    if is_common_english(word) {
+        return word.to_string();
+    }
+
     let candidate = bm.encode(word);
     if candidate.is_empty() {
         return word.to_string();
@@ -141,16 +168,6 @@ fn map_word_with(word: &str, bm: &BeiderMorse, corrector: &Corrector) -> String 
     let candidate_codes = split_codes(&candidate);
 
     for (dict_word, dict_codes) in &corrector.encoded {
-        // Same word already — take the dictionary's casing and stop before any
-        // phonetic neighbour can claim it. Returning `word` here instead would
-        // leave engine casing in place, which diverges the two ASR backends:
-        // Parakeet TDT emits "Wayland" itself, Granite's CTC head emits
-        // "wayland", and only the dictionary knows which spelling is canonical.
-        // Sentence-initial case is not a concern — `capitalize_sentences` runs
-        // after this pass.
-        if word.eq_ignore_ascii_case(dict_word) {
-            return dict_word.clone();
-        }
         if dict_codes
             .iter()
             .any(|dc| candidate_codes.iter().any(|cc| cc == dc))
@@ -161,6 +178,48 @@ fn map_word_with(word: &str, bm: &BeiderMorse, corrector: &Corrector) -> String 
 
     word.to_string()
 }
+
+/// Is this a word ordinary enough that the model was not guessing at it?
+///
+/// Case- and apostrophe-sensitive only in that the comparison is lowercased;
+/// `COMMON_ENGLISH` carries the contraction forms explicitly because they are
+/// the ones that actually collided.
+fn is_common_english(word: &str) -> bool {
+    let lowered = word.to_lowercase();
+    COMMON_ENGLISH.binary_search(&lowered.as_str()).is_ok()
+}
+
+/// High-frequency English, sorted for binary search.
+///
+/// Deliberately short. This is a guard against the corrector eating ordinary
+/// speech, not a spellchecker: it needs the words a dictation engine emits
+/// constantly, and every entry it does not need is a rare word it might block.
+/// Blocking fails safe — the word passes through uncorrected.
+const COMMON_ENGLISH: &[&str] = &[
+    "about", "after", "again", "all", "also", "always", "and", "another", "any", "anything",
+    "are", "aren't", "around", "back", "because", "been", "before", "being", "best", "better",
+    "between", "both", "but", "call", "called", "can", "can't", "come", "could", "couldn't",
+    "did", "didn't", "different", "does", "doesn't", "doing", "don't", "done", "down", "each",
+    "else", "enough", "even", "ever", "every", "everything", "far", "few", "find", "first",
+    "for", "from", "get", "give", "going", "good", "got", "great", "had", "hadn't", "has",
+    "hasn't", "have", "haven't", "having", "her", "here", "here's", "hers", "him", "his", "how",
+    "however", "i'd", "i'll", "i'm", "i've", "into", "isn't", "it's", "its", "just", "keep",
+    "kind", "know", "last", "least", "less", "let", "let's", "life", "like", "little", "long",
+    "look", "lot", "made", "make", "many", "maybe", "mean", "might", "more", "most", "much",
+    "must", "need", "never", "new", "next", "not", "nothing", "now", "off", "often", "old",
+    "once", "one", "only", "onto", "other", "our", "ours", "out", "over", "own", "part",
+    "people", "per", "place", "point", "put", "quite", "rather", "real", "really", "right",
+    "said", "same", "say", "see", "seem", "seen", "set", "she", "she's", "should", "shouldn't",
+    "show", "side", "since", "some", "something", "still", "such", "sure", "take", "than",
+    "that", "that's", "the", "their", "theirs", "them", "then", "there", "there's", "these",
+    "they", "they'd", "they'll", "they're", "they've", "thing", "things", "think", "this",
+    "those", "though", "thought", "three", "through", "time", "too", "two", "under", "until",
+    "use", "used", "using", "very", "want", "was", "wasn't", "way", "we'd", "we'll", "we're",
+    "we've", "well", "went", "were", "weren't", "what", "what's", "when", "where", "whether",
+    "which", "while", "who", "why", "will", "with", "within", "without", "won't", "work",
+    "would", "wouldn't", "yes", "yet", "you", "you'd", "you'll", "you're", "you've", "your",
+    "yours",
+];
 
 #[cfg(test)]
 mod tests {
@@ -227,5 +286,60 @@ mod tests {
         // tokenizer never collapses structure.
         let input = "line one\n\nline two — done.";
         assert_eq!(correct_with(input, &empty_corrector()), input);
+    }
+
+    /// `binary_search` on an unsorted slice silently returns wrong answers, so
+    /// the ordering of `COMMON_ENGLISH` is load-bearing, not cosmetic.
+    #[test]
+    fn common_english_list_is_sorted_and_lowercase() {
+        for pair in COMMON_ENGLISH.windows(2) {
+            assert!(
+                pair[0] < pair[1],
+                "COMMON_ENGLISH must be sorted: {:?} precedes {:?}",
+                pair[0],
+                pair[1]
+            );
+        }
+        for word in COMMON_ENGLISH {
+            assert_eq!(*word, word.to_lowercase(), "{word} must be lowercase");
+        }
+    }
+
+    /// The regression this guard exists for. `Tauri` in the dictionary claimed
+    /// every `they're` — 7 hits and 0 survivors across one transcript — because
+    /// the two share a Beider-Morse code. The collision is real; the guard is
+    /// what stops it mattering.
+    #[test]
+    fn common_words_survive_a_colliding_dictionary_entry() {
+        let bm = BeiderMorseBuilder::new(&CONFIG).build();
+        let dict_word = "Tauri".to_string();
+        let dict_codes = split_codes(&bm.encode(&dict_word));
+        let corrector = Corrector {
+            encoded: vec![(dict_word, dict_codes)],
+        };
+
+        for heard in ["they're", "There", "their", "were", "where"] {
+            assert_eq!(
+                map_word_with(heard, &bm, &corrector),
+                heard,
+                "'{heard}' is ordinary English and must pass through untouched"
+            );
+        }
+        // The entry still does its actual job on a word that is not English.
+        assert_eq!(map_word_with("Tauri", &bm, &corrector), "Tauri");
+    }
+
+    /// An exact match must win no matter where it sits in the file. Before the
+    /// exact-match pass was hoisted out, an earlier entry's phonetic
+    /// neighbourhood could claim the word and the winner depended on line order.
+    #[test]
+    fn exact_match_wins_regardless_of_dictionary_order() {
+        let bm = BeiderMorseBuilder::new(&CONFIG).build();
+        let encode = |w: &str| (w.to_string(), split_codes(&bm.encode(w)));
+        // "Tauri" first, so its phonetic neighbourhood gets first refusal.
+        let corrector = Corrector {
+            encoded: vec![encode("Tauri"), encode("Torrey")],
+        };
+        assert_eq!(map_word_with("Torrey", &bm, &corrector), "Torrey");
     }
 }
