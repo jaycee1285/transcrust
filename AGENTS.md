@@ -10,7 +10,7 @@ are deliberate.
 | | |
 |---|---|
 | `traverse/runtime-stack.md` | how the thing is built and why. The authority on architecture. |
-| `TASKBOARD-next.md` | what to do next, in order, with kill criteria |
+| `TASKBOARD.md` | what to do next, in order, with kill criteria |
 | `Dragon-Mechanisms.md` | the research north star — what pre-neural dictation solved and which of it is still load-bearing |
 | `Parakeet-v3.md` | why the default engine is the right one for on-device control. Reference doc, not a task list. |
 | `murmure-reference.md` | notes from an AGPL reference app that was read and removed — calibrated constants, and the licence caveat before copying any of it |

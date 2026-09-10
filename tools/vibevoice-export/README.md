@@ -6,7 +6,7 @@
 > tables, what went wrong — is at `~/syncthing/vibevoice-asr-15/`.
 >
 > This directory is kept because it is the repo's only working ONNX export
-> pipeline, and `TASKBOARD-next.md` lists rebuilding the Granite
+> pipeline, and `TASKBOARD.md` lists rebuilding the Granite
 > export as blocked with this as the starting point. `quantize_onnx.py` and
 > `common.py` are model-agnostic; the two `export_*.py` scripts are the worked
 > example of tracing a torch model to a KV-cached graph.

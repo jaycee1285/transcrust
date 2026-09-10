@@ -247,7 +247,7 @@ correction loop). Those are all small and all compose with a good model.
 **2** is the big one and a real project. **1** and **8** are the hard ones — one
 needs a training pipeline, the other needs to own a buffer.
 
-Tracked as tasks in `TASKBOARD-next.md`; this document is the *why* behind them.
+Tracked as tasks in `TASKBOARD.md`; this document is the *why* behind them.
 
 ---
 
