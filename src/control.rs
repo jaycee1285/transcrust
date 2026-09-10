@@ -38,11 +38,30 @@ pub fn write_pid_file() -> Result<PidFileGuard, String> {
     Ok(PidFileGuard { path })
 }
 
+/// Ask a running daemon to start or stop recording.
+///
+/// Same rails as [`request_quit`] — the pid file plus a signal — because the
+/// daemon already owns that file and a second IPC mechanism would be a second
+/// thing to go stale. `SIGUSR1` rather than `SIGTERM`, and the daemon only
+/// listens for it when started with `--long`.
+///
+/// **This is the escape from evdev.** The default hold-to-talk path reads the
+/// keyboard passively and therefore cannot stop a printable key reaching the
+/// focused window. A compositor binding that runs `transcrust --toggle` has
+/// none of that problem: labwc does the key handling, which is its job.
+pub fn request_toggle() -> Result<(), String> {
+    signal_daemon("USR1", "toggle")
+}
+
 pub fn request_quit() -> Result<(), String> {
+    signal_daemon("TERM", "quit")
+}
+
+fn signal_daemon(signal: &str, what: &str) -> Result<(), String> {
     let path = pid_file_path();
     let pid_raw = std::fs::read_to_string(&path).map_err(|e| {
         format!(
-            "failed to read pid file at {}: {e}",
+            "failed to read pid file at {} ({e}). Is transcrust running?",
             path.display()
         )
     })?;
@@ -52,13 +71,13 @@ pub fn request_quit() -> Result<(), String> {
     }
 
     let status = std::process::Command::new("kill")
-        .args(["-TERM", pid])
+        .args([&format!("-{signal}"), pid])
         .status()
         .map_err(|e| format!("failed to execute kill: {e}"))?;
 
     if status.success() {
         Ok(())
     } else {
-        Err(format!("kill exited with status {status}"))
+        Err(format!("{what} signal failed: kill exited with status {status}"))
     }
 }
