@@ -1035,20 +1035,37 @@ fn run_doctor() {
         None => {}
     }
     // The push-to-talk binding, and whether it can leak into your document.
-    let combo = {
-        let mut parts = config.hotkey.modifiers.clone();
-        parts.push(config.hotkey.key.clone());
-        parts.join("+")
+    // Resolved the same way the listener resolves it, so this reports the
+    // binding actually in force rather than the fields it was written in.
+    let binding = hotkey::resolve_binding(&config.hotkey);
+    let (bound_modifiers, bound_key) = match &binding {
+        Ok(pair) => pair.clone(),
+        Err(error) => {
+            println!("Hotkey: INVALID — {error}");
+            println!("  transcrust will refuse to start until this is fixed.");
+            (Vec::new(), String::new())
+        }
     };
-    println!("Hotkey: {combo} (hold to talk)");
-    if !hotkey::is_silent_key(&config.hotkey.key) {
-        println!(
-            "  ⚠ trigger \"{}\" produces a character. transcrust reads evdev passively",
-            config.hotkey.key
-        );
-        println!("    and never grabs the keyboard, so every press and auto-repeat also");
-        println!("    reaches the focused window for the whole hold.");
-        println!("    Silent triggers: any modifier, F13-F20, PAUSE, SCROLLLOCK.");
+    if binding.is_ok() {
+        let mut parts = bound_modifiers.clone();
+        parts.push(bound_key.clone());
+        println!("Hotkey: {} (hold to talk)", parts.join("+"));
+        if config.hotkey.grab {
+            println!("  Grab: on — keyboard is held exclusively for the duration of the press");
+        }
+    }
+    if binding.is_ok() && !hotkey::is_silent_key(&bound_key) {
+        println!("  ⚠ trigger \"{bound_key}\" produces a character.");
+        if config.hotkey.grab {
+            println!("    grab is on, so the auto-repeat is suppressed — but the first press");
+            println!("    reaches the focused window before the grab takes effect, so expect");
+            println!("    one stray keystroke per hold.");
+        } else {
+            println!("    transcrust reads evdev passively and does not grab the keyboard, so");
+            println!("    every press and auto-repeat reaches the focused window for the whole");
+            println!("    hold. Set hotkey.grab = true to stop the repeat, or pick a silent key.");
+        }
+        println!("    Silent triggers: any modifier, F13-F20, Pause, ScrollLock, Print.");
     }
     match (config.hotkey.mode_key.as_deref(), config.hotkey.mode_modifiers.as_slice()) {
         (Some(key), mods) if !mods.is_empty() => {

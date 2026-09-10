@@ -22,6 +22,19 @@ pub struct HotkeyConfig {
     #[serde(default = "default_modifiers")]
     pub modifiers: Vec<String>,
     pub device: Option<String>,
+    /// labwc-style chord, e.g. `"A-space"`, `"W-A-p"`, `"Print"`.
+    ///
+    /// Overrides `key`/`modifiers` when set, so a binding can be written the way
+    /// it is written in `rc.xml` instead of as a key plus an array. Prefixes are
+    /// labwc's: `W-` super, `A-` alt, `C-` ctrl, `S-` shift.
+    pub chord: Option<String>,
+    /// Take exclusive control of the keyboard (`EVIOCGRAB`) while the trigger is
+    /// held, so a printable trigger cannot also reach the focused window.
+    ///
+    /// Off by default, and an incomplete fix by construction — see
+    /// `hotkey.rs`'s grab handling for exactly what it does and does not stop.
+    #[serde(default)]
+    pub grab: bool,
     /// Key that cycles to the next mode. Unset by default: a keyboard-driven
     /// desktop already has a full keymap and this should not claim a chord
     /// without being asked.
@@ -52,6 +65,8 @@ impl Default for HotkeyConfig {
     fn default() -> Self {
         Self {
             key: default_key(),
+            chord: None,
+            grab: false,
             modifiers: default_modifiers(),
             device: None,
             mode_key: None,

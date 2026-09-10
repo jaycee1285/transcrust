@@ -14,8 +14,22 @@
 # character will type into your document for the whole hold — `Space + LeftAlt`
 # did exactly that. Safe triggers emit nothing: any modifier, F13-F20, PAUSE,
 # SCROLLLOCK. `--doctor` warns if you pick one that does not.
+# Two ways to write the binding; `chord` wins when both are present.
+# Either way this is read at startup — change it and restart, no rebuild.
+#
+# chord uses labwc rc.xml spelling, so a binding can move between the two files
+# unchanged: W- super, A- alt, C- ctrl, S- shift.
+#chord = "Print"
+#chord = "A-space"
 key = "RightAlt"
 modifiers = ["LeftAlt"]
+
+# Hold the keyboard exclusively (EVIOCGRAB) while the trigger is down, so a
+# printable trigger cannot spray auto-repeat into the focused window. It does
+# not stop the *first* press, which the compositor has already delivered by the
+# time transcrust sees it — so A-space still cycles a Firefox tab once per hold.
+# Only worth turning on if you want a printable trigger anyway.
+grab = false
 # device = "/dev/input/event3"
 
 [audio]
