@@ -7,7 +7,14 @@
 # tray switcher: the swap is refused unless the app is idle.
 # mode_key = "M"
 # mode_modifiers = ["RightAlt"]
-key = "Space"
+# Push-to-talk: hold both, speak, release. Modifier-only on purpose.
+#
+# transcrust reads evdev passively and never grabs the keyboard, so the focused
+# window sees every press and auto-repeat regardless. A trigger that produces a
+# character will type into your document for the whole hold — `Space + LeftAlt`
+# did exactly that. Safe triggers emit nothing: any modifier, F13-F20, PAUSE,
+# SCROLLLOCK. `--doctor` warns if you pick one that does not.
+key = "RightAlt"
 modifiers = ["LeftAlt"]
 # device = "/dev/input/event3"
 

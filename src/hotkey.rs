@@ -187,6 +187,26 @@ pub async fn listen(config: &HotkeyConfig) -> mpsc::Receiver<HotkeyEvent> {
     rx
 }
 
+/// Does this trigger emit a character into whatever has focus?
+///
+/// transcrust reads evdev **passively** — no `EVIOCGRAB` — so the compositor and
+/// the focused window see every press and every auto-repeat regardless of what
+/// transcrust does with them. A printable trigger therefore types into your
+/// document for the whole hold: `Space + LeftAlt` cycled Firefox tabs and left
+/// spaces behind. Modifiers, the F13-F20 block, Pause and Scroll Lock emit
+/// nothing, so they are the only safe push-to-talk triggers without a grab.
+pub fn is_silent_key(name: &str) -> bool {
+    matches!(
+        name.to_uppercase().as_str(),
+        "LEFTCTRL" | "LCTRL" | "RIGHTCTRL" | "RCTRL"
+            | "LEFTSHIFT" | "LSHIFT" | "RIGHTSHIFT" | "RSHIFT"
+            | "LEFTALT" | "LALT" | "RIGHTALT" | "RALT"
+            | "LEFTMETA" | "LMETA" | "SUPER" | "RIGHTMETA" | "RMETA"
+            | "PAUSE" | "SCROLLLOCK"
+            | "F13" | "F14" | "F15" | "F16" | "F17" | "F18" | "F19" | "F20"
+    )
+}
+
 pub fn list_devices() {
     let input_dir = PathBuf::from("/dev/input");
     let mut entries: Vec<_> = match std::fs::read_dir(&input_dir) {
@@ -209,5 +229,39 @@ pub fn list_devices() {
                 }
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Every name `is_silent_key` claims is safe must actually parse, or
+    /// `--doctor` will bless a binding that never fires.
+    #[test]
+    fn every_silent_key_parses() {
+        for name in [
+            "LEFTCTRL", "RIGHTCTRL", "LEFTSHIFT", "RIGHTSHIFT", "LEFTALT", "RIGHTALT",
+            "LEFTMETA", "RIGHTMETA", "SUPER", "PAUSE", "SCROLLLOCK", "F13", "F20",
+        ] {
+            assert!(parse_key(name).is_some(), "{name} is called silent but does not parse");
+            assert!(is_silent_key(name), "{name} should be silent");
+        }
+    }
+
+    /// The binding that caused the leak, and the one that replaced it.
+    #[test]
+    fn character_keys_are_not_silent() {
+        for name in ["SPACE", "A", "Z", "CAPSLOCK"] {
+            assert!(!is_silent_key(name), "{name} emits something and must warn");
+        }
+    }
+
+    /// Config is written in mixed case; the check must not depend on it.
+    #[test]
+    fn silence_check_ignores_case() {
+        assert!(is_silent_key("RightAlt"));
+        assert!(is_silent_key("rightalt"));
+        assert!(!is_silent_key("Space"));
     }
 }

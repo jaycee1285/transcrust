@@ -1007,6 +1007,22 @@ fn run_doctor() {
         ),
         None => {}
     }
+    // The push-to-talk binding, and whether it can leak into your document.
+    let combo = {
+        let mut parts = config.hotkey.modifiers.clone();
+        parts.push(config.hotkey.key.clone());
+        parts.join("+")
+    };
+    println!("Hotkey: {combo} (hold to talk)");
+    if !hotkey::is_silent_key(&config.hotkey.key) {
+        println!(
+            "  ⚠ trigger \"{}\" produces a character. transcrust reads evdev passively",
+            config.hotkey.key
+        );
+        println!("    and never grabs the keyboard, so every press and auto-repeat also");
+        println!("    reaches the focused window for the whole hold.");
+        println!("    Silent triggers: any modifier, F13-F20, PAUSE, SCROLLLOCK.");
+    }
     match (config.hotkey.mode_key.as_deref(), config.hotkey.mode_modifiers.as_slice()) {
         (Some(key), mods) if !mods.is_empty() => {
             println!("Mode toggle: {}+{key}", mods.join("+"))

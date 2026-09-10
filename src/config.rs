@@ -30,8 +30,18 @@ pub struct HotkeyConfig {
     pub mode_modifiers: Vec<String>,
 }
 
+/// Push-to-talk trigger. **Modifier-only on purpose.**
+///
+/// `hotkey.rs` reads evdev passively and never calls `EVIOCGRAB`, so the
+/// compositor and the focused window see every press and every auto-repeat no
+/// matter what transcrust does with them. A printable trigger therefore types
+/// into whatever has focus for the entire hold — the previous default,
+/// `Space + LeftAlt`, cycled Firefox tabs and left a trail of spaces behind
+/// while dictating. Both alts emit no character, so there is nothing to leak.
+///
+/// `--doctor` warns if this is set to something that produces a character.
 fn default_key() -> String {
-    "Space".to_string()
+    "RightAlt".to_string()
 }
 
 fn default_modifiers() -> Vec<String> {
