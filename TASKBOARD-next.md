@@ -209,8 +209,10 @@ Reducing corrections is worth more than reducing latency. Depends on B.3.
         early on that flag, so notification-based surfacing is a no-op for the
         one user. Pick a surface he actually sees — the tray tooltip, a
         state, or an opt-in that turns notifications on for this alone.
-      The original reasoning follows.
-- [ ] **D.0 (original note).** The
+
+      The original reasoning, which still stands:
+
+      The
       pre-neural systems underlined low-confidence words rather than silently
       correcting them; Dragon's insight was that the human is going to proofread
       anyway, so the cheap win is telling them *where*. That is this repo's
@@ -229,6 +231,20 @@ Reducing corrections is worth more than reducing latency. Depends on B.3.
 ---
 
 ## Phase E — The command channel
+
+> **Largely superseded 2026-09-10 by `~/repos/dayshade/spec.md`.** The command
+> channel was designed as a decode-time capability inside transcrust on the
+> desktop. The use case that actually wanted it — logging time and habits into
+> DayLight — turned out to live on the phone, behind a Quick Settings tile, with
+> a different engine and an explicit grammar. That removes E.3 and E.4 from this
+> repo: intent classification is unnecessary when the utterance is
+> `<name> <verb> <detail>` and the name resolves against ~35 candidates.
+>
+> **E.1 survives and is still the largest item on this board**, because it is not
+> really about commands — it is decode-time vocabulary biasing, which is Dragon
+> mechanism 2 and the direct answer to the proper-noun errors measured on
+> 2026-09-10: `Orang`/Orion, `terrake`/Terakeet, `at track`/Apptrack,
+> `sigs`/Cigs. E.2 only matters if E.1 lands.
 
 Demoted deliberately. It is the most-designed and least-validated thing here —
 John encountered the idea this week. Building six subtasks ahead of evidence is
@@ -265,6 +281,23 @@ channel eats your dictation. Ship push-to-talk-with-a-modifier instead.
 ---
 
 ## Settled
+
+- [x] **Moonshine is the command engine; Parakeet stays the dictation engine.**
+      Measured 2026-09-10 on a 5 s command from real phone audio: Moonshine at
+      0.57 s cold load plus 0.17 s inference (RTF 0.033), against Parakeet at
+      ~0.9 s plus ~1.0 s. It emits digits where Parakeet emits number words, and
+      it transcribed `Orion Laundry` correctly where Parakeet produced `Orang`
+      and flagged it at 0.46. Two limits keep it out of dictation: it truncated
+      partway through a 60 s clip, and it repeated a phrase on a 5 s one — the
+      autoregressive hallucination a transducer structurally cannot produce.
+      `src/moonshine.rs` and `--moonshine <dir> <wav>`. The **split-decoder**
+      export is required: the merged one fuses across its own `optimum::if`
+      under ORT and dies on the first token.
+- [x] **Cold load, not RTF, is the metric for a tap-to-talk surface.** A tile is
+      cold every time, so load dominates the wall clock on a 1-5 s utterance.
+      `--bench` reports both columns; read the load one.
+- [x] **`--probe-onnx` prints graph inputs and outputs.** Every export naming
+      difference in the Moonshine work was found with it rather than guessed.
 
 - [x] **Granite pad-to-512 is a hard graph constraint.** Axes declared dynamic,
       only multiples of 512 execute; 256/128/64/100 fail on a frozen reshape in
