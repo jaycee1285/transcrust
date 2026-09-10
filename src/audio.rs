@@ -463,14 +463,24 @@ mod tests {
     #[test]
     fn resampling_a_dictation_clip_is_cheap() {
         let input = tone(1000.0, 44_100, 10.0);
-        let start = std::time::Instant::now();
-        let out = resample(&input, 44_100, 16_000);
-        let elapsed = start.elapsed();
-        assert_eq!(out.len(), 160_000);
-        println!("10s of 44.1kHz -> 16kHz took {:?}", elapsed);
+        // Best of three, not a single run. This asserts a wall-clock bound, and
+        // a single sample fails whenever the machine is busy — it did, once,
+        // while an LLM was generating in another process. The best run still
+        // catches the regression this guards against: the pre-polyphase form
+        // called `sin` once per tap and was an order of magnitude slower.
+        let mut best = std::time::Duration::MAX;
+        let mut out_len = 0;
+        for _ in 0..3 {
+            let start = std::time::Instant::now();
+            let out = resample(&input, 44_100, 16_000);
+            best = best.min(start.elapsed());
+            out_len = out.len();
+        }
+        assert_eq!(out_len, 160_000);
+        println!("10s of 44.1kHz -> 16kHz took {best:?} (best of 3)");
         assert!(
-            elapsed < std::time::Duration::from_millis(150),
-            "resampling 10s took {elapsed:?}; the polyphase bank should keep this in single-digit ms"
+            best < std::time::Duration::from_millis(150),
+            "resampling 10s took {best:?}; the polyphase bank should keep this in single-digit ms"
         );
     }
 
