@@ -27,16 +27,28 @@
 - Accept labwc-style `chord = "A-space"` in config so a binding moves between `rc.xml` and `config.toml` unchanged, and never needs a rebuild.
 
 ## Next
-- **Granite as a command channel** — see `TASKBOARD-next.md`. The bet:
-  Parakeet needs none of murmure's correction machinery for *dictation* because
-  it emits grownup English natively; that machinery is worth pointing at
-  commands, where the vocabulary is closed and output shape is irrelevant. It
-  runs on Parakeet itself — the logits were always there, `parakeet-rs` just
-  hid them. See `Parakeet-v3.md` for why this model fits on-device control.
+- **The command channel moved.** It is now `~/repos/dayshade/spec.md` — a Quick
+  Settings tile on Android that writes DayLight Markdown directly. What stays in
+  this repo is `TASKBOARD-next.md` **E.1**, the decode-time boost tree, which was
+  never really about commands: it is vocabulary biasing, and it is the answer to
+  the proper-noun errors this repo actually has.
+- **Ship what is built.** Five commits are local-only and the published release
+  asset is now seven behind: `./release.sh`, then
+  `git push -u origin engines-and-corpus`, then check the `tauri.nix` entry in
+  the config repo against the new asset.
+- **Turn on `observe.corpus`.** It is `false`, so nothing is banked and the
+  corpus is empty. C.2, C.4, the A.2 re-run against real microphone audio, and
+  Dragon mechanism 1 all wait behind one boolean.
+- **Bump yt-dlp.** The system binary is `2025.12.08` against nixpkgs
+  `2026.08.19`, and the stale one 403s on every download — so anything shelling
+  out to it is broken, not just the new skills.
 - If a grammar/punctuation pass is wanted back, build a small purpose-built deterministic one (or the future small-LM toggle) rather than re-adding Harper.
 - Add explicit first-load tray/icon feedback so users can see model warmup instead of only paying hidden latency on first transcription.
 - Tighten startup/log ergonomics so steady-state smoke logs stay high-signal.
-- Verify the `transcrust` `tauri.nix` entry in the config repo against the published release asset.
+- **Log path is cwd-relative.** `observe.rs` builds `./logs/latest.log` from
+  `current_dir()`, so a tray- or systemd-launched instance writes somewhere
+  arbitrary and `--doctor` does not say where. `~/.local/state/transcrust/` is
+  the XDG-correct home; two lines plus a `--doctor` line.
 
 ## Risks
 - Pure Nix builds still need scrutiny because `ort` binary provisioning is touchy across environments.
