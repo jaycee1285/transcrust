@@ -19,6 +19,10 @@ fn parse_key(name: &str) -> Option<Key> {
     match name.to_uppercase().as_str() {
         "SCROLLLOCK" => Some(Key::KEY_SCROLLLOCK),
         "PAUSE" => Some(Key::KEY_PAUSE),
+        // Emits no character, but most desktops bind it to a screenshot tool, so
+        // it is offered rather than recommended.
+        "PRTSCR" | "PRINTSCREEN" | "SYSRQ" => Some(Key::KEY_SYSRQ),
+        "MENU" | "COMPOSE" => Some(Key::KEY_COMPOSE),
         "F13" => Some(Key::KEY_F13),
         "F14" => Some(Key::KEY_F14),
         "F15" => Some(Key::KEY_F15),
@@ -202,9 +206,94 @@ pub fn is_silent_key(name: &str) -> bool {
             | "LEFTSHIFT" | "LSHIFT" | "RIGHTSHIFT" | "RSHIFT"
             | "LEFTALT" | "LALT" | "RIGHTALT" | "RALT"
             | "LEFTMETA" | "LMETA" | "SUPER" | "RIGHTMETA" | "RMETA"
-            | "PAUSE" | "SCROLLLOCK"
+            | "PAUSE" | "SCROLLLOCK" | "PRTSCR" | "PRINTSCREEN" | "SYSRQ"
+            | "MENU" | "COMPOSE"
             | "F13" | "F14" | "F15" | "F16" | "F17" | "F18" | "F19" | "F20"
     )
+}
+
+/// Every name `parse_key` accepts, canonical spelling first.
+///
+/// Exists so `--keys` can name a key it just saw. `parse_key` is a one-way
+/// match, and a probe that can only say "some key" is no better than guessing.
+const BINDABLE: &[&str] = &[
+    "LeftCtrl", "RightCtrl", "LeftShift", "RightShift", "LeftAlt", "RightAlt",
+    "LeftMeta", "RightMeta", "Pause", "ScrollLock", "PrtScr", "Menu", "CapsLock",
+    "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "Space",
+    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+    "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+];
+
+fn name_for(key: Key) -> Option<&'static str> {
+    BINDABLE.iter().copied().find(|n| parse_key(n) == Some(key))
+}
+
+/// Print keyboard events as transcrust sees them, with the name to put in
+/// config and whether it can leak into the focused window.
+///
+/// The reason this exists: choosing a push-to-talk chord was guesswork. The
+/// daemon reads one evdev device, a chord only fires if every modifier is
+/// already held when the trigger goes down, and nothing reported either fact.
+/// Watching the actual stream answers both in seconds.
+pub async fn probe_keys(device_name: Option<&str>) {
+    let device = match find_keyboard_device(device_name) {
+        Ok(device) => device,
+        Err(error) => {
+            eprintln!("{error}");
+            eprintln!("Try --list-devices; are you in the 'input' group?");
+            std::process::exit(1);
+        }
+    };
+    println!(
+        "Watching {}. Hold your candidate chord; Ctrl+C to stop.",
+        device.name().unwrap_or("keyboard")
+    );
+    println!("A chord fires only if every modifier is already down when the trigger goes down.\n");
+
+    let mut stream = match device.into_event_stream() {
+        Ok(stream) => stream,
+        Err(error) => {
+            eprintln!("Failed to read events: {error}");
+            std::process::exit(1);
+        }
+    };
+    let mut held: Vec<&'static str> = Vec::new();
+
+    loop {
+        let event = match stream.next().await {
+            Some(Ok(event)) => event,
+            _ => break,
+        };
+        let InputEventKind::Key(key) = event.kind() else { continue };
+        let value = event.value();
+        if value == 2 {
+            continue; // auto-repeat: noise here, and the thing that leaks
+        }
+        let Some(name) = name_for(key) else {
+            if value == 1 {
+                println!("  press    {:<12} — not bindable by transcrust", format!("{key:?}"));
+            }
+            continue;
+        };
+        if value == 1 {
+            if !held.contains(&name) {
+                held.push(name);
+            }
+        } else {
+            held.retain(|h| *h != name);
+        }
+        let leaks = if is_silent_key(name) { "silent" } else { "LEAKS a character" };
+        let action = if value == 1 { "press  " } else { "release" };
+        println!("  {action}  {name:<12} {leaks}");
+        if value == 1 && held.len() > 1 {
+            let (trigger, mods) = held.split_last().expect("held is non-empty");
+            let quoted: Vec<String> = mods.iter().map(|m| format!("\"{m}\"")).collect();
+            println!(
+                "           chord: key = \"{trigger}\", modifiers = [{}]",
+                quoted.join(", ")
+            );
+        }
+    }
 }
 
 pub fn list_devices() {

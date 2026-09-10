@@ -254,6 +254,15 @@ fn main() {
             println!("injected: {}", postprocess::fix_transcription(&shaped));
             return;
         }
+        Some("--keys") => {
+            // Choosing a push-to-talk chord was guesswork: nothing reported what
+            // the daemon actually receives, or that a chord only fires when every
+            // modifier is already down when the trigger lands.
+            let config = config::load();
+            let _ = runtime();
+            runtime().block_on(hotkey::probe_keys(config.hotkey.device.as_deref()));
+            return;
+        }
         Some("--list-devices") => {
             hotkey::list_devices();
             println!();
@@ -294,6 +303,7 @@ fn main() {
             println!("  parakeet-tdt-0.6b           FP32 full precision, ~1.4 GB");
             println!();
             println!("Models are saved to ~/.local/share/transcrust/models/");
+            println!("  --keys                      Watch keyboard events; name the chord to bind");
             println!("  --list-devices              List keyboard and audio devices");
             println!("  --config                    Print config path");
             println!("  --version                   Print version");
