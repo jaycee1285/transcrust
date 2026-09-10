@@ -127,6 +127,88 @@ impl Normaliser {
     }
 }
 
+/// One normaliser for the life of the process.
+///
+/// `llama-server` costs ~1 s to come up and holds ~460 MB; paying that per
+/// dictation would eat the speed advantage that justifies the pipeline. Built
+/// lazily on first use so a daemon that never dictates long never loads it.
+static SHARED: std::sync::OnceLock<std::sync::Mutex<Option<Normaliser>>> =
+    std::sync::OnceLock::new();
+
+/// Where the models live, by convention rather than configuration.
+fn model_dirs() -> (std::path::PathBuf, std::path::PathBuf) {
+    let models = dirs::data_dir()
+        .unwrap_or_default()
+        .join("transcrust")
+        .join("models");
+    (models.join("s1-mini-gguf"), models.join("s1-mini-onnx"))
+}
+
+/// Clean a transcript, or hand it back untouched.
+///
+/// **This never fails a dictation.** A missing model, an absent `llama-server`,
+/// a crashed request — every one of them returns the input rather than an error,
+/// because the transcript already exists and the polish is an improvement rather
+/// than a requirement. Losing words to a normaliser that would not start is the
+/// one outcome worth engineering against.
+pub fn polish(observer: &crate::observe::Observer, text: &str, style: Style) -> String {
+    if text.trim().is_empty() {
+        return text.to_string();
+    }
+    let cell = SHARED.get_or_init(|| std::sync::Mutex::new(None));
+    let Ok(mut guard) = cell.lock() else {
+        observer.error("normalise", "normaliser lock poisoned; leaving transcript as is");
+        return text.to_string();
+    };
+
+    if guard.is_none() {
+        let (gguf_dir, onnx_dir) = model_dirs();
+        let started = std::time::Instant::now();
+        match Normaliser::load(&gguf_dir, &onnx_dir) {
+            Ok(model) => {
+                observer.phase(
+                    "normalise",
+                    &format!(
+                        "{} normaliser ready in {:.2}s",
+                        model.backend(),
+                        started.elapsed().as_secs_f64()
+                    ),
+                );
+                *guard = Some(model);
+            }
+            Err(error) => {
+                observer.error(
+                    "normalise",
+                    &format!("no normaliser available ({error}); leaving transcript as is"),
+                );
+                return text.to_string();
+            }
+        }
+    }
+
+    let Some(model) = guard.as_mut() else {
+        return text.to_string();
+    };
+    let started = std::time::Instant::now();
+    match model.normalise(text, style) {
+        Ok(cleaned) if !cleaned.trim().is_empty() => {
+            observer.phase(
+                "normalise",
+                &format!("polished in {:.2}s", started.elapsed().as_secs_f64()),
+            );
+            cleaned
+        }
+        Ok(_) => {
+            observer.error("normalise", "normaliser returned nothing; keeping the raw transcript");
+            text.to_string()
+        }
+        Err(error) => {
+            observer.error("normalise", &format!("{error}; keeping the raw transcript"));
+            text.to_string()
+        }
+    }
+}
+
 fn first_file(dir: &Path, names: &[&str]) -> Option<std::path::PathBuf> {
     names
         .iter()
