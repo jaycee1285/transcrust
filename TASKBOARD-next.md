@@ -116,12 +116,20 @@ it** except `--parakeet-direct`; the live path still goes through
       `CentOS Stream 10`. Confidence flags the same span — `CentOS` scores 0.42
       and a neighbouring mangle `CentaWes.` scores 0.27, against >0.75 for
       ordinary words.
-- [ ] **B.3 — Then choose, and actually do it.** Evidence says route
-      `parakeet.rs` through the direct driver: faster, at least as accurate, and
-      it is the only way Phase D reaches the live path. The one blocker is
-      packaging — `LoadedParakeet` needs `nemo128.onnx`, which
-      `--download-model` does not fetch, so a fresh install has to fall back to
-      the crate rather than fail.
+- [x] **B.3 — Then choose, and actually do it.** Done 2026-09-09. `parakeet.rs`
+      now loads an `Engine` that prefers the direct driver and falls back to the
+      crate, so there is one live path rather than two implementations and a
+      flag. Both arms verified through `--wav`, which drives the same worker:
+      - **Direct**, when `nemo128.onnx` is present: RTF **0.11** on a 45 s clip
+        against the crate's 0.17, and `transcription.confidence` in the log
+        (`EUL (0.52)`).
+      - **Crate**, with the graph absent (tested via a symlink farm, no
+        `nemo128.onnx`): RTF 0.19, logs *"no nemo128.onnx; using parakeet-rs (no
+        confidence signal)"*, and produces a **byte-identical transcript**.
+      - A present-but-broken graph set reports the error and falls through
+        rather than stranding the user with no dictation.
+      - `CONFIDENCE_GATE = 0.75` and the log line are D.0's substrate. The
+        notification half is still D.0's own work.
 
 **Kill criterion:** >15% slower than the crate → profile before proceeding.
 **Result: cleared.** 35-43% faster, so nothing to profile.
@@ -166,6 +174,8 @@ problem.**
 ---
 
 ## Phase D — The correction legs
+
+**Unblocked 2026-09-09 by B.3.** Confidence now reaches the live path.
 
 **This is the phase that attacks the actual bottleneck.** John reviews every
 sentence, which is why he never perceives the engine speed differences at all.
