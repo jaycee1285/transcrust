@@ -239,50 +239,50 @@ Reducing corrections is worth more than reducing latency. Depends on B.3.
       log (**not** in the injected text — that goes into a real buffer). Turns a
       whole-sentence proofread into a two-word glance, and needs no model change
       at all.
-- [ ] **D.4 — s1-mini against the deterministic ceiling, which now has a number.**
-      `Dragon-Mechanisms.md` §4 keeps the rule-based pass as "the baseline any
-      learned normaliser has to beat". As of 2026-09-10 that baseline is
-      measured, on 36:35 of speech against yt-dlp auto-captions:
+- [ ] **D.4 — s1-mini as the readability pass for Granite's `--wav` output.**
+      **Scoped to batch, not to dictation.** Granite is in the tree permanently
+      for `--wav`: 36:35 of YouTube in 2:17 against Parakeet's 7:37. It is not a
+      candidate that has to earn its keep, so the marginal cost here is s1-mini
+      alone.
 
-      | | WER | RTF |
-      |---|---|---|
-      | Granite, raw | 13.71% | 0.062 |
-      | Granite — Long (deterministic) | **10.11%** | 0.063 |
-      | Parakeet | 4.86% | 0.208 |
+      The problem it solves is readability, not accuracy. Granite emits no
+      punctuation and no casing, so a long transcript arrives as one run-on per
+      window:
 
-      **The deterministic contraction pass buys 3.6 points — a 26% relative cut
-      — for no measurable time.** That is the bar.
+      > *whether you are using expensive best in class stuff like fable 5 or
+      > surprisingly cheap and effective stuff like deep seek v 4 flash it is
+      > hard to go wrong but what if you are would not it be nice to know*
 
-      It also shows exactly where rules stop, which is the useful half. `— Long`
-      cannot reach the possessive: Granite emits `today is sponsor` and
-      `when is the last time`, and `today is` → `today's` is not safely
-      reversible (`today is Tuesday`). That is the same wall `mode.rs` already
-      documents for `I have`, and it is precisely what a learned normaliser is
-      for — s1-mini's `Styling` axis (`casual` → `formal`) *is* the contraction
-      decision, and it can also resolve false starts, which no rule can.
+      `Profile::Long` gets 13.71% → **10.11%** WER on contractions alone, for no
+      measurable time, and then stops at the possessive: `today is sponsor`,
+      `when is the last time`. `today is` → `today's` is not safely reversible
+      (`today is Tuesday`), the same wall `mode.rs` documents for `I have`.
+      s1-mini's `Styling` axis *is* that decision, and it resolves false starts
+      no rule can reach.
 
-      **But run the arithmetic before building it.** Granite's remaining gap to
-      Parakeet is 5.2 points, and it is not all shape. Proper nouns are the other
-      half and a normaliser cannot touch them: on the same audio Granite dropped
-      `Claude Code` 5→1 and `Kimi` 13→5, writing `clcode` and `kimmy`. So the
-      honest hypothesis is that s1-mini closes the shape half and leaves the
-      content half, landing somewhere near 7-8% rather than at Parakeet's 4.86%.
+      **Batch removes the risk that made this hard.** The unmeasured number was
+      s1-mini's token rate, and interactively it swings the answer from "never
+      wins" to "wins after 26 s". Nobody waits on a `--wav` run, so it does not
+      matter here. Latency stops being a variable and the question reduces to
+      one thing: does the output read better?
 
-      Against that it costs ~460 MB, its own inference time on top of Granite's,
-      and an LLM in the path that can invent. Granite's whole appeal was being
-      3.2× faster; a normaliser large enough to fix it may spend that back.
+      **Test with what already exists.** `~/repos/transcrust` holds Granite
+      `--wav` transcripts of two long talks, and `tools/wer/` compares them.
+      Run s1-mini over a Granite transcript, diff against the Parakeet one, and
+      read both. No wiring required to answer it.
 
-      **Kill criterion:** if Granite + s1-mini is not both faster *and* within a
-      point of Parakeet end-to-end, there is no reason to run two models where
-      one already works. Measure with `--bench` and `tools/wer/` before writing
-      any wiring.
+      **Do not extend this to dictation without a separate argument.** Live,
+      Granite costs roughly one extra wrong word per 22-second sentence and
+      forfeits the confidence signal that reached the live path on 2026-09-10 —
+      CTC posteriors could supply it, but nobody has written that. Reducing
+      corrections beats reducing latency here, and Granite trades the wrong way.
+      `--long` is the one dictation case worth revisiting, because a five-minute
+      capture is 63 s of Parakeet against ~43 s, and that gap is felt.
 
-      The ordering question from the old Deferred entry still stands and is now
-      sharper: s1-mini is a more aggressive general-English re-ranker than Harper
-      was, and Harper was removed for starving the phonetic dictionary. If
-      s1-mini runs *before* the dictionary it will do the same thing. If it runs
-      after, it may undo the dictionary's corrections. That ordering has to be
-      decided by measurement, not by taste.
+      **Ordering is still the open question.** s1-mini is a more aggressive
+      general-English re-ranker than Harper, and Harper was removed for starving
+      the phonetic dictionary. Before the dictionary it repeats that; after it,
+      it may undo the dictionary's corrections. Decide by measurement.
 - [ ] **D.3 — Widen the seam.** `TranscriptionService::transcribe` returns
       `Result<String, String>`; carrying confidence means a struct. Degrades
       cleanly: engines that cannot supply it return `None` and consumers fall
