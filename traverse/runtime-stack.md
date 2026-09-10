@@ -196,6 +196,18 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
   deterministic pass (or a toggled local post-processor), not re-adding Harper.
 
 ## Offline Files (`--wav`)
+- **`--wav` is how you test the live engine without a microphone.** It drives
+  the same `parakeet.rs` worker the hotkey drives, so an engine change is
+  verifiable end to end from a file — B.3's direct-driver swap and its crate
+  fallback were both confirmed this way, on a machine with no dictation
+  happening. What `--wav` does *not* exercise is capture and injection, which is
+  exactly where the two bugs of 2026-09-10 lived. Use it for engine work; use a
+  human smoke for anything touching the edges.
+- Reference recording: `~/syncthing/Record-2.wav` — 2:23, 44.1 kHz mono, John's
+  voice on his phone, deliberately enumerating his habits, tasks and two example
+  commands. The A.2 spectral result, the D.0 confidence hit-rate and the
+  Moonshine comparison all come from it. `tools/wer/` holds the comparison
+  scripts.
 - `src/wav.rs` is the offline twin of the hotkey path, and adds exactly one
   thing the live path does not need: **windowing**. Everything else — engine
   selection via `discover_modes`, the `transcribe(observer, rx, rate)` seam,
