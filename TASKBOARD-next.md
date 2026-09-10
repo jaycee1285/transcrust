@@ -149,7 +149,13 @@ problem.**
       dictation as WAV + JSON under `~/.local/share/transcrust/corpus/`, through
       the live path, pre-resample, at the device's real 44100 Hz. `--record`
       banks audio alone.
-- [ ] **C.2 — Fill `reference` only where it came out wrong.** A
+- [ ] **C.2 — Fill `reference` only where it came out wrong.**
+      **Blocked on a config flag, not on effort**: `observe.corpus` is `false` in
+      John’s config, so nothing is being banked and the corpus is empty (0 WAVs
+      as of 2026-09-10). Turn it on and it accumulates passively from ordinary
+      dictation. Several things wait on this: C.4, the A.2 re-run against real
+      microphone audio rather than codec-limited YouTube, and Dragon mechanism 1.
+      A
       failure-weighted corpus is worth more per minute of attention than a
       balanced one, and it is the only kind that gets finished.
 - [ ] **C.3 — A misroute is the free signal.** Dictating real project notes
@@ -194,7 +200,17 @@ Reducing corrections is worth more than reducing latency. Depends on B.3.
       dictionary words (`app image` → `AppImage`). Exact joins unconditional,
       fuzzy joins need both fragments below the gate. A repair, not a
       re-ranker — structurally cannot have Harper's failure mode.
-- [ ] **D.0 — Point at the words to check (do this first in D).** The
+- [ ] **D.0 — Point at the words to check (do this first in D).**
+      **Unblocked and now nearly free.** B.3 put confidence on the live path and
+      `parakeet.rs` already logs `transcription.confidence` with the
+      sub-threshold words; `CONFIDENCE_GATE` is 0.75. What remains is a surface.
+      - **The plan's assumed surface does not work for John**: his config sets
+        `observe.desktop_notifications = false`, and `Observer::notify` returns
+        early on that flag, so notification-based surfacing is a no-op for the
+        one user. Pick a surface he actually sees — the tray tooltip, a
+        state, or an opt-in that turns notifications on for this alone.
+      The original reasoning follows.
+- [ ] **D.0 (original note).** The
       pre-neural systems underlined low-confidence words rather than silently
       correcting them; Dragon's insight was that the human is going to proofread
       anyway, so the cheap win is telling them *where*. That is this repo's

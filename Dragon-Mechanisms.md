@@ -44,7 +44,7 @@ The impressive part was never the bones. It was the landing.
 | 4 | Deterministic formatting | Numbers, dates, currency, punctuation, without a model | Partly built (`postprocess.rs`, `Profile::Long`) |
 | 5 | Confidence surfacing / N-best | Tell the human *where to look* | Confidence recovered, not surfaced (**D.0**) |
 | 6 | Explicit modes + constrained grammar | Sidestep intent classification entirely | Mode toggle built; command grammar deferred |
-| 7 | Audio path validation | Refuse to work badly in silence | **`--doctor` reports the measured response** (2026-09-09); defect fixed in A.1 |
+| 7 | I/O path validation | Refuse to work badly in silence | **`--doctor` covers audio, hotkey and injection** (2026-09-10); `--keys` shows the live key stream |
 | 8 | Addressable prior text | Fix what was said without touching the keyboard | Nothing (`design-dictation-as-control.md`) |
 
 ---
@@ -184,7 +184,7 @@ mode lands on the 1997 solution, the 1997 solution was probably not naive.
 
 ---
 
-### 7. Audio path validation
+### 7. I/O path validation
 
 **Goal.** Fail loudly on bad input instead of quietly transcribing mush.
 
@@ -248,3 +248,27 @@ correction loop). Those are all small and all compose with a good model.
 needs a training pipeline, the other needs to own a buffer.
 
 Tracked as tasks in `TASKBOARD-next.md`; this document is the *why* behind them.
+
+---
+
+## Postscript, 2026-09-10: what the human smoke caught
+
+Mechanism 7 was scoped to *audio* because that is where the known defect was.
+A single human smoke test then found two more, both on the same principle and
+neither reachable by any unit test in this repo:
+
+- **`Space + LeftAlt` typed into the focused window for the whole hold.** A
+  passive evdev reader cannot suppress a key, so a printable trigger always
+  reaches the app. Structural, not a regression.
+- **Transcription succeeded and nothing was typed, silently.** `inject_text`
+  returned `Ok(())` if *any* method worked and discarded the rest; `clipboard`
+  is an in-process call that essentially always succeeds, so a missing
+  `wtype`/`dotool` could never surface.
+
+Both are integration and environment rather than logic — the class of bug a test
+suite structurally cannot see, and precisely what Dragon's microphone wizard
+existed to catch. 104 tests were green through both.
+
+The lesson worth keeping is narrower than "test on real hardware": **the failure
+was invisible because a fallback succeeded.** Any path with a fallback needs to
+report what it fell back *from*, or the degraded mode becomes the silent normal.
