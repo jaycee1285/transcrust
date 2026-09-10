@@ -646,12 +646,29 @@ async fn run_transcription_pipeline(
             state.transition(state::AppState::Injecting);
             observer.phase("inject", "injecting transcript");
 
-            if let Err(e) = inject::inject_text(&fixed, &output_cfg).await {
-                observer.error("inject", &e);
-                state.transition(state::AppState::Error);
-                tokio::time::sleep(std::time::Duration::from_secs(2)).await;
-                state.transition(state::AppState::Idle);
-                return;
+            match inject::inject_text(&fixed, &output_cfg).await {
+                // A method that was asked for and failed is reported even when
+                // another one carried the transcript, and notified as well as
+                // logged — the whole failure mode here was being invisible while
+                // the clipboard quietly absorbed it.
+                Ok(warnings) => {
+                    for warning in &warnings {
+                        observer.error("inject", warning);
+                    }
+                    if !warnings.is_empty() {
+                        observer.notify(
+                            "Transcrust: not typed",
+                            "Transcript is on the clipboard. See the log for why typing failed.",
+                        );
+                    }
+                }
+                Err(e) => {
+                    observer.error("inject", &e);
+                    state.transition(state::AppState::Error);
+                    tokio::time::sleep(std::time::Duration::from_secs(2)).await;
+                    state.transition(state::AppState::Idle);
+                    return;
+                }
             }
 
             if let Some(samples) = banked {
@@ -1098,6 +1115,7 @@ fn run_doctor() {
     println!("  Clipping: not measurable here — record a clip with --record and check levels");
 
     println!("Quit pid file: {}", control::pid_file_path().display());
+    let mut typing_available = false;
     for cmd in ["wtype", "dotool", "notify-send"] {
         let found = std::process::Command::new("sh")
             .arg("-lc")
@@ -1105,6 +1123,18 @@ fn run_doctor() {
             .status()
             .map(|s| s.success())
             .unwrap_or(false);
+        if found && (cmd == "wtype" || cmd == "dotool") {
+            typing_available = true;
+        }
         println!("Command {cmd}: {}", if found { "yes" } else { "no" });
+    }
+    // The failure this catches is silent by construction: clipboard output is an
+    // in-process library call that essentially always succeeds, so with no typing
+    // tool the transcript still lands on the clipboard and nothing is typed.
+    if config.output.wtype && !typing_available {
+        println!("  ⚠ output.wtype is on but neither wtype nor dotool is on PATH.");
+        println!("    Transcripts will reach the clipboard and never be typed.");
+        println!("    Both live in the nix devShell: run via 'nix develop -c ...',");
+        println!("    or use the wrapped install rather than ./target/release/transcrust.");
     }
 }
