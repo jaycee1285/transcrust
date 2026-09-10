@@ -64,15 +64,85 @@ impl Default for Style {
     }
 }
 
-pub struct Normaliser {
+/// The system prompt is specified exactly by the model card; it is not advice.
+const SYSTEM: &str = "You are a text normalizer for speech-to-text transcripts. \
+The input begins with a control line specifying the styling, structure, and \
+context settings; clean the transcript to match those settings and output only \
+the cleaned text.";
+
+/// Which backend is doing the work.
+///
+/// llama.cpp is preferred and ONNX is the fallback, on measurement rather than
+/// taste: the same model is ~6x faster through llama.cpp, which is the whole
+/// difference between this pipeline beating Parakeet and losing to it.
+///
+/// ONNX is kept rather than deleted because it is the format that ports —
+/// `voxlin` already runs `onnxruntime-android`, so a phone pipeline goes that
+/// way, where a second inference stack would not.
+pub enum Normaliser {
+    Llama(LlamaNormaliser),
+    Onnx(Box<OnnxNormaliser>),
+}
+
+impl Normaliser {
+    /// Prefer llama.cpp; fall back to ONNX with a reason on stderr.
+    ///
+    /// `gguf_dir` and `onnx_dir` are looked at in that order, and a missing
+    /// `llama-server` on PATH is a fallback rather than an error — the release
+    /// wrapper does not currently carry it.
+    pub fn load(gguf_dir: &Path, onnx_dir: &Path) -> Result<Self, String> {
+        let gguf = first_file(gguf_dir, &["s1-mini-q4_k_m.gguf", "s1-mini-f16.gguf"]);
+        let have_server = std::process::Command::new("sh")
+            .args(["-lc", "command -v llama-server >/dev/null"])
+            .status()
+            .map(|s| s.success())
+            .unwrap_or(false);
+
+        match (gguf, have_server) {
+            (Some(gguf), true) => match LlamaNormaliser::spawn(&gguf) {
+                Ok(model) => return Ok(Self::Llama(model)),
+                Err(error) => eprintln!("llama-server unavailable ({error}); falling back to ONNX"),
+            },
+            (None, _) => eprintln!("no s1-mini GGUF under {}; falling back to ONNX", gguf_dir.display()),
+            (_, false) => eprintln!("llama-server not on PATH; falling back to ONNX (about 6x slower)"),
+        }
+        OnnxNormaliser::load(onnx_dir).map(|model| Self::Onnx(Box::new(model)))
+    }
+
+    pub fn normalise(&mut self, transcript: &str, style: Style) -> Result<String, String> {
+        if transcript.trim().is_empty() {
+            return Ok(String::new());
+        }
+        match self {
+            Self::Llama(model) => model.normalise(transcript, style),
+            Self::Onnx(model) => model.normalise(transcript, style),
+        }
+    }
+
+    pub fn backend(&self) -> &'static str {
+        match self {
+            Self::Llama(_) => "llama.cpp",
+            Self::Onnx(_) => "onnx",
+        }
+    }
+}
+
+fn first_file(dir: &Path, names: &[&str]) -> Option<std::path::PathBuf> {
+    names
+        .iter()
+        .map(|name| dir.join(name))
+        .find(|path| path.is_file())
+}
+
+pub struct OnnxNormaliser {
     session: Session,
     tokenizer: Tokenizer,
 }
 
-impl Normaliser {
+impl OnnxNormaliser {
     /// Expects the onnx-community layout: `onnx/model*.onnx` with its
     /// `*.onnx_data` sidecar beside it, and `tokenizer.json` at the root.
-    pub fn load(dir: &Path) -> Result<Self, String> {
+    fn load(dir: &Path) -> Result<Self, String> {
         let onnx = dir.join("onnx");
         let model = ["model_q4.onnx", "model_quantized.onnx", "model.onnx"]
             .into_iter()
@@ -95,7 +165,7 @@ impl Normaliser {
         Ok(Self { session, tokenizer })
     }
 
-    pub fn normalise(&mut self, transcript: &str, style: Style) -> Result<String, String> {
+    fn normalise(&mut self, transcript: &str, style: Style) -> Result<String, String> {
         if transcript.trim().is_empty() {
             return Ok(String::new());
         }
@@ -201,6 +271,119 @@ impl Normaliser {
     }
 }
 
+/// llama.cpp's server, kept warm for the life of the process.
+///
+/// **Six times faster than the same model through `ort`**, measured on a real
+/// Granite paragraph: 51.8 tok/s against 157 words in 24.19 s. Converted against
+/// speech that is RTF 0.046 versus 0.28 — the difference between Granite + s1
+/// beating Parakeet at 0.111 and losing to it at 0.345. The runtime, not the
+/// model, decides whether this pipeline is worth running.
+///
+/// It was also more faithful on the same input: Q4_K_M left an ungrammatical
+/// stretch verbatim where ONNX q4 inserted a phrase that was never spoken.
+///
+/// A **server** rather than one-shot `llama-cli` invocations for two reasons.
+/// The model stays resident, so a second dictation does not pay the load again.
+/// And the JSON API is parseable — `llama-cli` prints a banner and echoes the
+/// prompt to stdout, truncated with an ellipsis when it is long, so recovering
+/// just the completion means guessing where the echo ended.
+pub struct LlamaNormaliser {
+    child: std::process::Child,
+    port: u16,
+}
+
+/// Arbitrary, high, and unlikely to collide. Fixed rather than ephemeral so a
+/// stuck server is findable with `ss -tlnp | rg 8127`.
+const LLAMA_PORT: u16 = 8127;
+
+impl LlamaNormaliser {
+    fn spawn(gguf: &Path) -> Result<Self, String> {
+        let mut child = std::process::Command::new("llama-server")
+            .args([
+                "-m", &gguf.to_string_lossy(),
+                "--port", &LLAMA_PORT.to_string(),
+                "--host", "127.0.0.1",
+                "--jinja",
+                // The template must emit an empty think block: that is the exact
+                // prefix the model saw in training.
+                "--chat-template-kwargs", r#"{"enable_thinking":false}"#,
+                "-c", "8192",
+                "--log-disable",
+            ])
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::null())
+            .spawn()
+            .map_err(|e| format!("failed to start llama-server: {e}"))?;
+
+        // Poll rather than sleep: load time varies with the machine, and a fixed
+        // wait is either a stall or a race.
+        for _ in 0..120 {
+            if let Some(status) = child.try_wait().unwrap_or(None) {
+                return Err(format!("llama-server exited during startup: {status}"));
+            }
+            let healthy = std::process::Command::new("curl")
+                .args(["-sf", "-m", "1", &format!("http://127.0.0.1:{LLAMA_PORT}/health")])
+                .stdout(std::process::Stdio::null())
+                .status()
+                .map(|s| s.success())
+                .unwrap_or(false);
+            if healthy {
+                return Ok(Self { child, port: LLAMA_PORT });
+            }
+            std::thread::sleep(std::time::Duration::from_millis(250));
+        }
+        let _ = child.kill();
+        Err("llama-server did not become healthy within 30s".into())
+    }
+
+    fn normalise(&mut self, transcript: &str, style: Style) -> Result<String, String> {
+        let body = serde_json::json!({
+            "messages": [
+                { "role": "system", "content": SYSTEM },
+                { "role": "user", "content": format!(
+                    "[Styling: {}] [Structure: {}] [Context: {}]\n{transcript}",
+                    style.styling, style.structure, style.context) },
+            ],
+            "temperature": 0.0,
+            "max_tokens": MAX_NEW_TOKENS,
+            "stream": false,
+        });
+
+        // Body through a file rather than an argument: a transcript contains
+        // quotes and newlines, and this sidesteps every escaping question.
+        let path = std::env::temp_dir().join(format!("transcrust-normalise-{}.json", std::process::id()));
+        std::fs::write(&path, body.to_string())
+            .map_err(|e| format!("failed to stage request body: {e}"))?;
+        let output = std::process::Command::new("curl")
+            .args([
+                "-sf", "-m", "600",
+                "-H", "Content-Type: application/json",
+                "--data-binary", &format!("@{}", path.display()),
+                &format!("http://127.0.0.1:{}/v1/chat/completions", self.port),
+            ])
+            .output()
+            .map_err(|e| format!("failed to call llama-server: {e}"))?;
+        let _ = std::fs::remove_file(&path);
+
+        if !output.status.success() {
+            return Err(format!("llama-server request failed: {}", output.status));
+        }
+        let parsed: serde_json::Value = serde_json::from_slice(&output.stdout)
+            .map_err(|e| format!("llama-server returned unparseable JSON: {e}"))?;
+        parsed["choices"][0]["message"]["content"]
+            .as_str()
+            .map(|text| text.trim().to_string())
+            .ok_or_else(|| format!("llama-server response had no content: {parsed}"))
+    }
+}
+
+impl Drop for LlamaNormaliser {
+    fn drop(&mut self) {
+        let _ = self.child.kill();
+        let _ = self.child.wait();
+    }
+}
+
 /// The chat template, written out rather than rendered.
 ///
 /// The README specifies this exact string, including the empty `<think>` block —
@@ -209,10 +392,7 @@ impl Normaliser {
 /// render four lines.
 fn build_prompt(transcript: &str, style: Style) -> String {
     format!(
-        "<|im_start|>system\nYou are a text normalizer for speech-to-text \
-         transcripts. The input begins with a control line specifying the \
-         styling, structure, and context settings; clean the transcript to match \
-         those settings and output only the cleaned text.<|im_end|>\n\
+        "<|im_start|>system\n{SYSTEM}<|im_end|>\n\
          <|im_start|>user\n[Styling: {}] [Structure: {}] [Context: {}]\n\
          {transcript}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
         style.styling, style.structure, style.context
