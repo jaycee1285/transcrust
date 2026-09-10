@@ -9,6 +9,7 @@ mod inject;
 mod mode;
 mod model;
 mod moonshine;
+mod normalise;
 mod observe;
 mod parakeet;
 mod parakeet_ort;
@@ -173,6 +174,45 @@ fn main() {
             let _ = runtime();
             let config = config::load();
             runtime().block_on(wav::run(&paths, mode_filter.as_deref(), &config));
+            return;
+        }
+        Some("--normalise") => {
+            // Text in, text out. Reads stdin so it composes with `--wav` output
+            // and with anything else that produces a transcript.
+            let dir = args.get(2).cloned().unwrap_or_else(|| {
+                dirs::data_dir()
+                    .unwrap_or_default()
+                    .join("transcrust/models/s1-mini-onnx")
+                    .to_string_lossy()
+                    .into_owned()
+            });
+            let style = normalise::Style {
+                structure: if args.iter().any(|a| a == "--lists") { "lists" } else { "prose" },
+                ..normalise::Style::default()
+            };
+            init_ort_default();
+            let started = std::time::Instant::now();
+            let mut model = match normalise::Normaliser::load(std::path::Path::new(&dir)) {
+                Ok(model) => model,
+                Err(error) => { eprintln!("{error}"); std::process::exit(1); }
+            };
+            eprintln!("cold load: {:.2}s", started.elapsed().as_secs_f64());
+
+            let mut input = String::new();
+            if let Err(error) = std::io::Read::read_to_string(&mut std::io::stdin(), &mut input) {
+                eprintln!("failed to read stdin: {error}");
+                std::process::exit(1);
+            }
+            let started = std::time::Instant::now();
+            match model.normalise(input.trim(), style) {
+                Ok(text) => {
+                    let elapsed = started.elapsed().as_secs_f64();
+                    let words = text.split_whitespace().count();
+                    eprintln!("{words} words in {elapsed:.2}s");
+                    println!("{text}");
+                }
+                Err(error) => { eprintln!("{error}"); std::process::exit(1); }
+            }
             return;
         }
         Some("--moonshine") => {
@@ -349,6 +389,7 @@ fn main() {
             println!("  --fix <TEXT>                Run the post-processing pipeline on TEXT and print it");
             println!("  --fix-long <TEXT>           Same, but through the \"— Long\" mode profile first");
             println!("  --wav <WAV...> [--mode M]   Transcribe files offline; write <name>.md beside each");
+            println!("  --normalise [DIR] [--lists]  Clean a transcript on stdin with s1-mini");
             println!("  --bench <WAV...>            Time every installed engine on the same recordings");
             println!("  --record                    Record a clip to the corpus dir; Enter to stop");
             println!("  --download-model [MODEL]    Download a Parakeet model");
@@ -389,14 +430,13 @@ fn run_probe_suite(paths: &[std::path::PathBuf]) {
         observer.phase("startup", &format!("probe path: {}", path.display()));
     }
 
-    if let Err(e) = parakeet::run_probe_suite(&observer, paths, std::time::Duration::from_secs(20)) {
-        observer.error("probe", &e);
-        std::process::exit(1);
-    }
-
-    // A tool for inspecting an unfamiliar graph that will not say what the graph
-    // expects is only half a tool. Writing an engine against a new export starts
-    // with exactly these names and shapes.
+    // Interface first, probes second.
+    //
+    // `run_probe_suite` fails if *any* builder variant fails, and a model with
+    // external weights (`*.onnx_data`) can never pass the in-memory variants —
+    // ORT resolves the sidecar relative to a file path it does not have. Exiting
+    // on that denied the interface listing to precisely the models whose
+    // interface is least guessable.
     for path in paths {
         println!("\n{}", path.display());
         match ort::session::Session::builder().and_then(|mut b| b.commit_from_file(path)) {
@@ -408,8 +448,13 @@ fn run_probe_suite(paths: &[std::path::PathBuf]) {
                     println!("  out  {output:?}");
                 }
             }
-            Err(error) => println!("  could not reopen for interface listing: {error}"),
+            Err(error) => println!("  could not open for interface listing: {error}"),
         }
+    }
+
+    if let Err(e) = parakeet::run_probe_suite(&observer, paths, std::time::Duration::from_secs(20)) {
+        observer.error("probe", &e);
+        std::process::exit(1);
     }
 }
 
