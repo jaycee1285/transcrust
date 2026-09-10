@@ -8,6 +8,7 @@ mod granite;
 mod inject;
 mod mode;
 mod model;
+mod moonshine;
 mod observe;
 mod parakeet;
 mod parakeet_ort;
@@ -155,6 +156,42 @@ fn main() {
             let _ = runtime();
             let config = config::load();
             runtime().block_on(wav::run(&paths, mode_filter.as_deref(), &config));
+            return;
+        }
+        Some("--moonshine") => {
+            // Evaluation surface, not yet an engine: the question is cold load
+            // time against Parakeet and Granite on the same clips.
+            let Some(dir) = args.get(2) else {
+                eprintln!("Usage: transcrust --moonshine /path/to/moonshine-dir <audio.wav>");
+                std::process::exit(1);
+            };
+            let Some(wav) = args.get(3) else {
+                eprintln!("Usage: transcrust --moonshine /path/to/moonshine-dir <audio.wav>");
+                std::process::exit(1);
+            };
+            init_ort_default();
+            let started = std::time::Instant::now();
+            let mut model = match moonshine::LoadedMoonshine::load(std::path::Path::new(dir)) {
+                Ok(model) => model,
+                Err(error) => { eprintln!("{error}"); std::process::exit(1); }
+            };
+            println!("cold load: {:.2}s", started.elapsed().as_secs_f64());
+            let (samples, rate) = match audio::read_wav_mono(std::path::Path::new(wav)) {
+                Ok(pair) => pair,
+                Err(error) => { eprintln!("{error}"); std::process::exit(1); }
+            };
+            let seconds = samples.len() as f64 / rate as f64;
+            let audio_16k = audio::resample_to_16k(&samples, rate);
+            let started = std::time::Instant::now();
+            match model.transcribe(&audio_16k) {
+                Ok(text) => {
+                    let elapsed = started.elapsed().as_secs_f64();
+                    println!("audio {seconds:.2}s  wall {elapsed:.2}s  RTF {:.3}", elapsed / seconds);
+                    println!("text: {text:?}");
+                    println!("post-processed: {:?}", postprocess::fix_transcription(&text));
+                }
+                Err(error) => { eprintln!("{error}"); std::process::exit(1); }
+            }
             return;
         }
         Some("--parakeet-direct") => {
@@ -336,6 +373,24 @@ fn run_probe_suite(paths: &[std::path::PathBuf]) {
     if let Err(e) = parakeet::run_probe_suite(&observer, paths, std::time::Duration::from_secs(20)) {
         observer.error("probe", &e);
         std::process::exit(1);
+    }
+
+    // A tool for inspecting an unfamiliar graph that will not say what the graph
+    // expects is only half a tool. Writing an engine against a new export starts
+    // with exactly these names and shapes.
+    for path in paths {
+        println!("\n{}", path.display());
+        match ort::session::Session::builder().and_then(|mut b| b.commit_from_file(path)) {
+            Ok(session) => {
+                for input in session.inputs() {
+                    println!("  in   {input:?}");
+                }
+                for output in session.outputs() {
+                    println!("  out  {output:?}");
+                }
+            }
+            Err(error) => println!("  could not reopen for interface listing: {error}"),
+        }
     }
 }
 
