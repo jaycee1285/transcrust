@@ -179,24 +179,23 @@ fn main() {
         Some("--normalise") => {
             // Text in, text out. Reads stdin so it composes with `--wav` output
             // and with anything else that produces a transcript.
-            let dir = args.get(2).cloned().unwrap_or_else(|| {
-                dirs::data_dir()
-                    .unwrap_or_default()
-                    .join("transcrust/models/s1-mini-onnx")
-                    .to_string_lossy()
-                    .into_owned()
-            });
+            let models = dirs::data_dir().unwrap_or_default().join("transcrust/models");
+            let gguf_dir = models.join("s1-mini-gguf");
+            let onnx_dir = args
+                .get(2)
+                .map(std::path::PathBuf::from)
+                .unwrap_or_else(|| models.join("s1-mini-onnx"));
             let style = normalise::Style {
                 structure: if args.iter().any(|a| a == "--lists") { "lists" } else { "prose" },
                 ..normalise::Style::default()
             };
             init_ort_default();
             let started = std::time::Instant::now();
-            let mut model = match normalise::Normaliser::load(std::path::Path::new(&dir)) {
+            let mut model = match normalise::Normaliser::load(&gguf_dir, &onnx_dir) {
                 Ok(model) => model,
                 Err(error) => { eprintln!("{error}"); std::process::exit(1); }
             };
-            eprintln!("cold load: {:.2}s", started.elapsed().as_secs_f64());
+            eprintln!("{} ready in {:.2}s", model.backend(), started.elapsed().as_secs_f64());
 
             let mut input = String::new();
             if let Err(error) = std::io::Read::read_to_string(&mut std::io::stdin(), &mut input) {
