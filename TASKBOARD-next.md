@@ -96,20 +96,42 @@ codec-limited speech"* rather than *"the resampler never mattered."*
 it** except `--parakeet-direct`; the live path still goes through
 `parakeet-rs`. A parallel implementation that nothing uses rots silently.
 
-- [ ] **B.1 — Measure it.** The kill criterion I wrote was never evaluated.
-      Add it to `--bench` as a fourth row and compare against the crate.
-- [ ] **B.2 — Reconcile the one-token divergence.** Verification demanded
-      byte-identical output. It is identical on `chat-10s` and differs by a
-      single comma on `chat-20s` (`album cover, by the way`). Cause is known and
-      benign — the crate computes mel in Rust, the direct driver uses NeMo's own
-      `nemo128.onnx` — but "known and benign" needs to be *shown*, not asserted.
-      Marginal punctuation tokens score 0.3–0.7, so this is the expected place
-      to drift.
-- [ ] **B.3 — Then choose, and actually do it.** Either route `parakeet.rs`
-      through the direct driver (unlocking Phase D on the live path) **or**
-      delete `parakeet_ort.rs`. Do not leave it where it is.
+- [x] **B.1 — Measure it.** Done 2026-09-09. `--bench` now emits a fourth row
+      that bypasses `TranscriptionService` deliberately — the question is what
+      the crate boundary costs, so measuring through the seam the crate sits
+      behind would measure nothing. On 45 s and 90 s of the same talk:
+
+      | clip | crate | direct | |
+      |---|---:|---:|---|
+      | 45 s | 7.59 s (RTF 0.17) | **4.34 s (RTF 0.10)** | 43% faster |
+      | 90 s | 17.94 s (RTF 0.20) | **11.58 s (RTF 0.13)** | 35% faster |
+
+      **The kill criterion fires in the opposite direction.** It guarded against
+      >15% *slower*; the direct driver is 35-43% faster. Likely the mel: the
+      crate computes it in Rust, the driver runs NeMo's own `nemo128.onnx`.
+- [x] **B.2 — Reconcile the one-token divergence.** Done 2026-09-09, and the
+      answer is better than "benign". Byte-identical on the 45 s clip. The 90 s
+      clip diverges once, and **the direct driver is the correct one**: the
+      crate writes `Centaurus Stream 10` where the driver writes
+      `CentOS Stream 10`. Confidence flags the same span — `CentOS` scores 0.42
+      and a neighbouring mangle `CentaWes.` scores 0.27, against >0.75 for
+      ordinary words.
+- [ ] **B.3 — Then choose, and actually do it.** Evidence says route
+      `parakeet.rs` through the direct driver: faster, at least as accurate, and
+      it is the only way Phase D reaches the live path. The one blocker is
+      packaging — `LoadedParakeet` needs `nemo128.onnx`, which
+      `--download-model` does not fetch, so a fresh install has to fall back to
+      the crate rather than fail.
 
 **Kill criterion:** >15% slower than the crate → profile before proceeding.
+**Result: cleared.** 35-43% faster, so nothing to profile.
+
+**What B.1 incidentally proved.** The confidence column is Dragon mechanism 5
+running live: on 90 s of speech every word above 0.75 was right, and the ones
+below were `CentOS 0.42`, `CentaWes. 0.27`, `RHEL 0.64`, `Alma 0.69`,
+`Hadron 0.68` — the proper nouns, which is exactly the class of error that
+actually costs John a re-read. **D.0 is now a display problem, not a research
+problem.**
 
 ---
 

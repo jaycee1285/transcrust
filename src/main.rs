@@ -765,6 +765,99 @@ async fn run_bench(paths: &[std::path::PathBuf]) {
             }
         }
     }
+
+    bench_direct_driver(&installed, &clips);
+}
+
+/// The fourth row: Parakeet driven through `ort` directly instead of through
+/// the `parakeet-rs` crate.
+///
+/// `parakeet_ort.rs` has existed, passing its own tests, with nothing calling it
+/// but `--parakeet-direct`. Its kill criterion — *more than 15% slower than the
+/// crate and you profile before proceeding* — was written and never evaluated,
+/// which is why it sits here rather than in a doc: the comparison has to be on
+/// the same clips, in the same run, next to the number it is judged against.
+///
+/// It bypasses `TranscriptionService` on purpose. The whole question is what the
+/// crate boundary costs, so routing this through the seam the crate sits behind
+/// would measure nothing.
+fn bench_direct_driver(installed: &[mode::Mode], clips: &[(std::path::PathBuf, Vec<f32>, u32)]) {
+    let Some(parakeet) = installed
+        .iter()
+        .find(|mode| mode.model.kind == model::ModelKind::Parakeet)
+    else {
+        return;
+    };
+    let dir = parakeet.model.path.as_path();
+    if model::parakeet_direct_graphs(dir).is_none() {
+        println!(
+            "{:<46} needs nemo128.onnx alongside the encoder and joint",
+            "Parakeet direct (ort) / unavailable"
+        );
+        return;
+    }
+
+    let label = "Parakeet direct (ort)";
+    let started = std::time::Instant::now();
+    let mut model = match parakeet_ort::LoadedParakeet::load(dir) {
+        Ok(model) => model,
+        Err(error) => {
+            println!("{:<46} {error}", format!("{label} / load"));
+            return;
+        }
+    };
+    println!(
+        "{:<46} {:>8} {:>9.2}s {:>7}",
+        format!("{label} / cold load"),
+        "-",
+        started.elapsed().as_secs_f64(),
+        "-"
+    );
+
+    for (path, samples, rate) in clips {
+        // The crate resamples internally; this driver does not, so match what
+        // the live path would hand it rather than measuring a resample twice.
+        let audio = audio::resample_to_16k(samples, *rate);
+        let seconds = samples.len() as f64 / *rate as f64;
+        let name = path
+            .file_name()
+            .map(|n| n.to_string_lossy().into_owned())
+            .unwrap_or_default();
+
+        let started = std::time::Instant::now();
+        match model.transcribe(&audio) {
+            Ok(decoded) => {
+                let elapsed = started.elapsed();
+                println!(
+                    "{:<46} {:>7.2}s {:>9.2}s {:>7.2}",
+                    format!("{label} / {name}"),
+                    seconds,
+                    elapsed.as_secs_f64(),
+                    elapsed.as_secs_f64() / seconds
+                );
+                println!(
+                    "      {:?}",
+                    postprocess::fix_transcription(&decoded.text)
+                );
+                // The signal the crate throws away, and the reason this driver
+                // exists at all. Anything below the gate is what D.0 would
+                // surface to the user instead of making them read the line.
+                let vocab = model.vocabulary();
+                let low: Vec<String> = decoded
+                    .word_confidences(vocab)
+                    .into_iter()
+                    .filter(|(_, confidence)| *confidence < 0.75)
+                    .map(|(word, confidence)| format!("{word} {confidence:.2}"))
+                    .collect();
+                if low.is_empty() {
+                    println!("      confidence: every word above 0.75");
+                } else {
+                    println!("      below 0.75: {}", low.join(", "));
+                }
+            }
+            Err(error) => println!("{:<46} {error}", format!("{label} / {name}")),
+        }
+    }
 }
 
 #[allow(clippy::too_many_arguments)]
