@@ -121,6 +121,81 @@ impl AudioCapture {
     }
 }
 
+/// Name, sample rate and channel count of the device dictation would use.
+///
+/// Same selection `AudioCapture::new` performs, so `--doctor` reports the device
+/// that will actually be recorded from rather than the first one enumerated.
+pub fn default_input_summary(device_name: Option<&str>) -> Result<(String, u32, u16), String> {
+    let host = cpal::default_host();
+    let device = match device_name {
+        Some(name) => host
+            .input_devices()
+            .map_err(|e| format!("cannot enumerate audio devices: {e}"))?
+            .find(|d| d.name().ok().as_deref() == Some(name))
+            .ok_or_else(|| format!("audio device not found: {name}"))?,
+        None => host
+            .default_input_device()
+            .ok_or("no default audio input device")?,
+    };
+    let name = device.name().unwrap_or_else(|_| "unknown".into());
+    let config = device
+        .default_input_config()
+        .map_err(|e| format!("no supported input config: {e}"))?;
+    Ok((name, config.sample_rate().0, config.channels()))
+}
+
+/// Measure the resampler's actual attenuation at frequencies that would alias.
+///
+/// Reported rather than asserted, because the defect this exists to catch was
+/// invisible for months: linear interpolation passed 12 kHz at −2.1 dB and
+/// folded it onto 4 kHz, mid speech band. A number in `--doctor` is how that
+/// gets noticed the next time.
+///
+/// Returns `(input_hz, attenuation_db, folds_onto_hz)` for each probe above the
+/// output Nyquist. An empty result means no probe frequency aliases, which is
+/// the case when the device already runs at the target rate.
+pub fn resampler_response(from_rate: u32, to_rate: u32) -> Vec<(f64, f64, f64)> {
+    if from_rate == to_rate {
+        return Vec::new();
+    }
+    let nyquist = to_rate as f64 / 2.0;
+    let mut out = Vec::new();
+    for probe in [10_000.0f64, 12_000.0, 14_000.0] {
+        if probe <= nyquist || probe >= from_rate as f64 / 2.0 {
+            continue;
+        }
+        let input: Vec<f32> = (0..from_rate as usize)
+            .map(|i| {
+                (2.0 * std::f64::consts::PI * probe * i as f64 / from_rate as f64).sin() as f32
+            })
+            .collect();
+        let resampled = resample(&input, from_rate, to_rate);
+        let ratio = rms_body(&resampled) / rms_body(&input).max(f64::EPSILON);
+        // Where the tone lands once the rate is decimated: reflect it about
+        // Nyquist until it falls inside the band.
+        let mut folded = probe % to_rate as f64;
+        if folded > nyquist {
+            folded = to_rate as f64 - folded;
+        }
+        out.push((probe, 20.0 * ratio.max(1e-12).log10(), folded));
+    }
+    out
+}
+
+/// RMS with the kernel-length edges skipped, where a half-covered window rolls
+/// the amplitude off legitimately.
+fn rms_body(x: &[f32]) -> f64 {
+    if x.is_empty() {
+        return 0.0;
+    }
+    let skip = (x.len() / 10).min(2000);
+    if x.len() <= skip * 2 {
+        return 0.0;
+    }
+    let body = &x[skip..x.len() - skip];
+    (body.iter().map(|&v| (v as f64) * (v as f64)).sum::<f64>() / body.len() as f64).sqrt()
+}
+
 /// Resample f32 audio to 16kHz, returning f32 for batch transcription backends.
 pub fn resample_to_16k(input: &[f32], from_rate: u32) -> Vec<f32> {
     if from_rate == 16000 {
@@ -397,5 +472,28 @@ mod tests {
             elapsed < std::time::Duration::from_millis(150),
             "resampling 10s took {elapsed:?}; the polyphase bank should keep this in single-digit ms"
         );
+    }
+
+    /// `--doctor` reports these numbers, so the fold arithmetic has to be right
+    /// or the report is confidently wrong about where the energy lands.
+    #[test]
+    fn resampler_response_reports_fold_targets_and_rejection() {
+        let response = resampler_response(44_100, 16_000);
+        assert_eq!(response.len(), 3, "expected probes at 10, 12 and 14 kHz");
+        let folds: Vec<f64> = response.iter().map(|(_, _, f)| f.round()).collect();
+        assert_eq!(folds, vec![6000.0, 4000.0, 2000.0]);
+        for (probe, db, _) in &response {
+            assert!(
+                *db <= -40.0,
+                "{probe} Hz should be rejected, reported {db:.1} dB"
+            );
+        }
+    }
+
+    /// A device already at the target rate is not resampled, so there is
+    /// nothing to report and `--doctor` must not invent a row.
+    #[test]
+    fn resampler_response_is_empty_when_no_conversion_happens() {
+        assert!(resampler_response(16_000, 16_000).is_empty());
     }
 }

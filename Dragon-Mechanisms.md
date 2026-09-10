@@ -44,7 +44,7 @@ The impressive part was never the bones. It was the landing.
 | 4 | Deterministic formatting | Numbers, dates, currency, punctuation, without a model | Partly built (`postprocess.rs`, `Profile::Long`) |
 | 5 | Confidence surfacing / N-best | Tell the human *where to look* | Confidence recovered, not surfaced (**D.0**) |
 | 6 | Explicit modes + constrained grammar | Sidestep intent classification entirely | Mode toggle built; command grammar deferred |
-| 7 | Audio path validation | Refuse to work badly in silence | Nothing — and we just found a real defect (**A.1**) |
+| 7 | Audio path validation | Refuse to work badly in silence | **`--doctor` reports the measured response** (2026-09-09); defect fixed in A.1 |
 | 8 | Addressable prior text | Fix what was said without touching the keyboard | Nothing (`design-dictation-as-control.md`) |
 
 ---
@@ -194,7 +194,7 @@ the model.
 
 **Now.** Basically absent. Tools accept whatever the OS hands them.
 
-**Here.** Nothing, and this repo just proved the point on itself: `audio.rs`
+**Here.** `--doctor` now measures it (2026-09-09): device, rate, channel handling, and the resampler's actual attenuation at each frequency that would alias, with where it folds to. On this machine 10/12/14 kHz report -89/-98/-116 dB against the -1.5/-2.1/-2.8 dB the old resampler passed. Clipping is still not covered — it needs a capture, so `--record` is the place. The reason this row existed: `audio.rs`
 resamples 44100 → 16000 by linear interpolation with no anti-aliasing filter,
 so 12 kHz content arrives 2.2 dB down and folds onto 4 kHz — the middle of the
 speech band. That is **A.1/A.2**, and it went unnoticed for months because

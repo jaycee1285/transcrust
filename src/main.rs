@@ -1039,6 +1039,38 @@ fn run_doctor() {
         Some(n) => println!("Phonetic dictionary: {} ({n} entries)", dict_path.display()),
         None => println!("Phonetic dictionary: {} (absent — pass-through)", dict_path.display()),
     }
+    // Dragon mechanism 7: fail loudly on bad input instead of quietly
+    // transcribing mush. The resampler defect A.1 fixed went unnoticed for
+    // months because nothing was watching this path, so the response is
+    // measured here rather than asserted.
+    println!("Audio path:");
+    match audio::default_input_summary(config.audio.device.as_deref()) {
+        Ok((name, rate, channels)) => {
+            println!("  Device: {name} @ {rate} Hz, {channels}ch");
+            if channels > 1 {
+                println!("  Downmix: channel 0 only (capture does not sum channels)");
+            }
+            if rate == 16_000 {
+                println!("  Resample: none needed — device is already at 16 kHz");
+            } else {
+                println!("  Resample: {rate} -> 16000, band-limited polyphase sinc");
+                let response = audio::resampler_response(rate, 16_000);
+                if response.is_empty() {
+                    println!("    (no probe frequency aliases at this rate)");
+                }
+                for (probe, db, folds) in response {
+                    let verdict = if db <= -40.0 { "ok" } else { "LEAKS" };
+                    println!(
+                        "    {:>6.0} Hz  {:>7.1} dB  would fold onto {:>5.0} Hz  {verdict}",
+                        probe, db, folds
+                    );
+                }
+            }
+        }
+        Err(error) => println!("  Device: unavailable ({error})"),
+    }
+    println!("  Clipping: not measurable here — record a clip with --record and check levels");
+
     println!("Quit pid file: {}", control::pid_file_path().display());
     for cmd in ["wtype", "dotool", "notify-send"] {
         let found = std::process::Command::new("sh")
