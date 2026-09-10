@@ -31,7 +31,11 @@
         runtimeDeps = libs.transcrust;
 
         # PATH-wrapped tools (binaries the app shells out to, not libraries)
-        runtimeTools = with pkgs; [ wtype dotool ydotool libnotify ];
+        # llama-cpp supplies llama-server, which --long uses to run s1-mini as
+        # the normalisation pass. Without it on PATH transcrust falls back to the
+        # ONNX build silently and loses about 6x on token rate, so it belongs in
+        # the wrapper rather than being assumed present.
+        runtimeTools = with pkgs; [ wtype dotool ydotool libnotify llama-cpp ];
 
         unwrapped = pkgs.rustPlatform.buildRustPackage {
           pname = "transcrust-unwrapped";

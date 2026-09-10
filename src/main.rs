@@ -915,6 +915,23 @@ async fn run_transcription_pipeline(
             }
             let fixed = postprocess::fix_transcription(&shaped);
             observer.sample("transcription.postprocess", &fixed);
+
+            // Long mode only, and last in the chain.
+            //
+            // Order was settled by measurement: the deterministic passes run
+            // first so s1-mini is repairing prose rather than guessing at it.
+            // Fed *raw* Granite it invented a clause that was never spoken; fed
+            // the same text after `Profile::Long`, it left the awkward stretch
+            // verbatim. Running last also means nothing downstream can be
+            // starved by it, which was Harper's failure mode.
+            //
+            // `polish` degrades to the input on every error, so a missing model
+            // costs the improvement and never the dictation.
+            let fixed = if long_form {
+                normalise::polish(&observer, &fixed, normalise::Style::default())
+            } else {
+                fixed
+            };
             state.transition(state::AppState::Injecting);
             observer.phase("inject", "injecting transcript");
 
