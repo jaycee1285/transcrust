@@ -24,7 +24,7 @@ The 1–4 s clips are the ones that matter: that is where the Parakeet/Granite
 crossover sits (~3 s) and where command utterances live.
 
 **These are timing fixtures, not a WER corpus.** There is no ground truth here.
-`TASKBOARD-next.md` Phase C is the hand-corrected set, and it needs
+`TASKBOARD.md` Phase C is the hand-corrected set, and it needs
 John's own voice, not an interview clip.
 
 Source: `demo/asr_demo/` of github.com/microsoft/VibeVoice (MIT).

@@ -4,7 +4,7 @@
 `8c7a07c`) is a Tauri dictation app that drives the same Parakeet ONNX exports
 transcrust does. It was cloned here as a conversation piece and removed on
 2026-09-06; these are the notes that outlived it, so nothing in
-`TASKBOARD-next.md` dangles.
+`TASKBOARD.md` dangles.
 
 ## The licence question, before anyone copies anything
 

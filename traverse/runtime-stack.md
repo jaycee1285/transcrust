@@ -118,7 +118,7 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
   already use — yields per-token probability, word confidence and timestamps
   from the files already on disk. `murmure` does exactly this and does not
   depend on the crate at all. `Parakeet-v3.md` §5 has the detail;
-  `TASKBOARD-next.md` Phase B is the work.
+  `TASKBOARD.md` Phase B is the work.
 
 ## Observations
 - The original failure surface was not “bad model files”; it was an ORT/runtime mismatch.
@@ -137,7 +137,7 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
   **160 phases**, so the inner loop is a dot product with no `sin` in it. Without
   that the naive form calls `sin` once per tap — 98 taps per output sample — and
   the cost stops being ignorable. Measured **18 ms per 10-second clip**.
-- **Do not read this as a quality win.** A.2 in `TASKBOARD-next.md` measured it
+- **Do not read this as a quality win.** A.2 in `TASKBOARD.md` measured it
   on 18 minutes of real speech: 0.87% of words changed, and no reference could
   tell which version was better (7.43% vs 7.39% WER against auto-captions). It
   removes a confound; it is not itself an improvement, and nothing downstream
@@ -319,5 +319,5 @@ much was *said*, not clip length; and a traced ONNX graph can declare a dynamic
 axis it does not honour.
 
 `tools/vibevoice-export/` is retained as the ONNX export template — it is the
-starting point for the Granite re-export that `TASKBOARD-next.md`
+starting point for the Granite re-export that `TASKBOARD.md`
 lists as blocked.

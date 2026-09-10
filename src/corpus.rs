@@ -7,7 +7,7 @@
 //! linear interpolation it replaced. That resampler was the leading suspect for
 //! the proper-noun errors; fixing it changed 0.87% of words on 18 minutes of
 //! codec-limited speech in no measurable direction, so the suspicion now needs
-//! real microphone captures to settle. See `TASKBOARD-next.md` A.2 — this
+//! real microphone captures to settle. See `TASKBOARD.md` A.2 — this
 //! corpus is how it gets settled.
 //!
 //! Each dictation writes a pair:

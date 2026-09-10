@@ -123,7 +123,7 @@ Not a step toward voice control. A demonstration that the surfaces hold:
   > yields per-token probability, word confidence and timestamps from the files
   > already on disk. `murmure-reference.md` records the shape (the clone
   > itself was removed). This error sent the command-channel plan toward Granite; see
-  > `TASKBOARD-next.md` and `Parakeet-v3.md` §5.
+  > `TASKBOARD.md` and `Parakeet-v3.md` §5.
 
 Those are the preconditions for building the diamond. They are not the diamond.
 

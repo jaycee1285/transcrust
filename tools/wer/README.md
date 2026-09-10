@@ -1,7 +1,7 @@
 # WER tooling
 
 Built 2026-09-09 to answer Phase A and B. Kept because the measurements in
-`TASKBOARD-next.md` are not reproducible without it.
+`TASKBOARD.md` are not reproducible without it.
 
 There is no ground truth for John's audio, so these compare against two
 substitutes: yt-dlp's auto-captions for YouTube material, and one transcrust
