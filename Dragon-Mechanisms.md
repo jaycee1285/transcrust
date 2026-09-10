@@ -135,6 +135,17 @@ the honest map of where rules run out: `I have` → `I've` needs part-of-speech,
 a count, a date or a version. That deterministic ceiling is deliberately kept
 as the baseline any learned normaliser has to beat.
 
+**Measured 2026-09-10, so the baseline is no longer notional.** On 36:35 of
+speech, Granite raw scores 13.71% WER against auto-captions and `Profile::Long`
+scores **10.11%** — the deterministic contraction pass buys 3.6 points, a 26%
+relative cut, for no measurable time. Parakeet on the same audio is 4.86%.
+
+The failure it cannot reach is the possessive: Granite writes `today is sponsor`
+and `when is the last time`, and `today is` → `today's` is not safely reversible.
+That is the seam a learned normaliser exists to cross, and it is now **D.4** on
+the board with a kill criterion attached — because the other half of Granite's
+gap is proper nouns (`clcode`, `kimmy`), which no normaliser fixes.
+
 ---
 
 ### 5. Confidence surfacing / N-best

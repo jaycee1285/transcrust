@@ -239,6 +239,50 @@ Reducing corrections is worth more than reducing latency. Depends on B.3.
       log (**not** in the injected text — that goes into a real buffer). Turns a
       whole-sentence proofread into a two-word glance, and needs no model change
       at all.
+- [ ] **D.4 — s1-mini against the deterministic ceiling, which now has a number.**
+      `Dragon-Mechanisms.md` §4 keeps the rule-based pass as "the baseline any
+      learned normaliser has to beat". As of 2026-09-10 that baseline is
+      measured, on 36:35 of speech against yt-dlp auto-captions:
+
+      | | WER | RTF |
+      |---|---|---|
+      | Granite, raw | 13.71% | 0.062 |
+      | Granite — Long (deterministic) | **10.11%** | 0.063 |
+      | Parakeet | 4.86% | 0.208 |
+
+      **The deterministic contraction pass buys 3.6 points — a 26% relative cut
+      — for no measurable time.** That is the bar.
+
+      It also shows exactly where rules stop, which is the useful half. `— Long`
+      cannot reach the possessive: Granite emits `today is sponsor` and
+      `when is the last time`, and `today is` → `today's` is not safely
+      reversible (`today is Tuesday`). That is the same wall `mode.rs` already
+      documents for `I have`, and it is precisely what a learned normaliser is
+      for — s1-mini's `Styling` axis (`casual` → `formal`) *is* the contraction
+      decision, and it can also resolve false starts, which no rule can.
+
+      **But run the arithmetic before building it.** Granite's remaining gap to
+      Parakeet is 5.2 points, and it is not all shape. Proper nouns are the other
+      half and a normaliser cannot touch them: on the same audio Granite dropped
+      `Claude Code` 5→1 and `Kimi` 13→5, writing `clcode` and `kimmy`. So the
+      honest hypothesis is that s1-mini closes the shape half and leaves the
+      content half, landing somewhere near 7-8% rather than at Parakeet's 4.86%.
+
+      Against that it costs ~460 MB, its own inference time on top of Granite's,
+      and an LLM in the path that can invent. Granite's whole appeal was being
+      3.2× faster; a normaliser large enough to fix it may spend that back.
+
+      **Kill criterion:** if Granite + s1-mini is not both faster *and* within a
+      point of Parakeet end-to-end, there is no reason to run two models where
+      one already works. Measure with `--bench` and `tools/wer/` before writing
+      any wiring.
+
+      The ordering question from the old Deferred entry still stands and is now
+      sharper: s1-mini is a more aggressive general-English re-ranker than Harper
+      was, and Harper was removed for starving the phonetic dictionary. If
+      s1-mini runs *before* the dictionary it will do the same thing. If it runs
+      after, it may undo the dictionary's corrections. That ordering has to be
+      decided by measurement, not by taste.
 - [ ] **D.3 — Widen the seam.** `TranscriptionService::transcribe` returns
       `Result<String, String>`; carrying confidence means a struct. Degrades
       cleanly: engines that cannot supply it return `None` and consumers fall
@@ -349,7 +393,7 @@ channel eats your dictation. Ship push-to-talk-with-a-modifier instead.
 | Rolling our own Parakeet ONNX export | community int4 has been fine for six months; `tools/vibevoice-export/` is the template if it ever proves lossy |
 | LM adaptation from John's own prose | the biggest unexploited win here and the one Dragon did best: bias decoding toward the writer's actual vocabulary and phrasing. Needs E.1's boost tree as the mechanism, plus a corpus of his writing. Real project, not a task |
 | Enrollment / speaker adaptation | dropped industry-wide because large models generalise — but generalising is what you need for *many* speakers, and this is a single-speaker app with corpus capture now running. Revisit once C.2 has volume |
-| s1-mini behind `Profile::Long` | real candidate, but the ordering against the phonetic dictionary is unresolved — it is a more aggressive general-English re-ranker than Harper was |
+| s1-mini behind `Profile::Long` | **promoted to D.4 on 2026-09-10**, now that the deterministic baseline it has to beat is measured (10.11% WER) and the residual is characterised |
 | Dictation-shape fixes for Granite | only needed if Granite becomes the *content* engine. It should not |
 | VibeVoice | **removed 2026-09-06.** Lost on size, latency and quality; postmortem at `~/syncthing/vibevoice-asr-15/` |
 
