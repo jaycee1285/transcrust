@@ -88,7 +88,10 @@ fn find_keyboard_device(config_device: Option<&str>) -> Result<Device, String> {
     Err("No keyboard device found. Check input group membership or set hotkey.device in config".into())
 }
 
-pub async fn listen(config: &HotkeyConfig) -> mpsc::Receiver<HotkeyEvent> {
+/// Returns a sender alongside the receiver so another source — the `--long`
+/// mode SIGUSR1 handler — can inject the same events the keyboard produces,
+/// rather than duplicating the handling for them.
+pub async fn listen(config: &HotkeyConfig) -> (mpsc::Sender<HotkeyEvent>, mpsc::Receiver<HotkeyEvent>) {
     let (tx, rx) = mpsc::channel(16);
 
     let (bound_modifiers, bound_key) = resolve_binding(config)
@@ -145,6 +148,8 @@ pub async fn listen(config: &HotkeyConfig) -> mpsc::Receiver<HotkeyEvent> {
     let mut stream = device
         .into_event_stream()
         .expect("Failed to create event stream");
+
+    let tx_for_callers = tx.clone();
 
     tokio::spawn(async move {
         let mut mods_held: HashSet<Key> = HashSet::new();
@@ -218,7 +223,7 @@ pub async fn listen(config: &HotkeyConfig) -> mpsc::Receiver<HotkeyEvent> {
         eprintln!("Keyboard event stream ended");
     });
 
-    rx
+    (tx_for_callers, rx)
 }
 
 /// Split a labwc-style chord into `(modifiers, key)`.

@@ -48,16 +48,33 @@ where
 #[derive(Clone, Copy)]
 struct RunMode {
     smoke: bool,
+    /// Toggle-driven dictation for long-form: `--toggle` starts and stops
+    /// instead of a key being held down. Off by default; the hold-to-talk path
+    /// is untouched by this flag.
+    long: bool,
 }
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     let run_mode = RunMode {
         smoke: args.iter().any(|arg| arg == "--smoke"),
+        long: args.iter().any(|arg| arg == "--long"),
     };
 
     match args.get(1).map(|s| s.as_str()) {
         Some("--smoke") => {}
+        // Falls through to the daemon startup below, the same way --smoke does.
+        Some("--long") => {}
+        Some("--toggle") => {
+            match control::request_toggle() {
+                Ok(()) => println!("transcrust toggle signal sent"),
+                Err(e) => {
+                    eprintln!("Toggle failed: {e}");
+                    std::process::exit(1);
+                }
+            }
+            return;
+        }
         Some("--quit") => {
             match control::request_quit() {
                 Ok(()) => println!("transcrust quit signal sent"),
@@ -325,6 +342,8 @@ fn main() {
             println!("  --granite-smoke <DIR>       Run Granite frontend, ONNX, CTC, and tokenizer");
             println!("  --parakeet-direct <DIR> [WAV]  Drive Parakeet's graphs directly; print confidences");
             println!("  --smoke                     Run with terminal phase logging enabled");
+            println!("  --long                      Run the daemon in toggle mode for long dictation");
+            println!("  --toggle                    Tell a --long daemon to start or stop recording");
             println!("  --quit                      Ask a running transcrust instance to exit");
             println!("  --doctor                    Print phase-relevant environment info");
             println!("  --fix <TEXT>                Run the post-processing pipeline on TEXT and print it");
@@ -471,7 +490,7 @@ async fn run(config: config::Config, run_mode: RunMode) {
         active_engine_rx,
         engine_request_tx,
     ));
-    let mut hotkey_rx = hotkey::listen(&config.hotkey).await;
+    let (hotkey_tx_for_toggle, mut hotkey_rx) = hotkey::listen(&config.hotkey).await;
     let mut transcription = match build_service(&installed[active_engine].model, &config) {
         Ok(service) => service,
         Err(e) => {
@@ -481,8 +500,68 @@ async fn run(config: config::Config, run_mode: RunMode) {
     };
     let mut active_audio_rx: Option<std::sync::mpsc::Receiver<Vec<f32>>> = None;
 
+    // Only a --long daemon listens for SIGUSR1. Registered before the loop so a
+    // toggle that arrives during model load is queued rather than killing the
+    // process — the default disposition for SIGUSR1 is terminate.
+    // **Always** register, even outside long mode.
+    //
+    // The default disposition for SIGUSR1 is *terminate*, so a daemon that does
+    // not handle it dies silently the first time someone runs
+    // `transcrust --toggle` against it — measured, not theorised. Catching it
+    // unconditionally turns a lost dictation session into a log line.
+    let mut toggle_signal =
+        match tokio::signal::unix::signal(tokio::signal::unix::SignalKind::user_defined1()) {
+            Ok(stream) => {
+                if run_mode.long {
+                    observer.phase(
+                        "startup",
+                        "long mode: recording starts and stops on `transcrust --toggle`",
+                    );
+                }
+                Some(stream)
+            }
+            Err(error) => {
+                observer.error("startup", &format!("failed to listen for SIGUSR1: {error}"));
+                None
+            }
+        };
+
+
     loop {
         tokio::select! {
+            Some(()) = async {
+                match toggle_signal.as_mut() {
+                    Some(stream) => stream.recv().await,
+                    // No SIGUSR1 stream outside --long mode: park forever so
+                    // this arm never fires and never busy-loops.
+                    None => std::future::pending().await,
+                }
+            } => {
+                if !run_mode.long {
+                    observer.phase(
+                        "toggle",
+                        "ignored: daemon is in hold-to-talk mode; start it with --long",
+                    );
+                    observer.notify("Transcrust", "Not in --long mode; toggle ignored");
+                    continue;
+                }
+                // The state machine already guards both transitions, so a
+                // toggle is a translation rather than a new path.
+                let event = match state.current() {
+                    state::AppState::Idle => hotkey::HotkeyEvent::Pressed,
+                    state::AppState::Recording => hotkey::HotkeyEvent::Released,
+                    other => {
+                        observer.phase(
+                            "toggle",
+                            &format!("ignored: busy ({other:?})"),
+                        );
+                        continue;
+                    }
+                };
+                if hotkey_tx_for_toggle.send(event).await.is_err() {
+                    observer.error("toggle", "hotkey channel closed");
+                }
+            }
             Some(event) = hotkey_rx.recv() => {
                 match event {
                     hotkey::HotkeyEvent::Pressed => {
@@ -563,6 +642,7 @@ async fn run(config: config::Config, run_mode: RunMode) {
                                     mode_label,
                                     engine_name,
                                     corpus_enabled,
+                                    run_mode.long,
                                     state,
                                 ).await;
                             });
@@ -633,6 +713,52 @@ fn build_service(
     )
 }
 
+/// Feed a long capture through the engine one window at a time.
+///
+/// The same windowing `--wav` uses, against the same seam, so the two paths
+/// cannot drift: `wav::plan_windows` cuts at the quietest 20 ms frame near each
+/// 60 s boundary, and each window goes to the engine as its own job. Windows
+/// tile exactly — no sample dropped, none heard twice — which is pinned by
+/// `wav.rs`'s own tests.
+async fn transcribe_windowed(
+    observer: &observe::Observer,
+    transcription: &transcription::TranscriptionService,
+    samples: &[f32],
+    sample_rate: u32,
+) -> Result<String, String> {
+    let windows = wav::plan_windows(samples.len(), sample_rate, |from, to| {
+        samples[from..to].iter().map(|s| s * s).sum::<f32>()
+    });
+    observer.phase(
+        "transcription",
+        &format!("{} window(s) to transcribe", windows.len()),
+    );
+
+    let mut parts: Vec<String> = Vec::new();
+    for (index, window) in windows.iter().enumerate() {
+        let (tx, rx) = std::sync::mpsc::channel();
+        // One chunk then drop is what the live capture path looks like to the
+        // worker once recording has stopped.
+        tx.send(samples[window.start..window.end].to_vec())
+            .map_err(|_| "engine receiver closed".to_string())?;
+        drop(tx);
+
+        let text = transcription
+            .transcribe(observer.clone(), rx, sample_rate)
+            .await?;
+        observer.phase(
+            "transcription",
+            &format!("window {}/{} done", index + 1, windows.len()),
+        );
+        let trimmed = text.trim();
+        if !trimmed.is_empty() {
+            parts.push(trimmed.to_string());
+        }
+    }
+
+    Ok(parts.join(" "))
+}
+
 async fn run_transcription_pipeline(
     observer: observe::Observer,
     transcription: transcription::TranscriptionService,
@@ -643,6 +769,7 @@ async fn run_transcription_pipeline(
     mode_label: String,
     engine_name: String,
     corpus_enabled: bool,
+    long_form: bool,
     state: Arc<state::StateMachine>,
 ) {
     observer.phase("transcription", &format!("starting {} transcription", transcription.name()));
@@ -665,22 +792,68 @@ async fn run_transcription_pipeline(
     };
 
     let started = std::time::Instant::now();
-    // The ceiling is the engine's, not a global constant: VibeVoice decodes at
-    // roughly real time and 45s would abort any dictation over a minute.
-    let budget = transcription.timeout();
-    let result = match tokio::time::timeout(
-        budget,
-        transcription.transcribe(observer.clone(), audio_rx, sample_rate),
-    )
-    .await
-    {
-        Ok(result) => result,
-        Err(_) => {
-            observer.error("transcription", &format!("timed out after {}s", budget.as_secs()));
-            state.transition(state::AppState::Error);
-            tokio::time::sleep(std::time::Duration::from_secs(2)).await;
-            state.transition(state::AppState::Idle);
-            return;
+
+    // Long mode drains and windows; the default path is left exactly as it was.
+    //
+    // Two ceilings sit between a toggle-length dictation and a transcript, and
+    // both are invisible until you cross them:
+    //
+    //  * the engine's own 45 s budget, which at Parakeet's ~0.2 RTF is spent by
+    //    about 225 s of speech, and
+    //  * Parakeet's encoder, which past roughly five minutes does not slow down
+    //    but *throws* — `2501 by 7501`, a positional table meeting a longer
+    //    sequence.
+    //
+    // `wav.rs` already solved this for files: cut at the quietest frame near
+    // each 60 s boundary and feed the seam one window at a time. Reusing it here
+    // means a two-minute dictation and a two-minute WAV take the same path.
+    let result = if long_form {
+        let mut samples: Vec<f32> = Vec::new();
+        while let Ok(chunk) = audio_rx.recv() {
+            samples.extend_from_slice(&chunk);
+        }
+        let seconds = samples.len() as f64 / sample_rate.max(1) as f64;
+        // Scale the ceiling with the work rather than removing it: a hung engine
+        // should still surrender. Generous, because the point is not to abort a
+        // dictation the user cannot re-record.
+        let budget = std::time::Duration::from_secs_f64((seconds * 2.0).max(45.0));
+        observer.phase(
+            "transcription",
+            &format!("long mode: {seconds:.0}s captured, {}s budget", budget.as_secs()),
+        );
+        match tokio::time::timeout(
+            budget,
+            transcribe_windowed(&observer, &transcription, &samples, sample_rate),
+        )
+        .await
+        {
+            Ok(result) => result,
+            Err(_) => {
+                observer.error("transcription", &format!("timed out after {}s", budget.as_secs()));
+                state.transition(state::AppState::Error);
+                tokio::time::sleep(std::time::Duration::from_secs(2)).await;
+                state.transition(state::AppState::Idle);
+                return;
+            }
+        }
+    } else {
+        // The ceiling is the engine's, not a global constant: VibeVoice decodes
+        // at roughly real time and 45s would abort any dictation over a minute.
+        let budget = transcription.timeout();
+        match tokio::time::timeout(
+            budget,
+            transcription.transcribe(observer.clone(), audio_rx, sample_rate),
+        )
+        .await
+        {
+            Ok(result) => result,
+            Err(_) => {
+                observer.error("transcription", &format!("timed out after {}s", budget.as_secs()));
+                state.transition(state::AppState::Error);
+                tokio::time::sleep(std::time::Duration::from_secs(2)).await;
+                state.transition(state::AppState::Idle);
+                return;
+            }
         }
     };
 
