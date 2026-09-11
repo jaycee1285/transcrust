@@ -2,22 +2,60 @@
 # Default location: ~/.config/transcrust/config.toml
 
 [hotkey]
-key = "Space"
+# Cycle to the next mode. Unset by default so it does not claim a chord on a
+# keyboard-driven desktop that already has a full keymap. Same rules as the
+# tray switcher: the swap is refused unless the app is idle.
+# mode_key = "M"
+# mode_modifiers = ["RightAlt"]
+# Push-to-talk: hold both, speak, release. Modifier-only on purpose.
+#
+# transcrust reads evdev passively and never grabs the keyboard, so the focused
+# window sees every press and auto-repeat regardless. A trigger that produces a
+# character will type into your document for the whole hold — `Space + LeftAlt`
+# did exactly that. Safe triggers emit nothing: any modifier, F13-F20, PAUSE,
+# SCROLLLOCK. `--doctor` warns if you pick one that does not.
+# Two ways to write the binding; `chord` wins when both are present.
+# Either way this is read at startup — change it and restart, no rebuild.
+#
+# chord uses labwc rc.xml spelling, so a binding can move between the two files
+# unchanged: W- super, A- alt, C- ctrl, S- shift.
+#chord = "Print"
+#chord = "A-space"
+key = "RightAlt"
 modifiers = ["LeftAlt"]
+
+# Hold the keyboard exclusively (EVIOCGRAB) while the trigger is down, so a
+# printable trigger cannot spray auto-repeat into the focused window. It does
+# not stop the *first* press, which the compositor has already delivered by the
+# time transcrust sees it — so A-space still cycles a Firefox tab once per hold.
+# Only worth turning on if you want a printable trigger anyway.
+grab = false
 # device = "/dev/input/event3"
 
 [audio]
 # device = "default"
 
 [model]
-# Optional override for the int8 Parakeet model directory.
-# Preferred default location:
-#   ~/.local/share/transcrust/models/parakeet-tdt-0.6b-v3-int8
-# Required files in that directory:
-#   encoder-model.int8.onnx
-#   decoder_joint-model.int8.onnx
+# Optional override pinning one model directory. Leave it unset to let
+# transcrust discover every installed model instead — install both families
+# side by side under ~/.local/share/transcrust/models/ and the tray grows an
+# "Engine" submenu to switch between them at runtime.
+#
+# Discovery keys on the family word at the start of the directory name
+# ("parakeet-…", "granite-…"), then confirms by contents. Within a directory
+# the best quantisation wins: int8, then int4, then fp32.
+#
+# A Parakeet directory needs:
+#   encoder*.onnx
+#   decoder_joint*.onnx
 #   vocab.txt
-# path = "/home/user/.local/share/transcrust/models/parakeet-tdt-0.6b-v3-int8"
+# A Granite directory needs:
+#   *.onnx  (anything that is not encoder*/decoder*)
+#   tokenizer.json
+#
+# When nothing is pinned and both are installed, Parakeet is the default.
+# path = "/home/user/.local/share/transcrust/models/granite-speech-5.0-470m-turboctc"
+# For a one-off run, TRANSCRUST_MODEL_PATH overrides this setting.
 
 [output]
 wtype = true

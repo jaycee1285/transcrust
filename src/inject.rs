@@ -2,7 +2,18 @@ use wl_clipboard_rs::copy::{MimeType, Options, Source};
 
 use crate::config::OutputConfig;
 
-pub async fn inject_text(text: &str, config: &OutputConfig) -> Result<(), String> {
+/// Put the transcript where the user asked for it.
+///
+/// Returns the failures of any method that was **requested and did not work**,
+/// even when another one succeeded. Previously those were collected and then
+/// dropped on the floor whenever `successes > 0`, and since `clipboard` defaults
+/// to `true` and is an in-process library call, it essentially always succeeds —
+/// so a missing `wtype`/`dotool` looked like a clean run while nothing was ever
+/// typed. The transcript went to the clipboard, the log said nothing, and the
+/// symptom was "it transcribes but does not do anything".
+///
+/// `Err` still means nothing worked at all.
+pub async fn inject_text(text: &str, config: &OutputConfig) -> Result<Vec<String>, String> {
     let mut errors = Vec::new();
     let mut successes = 0usize;
 
@@ -16,17 +27,19 @@ pub async fn inject_text(text: &str, config: &OutputConfig) -> Result<(), String
     if config.wtype {
         match type_with_wtype(text).await {
             Ok(()) => successes += 1,
-            Err(e) => {
-                match type_with_dotool(text).await {
-                    Ok(()) => successes += 1,
-                    Err(e2) => errors.push(format!("typing: wtype={e}, dotool={e2}")),
-                }
-            }
+            Err(e) => match type_with_dotool(text).await {
+                Ok(()) => successes += 1,
+                Err(e2) => errors.push(format!(
+                    "typing failed, transcript not typed: wtype={e}; dotool={e2}. \
+                     Both live in the nix devShell — run through `nix develop -c` \
+                     or use the wrapped install"
+                )),
+            },
         }
     }
 
     if successes > 0 {
-        Ok(())
+        Ok(errors)
     } else {
         Err(if errors.is_empty() {
             "no output methods enabled".into()
