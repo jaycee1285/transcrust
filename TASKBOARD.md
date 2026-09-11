@@ -390,7 +390,7 @@ channel eats your dictation. Ship push-to-talk-with-a-modifier instead.
 |---|---|
 | Granite as command engine | crate-boundary finding removed its only advantage; its 10.24 s quantum was already a latency problem below 3 s |
 | Granite export toolchain rebuild | `~/repos/granite-speech-5.0-470m-turboctc` is **gone**; no longer on the critical path |
-| Nemotron 3.5 adoption | RNN-T without a duration head; streaming is its only edge and PTT does not need it |
+| Nemotron 3.5 adoption | RNN-T without a duration head; streaming is its only edge and PTT does not need it. **Reopened 2026-09-11 for the toggled long-form case, where streaming is the point — see `design-long-form-routes.md`.** Blocked on C.2: every accuracy gate there reads the corpus |
 | Rolling our own Parakeet ONNX export | community int4 has been fine for six months; `tools/vibevoice-export/` is the template if it ever proves lossy |
 | LM adaptation from John's own prose | the biggest unexploited win here and the one Dragon did best: bias decoding toward the writer's actual vocabulary and phrasing. Needs E.1's boost tree as the mechanism, plus a corpus of his writing. Real project, not a task |
 | Enrollment / speaker adaptation | dropped industry-wide because large models generalise — but generalising is what you need for *many* speakers, and this is a single-speaker app with corpus capture now running. Revisit once C.2 has volume |

@@ -15,6 +15,7 @@ are deliberate.
 | `Parakeet-v3.md` | why the default engine is the right one for on-device control. Reference doc, not a task list. |
 | `murmure-reference.md` | notes from an AGPL reference app that was read and removed — calibrated constants, and the licence caveat before copying any of it |
 | `design-dictation-as-control.md` | the unbuilt half: dictation as a command channel |
+| `design-long-form-routes.md` | the four long-form dictation routes, their acceptance gates, and the fuzzel picker |
 
 ## State as of 2026-09-06
 
