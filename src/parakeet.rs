@@ -36,9 +36,15 @@ impl Clone for ParakeetService {
 
 impl ParakeetService {
     pub fn new(model_dir: impl Into<String>, idle_timeout_secs: u64) -> Result<Self, String> {
+        let model_dir = model_dir.into();
+        // Matches `GraniteService::new`: fail at construction with a named
+        // directory rather than 20s later on the worker-startup timeout.
+        if !crate::model::has_parakeet_model(std::path::Path::new(&model_dir)) {
+            return Err(format!("incomplete Parakeet model directory: {model_dir}"));
+        }
         Ok(Self {
             inner: Arc::new(ServiceInner {
-                model_dir: model_dir.into(),
+                model_dir,
                 tx: Mutex::new(None),
                 idle_timeout_secs,
             }),
@@ -454,19 +460,20 @@ fn worker_main(
 ) {
     let idle_timeout = Duration::from_secs(inner.idle_timeout_secs);
     observer.phase("worker.start", "loading Parakeet model on demand");
-    let exec = build_execution_config();
 
-    let mut model = match ParakeetTDT::from_pretrained(&inner.model_dir, Some(exec)) {
+    let mut model = match Engine::load(&observer, &inner.model_dir) {
         Ok(model) => {
-            observer.phase("worker.start", "Parakeet model loaded");
+            observer.phase(
+                "worker.start",
+                &format!("Parakeet model loaded ({} driver)", model.name()),
+            );
             observer.notify("Transcrust ready", "Parakeet model loaded and worker is ready.");
             let _ = ready_tx.send(Ok(()));
             model
         }
         Err(e) => {
-            let message = format!("failed to load parakeet model: {e}");
-            observer.error("worker.start", &message);
-            let _ = ready_tx.send(Err(message));
+            observer.error("worker.start", &e);
+            let _ = ready_tx.send(Err(e));
             return;
         }
     };
@@ -476,13 +483,15 @@ fn worker_main(
     loop {
         match rx.recv_timeout(WORKER_IDLE_CHECK_INTERVAL) {
             Ok(job) => {
-                last_activity = Instant::now();
                 let result = transcribe_with_loaded_model(
                     &job.observer,
                     &mut model,
                     job.audio_rx,
                     job.source_sample_rate,
                 );
+                // Inactivity begins after the transcription loop completes,
+                // not when the job first arrives.
+                last_activity = Instant::now();
                 let _ = job.reply_tx.send(result);
             }
             Err(mpsc::RecvTimeoutError::Timeout) => {
@@ -512,9 +521,73 @@ fn worker_main(
     observer.phase("worker.stop", "worker channel closed");
 }
 
+/// Which Parakeet is actually loaded.
+///
+/// The direct driver is preferred and the crate is the fallback, not the other
+/// way round. B.1 measured the driver 35-43% faster on the same clips and B.2
+/// found it byte-identical at 45 s and *more* accurate where it diverged at 90 s
+/// (`CentOS Stream 10` against the crate's `Centaurus Stream 10`). The reason it
+/// is not simply mandatory is packaging: it needs `nemo128.onnx`, which
+/// `--download-model` does not fetch, so a fresh install would otherwise fail
+/// rather than degrade.
+enum Engine {
+    /// Three graphs through `ort`. Keeps the joint's vocab logits, so per-word
+    /// confidence survives the decode instead of being discarded at the crate
+    /// boundary.
+    Direct(Box<crate::parakeet_ort::LoadedParakeet>),
+    /// `parakeet-rs`, which runs the decode internally and returns a `String`.
+    Crate(Box<ParakeetTDT>),
+}
+
+impl Engine {
+    /// Prefer the direct driver; fall back with a reason the log will show.
+    fn load(observer: &Observer, model_dir: &str) -> Result<Self, String> {
+        let dir = std::path::Path::new(model_dir);
+        if crate::model::parakeet_direct_graphs(dir).is_some() {
+            match crate::parakeet_ort::LoadedParakeet::load(dir) {
+                Ok(model) => {
+                    observer.phase("worker.start", "Parakeet loaded via direct ort driver");
+                    return Ok(Self::Direct(Box::new(model)));
+                }
+                // A present-but-broken graph set should not strand the user with
+                // no dictation at all, so this reports and falls through.
+                Err(error) => observer.error(
+                    "worker.start",
+                    &format!("direct driver failed, falling back to parakeet-rs: {error}"),
+                ),
+            }
+        } else {
+            observer.phase(
+                "worker.start",
+                "no nemo128.onnx; using parakeet-rs (no confidence signal)",
+            );
+        }
+
+        let exec = build_execution_config();
+        let model = ParakeetTDT::from_pretrained(model_dir, Some(exec))
+            .map_err(|e| format!("failed to load parakeet model: {e}"))?;
+        Ok(Self::Crate(Box::new(model)))
+    }
+
+    fn name(&self) -> &'static str {
+        match self {
+            Self::Direct(_) => "direct",
+            Self::Crate(_) => "crate",
+        }
+    }
+}
+
+/// Words at or below this are worth a human glance.
+///
+/// Measured on 90 s of speech: every word above it was correct, and the ones
+/// below were `CentOS 0.42`, `CentaWes. 0.27`, `RHEL 0.64`, `Alma 0.69` — proper
+/// nouns, which is the class of error that costs a re-read. Surfacing them is
+/// D.0; this constant and the log line below are the substrate it needs.
+const CONFIDENCE_GATE: f32 = 0.75;
+
 fn transcribe_with_loaded_model(
     observer: &Observer,
-    model: &mut ParakeetTDT,
+    model: &mut Engine,
     audio_rx: mpsc::Receiver<Vec<f32>>,
     source_sample_rate: u32,
 ) -> Result<String, String> {
@@ -541,11 +614,35 @@ fn transcribe_with_loaded_model(
         &format!("resampled to {} samples", audio_16k.len()),
     );
 
-    observer.phase("transcription.infer", "starting ONNX inference");
-    let result = model
-        .transcribe_samples(audio_16k, 16000, 1, Some(TimestampMode::Words))
-        .map_err(|e| format!("Parakeet transcription failed: {e}"))?;
+    observer.phase(
+        "transcription.infer",
+        &format!("starting ONNX inference ({} driver)", model.name()),
+    );
+    let text = match model {
+        Engine::Direct(model) => {
+            let decoded = model.transcribe(&audio_16k)?;
+            // The whole point of the direct driver: the joint's logits survive,
+            // so the engine can say which words it was unsure of. Reported here
+            // rather than injected — the injected text goes into a real buffer.
+            let low: Vec<String> = decoded
+                .word_confidences(model.vocabulary())
+                .into_iter()
+                .filter(|(_, confidence)| *confidence <= CONFIDENCE_GATE)
+                .map(|(word, confidence)| format!("{word} ({confidence:.2})"))
+                .collect();
+            if low.is_empty() {
+                observer.phase("transcription.confidence", "every word above the gate");
+            } else {
+                observer.sample("transcription.confidence", &low.join(", "));
+            }
+            decoded.text
+        }
+        Engine::Crate(model) => model
+            .transcribe_samples(audio_16k, 16000, 1, Some(TimestampMode::Words))
+            .map_err(|e| format!("Parakeet transcription failed: {e}"))?
+            .text,
+    };
     observer.phase("transcription.infer", "ONNX inference finished");
 
-    Ok(result.text.trim().to_string())
+    Ok(text.trim().to_string())
 }

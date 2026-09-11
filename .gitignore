@@ -6,3 +6,6 @@
 /.direnv
 /.envrc
 /parakeet-tdt-0.6b-v3-onnx
+
+# Reference clones read during design work, not part of the build.
+murmure/
