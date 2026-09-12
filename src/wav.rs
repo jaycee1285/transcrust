@@ -17,7 +17,7 @@ use std::path::{Path, PathBuf};
 use crate::config::Config;
 use crate::observe::Observer;
 use crate::transcription::TranscriptionService;
-use crate::{audio, corpus, mode, postprocess};
+use crate::{audio, corpus, mode, model, postprocess};
 
 /// Windowing constants.
 ///
@@ -161,7 +161,19 @@ async fn transcribe_file(
 ) -> Result<PathBuf, String> {
     let (samples, rate) = audio::read_wav_mono(path)?;
     let audio_secs = samples.len() as f64 / rate as f64;
-    let windows = plan_windows(samples.len(), rate, rms_energy(&samples));
+    // Windowing exists for the two engines that need it: Parakeet throws past
+    // ~300 s on a positional table sized for ~2500 frames, and Granite costs
+    // ~19 MB of RSS per extra second of window. Nemotron has neither problem —
+    // its streaming state is a fixed 7.7 MB regardless of capture length — and
+    // windowing actively *hurts* it, because every seam resets the encoder
+    // cache and the decoder LSTM. Measured on Record-2.wav: windowed gives
+    // "Tarakeate one P" and "paint Dominion" where one continuous pass gives
+    // "parakeet one P" and "paid Dominion".
+    let windows = if chosen.model.kind == model::ModelKind::Nemotron {
+        vec![Window { start: 0, end: samples.len() }]
+    } else {
+        plan_windows(samples.len(), rate, rms_energy(&samples))
+    };
 
     eprintln!(
         "{} — {} of audio, {} window(s), {}",

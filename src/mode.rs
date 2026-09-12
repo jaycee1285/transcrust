@@ -37,12 +37,32 @@ impl Profile {
     }
 }
 
+/// How a mode starts and stops recording.
+///
+/// This was a daemon-launch flag (`--long`) applying to every mode at once,
+/// which left one incoherent state: a hold-to-talk daemon with Nemotron
+/// selected, where the engine's whole reason for existing — encoding while you
+/// speak — is unreachable. Capture belongs to the mode.
+///
+/// `--long` survives as an override that forces `Toggle` on everything, because
+/// route 2 of `design-long-form-routes.md` is toggled *Parakeet* and it is the
+/// control the whole plan is measured against.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Capture {
+    /// Hold the trigger, speak, release. The default and the shipped path.
+    Hold,
+    /// One press starts, the next stops. Also reachable on SIGUSR1 via
+    /// `transcrust --toggle`.
+    Toggle,
+}
+
 /// One switchable entry in the tray and on the toggle hotkey.
 #[derive(Clone, Debug)]
 pub struct Mode {
     pub label: String,
     pub model: InstalledModel,
     pub profile: Profile,
+    pub capture: Capture,
 }
 
 /// Every mode available on this machine, best-first.
@@ -58,10 +78,12 @@ pub fn discover_modes(config_path: Option<&str>) -> Vec<Mode> {
             label: model.label.clone(),
             model: model.clone(),
             profile: Profile::Raw,
+            capture: default_capture(model.kind),
         });
         if wants_long_profile(model.kind) {
             modes.push(Mode {
                 label: format!("{}{}", model.label, Profile::Long.suffix()),
+                capture: default_capture(model.kind),
                 model,
                 profile: Profile::Long,
             });
@@ -75,6 +97,20 @@ pub fn discover_modes(config_path: Option<&str>) -> Vec<Mode> {
 /// repair pass on it is all downside.
 fn wants_long_profile(kind: ModelKind) -> bool {
     matches!(kind, ModelKind::Granite)
+}
+
+/// Nemotron is toggle-only.
+///
+/// A cache-aware streaming encoder exists to run *while* you are talking, and
+/// a hold that ends when your finger lifts gives it nothing to stream into. The
+/// other two engines are batch: they see the whole utterance after the fact
+/// either way, so hold-to-talk stays their default and `--long` is how they
+/// reach a toggle.
+pub fn default_capture(kind: ModelKind) -> Capture {
+    match kind {
+        ModelKind::Nemotron => Capture::Toggle,
+        ModelKind::Parakeet | ModelKind::Granite => Capture::Hold,
+    }
 }
 
 /// Apply a mode's profile to raw engine text, before the shared pipeline.
@@ -251,5 +287,27 @@ mod tests {
     fn long_modes_are_labelled_distinctly() {
         assert_eq!(Profile::Raw.suffix(), "");
         assert_eq!(Profile::Long.suffix(), " — Long");
+    }
+}
+
+#[cfg(test)]
+mod capture_tests {
+    use super::*;
+
+    #[test]
+    fn nemotron_is_toggle_and_the_batch_engines_are_hold() {
+        // A cache-aware streaming encoder has nothing to stream into if the
+        // capture ends when a finger lifts.
+        assert_eq!(default_capture(ModelKind::Nemotron), Capture::Toggle);
+        assert_eq!(default_capture(ModelKind::Parakeet), Capture::Hold);
+        assert_eq!(default_capture(ModelKind::Granite), Capture::Hold);
+    }
+
+    #[test]
+    fn nemotron_offers_no_repair_variant() {
+        // It emits casing and punctuation natively, so `— Long` would be all
+        // downside — the same reason Parakeet does not get one.
+        assert!(!wants_long_profile(ModelKind::Nemotron));
+        assert!(wants_long_profile(ModelKind::Granite));
     }
 }

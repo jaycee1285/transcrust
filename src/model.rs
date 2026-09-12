@@ -35,18 +35,25 @@ const PARAKEET_TDT_INT4_FILES: &[(&str, &str)] = &[
 const DEFAULT_PARAKEET_INT8_DIR: &str = "parakeet-tdt-0.6b-v3-int8";
 const PARAKEET_VOCAB_FILE: &str = "vocab.txt";
 const GRANITE_TOKENIZER_FILE: &str = "tokenizer.json";
+const NEMOTRON_TOKENS_FILE: &str = "tokens.txt";
+const NEMOTRON_FILTERBANK_FILE: &str = "filterbank.bin";
 
 /// Discovery is keyed on the family word at the *top* of a directory name.
 /// Every supported model belongs to one of these families, so a new
 /// quantisation or point release drops in without touching this file. The
 /// directory name only nominates a candidate — [`model_kind`] inspects the
 /// contents and has the final say.
-const FAMILY_KEYWORDS: &[&str] = &["parakeet", "granite"];
+const FAMILY_KEYWORDS: &[&str] = &["parakeet", "granite", "nemotron"];
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ModelKind {
     Parakeet,
     Granite,
+    /// Nemotron Speech Streaming EN 0.6B — cache-aware streaming FastConformer
+    /// with an RNN-T decoder. Route 4 of `design-long-form-routes.md`: toggled
+    /// capture at `Profile::Raw`, because it emits punctuation and casing
+    /// natively and a repair pass on it would be all downside.
+    Nemotron,
 }
 
 impl ModelKind {
@@ -54,6 +61,7 @@ impl ModelKind {
         match self {
             Self::Parakeet => "Parakeet TDT",
             Self::Granite => "Granite Speech 5 TurboCTC",
+            Self::Nemotron => "Nemotron Speech Streaming EN",
         }
     }
 
@@ -62,7 +70,10 @@ impl ModelKind {
     fn rank(self) -> u8 {
         match self {
             Self::Parakeet => 0,
-            Self::Granite => 1,
+            // Ahead of Granite: it is a dictation engine, and Granite is now
+            // principally a `--wav` skimmer.
+            Self::Nemotron => 1,
+            Self::Granite => 2,
         }
     }
 }
@@ -77,7 +88,13 @@ pub struct InstalledModel {
 }
 
 pub fn model_kind(path: &Path) -> Option<ModelKind> {
-    if has_granite_model(path) {
+    // Nemotron first: its directory carries `encoder*` and `decoder*` graphs, so
+    // it must be ruled in before the two families whose tests look at those
+    // same prefixes. It is distinguished by shipping its own frontend
+    // (`filterbank.bin`) and a `tokens.txt` rather than Parakeet's `vocab.txt`.
+    if has_nemotron_model(path) {
+        Some(ModelKind::Nemotron)
+    } else if has_granite_model(path) {
         Some(ModelKind::Granite)
     } else if has_parakeet_model(path) {
         Some(ModelKind::Parakeet)
@@ -199,6 +216,13 @@ pub fn probe_model_files(path: &Path) -> Vec<String> {
             candidates.extend(granite_onnx_path(path));
             candidates.push(path.join(GRANITE_TOKENIZER_FILE));
         }
+        Some(ModelKind::Nemotron) => {
+            candidates.extend(nemotron_encoder_path(path));
+            candidates.extend(nemotron_decoder_path(path));
+            candidates.push(path.join(NEMOTRON_TOKENS_FILE));
+            // Probed like a graph because gate 3 makes it load-bearing.
+            candidates.push(path.join(NEMOTRON_FILTERBANK_FILE));
+        }
         None => {}
     }
 
@@ -300,7 +324,20 @@ fn model_variant(kind: ModelKind, path: &Path) -> &'static str {
     let graph = match kind {
         ModelKind::Parakeet => parakeet_encoder_path(path),
         ModelKind::Granite => granite_onnx_path(path),
+        ModelKind::Nemotron => nemotron_encoder_path(path),
     };
+    // Nemotron exports put the precision in the *directory* name
+    // (`fp32/`, `int8-dynamic/`) and leave the graph called plain
+    // `encoder_model.onnx`, so keying on the filename alone labels an int8
+    // build "fp32". Fall back to the directory when the file is silent.
+    if kind == ModelKind::Nemotron {
+        if let Some(dir) = path.file_name().and_then(|n| n.to_str()) {
+            let from_dir = variant_label(dir);
+            if from_dir != "fp32" {
+                return from_dir;
+            }
+        }
+    }
     graph
         .as_deref()
         .map(|graph| variant_label(file_name_of(graph)))
@@ -321,6 +358,34 @@ pub fn has_parakeet_model(path: &Path) -> bool {
     parakeet_encoder_path(path).is_some()
         && parakeet_decoder_path(path).is_some()
         && path.join(PARAKEET_VOCAB_FILE).is_file()
+}
+
+/// Nemotron needs four things, and the two that identify it are the frontend
+/// and the tokens file.
+///
+/// Gate 3 is why `filterbank.bin` is mandatory rather than optional: Parakeet's
+/// `nemo128.onnx` applies NeMo's `normalize: per_feature` and Nemotron's config
+/// says `normalize: null`. Feeding the wrong mel does not error — it produces
+/// fluent, confident, invented English. A directory without its own filterbank
+/// is therefore not a usable Nemotron, however many graphs it has.
+pub fn has_nemotron_model(path: &Path) -> bool {
+    nemotron_encoder_path(path).is_some()
+        && nemotron_decoder_path(path).is_some()
+        && path.join(NEMOTRON_TOKENS_FILE).is_file()
+        && path.join(NEMOTRON_FILTERBANK_FILE).is_file()
+}
+
+/// Either export naming convention for the same two graphs.
+pub fn nemotron_encoder_path(path: &Path) -> Option<PathBuf> {
+    pick_onnx(path, |name| name.starts_with("encoder"))
+}
+
+/// The decoder and joint are fused in every Nemotron export seen, whichever
+/// of the two names it uses.
+pub fn nemotron_decoder_path(path: &Path) -> Option<PathBuf> {
+    pick_onnx(path, |name| {
+        name.starts_with("decoder_model") || name.starts_with("decoder_joint")
+    })
 }
 
 pub fn has_granite_model(path: &Path) -> bool {
