@@ -507,3 +507,256 @@ mod tests {
         assert!(resampler_response(16_000, 16_000).is_empty());
     }
 }
+
+/// A `resample` that can be fed in pieces.
+///
+/// The batch [`resample`] is a whole-buffer polyphase decimator, and splitting
+/// it naively puts a discontinuity at every seam: each call treats input
+/// outside its own slice as silence, so the kernel rolls off at both edges of
+/// every chunk. On 44100 → 16000 the kernel is ~98 taps wide, so that is ~3 ms
+/// of fabricated fade every chunk — the same class of defect A.1 spent a night
+/// removing, and invisible until it shows up as a word.
+///
+/// This keeps the filter's history instead. Output sample `i` is centred at
+/// `i * step` input samples and needs `half_width` taps either side, so an
+/// output is emitted only once the buffer actually covers its whole kernel;
+/// everything else waits for more input. [`finish`] then drains the tail with
+/// the same treat-beyond-the-end-as-silence rule the batch version uses, which
+/// is what makes the two agree exactly.
+///
+/// Used by the streaming engines, which have to resample while the user is
+/// still talking. The batch engines keep calling [`resample_to_16k`].
+pub struct StreamingResampler {
+    bank: Vec<f64>,
+    gains: Vec<f64>,
+    phases: usize,
+    taps: usize,
+    half_width: isize,
+    step: f64,
+    passthrough: bool,
+    /// Input samples not yet fully consumed by the filter.
+    pending: Vec<f32>,
+    /// Absolute input index of `pending[0]`.
+    pending_start: isize,
+    /// Next output index to emit.
+    next_out: usize,
+    /// Total input samples ever pushed, for the output-length calculation.
+    total_in: usize,
+}
+
+impl StreamingResampler {
+    pub fn new(from_rate: u32, to_rate: u32) -> Self {
+        if from_rate == to_rate {
+            return Self {
+                bank: Vec::new(),
+                gains: Vec::new(),
+                phases: 1,
+                taps: 0,
+                half_width: 0,
+                step: 1.0,
+                passthrough: true,
+                pending: Vec::new(),
+                pending_start: 0,
+                next_out: 0,
+                total_in: 0,
+            };
+        }
+        let from = from_rate as f64;
+        let to = to_rate as f64;
+        let cutoff = CUTOFF_FRACTION * from.min(to) / from;
+        let half_width = (SINC_ZERO_CROSSINGS / (2.0 * cutoff)).ceil() as isize;
+        let phases = (to_rate / gcd(from_rate, to_rate)) as usize;
+        let taps = (2 * half_width) as usize;
+        let mut bank = vec![0.0f64; phases * taps];
+        let mut gains = vec![0.0f64; phases];
+        for (p, gain) in gains.iter_mut().enumerate() {
+            let frac = p as f64 / phases as f64;
+            let mut sum = 0.0;
+            for k in 0..taps {
+                let t = (k as isize - half_width + 1) as f64 - frac;
+                let w = sinc(2.0 * cutoff * t) * blackman(t, half_width as f64);
+                bank[p * taps + k] = w;
+                sum += w;
+            }
+            *gain = sum;
+        }
+        Self {
+            bank,
+            gains,
+            phases,
+            taps,
+            half_width,
+            step: from / to,
+            passthrough: false,
+            pending: Vec::new(),
+            pending_start: 0,
+            next_out: 0,
+            total_in: 0,
+        }
+    }
+
+    /// Feed input; get back every output sample whose kernel is now covered.
+    pub fn push(&mut self, input: &[f32]) -> Vec<f32> {
+        self.total_in += input.len();
+        if self.passthrough {
+            return input.to_vec();
+        }
+        self.pending.extend_from_slice(input);
+        // Only emit where the kernel's right edge is inside what we hold.
+        let covered_end = self.pending_start + self.pending.len() as isize;
+        let mut out = Vec::new();
+        loop {
+            let centre = self.next_out as f64 * self.step;
+            let base = centre.floor() as isize;
+            if base + self.half_width >= covered_end {
+                break;
+            }
+            out.push(self.sample_at(self.next_out, base, centre));
+            self.next_out += 1;
+        }
+        self.trim();
+        out
+    }
+
+    /// Drain the tail, treating beyond-the-end as silence exactly as the batch
+    /// filter does, so a streamed clip and a batched one agree sample for
+    /// sample.
+    pub fn finish(&mut self) -> Vec<f32> {
+        if self.passthrough {
+            return Vec::new();
+        }
+        let output_len = (self.total_in as f64 / self.step) as usize;
+        let mut out = Vec::new();
+        while self.next_out < output_len {
+            let centre = self.next_out as f64 * self.step;
+            let base = centre.floor() as isize;
+            out.push(self.sample_at(self.next_out, base, centre));
+            self.next_out += 1;
+        }
+        out
+    }
+
+    fn sample_at(&self, _index: usize, base: isize, centre: f64) -> f32 {
+        let p = (((centre - base as f64) * self.phases as f64).round() as usize) % self.phases;
+        let kernel = &self.bank[p * self.taps..(p + 1) * self.taps];
+        let mut acc = 0.0f64;
+        for (k, &w) in kernel.iter().enumerate() {
+            let j = base - self.half_width + 1 + k as isize;
+            // Out of range is silence, both before the clip and past the end of
+            // what has arrived. Inside `push` the loop guarantees the right
+            // edge is covered, so only `finish` ever hits the far side.
+            if j >= 0 {
+                let local = j - self.pending_start;
+                if local >= 0 && (local as usize) < self.pending.len() {
+                    acc += self.pending[local as usize] as f64 * w;
+                }
+            }
+        }
+        let gain = self.gains[p];
+        if gain.abs() > f64::EPSILON {
+            (acc / gain) as f32
+        } else {
+            0.0
+        }
+    }
+
+    /// Drop input the filter can no longer reach.
+    fn trim(&mut self) {
+        let centre = self.next_out as f64 * self.step;
+        let oldest_needed = centre.floor() as isize - self.half_width + 1;
+        let drop = oldest_needed - self.pending_start;
+        if drop > 0 {
+            let drop = (drop as usize).min(self.pending.len());
+            self.pending.drain(..drop);
+            self.pending_start += drop as isize;
+        }
+    }
+}
+
+#[cfg(test)]
+mod streaming_resampler_tests {
+    use super::*;
+
+    fn tone(samples: usize, hz: f64, rate: u32) -> Vec<f32> {
+        (0..samples)
+            .map(|i| (2.0 * std::f64::consts::PI * hz * i as f64 / rate as f64).sin() as f32)
+            .collect()
+    }
+
+    /// The property that matters: streaming in arbitrary pieces must equal one
+    /// batch call. If this drifts, every streamed dictation carries a filter
+    /// artefact the batch path does not, and no transcript comparison between
+    /// the two would mean anything.
+    #[test]
+    fn streaming_matches_batch_for_any_chunking() {
+        // 0.2 s, not 1 s. The property is about chunk boundaries, not volume,
+        // and `resampling_a_dictation_clip_is_cheap` next door asserts a
+        // wall-clock bound — a heavy neighbour running in parallel is enough to
+        // push it over, which it did.
+        let input = tone(8820, 440.0, 44100);
+        let expected = resample(&input, 44100, 16000);
+
+        for chunk in [1usize, 7, 160, 441, 1024, 8820] {
+            let mut r = StreamingResampler::new(44100, 16000);
+            let mut got = Vec::new();
+            for piece in input.chunks(chunk) {
+                got.extend(r.push(piece));
+            }
+            got.extend(r.finish());
+            assert_eq!(
+                got.len(),
+                expected.len(),
+                "length mismatch at chunk size {chunk}"
+            );
+            for (i, (a, b)) in got.iter().zip(expected.iter()).enumerate() {
+                assert!(
+                    (a - b).abs() < 1e-6,
+                    "sample {i} differs at chunk size {chunk}: {a} vs {b}"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn a_matched_rate_passes_through_untouched() {
+        let input = tone(1000, 440.0, 16000);
+        let mut r = StreamingResampler::new(16000, 16000);
+        let mut got = r.push(&input);
+        got.extend(r.finish());
+        assert_eq!(got, input);
+    }
+
+    /// The seam test stated as a defect: a naive per-chunk batch resample fades
+    /// at every boundary, and this is what that costs. Keeps the streaming
+    /// implementation honest if anyone ever "simplifies" it.
+    #[test]
+    fn naive_per_chunk_resampling_is_measurably_worse() {
+        let input = tone(8820, 3000.0, 44100);
+        let expected = resample(&input, 44100, 16000);
+
+        let mut naive = Vec::new();
+        for piece in input.chunks(1024) {
+            naive.extend(resample(piece, 44100, 16000));
+        }
+        let mut streamed = Vec::new();
+        let mut r = StreamingResampler::new(44100, 16000);
+        for piece in input.chunks(1024) {
+            streamed.extend(r.push(piece));
+        }
+        streamed.extend(r.finish());
+
+        let err = |x: &[f32]| -> f64 {
+            let n = x.len().min(expected.len());
+            (0..n)
+                .map(|i| ((x[i] - expected[i]) as f64).powi(2))
+                .sum::<f64>()
+                / n as f64
+        };
+        assert!(
+            err(&naive) > err(&streamed) * 100.0,
+            "naive {} should be far worse than streamed {}",
+            err(&naive),
+            err(&streamed)
+        );
+    }
+}

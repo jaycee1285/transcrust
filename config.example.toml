@@ -1,35 +1,83 @@
 # Transcrust configuration
 # Default location: ~/.config/transcrust/config.toml
+#
+# transcrust never writes this file. Copy it into place yourself:
+#   install -Dm644 config.example.toml ~/.config/transcrust/config.toml
+#
+# A PARSE ERROR DISCARDS THE WHOLE FILE. `config::load` prints
+# "Config parse error: … , using defaults" to stderr and then every section
+# below silently reverts to its default — not just the broken one. Two ways
+# this has actually happened:
+#   modifiers = [space]     bare word; TOML needs ["Space"]
+#   key = "Alt"             not a bindable name; use LeftAlt / RightAlt
+# After editing, run `transcrust --doctor` and confirm it reports the binding
+# you just wrote. If it reports something else, the file did not parse.
 
 [hotkey]
-# Cycle to the next mode. Unset by default so it does not claim a chord on a
-# keyboard-driven desktop that already has a full keymap. Same rules as the
-# tray switcher: the swap is refused unless the app is idle.
-# mode_key = "M"
-# mode_modifiers = ["RightAlt"]
-# Push-to-talk: hold both, speak, release. Modifier-only on purpose.
+# ── Two ways to write the binding, and `chord` WINS when both are present ──
 #
-# transcrust reads evdev passively and never grabs the keyboard, so the focused
-# window sees every press and auto-repeat regardless. A trigger that produces a
-# character will type into your document for the whole hold — `Space + LeftAlt`
-# did exactly that. Safe triggers emit nothing: any modifier, F13-F20, PAUSE,
-# SCROLLLOCK. `--doctor` warns if you pick one that does not.
-# Two ways to write the binding; `chord` wins when both are present.
-# Either way this is read at startup — change it and restart, no rebuild.
+# `chord` uses labwc rc.xml spelling, so a binding can move between the two
+# files unchanged:  W- super   A- alt   C- ctrl   S- shift
+# A chord with no prefix is a bare trigger: "Print" is exactly key = "Print".
 #
-# chord uses labwc rc.xml spelling, so a binding can move between the two files
-# unchanged: W- super, A- alt, C- ctrl, S- shift.
-#chord = "Print"
+# Read at startup — change it and restart, no rebuild.
+#
+# LIMITATION: chord prefixes only ever produce LEFT-side modifiers, so `A-`
+# is always LeftAlt and RightAlt cannot be expressed as a modifier at all.
+# The default binding below (RightAlt+LeftAlt) is therefore unwriteable as a
+# chord. That is why the key/modifiers form still exists.
+
+# ── Why the default is modifier-only ──────────────────────────────────────
+# transcrust reads evdev PASSIVELY and does not grab the keyboard, so the
+# compositor and the focused window see every press and every auto-repeat
+# regardless of what transcrust does. A trigger that produces a character
+# types into your document for the whole hold — `Space + LeftAlt` did exactly
+# that, spraying spaces and cycling Firefox tabs.
+#
+# SILENT triggers, the only ones safe without a grab:
+#   any modifier    LeftCtrl RightCtrl LeftShift RightShift LeftAlt RightAlt
+#                   LeftMeta RightMeta
+#   function block  F13 F14 F15 F16 F17 F18 F19 F20
+#   oddments        Pause  ScrollLock  PrtScr  Menu  CapsLock
+# PRINTABLE triggers, which leak:  Space, A-Z
+# `--doctor` warns you if you pick one that is not silent.
+
+# ── Option 1: Alt+Space ───────────────────────────────────────────────────
+# Needs grab = true, and even then LEAKS ONE PRESS PER HOLD: the compositor
+# has already delivered the first keystroke by the time the grab takes
+# effect. Expect one space typed, or one Firefox tab cycled, per dictation.
 #chord = "A-space"
+
+# ── Option 2: PrintScreen ─────────────────────────────────────────────────
+# The clean single-key option: emits no character, so it leaks nothing and
+# grab is irrelevant. Spellings accepted: Print, PrtScr, PrintScreen, SysRq.
+# PREREQUISITE: unbind PrtScr from your screenshot tool in labwc rc.xml
+# first, or both fire on every hold.
+#chord = "Print"
+
+# ── Option 3: an arbitrary key chord ──────────────────────────────────────
+# Any number of prefixes plus one bindable trigger from the lists above.
+#chord = "C-A-F13"
+#chord = "W-S-F13"
+#chord = "C-Pause"
+
+# ── Option 4: the key/modifiers form (the default) ────────────────────────
+# Only read when `chord` is commented out entirely. Use it when you need a
+# RIGHT-side modifier, which chord cannot express.
 key = "RightAlt"
 modifiers = ["LeftAlt"]
 
-# Hold the keyboard exclusively (EVIOCGRAB) while the trigger is down, so a
-# printable trigger cannot spray auto-repeat into the focused window. It does
-# not stop the *first* press, which the compositor has already delivered by the
-# time transcrust sees it — so A-space still cycles a Firefox tab once per hold.
-# Only worth turning on if you want a printable trigger anyway.
+# EVIOCGRAB while the trigger is held, so a printable trigger cannot spray
+# auto-repeat into the focused window. It does NOT stop the first press.
+# Pointless for Print, F13-F20, Pause or ScrollLock, which emit nothing.
 grab = false
+
+# Cycle to the next mode. Fires on key-down, no hold, and the swap is refused
+# unless the app is idle — same contract as the tray radio. Unset by default
+# so it does not claim a chord on a keyboard-driven desktop.
+# mode_key = "M"
+# mode_modifiers = ["RightAlt"]
+
 # device = "/dev/input/event3"
 
 [audio]
@@ -62,5 +110,18 @@ wtype = true
 clipboard = true
 
 [observe]
+# Desktop notifications default to TRUE. Setting this false silences the
+# engine-switch and "Previous engine unloaded" notifications as well.
 desktop_notifications = true
 sample_chars = 120
+
+# Seconds of inactivity before a worker drops its model. A mode switch now
+# unloads the outgoing engine immediately, so this only governs sitting idle.
+idle_timeout_secs = 60
+
+# Bank every dictation to ~/.local/share/transcrust/corpus/ as a WAV plus a
+# JSON sidecar with "reference": null for you to fill in. Off by default: it
+# writes ~10 MB/minute and records your speech to disk. That directory has
+# its own README, and every accuracy gate in design-long-form-routes.md
+# reads from it.
+# corpus = true

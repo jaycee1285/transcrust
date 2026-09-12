@@ -13,6 +13,8 @@ mod normalise;
 mod observe;
 mod parakeet;
 mod parakeet_ort;
+mod nemotron;
+mod picker;
 mod postprocess;
 mod state;
 mod tray;
@@ -71,6 +73,16 @@ fn main() {
                 Ok(()) => println!("transcrust toggle signal sent"),
                 Err(e) => {
                     eprintln!("Toggle failed: {e}");
+                    std::process::exit(1);
+                }
+            }
+            return;
+        }
+        Some("--pick") => {
+            match control::request_pick() {
+                Ok(()) => println!("transcrust pick signal sent"),
+                Err(e) => {
+                    eprintln!("Pick failed: {e}");
                     std::process::exit(1);
                 }
             }
@@ -383,6 +395,7 @@ fn main() {
             println!("  --smoke                     Run with terminal phase logging enabled");
             println!("  --long                      Run the daemon in toggle mode for long dictation");
             println!("  --toggle                    Tell a --long daemon to start or stop recording");
+            println!("  --pick                      Open the fuzzel mode picker on a running daemon");
             println!("  --quit                      Ask a running transcrust instance to exit");
             println!("  --doctor                    Print phase-relevant environment info");
             println!("  --fix <TEXT>                Run the post-processing pipeline on TEXT and print it");
@@ -526,6 +539,9 @@ async fn run(config: config::Config, run_mode: RunMode) {
 
     let state = Arc::new(state::StateMachine::new());
     let (engine_request_tx, mut engine_request_rx) = tokio::sync::mpsc::unbounded_channel();
+    // The picker is a second front end onto this same channel, so it gets a
+    // clone rather than a mechanism of its own.
+    let picker_request_tx = engine_request_tx.clone();
     let (active_engine_tx, active_engine_rx) = tokio::sync::watch::channel(active_engine);
     spawn(tray::run_tray(
         state.rx.clone(),
@@ -570,6 +586,25 @@ async fn run(config: config::Config, run_mode: RunMode) {
             }
         };
 
+    // SIGUSR2 carries `transcrust --pick`. Registered unconditionally and in
+    // every run mode for exactly the reason SIGUSR1 is: the default disposition
+    // is *terminate*, so a daemon that does not handle it dies silently the
+    // first time the compositor binding fires.
+    let mut pick_signal =
+        match tokio::signal::unix::signal(tokio::signal::unix::SignalKind::user_defined2()) {
+            Ok(stream) => Some(stream),
+            Err(error) => {
+                observer.error("startup", &format!("failed to listen for SIGUSR2: {error}"));
+                None
+            }
+        };
+    if !picker::is_available() {
+        observer.phase(
+            "startup",
+            "fuzzel not on PATH; `transcrust --pick` will log and continue",
+        );
+    }
+
 
     loop {
         tokio::select! {
@@ -581,12 +616,22 @@ async fn run(config: config::Config, run_mode: RunMode) {
                     None => std::future::pending().await,
                 }
             } => {
-                if !run_mode.long {
+                // Capture is a property of the mode now. `--long` still forces
+                // Toggle on everything, because route 2 is toggled Parakeet.
+                let capture = if run_mode.long {
+                    mode::Capture::Toggle
+                } else {
+                    installed[active_engine].capture
+                };
+                if capture != mode::Capture::Toggle {
                     observer.phase(
                         "toggle",
-                        "ignored: daemon is in hold-to-talk mode; start it with --long",
+                        &format!(
+                            "ignored: {} is hold-to-talk; start the daemon with --long to toggle it",
+                            installed[active_engine].label
+                        ),
                     );
-                    observer.notify("Transcrust", "Not in --long mode; toggle ignored");
+                    observer.notify("Transcrust", "This mode is hold-to-talk; toggle ignored");
                     continue;
                 }
                 // The state machine already guards both transitions, so a
@@ -606,7 +651,87 @@ async fn run(config: config::Config, run_mode: RunMode) {
                     observer.error("toggle", "hotkey channel closed");
                 }
             }
+            Some(()) = async {
+                match pick_signal.as_mut() {
+                    Some(stream) => stream.recv().await,
+                    None => std::future::pending().await,
+                }
+            } => {
+                // The tray hides its submenu below two entries; the picker does
+                // the same rather than showing a one-item list.
+                if installed.len() < 2 {
+                    observer.phase("pick", "only one mode installed");
+                    continue;
+                }
+                // Spawned, not awaited: the select! loop must not be parked on
+                // a picker the user walked away from. The switch itself still
+                // goes through engine_request_rx below, so Idle-only, the Busy
+                // notification and the watch echo are all unchanged.
+                // §4 says feed `discover_modes()` labels, and the picker adds the
+                // capture mode because that is the one thing about a route you
+                // cannot see from the engine name — `Nemotron` is toggle-only
+                // and the other three are hold. Annotation happens inside
+                // `picker::pick`, and only on the `--index` path: the
+                // string-match fallback must compare against unprettified
+                // labels or every pick silently misses.
+                let labels: Vec<(String, mode::Capture)> = installed
+                    .iter()
+                    .map(|mode| (mode.label.clone(), mode.capture))
+                    .collect();
+                let active = active_engine;
+                let tx = picker_request_tx.clone();
+                let observer = observer.clone();
+                // Logged before the picker opens, not after it resolves. Without
+                // this there is no evidence the signal arrived until the user
+                // chooses — which reads exactly like a picker that never spawned.
+                observer.phase("pick", "opening picker");
+                spawn(async move {
+                    match picker::pick(&labels, active).await {
+                        Ok(Some(index)) => {
+                            observer.phase("pick", &format!("chose {}", labels[index].0));
+                            let _ = tx.send(index);
+                        }
+                        Ok(None) => observer.phase("pick", "cancelled"),
+                        Err(error) => {
+                            // Never crash a dictation daemon over a missing
+                            // picker.
+                            observer.error("pick", &error);
+                            observer.notify("Transcrust", &format!("Picker unavailable: {error}"));
+                        }
+                    }
+                });
+            }
             Some(event) = hotkey_rx.recv() => {
+                // On a Toggle-capture mode the physical trigger toggles instead
+                // of gating: one press starts, the next stops, and the release
+                // is ignored. Without this a toggle mode would stop recording
+                // the instant your finger lifted, which is hold-to-talk wearing
+                // a different name.
+                //
+                // Done as a translation here rather than in `hotkey.rs` so the
+                // listener stays a dumb evdev reader and capture policy lives
+                // in one place with the mode that owns it.
+                let capture = if run_mode.long {
+                    mode::Capture::Toggle
+                } else {
+                    installed[active_engine].capture
+                };
+                let event = if capture == mode::Capture::Toggle {
+                    match event {
+                        hotkey::HotkeyEvent::Pressed
+                            if state.current() == state::AppState::Recording =>
+                        {
+                            hotkey::HotkeyEvent::Released
+                        }
+                        hotkey::HotkeyEvent::Released => {
+                            // Not an error and not worth a log line per hold.
+                            continue;
+                        }
+                        other => other,
+                    }
+                } else {
+                    event
+                };
                 match event {
                     hotkey::HotkeyEvent::Pressed => {
                         if state.current() == state::AppState::Idle {
@@ -638,6 +763,11 @@ async fn run(config: config::Config, run_mode: RunMode) {
                             };
                             match outcome {
                                 Ok(service) => {
+                                    // Two modes over one model share a service, so
+                                    // only a real model change has anything to free.
+                                    if !same_model {
+                                        transcription.shutdown();
+                                    }
                                     transcription = service;
                                     active_engine = next;
                                     let _ = active_engine_tx.send(active_engine);
@@ -723,8 +853,12 @@ async fn run(config: config::Config, run_mode: RunMode) {
                 };
                 match outcome {
                     Ok(service) => {
-                        // The outgoing worker holds its model until its own idle
-                        // timeout fires; nothing here forces it out early.
+                        // Free the outgoing model now rather than waiting out
+                        // `idle_timeout_secs`: holding both is 2.3 GB measured,
+                        // and the worker already has an unload path to take.
+                        if !same_model {
+                            transcription.shutdown();
+                        }
                         transcription = service;
                         active_engine = requested;
                         let _ = active_engine_tx.send(active_engine);
@@ -851,7 +985,11 @@ async fn run_transcription_pipeline(
     // `wav.rs` already solved this for files: cut at the quietest frame near
     // each 60 s boundary and feed the seam one window at a time. Reusing it here
     // means a two-minute dictation and a two-minute WAV take the same path.
-    let result = if long_form {
+    // A streaming engine must not be windowed and must not have its audio
+    // pre-drained, so `--long` selects the windowed path only for the engines
+    // that actually want it. See `TranscriptionService::windows_long_captures`.
+    let windowed = long_form && transcription.windows_long_captures();
+    let result = if windowed {
         let mut samples: Vec<f32> = Vec::new();
         while let Ok(chunk) = audio_rx.recv() {
             samples.extend_from_slice(&chunk);
@@ -883,7 +1021,17 @@ async fn run_transcription_pipeline(
     } else {
         // The ceiling is the engine's, not a global constant: VibeVoice decodes
         // at roughly real time and 45s would abort any dictation over a minute.
-        let budget = transcription.timeout();
+        //
+        // A toggled streaming capture is unbounded by design — the user decides
+        // when to stop — so a wall-clock ceiling on the whole job would be
+        // measuring how long they chose to talk. The engine does its work
+        // *during* the capture, so the ceiling here only has to be generous
+        // enough never to abort a dictation that cannot be re-recorded.
+        let budget = if long_form {
+            std::time::Duration::from_secs(3600)
+        } else {
+            transcription.timeout()
+        };
         match tokio::time::timeout(
             budget,
             transcription.transcribe(observer.clone(), audio_rx, sample_rate),
@@ -1289,6 +1437,7 @@ fn run_doctor() {
     match resolved.as_deref().and_then(model::model_kind) {
         Some(model::ModelKind::Parakeet) => println!("Engine: Parakeet TDT"),
         Some(model::ModelKind::Granite) => println!("Engine: Granite Speech 5 TurboCTC"),
+        Some(model::ModelKind::Nemotron) => println!("Engine: Nemotron Speech Streaming EN"),
         None => println!("Engine: <none>"),
     }
     println!("Search paths:");
@@ -1305,14 +1454,24 @@ fn run_doctor() {
             mode::Profile::Raw => "raw",
             mode::Profile::Long => "long-form repair",
         };
+        let capture = match found.capture {
+            mode::Capture::Hold => "hold",
+            mode::Capture::Toggle => "toggle",
+        };
         println!(
-            "  {marker} {} [{profile}] — {}",
+            "  {marker} {} [{profile}, {capture}] — {}",
             found.label,
             found.model.path.display()
         );
     }
     if modes.len() < 2 {
         println!("  (tray Engine switcher appears once two or more are installed)");
+    }
+    // The picker is optional: absent fuzzel costs `--pick` and nothing else.
+    if picker::is_available() {
+        println!("Mode picker: fuzzel found — bind `transcrust --pick` in rc.xml");
+    } else {
+        println!("Mode picker: fuzzel NOT on PATH — `transcrust --pick` will log and continue");
     }
     match resolved.as_deref() {
         Some(path) if model::has_parakeet_direct(path) => {
@@ -1338,7 +1497,13 @@ fn run_doctor() {
     if binding.is_ok() {
         let mut parts = bound_modifiers.clone();
         parts.push(bound_key.clone());
-        println!("Hotkey: {} (hold to talk)", parts.join("+"));
+        // Capture belongs to the mode, so the same trigger holds on Parakeet
+        // and Granite and toggles on Nemotron. Saying only "hold to talk" here
+        // described half the modes.
+        println!(
+            "Hotkey: {} (holds on hold modes, toggles on toggle modes — see Modes above)",
+            parts.join("+")
+        );
         if config.hotkey.grab {
             println!("  Grab: on — keyboard is held exclusively for the duration of the press");
         }

@@ -66,6 +66,22 @@ impl GraniteService {
         })
     }
 
+    /// Release the model now instead of waiting out `idle_timeout_secs`.
+    ///
+    /// Dropping the service side of the channel is the whole mechanism: the
+    /// worker is already parked in `recv_timeout`, so it sees `Disconnected`
+    /// as soon as the last sender goes and takes its existing unload path.
+    /// Nothing new has to be coordinated, and a worker mid-job is unaffected
+    /// because it only reads the channel between jobs.
+    ///
+    /// Safe to call on a service that never started a worker (`tx` is `None`
+    /// until the first job) and safe to call twice.
+    pub fn shutdown(&self) {
+        if let Ok(mut guard) = self.inner.tx.lock() {
+            *guard = None;
+        }
+    }
+
     pub async fn transcribe(
         &self,
         observer: Observer,
@@ -276,7 +292,17 @@ fn worker_main(
                 break;
             }
             Err(mpsc::RecvTimeoutError::Timeout) => {}
-            Err(mpsc::RecvTimeoutError::Disconnected) => break,
+            Err(mpsc::RecvTimeoutError::Disconnected) => {
+                // Every sender is gone, which in practice means `shutdown` was
+                // called on a mode switch. Drop the model here rather than
+                // letting it fall out of scope at the end of the function, so
+                // the notification fires after the memory is actually released
+                // and not merely after the decision to release it.
+                drop(model);
+                observer.phase("worker.unload", "model dropped on switch");
+                observer.notify("Transcrust", "Previous engine unloaded");
+                return;
+            }
         }
     }
     observer.phase("worker.stop", "worker channel closed");

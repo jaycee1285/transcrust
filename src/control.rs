@@ -53,6 +53,20 @@ pub fn request_toggle() -> Result<(), String> {
     signal_daemon("USR1", "toggle")
 }
 
+/// Ask a running daemon to show its mode picker.
+///
+/// `SIGUSR2`, because `SIGUSR1` is taken by [`request_toggle`]. The daemon
+/// registers a handler for it unconditionally: the default disposition is
+/// *terminate*, so an unhandled `transcrust --pick` would kill the daemon
+/// silently — the same trap SIGUSR1 already documents at `main.rs`.
+///
+/// The daemon spawns the picker rather than the CLI doing it, because the
+/// daemon is the only process that knows the current mode list and is already
+/// inside the user's Wayland session.
+pub fn request_pick() -> Result<(), String> {
+    signal_daemon("USR2", "pick")
+}
+
 pub fn request_quit() -> Result<(), String> {
     signal_daemon("TERM", "quit")
 }
