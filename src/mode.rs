@@ -28,15 +28,6 @@ pub enum Profile {
     Long,
 }
 
-impl Profile {
-    pub fn suffix(self) -> &'static str {
-        match self {
-            Self::Raw => "",
-            Self::Long => " — Long",
-        }
-    }
-}
-
 /// How a mode starts and stops recording.
 ///
 /// This was a daemon-launch flag (`--long`) applying to every mode at once,
@@ -67,49 +58,61 @@ pub struct Mode {
 
 /// Every mode available on this machine, best-first.
 ///
-/// Base modes come straight from `discover_models`, preserving its ordering, so
-/// an unpinned install still resolves to Parakeet. A `— Long` variant is
-/// offered only for engines whose raw output actually needs repair: Parakeet
-/// emits grown-up English natively and would gain nothing but risk.
+/// One mode per installed model, preserving `discover_models`' ordering, so an
+/// unpinned install still resolves to Parakeet. Each engine gets exactly one
+/// route, the one it is measured on in `design-long-form-routes.md`: Parakeet
+/// held, Nemotron toggled, Granite toggled with the repair profile. Granite's
+/// hold-to-talk raw entry was removed — Parakeet owns hold, and a second hold
+/// engine only widened the menu.
 pub fn discover_modes(config_path: Option<&str>) -> Vec<Mode> {
-    let mut modes = Vec::new();
-    for model in discover_models(config_path) {
-        modes.push(Mode {
-            label: model.label.clone(),
-            model: model.clone(),
-            profile: Profile::Raw,
-            capture: default_capture(model.kind),
-        });
-        if wants_long_profile(model.kind) {
-            modes.push(Mode {
-                label: format!("{}{}", model.label, Profile::Long.suffix()),
-                capture: default_capture(model.kind),
+    discover_models(config_path)
+        .into_iter()
+        .map(|model| {
+            let capture = default_capture(model.kind);
+            Mode {
+                label: menu_label(&model, capture),
+                profile: profile_for(model.kind),
+                capture,
                 model,
-                profile: Profile::Long,
-            });
-        }
+            }
+        })
+        .collect()
+}
+
+/// The name the tray and the fuzzel picker show. Capture is in the name because
+/// it is the one thing about a route you cannot see from the engine.
+///
+/// No quantisation: one export per engine is installed, and the fuzzel picker is
+/// sized to the longest label. `--doctor` still prints the directory.
+fn menu_label(model: &InstalledModel, capture: Capture) -> String {
+    match (model.kind, capture) {
+        (ModelKind::Parakeet, Capture::Hold) => "Parakeet PTT".to_string(),
+        (ModelKind::Nemotron, Capture::Toggle) => "Nemotron Toggle".to_string(),
+        (ModelKind::Granite, Capture::Toggle) => "Granite 5 Toggle".to_string(),
+        _ => model.label.clone(),
     }
-    modes
 }
 
 /// Granite's CTC head emits bare lowercase with expanded contractions — it is
-/// built to feed a pipeline, not a reader. Parakeet emits finished prose, so a
-/// repair pass on it is all downside.
-fn wants_long_profile(kind: ModelKind) -> bool {
-    matches!(kind, ModelKind::Granite)
+/// built to feed a pipeline, not a reader. Parakeet and Nemotron emit finished
+/// prose, so a repair pass on them is all downside.
+fn profile_for(kind: ModelKind) -> Profile {
+    match kind {
+        ModelKind::Granite => Profile::Long,
+        ModelKind::Parakeet | ModelKind::Nemotron => Profile::Raw,
+    }
 }
 
-/// Nemotron is toggle-only.
+/// Parakeet is the only hold-to-talk engine.
 ///
 /// A cache-aware streaming encoder exists to run *while* you are talking, and
-/// a hold that ends when your finger lifts gives it nothing to stream into. The
-/// other two engines are batch: they see the whole utterance after the fact
-/// either way, so hold-to-talk stays their default and `--long` is how they
-/// reach a toggle.
+/// a hold that ends when your finger lifts gives it nothing to stream into, so
+/// Nemotron toggles. Granite toggles because its one remaining route is
+/// long-form (route 3). `--long` still forces Toggle on Parakeet too.
 pub fn default_capture(kind: ModelKind) -> Capture {
     match kind {
-        ModelKind::Nemotron => Capture::Toggle,
-        ModelKind::Parakeet | ModelKind::Granite => Capture::Hold,
+        ModelKind::Nemotron | ModelKind::Granite => Capture::Toggle,
+        ModelKind::Parakeet => Capture::Hold,
     }
 }
 
@@ -278,36 +281,52 @@ mod tests {
     }
 
     #[test]
-    fn only_granite_offers_a_long_variant() {
-        assert!(wants_long_profile(ModelKind::Granite));
-        assert!(!wants_long_profile(ModelKind::Parakeet));
-    }
-
-    #[test]
-    fn long_modes_are_labelled_distinctly() {
-        assert_eq!(Profile::Raw.suffix(), "");
-        assert_eq!(Profile::Long.suffix(), " — Long");
+    fn only_granite_gets_the_repair_profile() {
+        assert_eq!(profile_for(ModelKind::Granite), Profile::Long);
+        assert_eq!(profile_for(ModelKind::Parakeet), Profile::Raw);
     }
 }
 
 #[cfg(test)]
 mod capture_tests {
     use super::*;
+    use std::path::PathBuf;
 
-    #[test]
-    fn nemotron_is_toggle_and_the_batch_engines_are_hold() {
-        // A cache-aware streaming encoder has nothing to stream into if the
-        // capture ends when a finger lifts.
-        assert_eq!(default_capture(ModelKind::Nemotron), Capture::Toggle);
-        assert_eq!(default_capture(ModelKind::Parakeet), Capture::Hold);
-        assert_eq!(default_capture(ModelKind::Granite), Capture::Hold);
+    fn installed(kind: ModelKind, label: &str) -> InstalledModel {
+        InstalledModel {
+            kind,
+            path: PathBuf::from("/nowhere"),
+            label: label.to_string(),
+        }
     }
 
     #[test]
-    fn nemotron_offers_no_repair_variant() {
-        // It emits casing and punctuation natively, so `— Long` would be all
-        // downside — the same reason Parakeet does not get one.
-        assert!(!wants_long_profile(ModelKind::Nemotron));
-        assert!(wants_long_profile(ModelKind::Granite));
+    fn parakeet_is_the_only_hold_engine() {
+        // A cache-aware streaming encoder has nothing to stream into if the
+        // capture ends when a finger lifts; Granite's one route is long-form.
+        assert_eq!(default_capture(ModelKind::Nemotron), Capture::Toggle);
+        assert_eq!(default_capture(ModelKind::Granite), Capture::Toggle);
+        assert_eq!(default_capture(ModelKind::Parakeet), Capture::Hold);
+    }
+
+    #[test]
+    fn nemotron_offers_no_repair_profile() {
+        // It emits casing and punctuation natively, so repair would be all
+        // downside — the same reason Parakeet does not get it.
+        assert_eq!(profile_for(ModelKind::Nemotron), Profile::Raw);
+    }
+
+    #[test]
+    fn menu_labels_name_the_capture() {
+        let label = |kind, raw| menu_label(&installed(kind, raw), default_capture(kind));
+        assert_eq!(label(ModelKind::Parakeet, "Parakeet TDT (int4)"), "Parakeet PTT");
+        assert_eq!(
+            label(ModelKind::Nemotron, "Nemotron Speech Streaming EN (int4)"),
+            "Nemotron Toggle"
+        );
+        assert_eq!(
+            label(ModelKind::Granite, "Granite Speech 5 TurboCTC (int8)"),
+            "Granite 5 Toggle"
+        );
     }
 }

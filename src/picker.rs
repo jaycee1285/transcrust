@@ -69,22 +69,33 @@ pub async fn pick(
     let menu: String = labels
         .iter()
         .enumerate()
-        .map(|(i, (label, capture))| {
+        .map(|(i, (label, _))| {
             if !indexed {
                 return label.clone();
             }
+            // Capture is already in the label (`Nemotron Toggle`), so no
+            // `[toggle]` tag: menu width is the constraint.
             let marker = if i == active { ACTIVE_MARKER } else { "  " };
-            let capture = match capture {
-                crate::mode::Capture::Hold => "hold",
-                crate::mode::Capture::Toggle => "toggle",
-            };
-            format!("{marker}{label}  [{capture}]")
+            format!("{marker}{label}")
         })
         .collect::<Vec<_>>()
         .join("\n");
 
+    // Sized to the list: one row per mode, and wide enough for the longest
+    // label plus the two-character active marker.
+    let width = 2 + labels.iter().map(|(label, _)| label.chars().count()).max().unwrap_or(0);
     let mut command = Command::new(BINARY);
-    command.arg("--dmenu").arg("--prompt").arg("mode> ");
+    command
+        .args([
+            "--dmenu",
+            "--line-height=22px",
+            "--minimal-lines",
+            "--only-match",
+        ])
+        .arg(format!("--width={width}"))
+        .arg(format!("--lines={}", labels.len()))
+        .arg("--prompt")
+        .arg("mode> ");
     if indexed {
         command.arg("--index");
     }
@@ -146,16 +157,15 @@ mod tests {
     fn labels() -> Vec<(String, crate::mode::Capture)> {
         use crate::mode::Capture;
         vec![
-            ("Parakeet TDT 0.6B v3 (int4)".to_string(), Capture::Hold),
-            ("Nemotron Speech Streaming EN (int8)".to_string(), Capture::Toggle),
-            ("Granite Speech 5 470m TurboCTC".to_string(), Capture::Hold),
-            ("Granite Speech 5 470m TurboCTC — Long".to_string(), Capture::Hold),
+            ("Parakeet PTT".to_string(), Capture::Hold),
+            ("Nemotron Toggle".to_string(), Capture::Toggle),
+            ("Granite 5 Toggle".to_string(), Capture::Toggle),
         ]
     }
 
     #[test]
     fn an_index_resolves_to_a_mode() {
-        assert_eq!(resolve("3", &labels(), true), Some(3));
+        assert_eq!(resolve("2", &labels(), true), Some(2));
     }
 
     #[test]
@@ -166,13 +176,9 @@ mod tests {
 
     #[test]
     fn the_fallback_matches_the_label_exactly() {
-        // The em-dashed label is the one most likely to be mangled by any
-        // prettifying, which is why the fallback path prettifies nothing.
-        assert_eq!(
-            resolve("Granite Speech 5 470m TurboCTC — Long", &labels(), false),
-            Some(3)
-        );
-        assert_eq!(resolve("Granite Speech 5", &labels(), false), None);
+        // The fallback path prettifies nothing, so only the bare label matches.
+        assert_eq!(resolve("Granite 5 Toggle", &labels(), false), Some(2));
+        assert_eq!(resolve("Granite 5", &labels(), false), None);
     }
 
     #[test]
