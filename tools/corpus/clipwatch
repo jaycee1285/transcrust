@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# clipwatch: feed every text clipboard change to corpus-match.
+#
+# Copy is the submit: dictate, edit the text wherever it landed, copy it.
+# corpus-match keeps it only if it is a near-copy of a recent unlabelled
+# dictation, and forgets everything else. With observe.corpus off no new clips
+# arrive, so there is nothing to match and every copy is dropped.
+#
+# Start once per session: labwc autostart, or a systemd user service.
+set -euo pipefail
+exec wl-paste --type text --watch corpus-match --source clip

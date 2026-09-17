@@ -407,8 +407,7 @@ fn main() {
             println!("  --download-model [MODEL]    Download a Parakeet model");
             println!();
             println!("Available models for --download-model:");
-            println!("  parakeet-tdt-0.6b-int8      INT8 quantised, ~250 MB (default)");
-            println!("  parakeet-tdt-0.6b-int4      INT4 quantised, ~409 MB (less RAM at inference)");
+            println!("  parakeet-tdt-0.6b-int4      INT4 quantised, ~409 MB (default)");
             println!("  parakeet-tdt-0.6b           FP32 full precision, ~1.4 GB");
             println!();
             println!("Models are saved to ~/.local/share/transcrust/models/");
@@ -1528,9 +1527,9 @@ fn run_doctor() {
         (Some(key), _) => println!("Mode toggle: {key}"),
         (None, _) => println!("Mode toggle: <unbound> (set hotkey.mode_key to enable)"),
     }
-    println!("Preferred int8 model dir: {}", model::preferred_int8_model_dir().display());
+    println!("Preferred Parakeet model dir: {}", model::preferred_parakeet_model_dir().display());
     println!("Required Parakeet files:");
-    for file in model::required_int8_files() {
+    for file in model::required_parakeet_files() {
         println!("  {file}");
     }
     println!("Required Granite files:");

@@ -371,6 +371,7 @@ impl Nemotron {
         state: &mut DecoderState,
         previous: &mut u32,
         out: &mut Vec<u32>,
+        scores: &mut Vec<TokenScore>,
     ) -> Result<(), String> {
         for step in 0..encodings.shape()[0] {
             let frame = encodings
@@ -385,6 +386,7 @@ impl Nemotron {
                 if token == BLANK_ID {
                     break;
                 }
+                scores.push(TokenScore::from_logits(&logits, token as usize));
                 out.push(token);
                 *previous = token;
                 *state = next_state;
@@ -400,6 +402,35 @@ impl Nemotron {
     /// model was validated with.
     pub fn streaming_frontend(&self) -> Result<StreamingFrontend, String> {
         Ok(StreamingFrontend::from_frontend(self.frontend.clone()))
+    }
+}
+
+/// What the joint thought of one emitted token: its probability and the
+/// runner-up's. Captured in the decode loop because the logits are already in
+/// memory there; the transcript does not change whether or not it is read.
+#[derive(Clone, Copy, Debug)]
+pub struct TokenScore {
+    pub p1: f32,
+    pub p2: f32,
+}
+
+impl TokenScore {
+    /// Softmax over the joint's outputs, reduced to the top two. Computed
+    /// relative to the winning logit so a large value cannot overflow `exp`.
+    fn from_logits(logits: &[f32], top: usize) -> Self {
+        let max = logits[top];
+        let mut sum = 0.0f64;
+        let mut second = f32::NEG_INFINITY;
+        for (index, &value) in logits.iter().enumerate() {
+            sum += ((value - max) as f64).exp();
+            if index != top && value > second {
+                second = value;
+            }
+        }
+        Self {
+            p1: (1.0 / sum) as f32,
+            p2: (((second - max) as f64).exp() / sum) as f32,
+        }
     }
 }
 
@@ -442,6 +473,37 @@ fn extract4(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn export_dir(name: &str) -> std::path::PathBuf {
+        let dir = std::env::temp_dir()
+            .join(format!("transcrust-chunk-{}", std::process::id()))
+            .join(name);
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).expect("create export dir");
+        dir
+    }
+
+    #[test]
+    fn chunk_size_comes_from_config_json_first() {
+        // The directory says 1120 but the config wins: it is the export's own word.
+        let dir = export_dir("nemotron-1120ms-config");
+        std::fs::write(dir.join("config.json"), r#"{"encoder":{"chunk_mel_frames":56}}"#)
+            .expect("write config");
+        assert_eq!(Tuning::for_export(&dir).chunk_frames, 56);
+    }
+
+    #[test]
+    fn chunk_size_falls_back_to_the_directory_name() {
+        let dir = export_dir("nemotron-speech-en-0.6b-onnx-1120ms-int4");
+        assert_eq!(Tuning::for_export(&dir).chunk_frames, 112);
+    }
+
+    #[test]
+    fn chunk_size_defaults_to_560_ms() {
+        // `0.6b` must not read as a duration, and neither may `int4`.
+        let dir = export_dir("nemotron-speech-streaming-en-0.6b-int4");
+        assert_eq!(Tuning::for_export(&dir).chunk_frames, CHUNK_MEL_FRAMES);
+    }
 
     #[test]
     fn sentencepiece_pieces_join_into_words() {
@@ -642,6 +704,22 @@ impl Default for Tuning {
 }
 
 impl Tuning {
+    /// Defaults, with the chunk size taken from the export rather than assumed.
+    ///
+    /// An export is trained for one chunk size, and its encoder declares
+    /// `audio_signal` as `[-1, 128, -1]`, so the graph cannot say which. Feeding
+    /// 560 ms chunks through a 1120 ms export runs without error and degrades
+    /// quietly. In order: `encoder.chunk_mel_frames` from `config.json`; a
+    /// `<n>ms` in the directory name (`…-1120ms-int4` → 112); the 560 ms default.
+    pub fn for_export(dir: &Path) -> Self {
+        Self {
+            chunk_frames: chunk_frames_from_config(dir)
+                .or_else(|| chunk_frames_from_dir_name(dir))
+                .unwrap_or(CHUNK_MEL_FRAMES),
+            ..Self::default()
+        }
+    }
+
     fn builder(&self) -> Result<ort::session::builder::SessionBuilder, String> {
         let mut builder =
             Session::builder().map_err(|e| format!("failed to create session builder: {e}"))?;
@@ -662,6 +740,23 @@ impl Tuning {
         }
         Ok(builder)
     }
+}
+
+fn chunk_frames_from_config(dir: &Path) -> Option<usize> {
+    let raw = std::fs::read_to_string(dir.join("config.json")).ok()?;
+    let config: serde_json::Value = serde_json::from_str(&raw).ok()?;
+    let frames = config.get("encoder")?.get("chunk_mel_frames")?.as_u64()?;
+    (frames > 0).then_some(frames as usize)
+}
+
+/// Mel frames are 10 ms apart, so `1120ms` is 112 frames.
+fn chunk_frames_from_dir_name(dir: &Path) -> Option<usize> {
+    let name = dir.file_name()?.to_str()?;
+    name.split(|c: char| !c.is_ascii_alphanumeric())
+        .filter_map(|part| part.strip_suffix("ms"))
+        .filter_map(|digits| digits.parse::<usize>().ok())
+        .find(|ms| *ms >= 10)
+        .map(|ms| ms / 10)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -811,10 +906,16 @@ fn worker_main(
     let idle_timeout = Duration::from_secs(inner.idle_timeout_secs);
     observer.phase("worker.start", "loading Nemotron model on demand");
 
-    let mut model = match Nemotron::load(std::path::Path::new(&inner.model_dir), Tuning::default())
-    {
+    let model_dir = std::path::Path::new(&inner.model_dir);
+    let mut model = match Nemotron::load(model_dir, Tuning::for_export(model_dir)) {
         Ok(model) => {
-            observer.phase("worker.start", "Nemotron model loaded");
+            observer.phase(
+                "worker.start",
+                &format!(
+                    "Nemotron model loaded, {} ms chunks",
+                    model.tuning.chunk_frames * 10
+                ),
+            );
             observer.notify(
                 "Transcrust ready",
                 "Nemotron model loaded and worker is ready.",
@@ -1230,6 +1331,8 @@ pub struct StreamState {
     decoder: DecoderState,
     previous: u32,
     tokens: Vec<u32>,
+    /// One per entry in `tokens`, in the same order.
+    scores: Vec<TokenScore>,
     /// Mel frames not yet part of a complete chunk, each 128 values.
     pending: Vec<Vec<f32>>,
     /// The trailing frames of the last chunk, re-fed as pre-encode context.
@@ -1247,6 +1350,7 @@ impl Nemotron {
             ),
             previous: BLANK_ID,
             tokens: Vec::new(),
+            scores: Vec::new(),
             pending: Vec::new(),
             context: Vec::new(),
             chunks: 0,
@@ -1322,6 +1426,7 @@ impl Nemotron {
             &mut decoder,
             &mut previous,
             &mut state.tokens,
+            &mut state.scores,
         )?;
         state.decoder = decoder;
         state.previous = previous;
@@ -1331,5 +1436,99 @@ impl Nemotron {
         state.context = frames[frames.len() - keep..].to_vec();
         state.chunks += 1;
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod margin_study {
+    //! Does quantisation or chunk size change exactly the words the model was
+    //! unsure of? Runs each export through the live streaming path and writes a
+    //! per-word score table for `tools/wer/margins.mjs` to align.
+    //!
+    //! Ignored by default: it needs installed exports and a recording.
+    //!
+    //! ```sh
+    //! MARGIN_WAV=~/syncthing/Record-2.wav MARGIN_OUT=fixtures/<dir> \
+    //! MARGIN_RUNS='a=<export-dir>@560;b=<export-dir>@1120' \
+    //! nix develop -c cargo test --release margin_study -- --ignored --nocapture
+    //! ```
+    use super::*;
+    use std::fmt::Write as _;
+
+    /// Group scores into words the way `Vocab::detokenize` groups text: `▁`
+    /// opens a word. A word takes its least confident *lettered* token, since a
+    /// trailing comma says nothing about the word it follows.
+    fn words(vocab: &Vocab, tokens: &[u32], scores: &[TokenScore]) -> Vec<(String, f32, f32)> {
+        let mut out: Vec<(String, f32, f32)> = Vec::new();
+        for (token, score) in tokens.iter().zip(scores) {
+            let Some(piece) = vocab.pieces.get(*token as usize) else {
+                continue;
+            };
+            let (starts, text) = match piece.strip_prefix('▁') {
+                Some(rest) => (true, rest),
+                None => (false, piece.as_str()),
+            };
+            if starts || out.is_empty() {
+                out.push((String::new(), 1.0, 1.0));
+            }
+            let word = out.last_mut().expect("a word was pushed above");
+            word.0.push_str(text);
+            if text.chars().any(|c| c.is_alphanumeric()) {
+                word.1 = word.1.min(score.p1);
+                word.2 = word.2.min(score.p1 - score.p2);
+            }
+        }
+        out.retain(|(text, _, _)| text.chars().any(|c| c.is_alphanumeric()));
+        out
+    }
+
+    #[test]
+    #[ignore = "needs installed Nemotron exports and a recording; see module docs"]
+    fn record_2_word_margins() {
+        let wav = std::env::var("MARGIN_WAV").expect("MARGIN_WAV");
+        let out = std::path::PathBuf::from(std::env::var("MARGIN_OUT").expect("MARGIN_OUT"));
+        let runs = std::env::var("MARGIN_RUNS").expect("MARGIN_RUNS");
+        std::fs::create_dir_all(&out).expect("create MARGIN_OUT");
+        crate::init_ort_default();
+        let (samples, rate) = crate::audio::read_wav_mono(Path::new(&wav)).expect("read wav");
+
+        for spec in runs.split(';').filter(|s| !s.trim().is_empty()) {
+            let (label, rest) = spec.split_once('=').expect("label=dir@ms");
+            let (dir, ms) = rest.rsplit_once('@').expect("dir@ms");
+            let mut tuning = Tuning::default();
+            // Mel frames are 10 ms apart.
+            tuning.chunk_frames = ms.parse::<usize>().expect("chunk ms") / 10;
+            let mut model = Nemotron::load(Path::new(dir), tuning).expect("load export");
+            let mut resampler = crate::audio::StreamingResampler::new(rate, 16_000);
+            let mut frontend = model.streaming_frontend().expect("frontend");
+            let mut state = model.stream_begin();
+
+            // 100 ms of device-rate audio at a time, the way a live capture arrives.
+            for piece in samples.chunks((rate / 10) as usize) {
+                let audio = resampler.push(piece);
+                if let Some(mel) = frontend.push(&audio).expect("mel") {
+                    model.stream_push(&mut state, &mel).expect("encode");
+                }
+            }
+            let audio = resampler.finish();
+            if let Some(mel) = frontend.push(&audio).expect("mel") {
+                model.stream_push(&mut state, &mel).expect("encode");
+            }
+            if let Some(mel) = frontend.finish().expect("mel") {
+                model.stream_push(&mut state, &mel).expect("encode");
+            }
+            let (text, chunks) = model.stream_finish(&mut state).expect("finish");
+            assert_eq!(state.tokens.len(), state.scores.len(), "one score per emitted token");
+
+            let mut tsv = String::from("index\tword\tp1\tmargin\n");
+            for (index, (word, p1, margin)) in
+                words(&model.vocab, &state.tokens, &state.scores).iter().enumerate()
+            {
+                let _ = writeln!(tsv, "{index}\t{word}\t{p1:.4}\t{margin:.4}");
+            }
+            std::fs::write(out.join(format!("{label}.tsv")), tsv).expect("write tsv");
+            std::fs::write(out.join(format!("{label}.txt")), format!("{text}\n")).expect("write text");
+            eprintln!("{label}: {chunks} chunks, {} tokens", state.tokens.len());
+        }
     }
 }

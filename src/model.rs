@@ -2,14 +2,11 @@ use std::path::{Path, PathBuf};
 
 const PARAKEET_MODELS_BASE: &str =
     "https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx/resolve/main";
-const PARAKEET_INT8_MODELS_BASE: &str =
-    "https://huggingface.co/nasedkinpv/parakeet-tdt-0.6b-v3-onnx-int8/resolve/main";
 const PARAKEET_INT4_MODELS_BASE: &str =
     "https://huggingface.co/efederici/parakeet-tdt-0.6b-v3-onnx-int4/resolve/main";
 
 const PARAKEET_MODELS: &[(&str, &str)] = &[
     ("tdt-0.6b", "parakeet-tdt-0.6b-v3"),
-    ("tdt-0.6b-int8", "parakeet-tdt-0.6b-v3-int8"),
     ("tdt-0.6b-int4", "parakeet-tdt-0.6b-v3-int4"),
 ];
 
@@ -20,19 +17,13 @@ const PARAKEET_TDT_FILES: &[&str] = &[
     "vocab.txt",
 ];
 
-const PARAKEET_TDT_INT8_FILES: &[(&str, &str)] = &[
-    ("encoder-model.int8.onnx", "encoder-model.int8.onnx"),
-    ("decoder_joint-model.int8.onnx", "decoder_joint-model.int8.onnx"),
-    ("vocab.txt", "vocab.txt"),
-];
-
 const PARAKEET_TDT_INT4_FILES: &[(&str, &str)] = &[
     ("encoder-model.int4.onnx", "encoder-model.int4.onnx"),
     ("decoder_joint-model.int8.onnx", "decoder_joint-model.int8.onnx"),
     ("vocab.txt", "vocab.txt"),
 ];
 
-const DEFAULT_PARAKEET_INT8_DIR: &str = "parakeet-tdt-0.6b-v3-int8";
+const DEFAULT_PARAKEET_DIR: &str = "parakeet-tdt-0.6b-v3-int4";
 const PARAKEET_VOCAB_FILE: &str = "vocab.txt";
 const GRANITE_TOKENIZER_FILE: &str = "tokenizer.json";
 const NEMOTRON_TOKENS_FILE: &str = "tokens.txt";
@@ -427,15 +418,15 @@ pub fn has_parakeet_direct(path: &Path) -> bool {
     has_parakeet_model(path) && parakeet_direct_graphs(path).is_some()
 }
 
-pub fn preferred_int8_model_dir() -> PathBuf {
+pub fn preferred_parakeet_model_dir() -> PathBuf {
     dirs::data_dir()
         .unwrap_or_else(|| PathBuf::from(".local/share"))
         .join("transcrust")
         .join("models")
-        .join(DEFAULT_PARAKEET_INT8_DIR)
+        .join(DEFAULT_PARAKEET_DIR)
 }
 
-pub fn required_int8_files() -> &'static [&'static str] {
+pub fn required_parakeet_files() -> &'static [&'static str] {
     &[
         "encoder*.onnx (int8 preferred, then int4, then fp32)",
         "decoder_joint*.onnx",
@@ -453,7 +444,7 @@ pub fn required_granite_files() -> &'static [&'static str] {
 pub async fn download_model(
     model_name: Option<&str>,
 ) -> Result<PathBuf, Box<dyn std::error::Error>> {
-    let name = model_name.unwrap_or("parakeet-tdt-0.6b-int8");
+    let name = model_name.unwrap_or("parakeet-tdt-0.6b-int4");
 
     let target = dirs::data_dir()
         .expect("No XDG data directory")
@@ -486,8 +477,6 @@ pub async fn download_model(
 
     if parakeet_name.ends_with("-int4") {
         download_pair_list(&dest, PARAKEET_INT4_MODELS_BASE, PARAKEET_TDT_INT4_FILES).await?;
-    } else if parakeet_name.ends_with("-int8") {
-        download_pair_list(&dest, PARAKEET_INT8_MODELS_BASE, PARAKEET_TDT_INT8_FILES).await?;
     } else {
         for file_name in PARAKEET_TDT_FILES {
             let file_dest = dest.join(file_name);
