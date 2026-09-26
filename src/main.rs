@@ -1540,15 +1540,7 @@ fn run_doctor() {
     // text and main.rs runs postprocess::fix_transcription on it exactly once.
     println!("Post-processing: shared by all engines (postprocess::fix_transcription)");
     let dict_path = dictionary::dictionary_path();
-    let dict_entries = std::fs::read_to_string(&dict_path)
-        .map(|c| {
-            c.lines()
-                .map(str::trim)
-                .filter(|l| !l.is_empty() && !l.starts_with('#'))
-                .count()
-        })
-        .ok();
-    match dict_entries {
+    match dictionary::term_count() {
         Some(n) => println!("Phonetic dictionary: {} ({n} entries)", dict_path.display()),
         None => println!("Phonetic dictionary: {} (absent — pass-through)", dict_path.display()),
     }

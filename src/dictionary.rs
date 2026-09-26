@@ -62,13 +62,20 @@ impl Corrector {
     }
 }
 
-/// Path to the user dictionary: one term per line, `#` comments and blank lines
-/// ignored. Lives next to `config.toml`.
+/// Path to the user dictionary: `~/syncthing/john-vocab.md`, the one vocabulary
+/// shared with mopvox and dayshade.
 pub fn dictionary_path() -> PathBuf {
-    dirs::config_dir()
-        .unwrap_or_else(|| PathBuf::from(".config"))
-        .join("transcrust")
-        .join("dictionary.txt")
+    dirs::home_dir()
+        .unwrap_or_else(|| PathBuf::from("."))
+        .join("syncthing")
+        .join("john-vocab.md")
+}
+
+/// How many terms the dictation pass would load, for `doctor`.
+pub fn term_count() -> Option<usize> {
+    std::fs::read_to_string(dictionary_path())
+        .ok()
+        .map(|c| parse_dictionary(&c).len())
 }
 
 fn load_dictionary() -> Vec<String> {
@@ -78,13 +85,59 @@ fn load_dictionary() -> Vec<String> {
     parse_dictionary(&contents)
 }
 
+/// Kinds that are dayshade's alone. Habit and task names are short and
+/// ordinary — `Cigs` would claim every `six` — so dictation never sees them.
+const DAYSHADE_ONLY: &[&str] = &["habit", "task"];
+
+/// Each `## Term` at column 0 of the shared vocabulary is an entry, kept unless
+/// its `kind:` is dayshade's alone. A file with no `## ` headings is the old
+/// `dictionary.txt`: one term per line, `#` comments and blank lines ignored.
 fn parse_dictionary(contents: &str) -> Vec<String> {
-    contents
-        .lines()
-        .map(str::trim)
-        .filter(|line| !line.is_empty() && !line.starts_with('#'))
-        .map(str::to_string)
-        .collect()
+    let heading = |line: &str| {
+        line.strip_prefix("##")
+            .filter(|rest| rest.starts_with(char::is_whitespace))
+            .map(str::trim)
+            .filter(|term| !term.is_empty())
+            .map(str::to_string)
+    };
+    if !contents.lines().any(|line| heading(line).is_some()) {
+        return contents
+            .lines()
+            .map(str::trim)
+            .filter(|line| !line.is_empty() && !line.starts_with('#'))
+            .map(str::to_string)
+            .collect();
+    }
+
+    let mut out = Vec::new();
+    let mut term: Option<String> = None;
+    let mut kind = String::new();
+    let mut flush = |term: &mut Option<String>, kind: &mut String| {
+        if let Some(t) = term.take() {
+            if !DAYSHADE_ONLY.contains(&kind.as_str()) {
+                out.push(t);
+            }
+        }
+        kind.clear();
+    };
+    for line in contents.lines() {
+        if let Some(t) = heading(line) {
+            flush(&mut term, &mut kind);
+            term = Some(t);
+        } else if line.starts_with('#') {
+            flush(&mut term, &mut kind);
+        } else if let Some(k) = line
+            .trim_start_matches(['-', '*'])
+            .trim_start()
+            .strip_prefix("kind:")
+        {
+            if !line.starts_with(char::is_whitespace) {
+                kind = k.trim().to_lowercase();
+            }
+        }
+    }
+    flush(&mut term, &mut kind);
+    out
 }
 
 fn split_codes(encoded: &str) -> Vec<String> {
@@ -229,6 +282,16 @@ mod tests {
     fn parses_comments_and_blanks() {
         let raw = "# names\nKubernetes\n\n  Svelte  \n# trailing\n";
         assert_eq!(parse_dictionary(raw), vec!["Kubernetes", "Svelte"]);
+    }
+
+    /// The shared vocabulary: habits and tasks are dayshade's; an indented
+    /// example in the prose is not an entry.
+    #[test]
+    fn shared_vocabulary_keeps_habits_and_tasks_out() {
+        let md = "# John's vocabulary\n\n    ## Apptrack\n    kind: task\n\n\
+                  ## Wayland\nkind: term\n\n## Cigs\nkind: habit\nheard: sigs, six\n\n\
+                  ## Apptrack\nkind: task\n\n## Gambol\n- kind: person\n\n## Tauri\n";
+        assert_eq!(parse_dictionary(md), vec!["Wayland", "Gambol", "Tauri"]);
     }
 
     fn empty_corrector() -> Corrector {
