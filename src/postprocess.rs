@@ -191,10 +191,30 @@ const PUNCTUATION_KEYWORDS: &[(&str, &str)] = &[
     ("dash", " — "),
 ];
 
+/// "new paragraph" / "new line" plus whatever punctuation the model wrapped
+/// around them. Parakeet and Nemotron punctuate natively, so the command
+/// arrives as "one. New paragraph. Two", which the keyword pass below never
+/// matched (it needs whitespace after the keyword). A sentence terminator
+/// already before the command is kept; none is invented, so a list dictated
+/// with "new line" stays a list.
+static LINE_BREAK: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"(?i)[ \t,;:]*([.!?])?[ \t,;:.]*\bnew (paragraph|line)\b[ \t,;:.!?]*").unwrap()
+});
+
+fn replace_line_breaks(text: &str) -> String {
+    LINE_BREAK
+        .replace_all(text, |caps: &regex::Captures| {
+            let terminator = caps.get(1).map_or("", |m| m.as_str());
+            let brk = if caps[2].eq_ignore_ascii_case("paragraph") { "\n\n" } else { "\n" };
+            format!("{terminator}{brk}")
+        })
+        .into_owned()
+}
+
 /// Replace spoken punctuation keywords with their symbols.
 /// Handles surrounding whitespace so "hello period goodbye" becomes "hello. goodbye".
 fn replace_spoken_punctuation(text: &str) -> String {
-    let mut result = text.to_string();
+    let mut result = replace_line_breaks(text);
 
     for &(keyword, symbol) in PUNCTUATION_KEYWORDS {
         let mut search_from = 0;
@@ -509,6 +529,28 @@ mod tests {
             replace_spoken_punctuation("line one new line line two"),
             "line one\nline two"
         );
+    }
+
+    #[test]
+    fn new_paragraph_absorbs_model_punctuation() {
+        assert_eq!(
+            fix_transcription("This is one. New paragraph. This is two."),
+            "This is one.\n\nThis is two."
+        );
+        assert_eq!(
+            fix_transcription("This is one, new paragraph, this is two."),
+            "This is one\n\nThis is two."
+        );
+        assert_eq!(fix_transcription("New paragraph."), "\n\n");
+        assert_eq!(
+            fix_transcription("Milk, new line, eggs, new line, bread."),
+            "Milk\nEggs\nBread."
+        );
+    }
+
+    #[test]
+    fn new_line_inside_a_word_is_not_a_command() {
+        assert_eq!(replace_spoken_punctuation("renew lines"), "renew lines");
     }
 
     #[test]
