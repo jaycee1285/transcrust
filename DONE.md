@@ -1,4 +1,10 @@
 # Done
+- Linux correct-last GUI accepted by John on 2026-10-06: egui editor, tray/chord,
+  Replace/Copy, Keep/Drop proposal flow, Mesa runtime fix and GTK FG/BG/accent.
+  Vocabulary quality remains an open item in `TASKBOARD.md`; this entry records
+  interface acceptance only. Native `--dec` is implemented and machine-checked,
+  but its post-port live acceptance is not asserted here.
+- Nemotron streaming toggle mode and the fuzzel `--pick` interface are implemented; startup selects the first discovered mode. Confirmed against source 2026-10-06.
 - Stabilize ONNX Runtime startup by aligning the app and vendored `parakeet-rs` to `ort 2.0.0-rc.10`.
 - Strip the vendored `parakeet-rs` copy down to the TDT path actually used by Transcrust.
 - Restore working transcription with Parakeet and int8 model resolution from `~/.local/share/transcrust/models`.

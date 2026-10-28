@@ -1,0 +1,1636 @@
+{
+  "model": "/home/john/repos/dz/jev-options/rlcd-151m/model_fp16.onnx",
+  "model_sha256": "4db28305590c714e33c2cacb75a57ec941c72bb210e1266ba2c7d77e85ddc526",
+  "cases_file": "tools/pair-router-probe/suite.json",
+  "cases_sha256": "cbe6682ee9036dddcad327892101a8f9365eb93a5b5dc2c9d80f0a93e0c9956b",
+  "tokenizer_sha256": "8bb449eb0c037aae44115b65905bb339b8f3f74eb37067c19127feb3c0755723",
+  "calibrator_sha256": "af2a876993148efa0726b6ccf710fe2303897d20c0ce8c7c9036eb50f64d23de",
+  "temperature": 5.0069,
+  "onnxruntime": "1.24.4",
+  "scope": "sentence",
+  "provider": "CPUExecutionProvider",
+  "threads": 2,
+  "load_secs": 1.6723042760277167,
+  "cases": [
+    {
+      "id": "dog-name-1",
+      "source": "synthetic",
+      "category": "dog/name",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "Please put \u00abGamble\u00bb on her leash before taking my dog outside.",
+      "want": "name",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.5220415352914639,
+      "probabilities": {
+        "keep": 0.25260318475034577,
+        "name": 0.5220415352914639,
+        "abstain": 0.2253552799581903
+      },
+      "logits": [
+        1.64899480342865,
+        5.283640384674072,
+        1.0774990320205688
+      ],
+      "latency_ms": 95.84046603413299,
+      "token_count": 66,
+      "prompt": "<<LABEL>>It is ordinary English about gambling or betting money<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nPlease put \u00abGamble\u00bb on her leash before taking my dog outside."
+    },
+    {
+      "id": "dog-name-2",
+      "source": "synthetic",
+      "category": "dog/name",
+      "heard": "gamble",
+      "canonical": "Gambol",
+      "context": "My dog \u00abgamble\u00bb has a vet appointment tomorrow.",
+      "want": "name",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.612183902453644,
+      "probabilities": {
+        "keep": 0.12748807351373856,
+        "name": 0.612183902453644,
+        "abstain": 0.2603280240326174
+      },
+      "logits": [
+        -1.6316173076629639,
+        6.2242584228515625,
+        1.9429069757461548
+      ],
+      "latency_ms": 92.61825098656118,
+      "token_count": 62,
+      "prompt": "<<LABEL>>It is ordinary English about gambling or betting money<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy dog \u00abgamble\u00bb has a vet appointment tomorrow."
+    },
+    {
+      "id": "dog-name-3",
+      "source": "synthetic",
+      "category": "dog/name",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "The dog's name is \u00abGamble\u00bb, and she jumps on me when I say it.",
+      "want": "name",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.5948471735134413,
+      "probabilities": {
+        "keep": 0.17984626140365725,
+        "name": 0.5948471735134413,
+        "abstain": 0.22530656508290145
+      },
+      "logits": [
+        0.4921116828918457,
+        6.4813761711120605,
+        1.6204646825790405
+      ],
+      "latency_ms": 118.96965198684484,
+      "token_count": 69,
+      "prompt": "<<LABEL>>It is ordinary English about gambling or betting money<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe dog's name is \u00abGamble\u00bb, and she jumps on me when I say it."
+    },
+    {
+      "id": "dog-name-4",
+      "source": "synthetic",
+      "category": "dog/name",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "I filled my dog \u00abGamble\u00bb's water bowl.",
+      "want": "name",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.5664327058707802,
+      "probabilities": {
+        "keep": 0.1856014170021459,
+        "name": 0.5664327058707802,
+        "abstain": 0.24796587712707385
+      },
+      "logits": [
+        0.17093242704868317,
+        5.757415294647217,
+        1.6213797330856323
+      ],
+      "latency_ms": 111.79150303360075,
+      "token_count": 63,
+      "prompt": "<<LABEL>>It is ordinary English about gambling or betting money<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI filled my dog \u00abGamble\u00bb's water bowl."
+    },
+    {
+      "id": "dog-keep-1",
+      "source": "synthetic",
+      "category": "dog/keep",
+      "heard": "gamble",
+      "canonical": "Gambol",
+      "context": "We should never \u00abgamble\u00bb with the rent money.",
+      "want": "keep",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "keep",
+      "confidence": 0.49264902637667474,
+      "probabilities": {
+        "keep": 0.49264902637667474,
+        "name": 0.15279097106165943,
+        "abstain": 0.3545600025616657
+      },
+      "logits": [
+        2.5673766136169434,
+        -3.294332504272461,
+        0.9205099940299988
+      ],
+      "latency_ms": 110.39859498851001,
+      "token_count": 62,
+      "prompt": "<<LABEL>>It is ordinary English about gambling or betting money<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nWe should never \u00abgamble\u00bb with the rent money."
+    },
+    {
+      "id": "dog-keep-2",
+      "source": "synthetic",
+      "category": "dog/keep",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "\u00abGamble\u00bb responsibly if you visit a casino.",
+      "want": "keep",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "keep",
+      "confidence": 0.568693199793431,
+      "probabilities": {
+        "keep": 0.568693199793431,
+        "name": 0.12942595622803948,
+        "abstain": 0.30188084397852954
+      },
+      "logits": [
+        3.984945774078369,
+        -3.4264285564422607,
+        0.8140323758125305
+      ],
+      "latency_ms": 109.42012601299211,
+      "token_count": 62,
+      "prompt": "<<LABEL>>It is ordinary English about gambling or betting money<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n\u00abGamble\u00bb responsibly if you visit a casino."
+    },
+    {
+      "id": "dog-keep-3",
+      "source": "synthetic",
+      "category": "dog/keep",
+      "heard": "gamble",
+      "canonical": "Gambol",
+      "context": "That investment would be a \u00abgamble\u00bb.",
+      "want": "keep",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "keep",
+      "confidence": 0.5928438061369711,
+      "probabilities": {
+        "keep": 0.5928438061369711,
+        "name": 0.14152339126327113,
+        "abstain": 0.2656328025997579
+      },
+      "logits": [
+        4.630365371704102,
+        -2.5418484210968018,
+        0.6107456684112549
+      ],
+      "latency_ms": 99.63802096899599,
+      "token_count": 59,
+      "prompt": "<<LABEL>>It is ordinary English about gambling or betting money<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThat investment would be a \u00abgamble\u00bb."
+    },
+    {
+      "id": "dog-keep-4",
+      "source": "synthetic",
+      "category": "dog/keep",
+      "heard": "gamble",
+      "canonical": "Gambol",
+      "context": "My dog is asleep while I \u00abgamble\u00bb online.",
+      "want": "keep",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.4783163880138225,
+      "probabilities": {
+        "keep": 0.28344992136064273,
+        "name": 0.4783163880138225,
+        "abstain": 0.23823369062553493
+      },
+      "logits": [
+        2.045151948928833,
+        4.664947032928467,
+        1.1750359535217285
+      ],
+      "latency_ms": 78.38030997663736,
+      "token_count": 62,
+      "prompt": "<<LABEL>>It is ordinary English about gambling or betting money<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy dog is asleep while I \u00abgamble\u00bb online."
+    },
+    {
+      "id": "dog-abstain-1",
+      "source": "synthetic",
+      "category": "dog/abstain",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "\u00abGamble\u00bb.",
+      "want": "abstain",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "keep",
+      "confidence": 0.5097860714964032,
+      "probabilities": {
+        "keep": 0.5097860714964032,
+        "name": 0.19375738764456643,
+        "abstain": 0.2964565408590304
+      },
+      "logits": [
+        3.5862619876861572,
+        -1.25733482837677,
+        0.8720688819885254
+      ],
+      "latency_ms": 68.36486398242414,
+      "token_count": 54,
+      "prompt": "<<LABEL>>It is ordinary English about gambling or betting money<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n\u00abGamble\u00bb."
+    },
+    {
+      "id": "dog-abstain-2",
+      "source": "synthetic",
+      "category": "dog/abstain",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "Tell \u00abGamble\u00bb.",
+      "want": "abstain",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "keep",
+      "confidence": 0.4675702292047667,
+      "probabilities": {
+        "keep": 0.4675702292047667,
+        "name": 0.22721161118015482,
+        "abstain": 0.30521815961507837
+      },
+      "logits": [
+        3.219740390777588,
+        -0.3935779631137848,
+        1.0841835737228394
+      ],
+      "latency_ms": 71.04294101009145,
+      "token_count": 55,
+      "prompt": "<<LABEL>>It is ordinary English about gambling or betting money<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nTell \u00abGamble\u00bb."
+    },
+    {
+      "id": "dog-abstain-3",
+      "source": "synthetic",
+      "category": "dog/abstain",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "I heard someone say \u00abGamble\u00bb.",
+      "want": "abstain",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "keep",
+      "confidence": 0.5184722272006448,
+      "probabilities": {
+        "keep": 0.5184722272006448,
+        "name": 0.1800801437585767,
+        "abstain": 0.30144762904077854
+      },
+      "logits": [
+        3.6621899604797363,
+        -1.6325290203094482,
+        0.946997344493866
+      ],
+      "latency_ms": 71.86193397501484,
+      "token_count": 58,
+      "prompt": "<<LABEL>>It is ordinary English about gambling or betting money<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI heard someone say \u00abGamble\u00bb."
+    },
+    {
+      "id": "dog-abstain-4",
+      "source": "synthetic",
+      "category": "dog/abstain",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "The note only says \u00abGamble\u00bb.",
+      "want": "abstain",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "keep",
+      "confidence": 0.5226258158732453,
+      "probabilities": {
+        "keep": 0.5226258158732453,
+        "name": 0.1870561944554193,
+        "abstain": 0.2903179896713355
+      },
+      "logits": [
+        4.015114784240723,
+        -1.1292580366134644,
+        1.0716137886047363
+      ],
+      "latency_ms": 72.75575201492757,
+      "token_count": 58,
+      "prompt": "<<LABEL>>It is ordinary English about gambling or betting money<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe note only says \u00abGamble\u00bb."
+    },
+    {
+      "id": "son-name-1",
+      "source": "synthetic",
+      "category": "son/name",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "My son \u00abRowan\u00bb forgot his lunchbox.",
+      "want": "name",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.6151602435724789,
+      "probabilities": {
+        "keep": 0.14289646067191136,
+        "name": 0.6151602435724789,
+        "abstain": 0.24194329575560983
+      },
+      "logits": [
+        -1.248583436012268,
+        6.060301303863525,
+        1.3879653215408325
+      ],
+      "latency_ms": 84.14620702387765,
+      "token_count": 68,
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son \u00abRowan\u00bb forgot his lunchbox."
+    },
+    {
+      "id": "son-name-2",
+      "source": "synthetic",
+      "category": "son/name",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "Please pack my son \u00abRowan\u00bb's school bag.",
+      "want": "name",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.6060965470284927,
+      "probabilities": {
+        "keep": 0.14504284928290231,
+        "name": 0.6060965470284927,
+        "abstain": 0.24886060368860502
+      },
+      "logits": [
+        -1.6221948862075806,
+        5.537722587585449,
+        1.0808486938476562
+      ],
+      "latency_ms": 86.10820199828595,
+      "token_count": 70,
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nPlease pack my son \u00abRowan\u00bb's school bag."
+    },
+    {
+      "id": "son-name-3",
+      "source": "synthetic",
+      "category": "son/name",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "Nell and I co-parent our son \u00abRowan\u00bb.",
+      "want": "name",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.6400921613030173,
+      "probabilities": {
+        "keep": 0.14806394259187225,
+        "name": 0.6400921613030173,
+        "abstain": 0.2118438961051104
+      },
+      "logits": [
+        -0.8749402165412903,
+        6.455000877380371,
+        0.9185585975646973
+      ],
+      "latency_ms": 85.05813800729811,
+      "token_count": 70,
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nNell and I co-parent our son \u00abRowan\u00bb."
+    },
+    {
+      "id": "son-name-4",
+      "source": "synthetic",
+      "category": "son/name",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "My son's name is \u00abRowan\u00bb.",
+      "want": "name",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.56105606277439,
+      "probabilities": {
+        "keep": 0.22307246797142832,
+        "name": 0.56105606277439,
+        "abstain": 0.2158714692541817
+      },
+      "logits": [
+        0.9712510108947754,
+        5.589235782623291,
+        0.8069570660591125
+      ],
+      "latency_ms": 81.56134595628828,
+      "token_count": 66,
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son's name is \u00abRowan\u00bb."
+    },
+    {
+      "id": "son-keep-1",
+      "source": "synthetic",
+      "category": "son/keep",
+      "heard": "O",
+      "canonical": "Rowan",
+      "context": "I deliberately call my son \u00abO\u00bb online to protect his privacy; keep that initial.",
+      "want": "keep",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.5022214708724865,
+      "probabilities": {
+        "keep": 0.2509455520640089,
+        "name": 0.5022214708724865,
+        "abstain": 0.24683297706350454
+      },
+      "logits": [
+        1.1309497356414795,
+        4.604763031005859,
+        1.0482152700424194
+      ],
+      "latency_ms": 91.33248403668404,
+      "token_count": 75,
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI deliberately call my son \u00abO\u00bb online to protect his privacy; keep that initial."
+    },
+    {
+      "id": "son-keep-2",
+      "source": "synthetic",
+      "category": "son/keep",
+      "heard": "O",
+      "canonical": "Rowan",
+      "context": "My son \u00abO\u00bb needs his lunchbox; use only his initial in this message.",
+      "want": "keep",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.5538218319650862,
+      "probabilities": {
+        "keep": 0.1980351504496937,
+        "name": 0.5538218319650862,
+        "abstain": 0.24814301758522
+      },
+      "logits": [
+        -0.0645923763513565,
+        5.084496021270752,
+        1.064767599105835
+      ],
+      "latency_ms": 90.78867197968066,
+      "token_count": 75,
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son \u00abO\u00bb needs his lunchbox; use only his initial in this message."
+    },
+    {
+      "id": "son-keep-3",
+      "source": "synthetic",
+      "category": "son/keep",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "My colleague \u00abRowan\u00bb is a different person from my son Rowan.",
+      "want": "keep",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.5078949320321013,
+      "probabilities": {
+        "keep": 0.28588048140771194,
+        "name": 0.5078949320321013,
+        "abstain": 0.20622458656018677
+      },
+      "logits": [
+        2.6802189350128174,
+        5.557688236236572,
+        1.0449252128601074
+      ],
+      "latency_ms": 90.65836999798194,
+      "token_count": 73,
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy colleague \u00abRowan\u00bb is a different person from my son Rowan."
+    },
+    {
+      "id": "son-keep-4",
+      "source": "synthetic",
+      "category": "son/keep",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "The author spells her name \u00abRowan\u00bb, without an o at the end.",
+      "want": "keep",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "abstain",
+      "confidence": 0.3529977201589469,
+      "probabilities": {
+        "keep": 0.33808423927136166,
+        "name": 0.3089180405696914,
+        "abstain": 0.3529977201589469
+      },
+      "logits": [
+        1.411402940750122,
+        0.9596849679946899,
+        1.6275333166122437
+      ],
+      "latency_ms": 90.21141397533938,
+      "token_count": 73,
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe author spells her name \u00abRowan\u00bb, without an o at the end."
+    },
+    {
+      "id": "son-abstain-1",
+      "source": "synthetic",
+      "category": "son/abstain",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "\u00abRowan\u00bb.",
+      "want": "abstain",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.5663142508963469,
+      "probabilities": {
+        "keep": 0.1637745046495427,
+        "name": 0.5663142508963469,
+        "abstain": 0.26991124445411036
+      },
+      "logits": [
+        -0.9998766779899597,
+        5.211977005004883,
+        1.5015839338302612
+      ],
+      "latency_ms": 77.23827101290226,
+      "token_count": 61,
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n\u00abRowan\u00bb."
+    },
+    {
+      "id": "son-abstain-2",
+      "source": "synthetic",
+      "category": "son/abstain",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "Ask \u00abRowan\u00bb about it.",
+      "want": "abstain",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.5657282569704395,
+      "probabilities": {
+        "keep": 0.15286683780498728,
+        "name": 0.5657282569704395,
+        "abstain": 0.28140490522457323
+      },
+      "logits": [
+        -1.5672427415847778,
+        4.9845194816589355,
+        1.4881047010421753
+      ],
+      "latency_ms": 80.2659600158222,
+      "token_count": 65,
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nAsk \u00abRowan\u00bb about it."
+    },
+    {
+      "id": "son-abstain-3",
+      "source": "synthetic",
+      "category": "son/abstain",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "Someone called \u00abRowan\u00bb left a message.",
+      "want": "abstain",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.43711837204356263,
+      "probabilities": {
+        "keep": 0.2739725384683131,
+        "name": 0.43711837204356263,
+        "abstain": 0.28890908948812416
+      },
+      "logits": [
+        1.205628752708435,
+        3.5447330474853516,
+        1.4714159965515137
+      ],
+      "latency_ms": 83.56578898383304,
+      "token_count": 67,
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nSomeone called \u00abRowan\u00bb left a message."
+    },
+    {
+      "id": "son-abstain-4",
+      "source": "synthetic",
+      "category": "son/abstain",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "The label says \u00abRowan\u00bb.",
+      "want": "abstain",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.46907943377594175,
+      "probabilities": {
+        "keep": 0.21284443387098104,
+        "name": 0.46907943377594175,
+        "abstain": 0.31807613235307725
+      },
+      "logits": [
+        -0.44393450021743774,
+        3.512570858001709,
+        1.5674835443496704
+      ],
+      "latency_ms": 77.67955597955734,
+      "token_count": 64,
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe label says \u00abRowan\u00bb."
+    },
+    {
+      "id": "mother-name-1",
+      "source": "synthetic",
+      "category": "mother/name",
+      "heard": "Knell",
+      "canonical": "Nell",
+      "context": "My son's mother \u00abKnell\u00bb will collect him from school.",
+      "want": "name",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.5448690314035907,
+      "probabilities": {
+        "keep": 0.20008103415036688,
+        "name": 0.5448690314035907,
+        "abstain": 0.25504993444604246
+      },
+      "logits": [
+        0.14372096955776215,
+        5.159748554229736,
+        1.3590803146362305
+      ],
+      "latency_ms": 90.20911098923534,
+      "token_count": 73,
+      "prompt": "<<LABEL>>It is ordinary English about a knell, the sound of a bell marking a death<<LABEL>>It is Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son's mother \u00abKnell\u00bb will collect him from school."
+    },
+    {
+      "id": "mother-name-2",
+      "source": "synthetic",
+      "category": "mother/name",
+      "heard": "knell",
+      "canonical": "Nell",
+      "context": "Rowan's mother is named \u00abknell\u00bb.",
+      "want": "name",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.6658350076560202,
+      "probabilities": {
+        "keep": 0.13241871399564245,
+        "name": 0.6658350076560202,
+        "abstain": 0.2017462783483373
+      },
+      "logits": [
+        -0.6349114179611206,
+        7.451597213745117,
+        1.473203182220459
+      ],
+      "latency_ms": 84.88630503416061,
+      "token_count": 69,
+      "prompt": "<<LABEL>>It is ordinary English about a knell, the sound of a bell marking a death<<LABEL>>It is Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nRowan's mother is named \u00abknell\u00bb."
+    },
+    {
+      "id": "mother-name-3",
+      "source": "synthetic",
+      "category": "mother/name",
+      "heard": "Knell",
+      "canonical": "Nell",
+      "context": "I co-parent with Rowan's mother \u00abKnell\u00bb.",
+      "want": "name",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.6723739585284461,
+      "probabilities": {
+        "keep": 0.12910328344679406,
+        "name": 0.6723739585284461,
+        "abstain": 0.19852275802475994
+      },
+      "logits": [
+        -0.8740732669830322,
+        7.388322830200195,
+        1.2803508043289185
+      ],
+      "latency_ms": 86.92410500952974,
+      "token_count": 72,
+      "prompt": "<<LABEL>>It is ordinary English about a knell, the sound of a bell marking a death<<LABEL>>It is Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI co-parent with Rowan's mother \u00abKnell\u00bb."
+    },
+    {
+      "id": "mother-name-4",
+      "source": "synthetic",
+      "category": "mother/name",
+      "heard": "Knell",
+      "canonical": "Nell",
+      "context": "Please send Rowan's mother \u00abKnell\u00bb the custody schedule.",
+      "want": "name",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.5956695660842172,
+      "probabilities": {
+        "keep": 0.14767500400113437,
+        "name": 0.5956695660842172,
+        "abstain": 0.25665542991464846
+      },
+      "logits": [
+        -0.9722561240196228,
+        6.010727882385254,
+        1.795160174369812
+      ],
+      "latency_ms": 88.8752460014075,
+      "token_count": 73,
+      "prompt": "<<LABEL>>It is ordinary English about a knell, the sound of a bell marking a death<<LABEL>>It is Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nPlease send Rowan's mother \u00abKnell\u00bb the custody schedule."
+    },
+    {
+      "id": "mother-keep-1",
+      "source": "synthetic",
+      "category": "mother/keep",
+      "heard": "knell",
+      "canonical": "Nell",
+      "context": "The church bell sounded a funeral \u00abknell\u00bb.",
+      "want": "keep",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "keep",
+      "confidence": 0.6002419033837034,
+      "probabilities": {
+        "keep": 0.6002419033837034,
+        "name": 0.1340554970269641,
+        "abstain": 0.2657025995893325
+      },
+      "logits": [
+        4.970094680786133,
+        -2.5356433391571045,
+        0.889695942401886
+      ],
+      "latency_ms": 83.42552301473916,
+      "token_count": 69,
+      "prompt": "<<LABEL>>It is ordinary English about a knell, the sound of a bell marking a death<<LABEL>>It is Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe church bell sounded a funeral \u00abknell\u00bb."
+    },
+    {
+      "id": "mother-keep-2",
+      "source": "synthetic",
+      "category": "mother/keep",
+      "heard": "knell",
+      "canonical": "Nell",
+      "context": "That decision was the death \u00abknell\u00bb for the business.",
+      "want": "keep",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "keep",
+      "confidence": 0.487537567016334,
+      "probabilities": {
+        "keep": 0.487537567016334,
+        "name": 0.1790859600248275,
+        "abstain": 0.33337647295883854
+      },
+      "logits": [
+        3.2486326694488525,
+        -1.7657848596572876,
+        1.3455352783203125
+      ],
+      "latency_ms": 86.0142579767853,
+      "token_count": 72,
+      "prompt": "<<LABEL>>It is ordinary English about a knell, the sound of a bell marking a death<<LABEL>>It is Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThat decision was the death \u00abknell\u00bb for the business."
+    },
+    {
+      "id": "mother-keep-3",
+      "source": "synthetic",
+      "category": "mother/keep",
+      "heard": "Knell",
+      "canonical": "Nell",
+      "context": "\u00abKnell\u00bb means the sound of a bell marking a death.",
+      "want": "keep",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "keep",
+      "confidence": 0.6067679156481022,
+      "probabilities": {
+        "keep": 0.6067679156481022,
+        "name": 0.12420473746541251,
+        "abstain": 0.26902734688648533
+      },
+      "logits": [
+        4.710259437561035,
+        -3.2317607402801514,
+        0.6379807591438293
+      ],
+      "latency_ms": 88.61350198276341,
+      "token_count": 73,
+      "prompt": "<<LABEL>>It is ordinary English about a knell, the sound of a bell marking a death<<LABEL>>It is Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n\u00abKnell\u00bb means the sound of a bell marking a death."
+    },
+    {
+      "id": "mother-keep-4",
+      "source": "synthetic",
+      "category": "mother/keep",
+      "heard": "knell",
+      "canonical": "Nell",
+      "context": "Nell heard the mournful \u00abknell\u00bb of the bell.",
+      "want": "keep",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "keep",
+      "confidence": 0.4749606473058021,
+      "probabilities": {
+        "keep": 0.4749606473058021,
+        "name": 0.23693231023547298,
+        "abstain": 0.28810704245872476
+      },
+      "logits": [
+        3.703237771987915,
+        0.22115179896354675,
+        1.2002891302108765
+      ],
+      "latency_ms": 88.46293104579672,
+      "token_count": 73,
+      "prompt": "<<LABEL>>It is ordinary English about a knell, the sound of a bell marking a death<<LABEL>>It is Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nNell heard the mournful \u00abknell\u00bb of the bell."
+    },
+    {
+      "id": "mother-abstain-1",
+      "source": "synthetic",
+      "category": "mother/abstain",
+      "heard": "Knell",
+      "canonical": "Nell",
+      "context": "\u00abKnell\u00bb.",
+      "want": "abstain",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "keep",
+      "confidence": 0.4578764377514701,
+      "probabilities": {
+        "keep": 0.4578764377514701,
+        "name": 0.20468270029985355,
+        "abstain": 0.3374408619486764
+      },
+      "logits": [
+        2.946582794189453,
+        -1.0846645832061768,
+        1.4184314012527466
+      ],
+      "latency_ms": 75.9860789985396,
+      "token_count": 63,
+      "prompt": "<<LABEL>>It is ordinary English about a knell, the sound of a bell marking a death<<LABEL>>It is Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n\u00abKnell\u00bb."
+    },
+    {
+      "id": "mother-abstain-2",
+      "source": "synthetic",
+      "category": "mother/abstain",
+      "heard": "Knell",
+      "canonical": "Nell",
+      "context": "I heard \u00abKnell\u00bb.",
+      "want": "abstain",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "keep",
+      "confidence": 0.4519599015421663,
+      "probabilities": {
+        "keep": 0.4519599015421663,
+        "name": 0.2103851211220656,
+        "abstain": 0.33765497733576816
+      },
+      "logits": [
+        2.793116569519043,
+        -1.0354280471801758,
+        1.333260416984558
+      ],
+      "latency_ms": 77.60641200002283,
+      "token_count": 65,
+      "prompt": "<<LABEL>>It is ordinary English about a knell, the sound of a bell marking a death<<LABEL>>It is Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI heard \u00abKnell\u00bb."
+    },
+    {
+      "id": "mother-abstain-3",
+      "source": "synthetic",
+      "category": "mother/abstain",
+      "heard": "Knell",
+      "canonical": "Nell",
+      "context": "The recording only contains \u00abKnell\u00bb.",
+      "want": "abstain",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "keep",
+      "confidence": 0.37433416979603357,
+      "probabilities": {
+        "keep": 0.37433416979603357,
+        "name": 0.259547320524997,
+        "abstain": 0.3661185096789694
+      },
+      "logits": [
+        1.7249507904052734,
+        -0.1086253672838211,
+        1.61383855342865
+      ],
+      "latency_ms": 82.42262701969594,
+      "token_count": 67,
+      "prompt": "<<LABEL>>It is ordinary English about a knell, the sound of a bell marking a death<<LABEL>>It is Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe recording only contains \u00abKnell\u00bb."
+    },
+    {
+      "id": "mother-abstain-4",
+      "source": "synthetic",
+      "category": "mother/abstain",
+      "heard": "Knell",
+      "canonical": "Nell",
+      "context": "Write down \u00abKnell\u00bb.",
+      "want": "abstain",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "keep",
+      "confidence": 0.39572512274699617,
+      "probabilities": {
+        "keep": 0.39572512274699617,
+        "name": 0.25486161578005795,
+        "abstain": 0.34941326147294594
+      },
+      "logits": [
+        1.876132845878601,
+        -0.3268987536430359,
+        1.2529516220092773
+      ],
+      "latency_ms": 78.12873902730644,
+      "token_count": 65,
+      "prompt": "<<LABEL>>It is ordinary English about a knell, the sound of a bell marking a death<<LABEL>>It is Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nWrite down \u00abKnell\u00bb."
+    },
+    {
+      "id": "project-name-1",
+      "source": "synthetic",
+      "category": "project/name",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "Open the Linux dictation app \u00abtrans crust\u00bb.",
+      "want": "name",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.6865668953726094,
+      "probabilities": {
+        "keep": 0.14203879008900797,
+        "name": 0.6865668953726094,
+        "abstain": 0.1713943145383827
+      },
+      "logits": [
+        -0.030756674706935883,
+        7.858132362365723,
+        0.909872829914093
+      ],
+      "latency_ms": 77.75367004796863,
+      "token_count": 65,
+      "prompt": "<<LABEL>>It is ordinary prose about material passing through a crust, not an application name<<LABEL>>It is the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nOpen the Linux dictation app \u00abtrans crust\u00bb."
+    },
+    {
+      "id": "project-name-2",
+      "source": "synthetic",
+      "category": "project/name",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "The Linux version of this dictation project is called \u00abtrans crust\u00bb.",
+      "want": "name",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.7125375184246375,
+      "probabilities": {
+        "keep": 0.12811289644973164,
+        "name": 0.7125375184246375,
+        "abstain": 0.15934958512563072
+      },
+      "logits": [
+        -0.1953432559967041,
+        8.396100044250488,
+        0.8971050381660461
+      ],
+      "latency_ms": 83.0018290434964,
+      "token_count": 69,
+      "prompt": "<<LABEL>>It is ordinary prose about material passing through a crust, not an application name<<LABEL>>It is the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe Linux version of this dictation project is called \u00abtrans crust\u00bb."
+    },
+    {
+      "id": "project-name-3",
+      "source": "synthetic",
+      "category": "project/name",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "Restart the \u00abtrans crust\u00bb dictation daemon.",
+      "want": "name",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.5614443850317357,
+      "probabilities": {
+        "keep": 0.2054953578992288,
+        "name": 0.5614443850317357,
+        "abstain": 0.23306025706903552
+      },
+      "logits": [
+        0.36845019459724426,
+        5.400831699371338,
+        0.998686671257019
+      ],
+      "latency_ms": 83.33882503211498,
+      "token_count": 67,
+      "prompt": "<<LABEL>>It is ordinary prose about material passing through a crust, not an application name<<LABEL>>It is the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nRestart the \u00abtrans crust\u00bb dictation daemon."
+    },
+    {
+      "id": "project-name-4",
+      "source": "synthetic",
+      "category": "project/name",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "I use \u00abtrans crust\u00bb for push-to-talk voice input on Wayland.",
+      "want": "name",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.6117061501245666,
+      "probabilities": {
+        "keep": 0.1694939323273145,
+        "name": 0.6117061501245666,
+        "abstain": 0.21879991754811898
+      },
+      "logits": [
+        -0.4802570343017578,
+        5.945773124694824,
+        0.7982076406478882
+      ],
+      "latency_ms": 89.87597597297281,
+      "token_count": 73,
+      "prompt": "<<LABEL>>It is ordinary prose about material passing through a crust, not an application name<<LABEL>>It is the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI use \u00abtrans crust\u00bb for push-to-talk voice input on Wayland."
+    },
+    {
+      "id": "project-keep-1",
+      "source": "synthetic",
+      "category": "project/keep",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "The geologist uses \u00abtrans crust\u00bb as two separate words; preserve the quotation.",
+      "want": "keep",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "abstain",
+      "confidence": 0.3480399858615241,
+      "probabilities": {
+        "keep": 0.3066959419931127,
+        "name": 0.34526407214536325,
+        "abstain": 0.3480399858615241
+      },
+      "logits": [
+        0.793941855430603,
+        1.3870227336883545,
+        1.427117109298706
+      ],
+      "latency_ms": 88.24667800217867,
+      "token_count": 72,
+      "prompt": "<<LABEL>>It is ordinary prose about material passing through a crust, not an application name<<LABEL>>It is the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe geologist uses \u00abtrans crust\u00bb as two separate words; preserve the quotation."
+    },
+    {
+      "id": "project-keep-2",
+      "source": "synthetic",
+      "category": "project/keep",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "Keep \u00abtrans crust\u00bb split into two words in this language exercise.",
+      "want": "keep",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "keep",
+      "confidence": 0.37464814542956315,
+      "probabilities": {
+        "keep": 0.37464814542956315,
+        "name": 0.3154416959454079,
+        "abstain": 0.3099101586250289
+      },
+      "logits": [
+        1.9758107662200928,
+        1.1145566701889038,
+        1.0259774923324585
+      ],
+      "latency_ms": 85.2708529564552,
+      "token_count": 69,
+      "prompt": "<<LABEL>>It is ordinary prose about material passing through a crust, not an application name<<LABEL>>It is the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nKeep \u00abtrans crust\u00bb split into two words in this language exercise."
+    },
+    {
+      "id": "project-keep-3",
+      "source": "synthetic",
+      "category": "project/keep",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "Do not turn the quoted phrase \u00abtrans crust\u00bb into the application name.",
+      "want": "keep",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "keep",
+      "confidence": 0.41768982533458154,
+      "probabilities": {
+        "keep": 0.41768982533458154,
+        "name": 0.3269696695682133,
+        "abstain": 0.25534050509720524
+      },
+      "logits": [
+        3.1501340866088867,
+        1.9240859746932983,
+        0.6860325932502747
+      ],
+      "latency_ms": 84.13015201222152,
+      "token_count": 70,
+      "prompt": "<<LABEL>>It is ordinary prose about material passing through a crust, not an application name<<LABEL>>It is the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nDo not turn the quoted phrase \u00abtrans crust\u00bb into the application name."
+    },
+    {
+      "id": "project-keep-4",
+      "source": "synthetic",
+      "category": "project/keep",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "The phrase \u00abtrans crust\u00bb here describes a geological process, not software.",
+      "want": "keep",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "keep",
+      "confidence": 0.513584300915888,
+      "probabilities": {
+        "keep": 0.513584300915888,
+        "name": 0.2272547336987927,
+        "abstain": 0.2591609653853193
+      },
+      "logits": [
+        4.33113431930542,
+        0.24879534542560577,
+        0.9065908193588257
+      ],
+      "latency_ms": 84.81627301080152,
+      "token_count": 71,
+      "prompt": "<<LABEL>>It is ordinary prose about material passing through a crust, not an application name<<LABEL>>It is the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe phrase \u00abtrans crust\u00bb here describes a geological process, not software."
+    },
+    {
+      "id": "project-abstain-1",
+      "source": "synthetic",
+      "category": "project/abstain",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "\u00abtrans crust\u00bb.",
+      "want": "abstain",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "keep",
+      "confidence": 0.4258688197087215,
+      "probabilities": {
+        "keep": 0.4258688197087215,
+        "name": 0.27633985287126717,
+        "abstain": 0.29779132742001146
+      },
+      "logits": [
+        2.8679213523864746,
+        0.7024375796318054,
+        1.0767611265182495
+      ],
+      "latency_ms": 71.9730100245215,
+      "token_count": 59,
+      "prompt": "<<LABEL>>It is ordinary prose about material passing through a crust, not an application name<<LABEL>>It is the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n\u00abtrans crust\u00bb."
+    },
+    {
+      "id": "project-abstain-2",
+      "source": "synthetic",
+      "category": "project/abstain",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "The note says \u00abtrans crust\u00bb.",
+      "want": "abstain",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "keep",
+      "confidence": 0.3869290656271842,
+      "probabilities": {
+        "keep": 0.3869290656271842,
+        "name": 0.3357810155240532,
+        "abstain": 0.2772899188487627
+      },
+      "logits": [
+        2.7109506130218506,
+        2.00106143951416,
+        1.0427627563476562
+      ],
+      "latency_ms": 77.50770199345425,
+      "token_count": 62,
+      "prompt": "<<LABEL>>It is ordinary prose about material passing through a crust, not an application name<<LABEL>>It is the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe note says \u00abtrans crust\u00bb."
+    },
+    {
+      "id": "project-abstain-3",
+      "source": "synthetic",
+      "category": "project/abstain",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "Someone mentioned \u00abtrans crust\u00bb.",
+      "want": "abstain",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "keep",
+      "confidence": 0.3736378021281416,
+      "probabilities": {
+        "keep": 0.3736378021281416,
+        "name": 0.2993502793521219,
+        "abstain": 0.3270119185197365
+      },
+      "logits": [
+        1.9467090368270874,
+        0.8368170261383057,
+        1.279338002204895
+      ],
+      "latency_ms": 76.4274779940024,
+      "token_count": 61,
+      "prompt": "<<LABEL>>It is ordinary prose about material passing through a crust, not an application name<<LABEL>>It is the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nSomeone mentioned \u00abtrans crust\u00bb."
+    },
+    {
+      "id": "project-abstain-4",
+      "source": "synthetic",
+      "category": "project/abstain",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "What about \u00abtrans crust\u00bb?",
+      "want": "abstain",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "keep",
+      "confidence": 0.4090362476990578,
+      "probabilities": {
+        "keep": 0.4090362476990578,
+        "name": 0.29934280221357307,
+        "abstain": 0.29162095008736916
+      },
+      "logits": [
+        2.588068962097168,
+        1.0248428583145142,
+        0.8939896821975708
+      ],
+      "latency_ms": 77.40412803832442,
+      "token_count": 62,
+      "prompt": "<<LABEL>>It is ordinary prose about material passing through a crust, not an application name<<LABEL>>It is the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nWhat about \u00abtrans crust\u00bb?"
+    },
+    {
+      "id": "habit-name-1",
+      "source": "synthetic",
+      "category": "habit/name",
+      "heard": "sigs",
+      "canonical": "Cigs",
+      "context": "My cigarette habit is named \u00absigs\u00bb.",
+      "want": "name",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.6907452362418258,
+      "probabilities": {
+        "keep": 0.09561686890230989,
+        "name": 0.6907452362418258,
+        "abstain": 0.21363789485586437
+      },
+      "logits": [
+        -3.2850868701934814,
+        6.615666389465332,
+        0.7401264905929565
+      ],
+      "latency_ms": 68.39822203619406,
+      "token_count": 54,
+      "prompt": "<<LABEL>>It is the ordinary number six<<LABEL>>It is the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy cigarette habit is named \u00absigs\u00bb."
+    },
+    {
+      "id": "habit-name-2",
+      "source": "synthetic",
+      "category": "habit/name",
+      "heard": "sigs",
+      "canonical": "Cigs",
+      "context": "Add one cigarette to my \u00absigs\u00bb habit counter.",
+      "want": "name",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.6764697765137948,
+      "probabilities": {
+        "keep": 0.10493708558887929,
+        "name": 0.6764697765137948,
+        "abstain": 0.21859313789732596
+      },
+      "logits": [
+        -2.7176434993743896,
+        6.61284875869751,
+        0.9566760659217834
+      ],
+      "latency_ms": 71.7958549503237,
+      "token_count": 57,
+      "prompt": "<<LABEL>>It is the ordinary number six<<LABEL>>It is the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nAdd one cigarette to my \u00absigs\u00bb habit counter."
+    },
+    {
+      "id": "habit-name-3",
+      "source": "synthetic",
+      "category": "habit/name",
+      "heard": "sigs",
+      "canonical": "Cigs",
+      "context": "The \u00absigs\u00bb habit tracks how many cigarettes I smoke.",
+      "want": "name",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.6778371705705432,
+      "probabilities": {
+        "keep": 0.10641321445313265,
+        "name": 0.6778371705705432,
+        "abstain": 0.2157496149763241
+      },
+      "logits": [
+        -2.0302231311798096,
+        7.240439414978027,
+        1.5085976123809814
+      ],
+      "latency_ms": 76.34449796751142,
+      "token_count": 58,
+      "prompt": "<<LABEL>>It is the ordinary number six<<LABEL>>It is the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe \u00absigs\u00bb habit tracks how many cigarettes I smoke."
+    },
+    {
+      "id": "habit-name-4",
+      "source": "synthetic",
+      "category": "habit/name",
+      "heard": "sigs",
+      "canonical": "Cigs",
+      "context": "Reset my cigarette counter called \u00absigs\u00bb.",
+      "want": "name",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.6287127451198697,
+      "probabilities": {
+        "keep": 0.12181166696864819,
+        "name": 0.6287127451198697,
+        "abstain": 0.24947558791148217
+      },
+      "logits": [
+        -2.7200629711151123,
+        5.497252941131592,
+        0.8693081736564636
+      ],
+      "latency_ms": 67.8825710201636,
+      "token_count": 54,
+      "prompt": "<<LABEL>>It is the ordinary number six<<LABEL>>It is the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nReset my cigarette counter called \u00absigs\u00bb."
+    },
+    {
+      "id": "habit-keep-1",
+      "source": "synthetic",
+      "category": "habit/keep",
+      "heard": "six",
+      "canonical": "Cigs",
+      "context": "Deal \u00absix\u00bb cards to each player.",
+      "want": "keep",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "keep",
+      "confidence": 0.5151093501457034,
+      "probabilities": {
+        "keep": 0.5151093501457034,
+        "name": 0.108146365593722,
+        "abstain": 0.37674428426057455
+      },
+      "logits": [
+        2.9524049758911133,
+        -4.862833499908447,
+        1.3861838579177856
+      ],
+      "latency_ms": 70.02598600229248,
+      "token_count": 55,
+      "prompt": "<<LABEL>>It is the ordinary number six<<LABEL>>It is the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nDeal \u00absix\u00bb cards to each player."
+    },
+    {
+      "id": "habit-keep-2",
+      "source": "synthetic",
+      "category": "habit/keep",
+      "heard": "six",
+      "canonical": "Cigs",
+      "context": "I smoked \u00absix\u00bb cigarettes today.",
+      "want": "keep",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.43679460201404163,
+      "probabilities": {
+        "keep": 0.34544191124607115,
+        "name": 0.43679460201404163,
+        "abstain": 0.21776348673988735
+      },
+      "logits": [
+        3.3601951599121094,
+        4.535006999969482,
+        1.0499366521835327
+      ],
+      "latency_ms": 66.78972899680957,
+      "token_count": 53,
+      "prompt": "<<LABEL>>It is the ordinary number six<<LABEL>>It is the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI smoked \u00absix\u00bb cigarettes today."
+    },
+    {
+      "id": "habit-keep-3",
+      "source": "synthetic",
+      "category": "habit/keep",
+      "heard": "Six",
+      "canonical": "Cigs",
+      "context": "\u00abSix\u00bb people attended the meeting.",
+      "want": "keep",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "keep",
+      "confidence": 0.5853958537643558,
+      "probabilities": {
+        "keep": 0.5853958537643558,
+        "name": 0.08399555132303137,
+        "abstain": 0.33060859491261285
+      },
+      "logits": [
+        4.3739423751831055,
+        -5.347076416015625,
+        1.5132344961166382
+      ],
+      "latency_ms": 66.9996669748798,
+      "token_count": 53,
+      "prompt": "<<LABEL>>It is the ordinary number six<<LABEL>>It is the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n\u00abSix\u00bb people attended the meeting."
+    },
+    {
+      "id": "habit-keep-4",
+      "source": "synthetic",
+      "category": "habit/keep",
+      "heard": "six",
+      "canonical": "Cigs",
+      "context": "Set the Cigs habit target to \u00absix\u00bb cigarettes.",
+      "want": "keep",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.54678794349028,
+      "probabilities": {
+        "keep": 0.27142698787987996,
+        "name": 0.54678794349028,
+        "abstain": 0.18178506862983998
+      },
+      "logits": [
+        2.7799081802368164,
+        6.2865800857543945,
+        0.7728015184402466
+      ],
+      "latency_ms": 71.58159097889438,
+      "token_count": 57,
+      "prompt": "<<LABEL>>It is the ordinary number six<<LABEL>>It is the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nSet the Cigs habit target to \u00absix\u00bb cigarettes."
+    },
+    {
+      "id": "habit-abstain-1",
+      "source": "synthetic",
+      "category": "habit/abstain",
+      "heard": "sigs",
+      "canonical": "Cigs",
+      "context": "\u00absigs\u00bb.",
+      "want": "abstain",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.6164841246772679,
+      "probabilities": {
+        "keep": 0.11785400163240126,
+        "name": 0.6164841246772679,
+        "abstain": 0.2656618736903309
+      },
+      "logits": [
+        -3.0375452041625977,
+        5.246801376342773,
+        1.0319517850875854
+      ],
+      "latency_ms": 63.98030003765598,
+      "token_count": 49,
+      "prompt": "<<LABEL>>It is the ordinary number six<<LABEL>>It is the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n\u00absigs\u00bb."
+    },
+    {
+      "id": "habit-abstain-2",
+      "source": "synthetic",
+      "category": "habit/abstain",
+      "heard": "sigs",
+      "canonical": "Cigs",
+      "context": "The note says \u00absigs\u00bb.",
+      "want": "abstain",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.5998143864048617,
+      "probabilities": {
+        "keep": 0.1175025306658571,
+        "name": 0.5998143864048617,
+        "abstain": 0.28268308292928107
+      },
+      "logits": [
+        -3.225996255874634,
+        4.93605375289917,
+        1.16939377784729
+      ],
+      "latency_ms": 65.6536229653284,
+      "token_count": 52,
+      "prompt": "<<LABEL>>It is the ordinary number six<<LABEL>>It is the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe note says \u00absigs\u00bb."
+    },
+    {
+      "id": "habit-abstain-3",
+      "source": "synthetic",
+      "category": "habit/abstain",
+      "heard": "sigs",
+      "canonical": "Cigs",
+      "context": "I heard the word \u00absigs\u00bb.",
+      "want": "abstain",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.5706065954308075,
+      "probabilities": {
+        "keep": 0.11991400227185575,
+        "name": 0.5706065954308075,
+        "abstain": 0.3094794022973367
+      },
+      "logits": [
+        -3.6116416454315186,
+        4.198747634887695,
+        1.1354838609695435
+      ],
+      "latency_ms": 67.46353802736849,
+      "token_count": 53,
+      "prompt": "<<LABEL>>It is the ordinary number six<<LABEL>>It is the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI heard the word \u00absigs\u00bb."
+    },
+    {
+      "id": "habit-abstain-4",
+      "source": "synthetic",
+      "category": "habit/abstain",
+      "heard": "sigs",
+      "canonical": "Cigs",
+      "context": "What is \u00absigs\u00bb?",
+      "want": "abstain",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.6200586092243332,
+      "probabilities": {
+        "keep": 0.11647465964609392,
+        "name": 0.6200586092243332,
+        "abstain": 0.2634667311295728
+      },
+      "logits": [
+        -3.1411828994750977,
+        5.231056213378906,
+        0.9457160830497742
+      ],
+      "latency_ms": 65.54506998509169,
+      "token_count": 52,
+      "prompt": "<<LABEL>>It is the ordinary number six<<LABEL>>It is the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nWhat is \u00absigs\u00bb?"
+    }
+  ]
+}

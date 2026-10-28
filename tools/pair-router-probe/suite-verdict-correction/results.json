@@ -1,0 +1,1637 @@
+{
+  "model": "/home/john/repos/dz/jev-options/rlcd-151m/model_fp16.onnx",
+  "model_sha256": "4db28305590c714e33c2cacb75a57ec941c72bb210e1266ba2c7d77e85ddc526",
+  "cases_file": "tools/pair-router-probe/suite.json",
+  "cases_sha256": "cbe6682ee9036dddcad327892101a8f9365eb93a5b5dc2c9d80f0a93e0c9956b",
+  "decision_task": "correction",
+  "tokenizer_sha256": "8bb449eb0c037aae44115b65905bb339b8f3f74eb37067c19127feb3c0755723",
+  "calibrator_sha256": "af2a876993148efa0726b6ccf710fe2303897d20c0ce8c7c9036eb50f64d23de",
+  "temperature": 5.0069,
+  "onnxruntime": "1.24.4",
+  "scope": "sentence",
+  "provider": "CPUExecutionProvider",
+  "threads": 2,
+  "load_secs": 1.1414335279841907,
+  "cases": [
+    {
+      "id": "dog-name-1",
+      "source": "synthetic",
+      "category": "dog/name",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "Please put \u00abGamble\u00bb on her leash before taking my dog outside.",
+      "want": "name",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.4461985751059465,
+      "probabilities": {
+        "keep": 0.17595499928813502,
+        "name": 0.4461985751059465,
+        "abstain": 0.3778464256059186
+      },
+      "logits": [
+        0.4595540165901184,
+        5.118653774261475,
+        4.286125183105469
+      ],
+      "latency_ms": 200.73771296301857,
+      "token_count": 152,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Gambol, meaning the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the dog named Gambol, belonging to the speaker. Alternative meaning: ordinary English about gambling or betting money.\n\nContext:\nPlease put \u00abGamble\u00bb on her leash before taking my dog outside."
+    },
+    {
+      "id": "dog-name-2",
+      "source": "synthetic",
+      "category": "dog/name",
+      "heard": "gamble",
+      "canonical": "Gambol",
+      "context": "My dog \u00abgamble\u00bb has a vet appointment tomorrow.",
+      "want": "name",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.43799345360799535,
+      "probabilities": {
+        "keep": 0.17625359919408953,
+        "name": 0.43799345360799535,
+        "abstain": 0.3857529471979151
+      },
+      "logits": [
+        0.36921799182891846,
+        4.926899433135986,
+        4.290988922119141
+      ],
+      "latency_ms": 174.41073898226023,
+      "token_count": 148,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Gambol, meaning the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the dog named Gambol, belonging to the speaker. Alternative meaning: ordinary English about gambling or betting money.\n\nContext:\nMy dog \u00abgamble\u00bb has a vet appointment tomorrow."
+    },
+    {
+      "id": "dog-name-3",
+      "source": "synthetic",
+      "category": "dog/name",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "The dog's name is \u00abGamble\u00bb, and she jumps on me when I say it.",
+      "want": "name",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.4348186592040335,
+      "probabilities": {
+        "keep": 0.1810334188984555,
+        "name": 0.4348186592040335,
+        "abstain": 0.384147921897511
+      },
+      "logits": [
+        0.5356084108352661,
+        4.922891616821289,
+        4.302529811859131
+      ],
+      "latency_ms": 185.38471002830192,
+      "token_count": 155,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Gambol, meaning the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the dog named Gambol, belonging to the speaker. Alternative meaning: ordinary English about gambling or betting money.\n\nContext:\nThe dog's name is \u00abGamble\u00bb, and she jumps on me when I say it."
+    },
+    {
+      "id": "dog-name-4",
+      "source": "synthetic",
+      "category": "dog/name",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "I filled my dog \u00abGamble\u00bb's water bowl.",
+      "want": "name",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.4381289042271226,
+      "probabilities": {
+        "keep": 0.18085070244182014,
+        "name": 0.4381289042271226,
+        "abstain": 0.38102039333105725
+      },
+      "logits": [
+        0.560611367225647,
+        4.9909234046936035,
+        4.291658401489258
+      ],
+      "latency_ms": 174.62317604804412,
+      "token_count": 149,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Gambol, meaning the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the dog named Gambol, belonging to the speaker. Alternative meaning: ordinary English about gambling or betting money.\n\nContext:\nI filled my dog \u00abGamble\u00bb's water bowl."
+    },
+    {
+      "id": "dog-keep-1",
+      "source": "synthetic",
+      "category": "dog/keep",
+      "heard": "gamble",
+      "canonical": "Gambol",
+      "context": "We should never \u00abgamble\u00bb with the rent money.",
+      "want": "keep",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.41332373355096075,
+      "probabilities": {
+        "keep": 0.19165941576696435,
+        "name": 0.41332373355096075,
+        "abstain": 0.3950168506820749
+      },
+      "logits": [
+        0.5466108918190002,
+        4.394469738006592,
+        4.1676435470581055
+      ],
+      "latency_ms": 174.7161289677024,
+      "token_count": 148,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Gambol, meaning the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the dog named Gambol, belonging to the speaker. Alternative meaning: ordinary English about gambling or betting money.\n\nContext:\nWe should never \u00abgamble\u00bb with the rent money."
+    },
+    {
+      "id": "dog-keep-2",
+      "source": "synthetic",
+      "category": "dog/keep",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "\u00abGamble\u00bb responsibly if you visit a casino.",
+      "want": "keep",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.4231849283568236,
+      "probabilities": {
+        "keep": 0.18338410130944718,
+        "name": 0.4231849283568236,
+        "abstain": 0.39343097033372926
+      },
+      "logits": [
+        0.43923625349998474,
+        4.626138210296631,
+        4.261116981506348
+      ],
+      "latency_ms": 172.74341400479898,
+      "token_count": 148,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Gambol, meaning the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the dog named Gambol, belonging to the speaker. Alternative meaning: ordinary English about gambling or betting money.\n\nContext:\n\u00abGamble\u00bb responsibly if you visit a casino."
+    },
+    {
+      "id": "dog-keep-3",
+      "source": "synthetic",
+      "category": "dog/keep",
+      "heard": "gamble",
+      "canonical": "Gambol",
+      "context": "That investment would be a \u00abgamble\u00bb.",
+      "want": "keep",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.42053391386981753,
+      "probabilities": {
+        "keep": 0.19211904973032617,
+        "name": 0.42053391386981753,
+        "abstain": 0.3873470363998563
+      },
+      "logits": [
+        0.651633083820343,
+        4.574088096618652,
+        4.162500381469727
+      ],
+      "latency_ms": 170.31024198513478,
+      "token_count": 145,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Gambol, meaning the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the dog named Gambol, belonging to the speaker. Alternative meaning: ordinary English about gambling or betting money.\n\nContext:\nThat investment would be a \u00abgamble\u00bb."
+    },
+    {
+      "id": "dog-keep-4",
+      "source": "synthetic",
+      "category": "dog/keep",
+      "heard": "gamble",
+      "canonical": "Gambol",
+      "context": "My dog is asleep while I \u00abgamble\u00bb online.",
+      "want": "keep",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.4577768186003016,
+      "probabilities": {
+        "keep": 0.16734300770396826,
+        "name": 0.4577768186003016,
+        "abstain": 0.3748801736957302
+      },
+      "logits": [
+        0.1958407759666443,
+        5.2344651222229,
+        4.234210014343262
+      ],
+      "latency_ms": 181.99243996059522,
+      "token_count": 148,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Gambol, meaning the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the dog named Gambol, belonging to the speaker. Alternative meaning: ordinary English about gambling or betting money.\n\nContext:\nMy dog is asleep while I \u00abgamble\u00bb online."
+    },
+    {
+      "id": "dog-abstain-1",
+      "source": "synthetic",
+      "category": "dog/abstain",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "\u00abGamble\u00bb.",
+      "want": "abstain",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.4342006159909578,
+      "probabilities": {
+        "keep": 0.18215861009821108,
+        "name": 0.4342006159909578,
+        "abstain": 0.383640773910831
+      },
+      "logits": [
+        0.7231648564338684,
+        5.07230281829834,
+        4.45244836807251
+      ],
+      "latency_ms": 163.91889797523618,
+      "token_count": 140,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Gambol, meaning the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the dog named Gambol, belonging to the speaker. Alternative meaning: ordinary English about gambling or betting money.\n\nContext:\n\u00abGamble\u00bb."
+    },
+    {
+      "id": "dog-abstain-2",
+      "source": "synthetic",
+      "category": "dog/abstain",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "Tell \u00abGamble\u00bb.",
+      "want": "abstain",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.4326886909630503,
+      "probabilities": {
+        "keep": 0.17939671653089254,
+        "name": 0.4326886909630503,
+        "abstain": 0.3879145925060572
+      },
+      "logits": [
+        0.5923848748207092,
+        5.000554084777832,
+        4.453633785247803
+      ],
+      "latency_ms": 166.71251197112724,
+      "token_count": 141,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Gambol, meaning the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the dog named Gambol, belonging to the speaker. Alternative meaning: ordinary English about gambling or betting money.\n\nContext:\nTell \u00abGamble\u00bb."
+    },
+    {
+      "id": "dog-abstain-3",
+      "source": "synthetic",
+      "category": "dog/abstain",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "I heard someone say \u00abGamble\u00bb.",
+      "want": "abstain",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.4523819518869482,
+      "probabilities": {
+        "keep": 0.18138465467258635,
+        "name": 0.4523819518869482,
+        "abstain": 0.3662333934404655
+      },
+      "logits": [
+        0.4796280562877655,
+        5.055468559265137,
+        3.9977307319641113
+      ],
+      "latency_ms": 166.8469249852933,
+      "token_count": 144,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Gambol, meaning the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the dog named Gambol, belonging to the speaker. Alternative meaning: ordinary English about gambling or betting money.\n\nContext:\nI heard someone say \u00abGamble\u00bb."
+    },
+    {
+      "id": "dog-abstain-4",
+      "source": "synthetic",
+      "category": "dog/abstain",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "The note only says \u00abGamble\u00bb.",
+      "want": "abstain",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling or betting money",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.4484153684733572,
+      "probabilities": {
+        "keep": 0.18787705745275177,
+        "name": 0.4484153684733572,
+        "abstain": 0.3637075740738911
+      },
+      "logits": [
+        0.8787640929222107,
+        5.234427452087402,
+        4.186133861541748
+      ],
+      "latency_ms": 166.1861459724605,
+      "token_count": 144,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Gambol, meaning the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the dog named Gambol, belonging to the speaker. Alternative meaning: ordinary English about gambling or betting money.\n\nContext:\nThe note only says \u00abGamble\u00bb."
+    },
+    {
+      "id": "son-name-1",
+      "source": "synthetic",
+      "category": "son/name",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "My son \u00abRowan\u00bb forgot his lunchbox.",
+      "want": "name",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.4277290667407917,
+      "probabilities": {
+        "keep": 0.16756873923179313,
+        "name": 0.4277290667407917,
+        "abstain": 0.4047021940274152
+      },
+      "logits": [
+        -0.22312843799591064,
+        4.4688191413879395,
+        4.191744804382324
+      ],
+      "latency_ms": 177.7385930181481,
+      "token_count": 151,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nMy son \u00abRowan\u00bb forgot his lunchbox."
+    },
+    {
+      "id": "son-name-2",
+      "source": "synthetic",
+      "category": "son/name",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "Please pack my son \u00abRowan\u00bb's school bag.",
+      "want": "name",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.4163069999152919,
+      "probabilities": {
+        "keep": 0.17639563562192584,
+        "name": 0.4163069999152919,
+        "abstain": 0.4072973644627823
+      },
+      "logits": [
+        -0.03524219989776611,
+        4.264150619506836,
+        4.154602527618408
+      ],
+      "latency_ms": 187.3599499813281,
+      "token_count": 153,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nPlease pack my son \u00abRowan\u00bb's school bag."
+    },
+    {
+      "id": "son-name-3",
+      "source": "synthetic",
+      "category": "son/name",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "Nell and I co-parent our son \u00abRowan\u00bb.",
+      "want": "name",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.4197505209455946,
+      "probabilities": {
+        "keep": 0.17941050468048805,
+        "name": 0.4197505209455946,
+        "abstain": 0.4008389743739172
+      },
+      "logits": [
+        -0.06595475971698761,
+        4.189830303192139,
+        3.9590084552764893
+      ],
+      "latency_ms": 181.7335599916987,
+      "token_count": 153,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nNell and I co-parent our son \u00abRowan\u00bb."
+    },
+    {
+      "id": "son-name-4",
+      "source": "synthetic",
+      "category": "son/name",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "My son's name is \u00abRowan\u00bb.",
+      "want": "name",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.4198483803059158,
+      "probabilities": {
+        "keep": 0.1758385424174626,
+        "name": 0.4198483803059158,
+        "abstain": 0.40431307727662164
+      },
+      "logits": [
+        -0.046524837613105774,
+        4.311117649078369,
+        4.1223368644714355
+      ],
+      "latency_ms": 182.3729689931497,
+      "token_count": 149,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nMy son's name is \u00abRowan\u00bb."
+    },
+    {
+      "id": "son-keep-1",
+      "source": "synthetic",
+      "category": "son/keep",
+      "heard": "O",
+      "canonical": "Rowan",
+      "context": "I deliberately call my son \u00abO\u00bb online to protect his privacy; keep that initial.",
+      "want": "keep",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "abstain",
+      "confidence": 0.4054629201937812,
+      "probabilities": {
+        "keep": 0.20414227631773388,
+        "name": 0.3903948034884848,
+        "abstain": 0.4054629201937812
+      },
+      "logits": [
+        0.5859324336051941,
+        3.8321127891540527,
+        4.021728515625
+      ],
+      "latency_ms": 193.78730101743713,
+      "token_count": 158,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nI deliberately call my son \u00abO\u00bb online to protect his privacy; keep that initial."
+    },
+    {
+      "id": "son-keep-2",
+      "source": "synthetic",
+      "category": "son/keep",
+      "heard": "O",
+      "canonical": "Rowan",
+      "context": "My son \u00abO\u00bb needs his lunchbox; use only his initial in this message.",
+      "want": "keep",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.42349275925838026,
+      "probabilities": {
+        "keep": 0.18110316924524453,
+        "name": 0.42349275925838026,
+        "abstain": 0.39540407149637524
+      },
+      "logits": [
+        0.20401670038700104,
+        4.457225799560547,
+        4.113611221313477
+      ],
+      "latency_ms": 236.7663549957797,
+      "token_count": 158,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nMy son \u00abO\u00bb needs his lunchbox; use only his initial in this message."
+    },
+    {
+      "id": "son-keep-3",
+      "source": "synthetic",
+      "category": "son/keep",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "My colleague \u00abRowan\u00bb is a different person from my son Rowan.",
+      "want": "keep",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.42010853901028933,
+      "probabilities": {
+        "keep": 0.17328390378103262,
+        "name": 0.42010853901028933,
+        "abstain": 0.40660755720867814
+      },
+      "logits": [
+        -0.3264135420322418,
+        4.107605934143066,
+        3.9440574645996094
+      ],
+      "latency_ms": 182.52913997275755,
+      "token_count": 156,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nMy colleague \u00abRowan\u00bb is a different person from my son Rowan."
+    },
+    {
+      "id": "son-keep-4",
+      "source": "synthetic",
+      "category": "son/keep",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "The author spells her name \u00abRowan\u00bb, without an o at the end.",
+      "want": "keep",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.435897552943333,
+      "probabilities": {
+        "keep": 0.17014211407769583,
+        "name": 0.435897552943333,
+        "abstain": 0.39396033297897115
+      },
+      "logits": [
+        -0.03445350006222725,
+        4.675903797149658,
+        4.1694207191467285
+      ],
+      "latency_ms": 182.75185098173097,
+      "token_count": 156,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nThe author spells her name \u00abRowan\u00bb, without an o at the end."
+    },
+    {
+      "id": "son-abstain-1",
+      "source": "synthetic",
+      "category": "son/abstain",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "\u00abRowan\u00bb.",
+      "want": "abstain",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "abstain",
+      "confidence": 0.4180204482808726,
+      "probabilities": {
+        "keep": 0.16754955935874755,
+        "name": 0.41442999236037986,
+        "abstain": 0.4180204482808726
+      },
+      "logits": [
+        -0.19206134974956512,
+        4.342311859130859,
+        4.385502815246582
+      ],
+      "latency_ms": 172.41541302064434,
+      "token_count": 144,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\n\u00abRowan\u00bb."
+    },
+    {
+      "id": "son-abstain-2",
+      "source": "synthetic",
+      "category": "son/abstain",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "Ask \u00abRowan\u00bb about it.",
+      "want": "abstain",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.41916785157504766,
+      "probabilities": {
+        "keep": 0.16837140570388673,
+        "name": 0.41916785157504766,
+        "abstain": 0.41246074272106564
+      },
+      "logits": [
+        -0.1183544173836708,
+        4.448434829711914,
+        4.367671489715576
+      ],
+      "latency_ms": 173.9257510052994,
+      "token_count": 148,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nAsk \u00abRowan\u00bb about it."
+    },
+    {
+      "id": "son-abstain-3",
+      "source": "synthetic",
+      "category": "son/abstain",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "Someone called \u00abRowan\u00bb left a message.",
+      "want": "abstain",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "abstain",
+      "confidence": 0.4126873737492517,
+      "probabilities": {
+        "keep": 0.17863962906264552,
+        "name": 0.40867299718810285,
+        "abstain": 0.4126873737492517
+      },
+      "logits": [
+        -0.011434502899646759,
+        4.131999492645264,
+        4.180942058563232
+      ],
+      "latency_ms": 191.19707797653973,
+      "token_count": 150,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nSomeone called \u00abRowan\u00bb left a message."
+    },
+    {
+      "id": "son-abstain-4",
+      "source": "synthetic",
+      "category": "son/abstain",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "The label says \u00abRowan\u00bb.",
+      "want": "abstain",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.43230330150380325,
+      "probabilities": {
+        "keep": 0.16325902073743892,
+        "name": 0.43230330150380325,
+        "abstain": 0.4044376777587579
+      },
+      "logits": [
+        -0.29147008061408997,
+        4.584196090698242,
+        4.250587463378906
+      ],
+      "latency_ms": 172.03031602548435,
+      "token_count": 147,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nThe label says \u00abRowan\u00bb."
+    },
+    {
+      "id": "mother-name-1",
+      "source": "synthetic",
+      "category": "mother/name",
+      "heard": "Knell",
+      "canonical": "Nell",
+      "context": "My son's mother \u00abKnell\u00bb will collect him from school.",
+      "want": "name",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.422070188531463,
+      "probabilities": {
+        "keep": 0.1800438662518799,
+        "name": 0.422070188531463,
+        "abstain": 0.3978859452166571
+      },
+      "logits": [
+        0.27064380049705505,
+        4.536377906799316,
+        4.240939617156982
+      ],
+      "latency_ms": 189.44940599612892,
+      "token_count": 159,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Nell, meaning Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Nell, the mother of the speaker's son Rowan. Alternative meaning: ordinary English about a knell, the sound of a bell marking a death.\n\nContext:\nMy son's mother \u00abKnell\u00bb will collect him from school."
+    },
+    {
+      "id": "mother-name-2",
+      "source": "synthetic",
+      "category": "mother/name",
+      "heard": "knell",
+      "canonical": "Nell",
+      "context": "Rowan's mother is named \u00abknell\u00bb.",
+      "want": "name",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.42551762387801817,
+      "probabilities": {
+        "keep": 0.1784932303198056,
+        "name": 0.42551762387801817,
+        "abstain": 0.3959891458021763
+      },
+      "logits": [
+        0.2727566361427307,
+        4.62252950668335,
+        4.262435436248779
+      ],
+      "latency_ms": 181.78976996568963,
+      "token_count": 155,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Nell, meaning Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Nell, the mother of the speaker's son Rowan. Alternative meaning: ordinary English about a knell, the sound of a bell marking a death.\n\nContext:\nRowan's mother is named \u00abknell\u00bb."
+    },
+    {
+      "id": "mother-name-3",
+      "source": "synthetic",
+      "category": "mother/name",
+      "heard": "Knell",
+      "canonical": "Nell",
+      "context": "I co-parent with Rowan's mother \u00abKnell\u00bb.",
+      "want": "name",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.42042510716082027,
+      "probabilities": {
+        "keep": 0.18021005027803147,
+        "name": 0.42042510716082027,
+        "abstain": 0.3993648425611481
+      },
+      "logits": [
+        0.30601444840431213,
+        4.547575950622559,
+        4.290266513824463
+      ],
+      "latency_ms": 188.66129399975762,
+      "token_count": 158,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Nell, meaning Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Nell, the mother of the speaker's son Rowan. Alternative meaning: ordinary English about a knell, the sound of a bell marking a death.\n\nContext:\nI co-parent with Rowan's mother \u00abKnell\u00bb."
+    },
+    {
+      "id": "mother-name-4",
+      "source": "synthetic",
+      "category": "mother/name",
+      "heard": "Knell",
+      "canonical": "Nell",
+      "context": "Please send Rowan's mother \u00abKnell\u00bb the custody schedule.",
+      "want": "name",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.41699932960890423,
+      "probabilities": {
+        "keep": 0.17037372988013558,
+        "name": 0.41699932960890423,
+        "abstain": 0.41262694051096005
+      },
+      "logits": [
+        -0.03797009587287903,
+        4.443656921386719,
+        4.390880584716797
+      ],
+      "latency_ms": 194.77249501505867,
+      "token_count": 159,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Nell, meaning Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Nell, the mother of the speaker's son Rowan. Alternative meaning: ordinary English about a knell, the sound of a bell marking a death.\n\nContext:\nPlease send Rowan's mother \u00abKnell\u00bb the custody schedule."
+    },
+    {
+      "id": "mother-keep-1",
+      "source": "synthetic",
+      "category": "mother/keep",
+      "heard": "knell",
+      "canonical": "Nell",
+      "context": "The church bell sounded a funeral \u00abknell\u00bb.",
+      "want": "keep",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.41952561195152155,
+      "probabilities": {
+        "keep": 0.18790052685266076,
+        "name": 0.41952561195152155,
+        "abstain": 0.39257386119581755
+      },
+      "logits": [
+        0.3427273631095886,
+        4.364328861236572,
+        4.031871318817139
+      ],
+      "latency_ms": 189.1227249871008,
+      "token_count": 155,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Nell, meaning Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Nell, the mother of the speaker's son Rowan. Alternative meaning: ordinary English about a knell, the sound of a bell marking a death.\n\nContext:\nThe church bell sounded a funeral \u00abknell\u00bb."
+    },
+    {
+      "id": "mother-keep-2",
+      "source": "synthetic",
+      "category": "mother/keep",
+      "heard": "knell",
+      "canonical": "Nell",
+      "context": "That decision was the death \u00abknell\u00bb for the business.",
+      "want": "keep",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.4149659752601021,
+      "probabilities": {
+        "keep": 0.18965512591016379,
+        "name": 0.4149659752601021,
+        "abstain": 0.39537889882973404
+      },
+      "logits": [
+        0.40186819434165955,
+        4.322216987609863,
+        4.080123424530029
+      ],
+      "latency_ms": 194.80741303414106,
+      "token_count": 158,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Nell, meaning Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Nell, the mother of the speaker's son Rowan. Alternative meaning: ordinary English about a knell, the sound of a bell marking a death.\n\nContext:\nThat decision was the death \u00abknell\u00bb for the business."
+    },
+    {
+      "id": "mother-keep-3",
+      "source": "synthetic",
+      "category": "mother/keep",
+      "heard": "Knell",
+      "canonical": "Nell",
+      "context": "\u00abKnell\u00bb means the sound of a bell marking a death.",
+      "want": "keep",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "abstain",
+      "confidence": 0.40708608112447453,
+      "probabilities": {
+        "keep": 0.1884880220571974,
+        "name": 0.404425896818328,
+        "abstain": 0.40708608112447453
+      },
+      "logits": [
+        0.341691255569458,
+        4.164129257202148,
+        4.19695520401001
+      ],
+      "latency_ms": 197.67493795370683,
+      "token_count": 159,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Nell, meaning Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Nell, the mother of the speaker's son Rowan. Alternative meaning: ordinary English about a knell, the sound of a bell marking a death.\n\nContext:\n\u00abKnell\u00bb means the sound of a bell marking a death."
+    },
+    {
+      "id": "mother-keep-4",
+      "source": "synthetic",
+      "category": "mother/keep",
+      "heard": "knell",
+      "canonical": "Nell",
+      "context": "Nell heard the mournful \u00abknell\u00bb of the bell.",
+      "want": "keep",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.4212217478493437,
+      "probabilities": {
+        "keep": 0.18037483215162817,
+        "name": 0.4212217478493437,
+        "abstain": 0.39840341999902823
+      },
+      "logits": [
+        0.2223588079214096,
+        4.468822479248047,
+        4.189966678619385
+      ],
+      "latency_ms": 194.37841599574313,
+      "token_count": 159,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Nell, meaning Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Nell, the mother of the speaker's son Rowan. Alternative meaning: ordinary English about a knell, the sound of a bell marking a death.\n\nContext:\nNell heard the mournful \u00abknell\u00bb of the bell."
+    },
+    {
+      "id": "mother-abstain-1",
+      "source": "synthetic",
+      "category": "mother/abstain",
+      "heard": "Knell",
+      "canonical": "Nell",
+      "context": "\u00abKnell\u00bb.",
+      "want": "abstain",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.4300507399281074,
+      "probabilities": {
+        "keep": 0.1725145970160761,
+        "name": 0.4300507399281074,
+        "abstain": 0.3974346630558165
+      },
+      "logits": [
+        0.30429431796073914,
+        4.877703666687012,
+        4.4827961921691895
+      ],
+      "latency_ms": 180.76103104976937,
+      "token_count": 149,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Nell, meaning Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Nell, the mother of the speaker's son Rowan. Alternative meaning: ordinary English about a knell, the sound of a bell marking a death.\n\nContext:\n\u00abKnell\u00bb."
+    },
+    {
+      "id": "mother-abstain-2",
+      "source": "synthetic",
+      "category": "mother/abstain",
+      "heard": "Knell",
+      "canonical": "Nell",
+      "context": "I heard \u00abKnell\u00bb.",
+      "want": "abstain",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.4195636683330093,
+      "probabilities": {
+        "keep": 0.17848903015484835,
+        "name": 0.4195636683330093,
+        "abstain": 0.4019473015121423
+      },
+      "logits": [
+        0.2671411633491516,
+        4.546479225158691,
+        4.331711769104004
+      ],
+      "latency_ms": 185.0307360291481,
+      "token_count": 151,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Nell, meaning Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Nell, the mother of the speaker's son Rowan. Alternative meaning: ordinary English about a knell, the sound of a bell marking a death.\n\nContext:\nI heard \u00abKnell\u00bb."
+    },
+    {
+      "id": "mother-abstain-3",
+      "source": "synthetic",
+      "category": "mother/abstain",
+      "heard": "Knell",
+      "canonical": "Nell",
+      "context": "The recording only contains \u00abKnell\u00bb.",
+      "want": "abstain",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.4227108847519303,
+      "probabilities": {
+        "keep": 0.17509195923029186,
+        "name": 0.4227108847519303,
+        "abstain": 0.4021971560177778
+      },
+      "logits": [
+        0.3358154296875,
+        4.748782634735107,
+        4.499709129333496
+      ],
+      "latency_ms": 187.67707998631522,
+      "token_count": 153,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Nell, meaning Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Nell, the mother of the speaker's son Rowan. Alternative meaning: ordinary English about a knell, the sound of a bell marking a death.\n\nContext:\nThe recording only contains \u00abKnell\u00bb."
+    },
+    {
+      "id": "mother-abstain-4",
+      "source": "synthetic",
+      "category": "mother/abstain",
+      "heard": "Knell",
+      "canonical": "Nell",
+      "context": "Write down \u00abKnell\u00bb.",
+      "want": "abstain",
+      "name_description": "Nell, the mother of the speaker's son Rowan",
+      "keep_description": "ordinary English about a knell, the sound of a bell marking a death",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.4222287202925126,
+      "probabilities": {
+        "keep": 0.1779558853604295,
+        "name": 0.4222287202925126,
+        "abstain": 0.3998153943470579
+      },
+      "logits": [
+        0.2612760066986084,
+        4.587295055389404,
+        4.314197540283203
+      ],
+      "latency_ms": 193.0557379964739,
+      "token_count": 151,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Nell, meaning Nell, the mother of the speaker's son Rowan<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Nell, the mother of the speaker's son Rowan. Alternative meaning: ordinary English about a knell, the sound of a bell marking a death.\n\nContext:\nWrite down \u00abKnell\u00bb."
+    },
+    {
+      "id": "project-name-1",
+      "source": "synthetic",
+      "category": "project/name",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "Open the Linux dictation app \u00abtrans crust\u00bb.",
+      "want": "name",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.4506788682855348,
+      "probabilities": {
+        "keep": 0.17289036856232207,
+        "name": 0.4506788682855348,
+        "abstain": 0.3764307631521432
+      },
+      "logits": [
+        0.37087586522102356,
+        5.167973518371582,
+        4.266626834869385
+      ],
+      "latency_ms": 263.12866603257135,
+      "token_count": 151,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with transcrust, meaning the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the Linux dictation application named transcrust. Alternative meaning: ordinary prose about material passing through a crust, not an application name.\n\nContext:\nOpen the Linux dictation app \u00abtrans crust\u00bb."
+    },
+    {
+      "id": "project-name-2",
+      "source": "synthetic",
+      "category": "project/name",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "The Linux version of this dictation project is called \u00abtrans crust\u00bb.",
+      "want": "name",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.44988637087439887,
+      "probabilities": {
+        "keep": 0.17923078433248535,
+        "name": 0.44988637087439887,
+        "abstain": 0.3708828447931157
+      },
+      "logits": [
+        0.41634032130241394,
+        5.024294376373291,
+        4.057417869567871
+      ],
+      "latency_ms": 182.64041101792827,
+      "token_count": 155,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with transcrust, meaning the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the Linux dictation application named transcrust. Alternative meaning: ordinary prose about material passing through a crust, not an application name.\n\nContext:\nThe Linux version of this dictation project is called \u00abtrans crust\u00bb."
+    },
+    {
+      "id": "project-name-3",
+      "source": "synthetic",
+      "category": "project/name",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "Restart the \u00abtrans crust\u00bb dictation daemon.",
+      "want": "name",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.4549743525602117,
+      "probabilities": {
+        "keep": 0.17319010485733766,
+        "name": 0.4549743525602117,
+        "abstain": 0.3718355425824507
+      },
+      "logits": [
+        0.45972588658332825,
+        5.2956461906433105,
+        4.285306930541992
+      ],
+      "latency_ms": 181.3268179539591,
+      "token_count": 153,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with transcrust, meaning the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the Linux dictation application named transcrust. Alternative meaning: ordinary prose about material passing through a crust, not an application name.\n\nContext:\nRestart the \u00abtrans crust\u00bb dictation daemon."
+    },
+    {
+      "id": "project-name-4",
+      "source": "synthetic",
+      "category": "project/name",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "I use \u00abtrans crust\u00bb for push-to-talk voice input on Wayland.",
+      "want": "name",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.4377972899419354,
+      "probabilities": {
+        "keep": 0.1788702983370316,
+        "name": 0.4377972899419354,
+        "abstain": 0.38333241172103305
+      },
+      "logits": [
+        0.4355120062828064,
+        4.917163372039795,
+        4.251979351043701
+      ],
+      "latency_ms": 189.2393419984728,
+      "token_count": 159,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with transcrust, meaning the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the Linux dictation application named transcrust. Alternative meaning: ordinary prose about material passing through a crust, not an application name.\n\nContext:\nI use \u00abtrans crust\u00bb for push-to-talk voice input on Wayland."
+    },
+    {
+      "id": "project-keep-1",
+      "source": "synthetic",
+      "category": "project/keep",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "The geologist uses \u00abtrans crust\u00bb as two separate words; preserve the quotation.",
+      "want": "keep",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.39034006094338103,
+      "probabilities": {
+        "keep": 0.25479231533430163,
+        "name": 0.39034006094338103,
+        "abstain": 0.35486762372231734
+      },
+      "logits": [
+        2.2210323810577393,
+        4.356823444366455,
+        3.879798650741577
+      ],
+      "latency_ms": 188.77583200810477,
+      "token_count": 158,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with transcrust, meaning the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the Linux dictation application named transcrust. Alternative meaning: ordinary prose about material passing through a crust, not an application name.\n\nContext:\nThe geologist uses \u00abtrans crust\u00bb as two separate words; preserve the quotation."
+    },
+    {
+      "id": "project-keep-2",
+      "source": "synthetic",
+      "category": "project/keep",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "Keep \u00abtrans crust\u00bb split into two words in this language exercise.",
+      "want": "keep",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.44335537364393857,
+      "probabilities": {
+        "keep": 0.19802709707062202,
+        "name": 0.44335537364393857,
+        "abstain": 0.35861752928543933
+      },
+      "logits": [
+        0.9626349210739136,
+        4.998034954071045,
+        3.93599534034729
+      ],
+      "latency_ms": 182.35201702918857,
+      "token_count": 155,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with transcrust, meaning the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the Linux dictation application named transcrust. Alternative meaning: ordinary prose about material passing through a crust, not an application name.\n\nContext:\nKeep \u00abtrans crust\u00bb split into two words in this language exercise."
+    },
+    {
+      "id": "project-keep-3",
+      "source": "synthetic",
+      "category": "project/keep",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "Do not turn the quoted phrase \u00abtrans crust\u00bb into the application name.",
+      "want": "keep",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.39660747446405753,
+      "probabilities": {
+        "keep": 0.22895679228344482,
+        "name": 0.39660747446405753,
+        "abstain": 0.3744357332524976
+      },
+      "logits": [
+        1.3764514923095703,
+        4.1273112297058105,
+        3.839279890060425
+      ],
+      "latency_ms": 183.1928079482168,
+      "token_count": 156,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with transcrust, meaning the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the Linux dictation application named transcrust. Alternative meaning: ordinary prose about material passing through a crust, not an application name.\n\nContext:\nDo not turn the quoted phrase \u00abtrans crust\u00bb into the application name."
+    },
+    {
+      "id": "project-keep-4",
+      "source": "synthetic",
+      "category": "project/keep",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "The phrase \u00abtrans crust\u00bb here describes a geological process, not software.",
+      "want": "keep",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.433922789662118,
+      "probabilities": {
+        "keep": 0.1919456201106249,
+        "name": 0.433922789662118,
+        "abstain": 0.37413159022725706
+      },
+      "logits": [
+        0.8003233671188354,
+        4.884223937988281,
+        4.141905784606934
+      ],
+      "latency_ms": 192.64456100063398,
+      "token_count": 157,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with transcrust, meaning the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the Linux dictation application named transcrust. Alternative meaning: ordinary prose about material passing through a crust, not an application name.\n\nContext:\nThe phrase \u00abtrans crust\u00bb here describes a geological process, not software."
+    },
+    {
+      "id": "project-abstain-1",
+      "source": "synthetic",
+      "category": "project/abstain",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "\u00abtrans crust\u00bb.",
+      "want": "abstain",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.45770428127172824,
+      "probabilities": {
+        "keep": 0.17095388184835794,
+        "name": 0.45770428127172824,
+        "abstain": 0.3713418368799138
+      },
+      "logits": [
+        0.5633381009101868,
+        5.494280815124512,
+        4.447336673736572
+      ],
+      "latency_ms": 170.67106801550835,
+      "token_count": 145,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with transcrust, meaning the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the Linux dictation application named transcrust. Alternative meaning: ordinary prose about material passing through a crust, not an application name.\n\nContext:\n\u00abtrans crust\u00bb."
+    },
+    {
+      "id": "project-abstain-2",
+      "source": "synthetic",
+      "category": "project/abstain",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "The note says \u00abtrans crust\u00bb.",
+      "want": "abstain",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.45586560557204053,
+      "probabilities": {
+        "keep": 0.1806951107926836,
+        "name": 0.45586560557204053,
+        "abstain": 0.36343928363527583
+      },
+      "logits": [
+        0.7594382166862488,
+        5.392757892608643,
+        4.258265495300293
+      ],
+      "latency_ms": 173.9568009506911,
+      "token_count": 148,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with transcrust, meaning the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the Linux dictation application named transcrust. Alternative meaning: ordinary prose about material passing through a crust, not an application name.\n\nContext:\nThe note says \u00abtrans crust\u00bb."
+    },
+    {
+      "id": "project-abstain-3",
+      "source": "synthetic",
+      "category": "project/abstain",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "Someone mentioned \u00abtrans crust\u00bb.",
+      "want": "abstain",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.4500449340419657,
+      "probabilities": {
+        "keep": 0.17678729297316065,
+        "name": 0.4500449340419657,
+        "abstain": 0.37316777298487375
+      },
+      "logits": [
+        0.6646285653114319,
+        5.343076705932617,
+        4.405187606811523
+      ],
+      "latency_ms": 173.56835101963952,
+      "token_count": 147,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with transcrust, meaning the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the Linux dictation application named transcrust. Alternative meaning: ordinary prose about material passing through a crust, not an application name.\n\nContext:\nSomeone mentioned \u00abtrans crust\u00bb."
+    },
+    {
+      "id": "project-abstain-4",
+      "source": "synthetic",
+      "category": "project/abstain",
+      "heard": "trans crust",
+      "canonical": "transcrust",
+      "context": "What about \u00abtrans crust\u00bb?",
+      "want": "abstain",
+      "name_description": "the Linux dictation application named transcrust",
+      "keep_description": "ordinary prose about material passing through a crust, not an application name",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.443495046539682,
+      "probabilities": {
+        "keep": 0.18480909476338667,
+        "name": 0.443495046539682,
+        "abstain": 0.37169585869693145
+      },
+      "logits": [
+        0.7915883660316467,
+        5.174444675445557,
+        4.290172576904297
+      ],
+      "latency_ms": 230.07967503508553,
+      "token_count": 148,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with transcrust, meaning the Linux dictation application named transcrust<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the Linux dictation application named transcrust. Alternative meaning: ordinary prose about material passing through a crust, not an application name.\n\nContext:\nWhat about \u00abtrans crust\u00bb?"
+    },
+    {
+      "id": "habit-name-1",
+      "source": "synthetic",
+      "category": "habit/name",
+      "heard": "sigs",
+      "canonical": "Cigs",
+      "context": "My cigarette habit is named \u00absigs\u00bb.",
+      "want": "name",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.4299940818109234,
+      "probabilities": {
+        "keep": 0.20941867759649865,
+        "name": 0.4299940818109234,
+        "abstain": 0.36058724059257785
+      },
+      "logits": [
+        1.0229028463363647,
+        4.625046730041504,
+        3.7436444759368896
+      ],
+      "latency_ms": 159.87065096851438,
+      "token_count": 138,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Cigs, meaning the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the habit named Cigs, counting cigarettes. Alternative meaning: the ordinary number six.\n\nContext:\nMy cigarette habit is named \u00absigs\u00bb."
+    },
+    {
+      "id": "habit-name-2",
+      "source": "synthetic",
+      "category": "habit/name",
+      "heard": "sigs",
+      "canonical": "Cigs",
+      "context": "Add one cigarette to my \u00absigs\u00bb habit counter.",
+      "want": "name",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.4293814244300071,
+      "probabilities": {
+        "keep": 0.20220923752263245,
+        "name": 0.4293814244300071,
+        "abstain": 0.36840933804736037
+      },
+      "logits": [
+        0.6148919463157654,
+        4.385301113128662,
+        3.6184895038604736
+      ],
+      "latency_ms": 164.3313600216061,
+      "token_count": 141,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Cigs, meaning the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the habit named Cigs, counting cigarettes. Alternative meaning: the ordinary number six.\n\nContext:\nAdd one cigarette to my \u00absigs\u00bb habit counter."
+    },
+    {
+      "id": "habit-name-3",
+      "source": "synthetic",
+      "category": "habit/name",
+      "heard": "sigs",
+      "canonical": "Cigs",
+      "context": "The \u00absigs\u00bb habit tracks how many cigarettes I smoke.",
+      "want": "name",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.4236366701119145,
+      "probabilities": {
+        "keep": 0.19185536860306607,
+        "name": 0.4236366701119145,
+        "abstain": 0.38450796128501935
+      },
+      "logits": [
+        0.45631006360054016,
+        4.422447681427002,
+        3.937220573425293
+      ],
+      "latency_ms": 164.63740600738674,
+      "token_count": 142,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Cigs, meaning the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the habit named Cigs, counting cigarettes. Alternative meaning: the ordinary number six.\n\nContext:\nThe \u00absigs\u00bb habit tracks how many cigarettes I smoke."
+    },
+    {
+      "id": "habit-name-4",
+      "source": "synthetic",
+      "category": "habit/name",
+      "heard": "sigs",
+      "canonical": "Cigs",
+      "context": "Reset my cigarette counter called \u00absigs\u00bb.",
+      "want": "name",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence explicitly identifies the supplied glossary referent.",
+      "choice": "name",
+      "confidence": 0.44337170115538865,
+      "probabilities": {
+        "keep": 0.19745453852466652,
+        "name": 0.44337170115538865,
+        "abstain": 0.35917376031994475
+      },
+      "logits": [
+        0.7760856747627258,
+        4.826167583465576,
+        3.7717034816741943
+      ],
+      "latency_ms": 159.6482490422204,
+      "token_count": 138,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Cigs, meaning the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the habit named Cigs, counting cigarettes. Alternative meaning: the ordinary number six.\n\nContext:\nReset my cigarette counter called \u00absigs\u00bb."
+    },
+    {
+      "id": "habit-keep-1",
+      "source": "synthetic",
+      "category": "habit/keep",
+      "heard": "six",
+      "canonical": "Cigs",
+      "context": "Deal \u00absix\u00bb cards to each player.",
+      "want": "keep",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.41661889335815766,
+      "probabilities": {
+        "keep": 0.20708584244071465,
+        "name": 0.41661889335815766,
+        "abstain": 0.3762952642011278
+      },
+      "logits": [
+        0.879460334777832,
+        4.379476070404053,
+        3.8697848320007324
+      ],
+      "latency_ms": 163.8599029975012,
+      "token_count": 139,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Cigs, meaning the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the habit named Cigs, counting cigarettes. Alternative meaning: the ordinary number six.\n\nContext:\nDeal \u00absix\u00bb cards to each player."
+    },
+    {
+      "id": "habit-keep-2",
+      "source": "synthetic",
+      "category": "habit/keep",
+      "heard": "six",
+      "canonical": "Cigs",
+      "context": "I smoked \u00absix\u00bb cigarettes today.",
+      "want": "keep",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.42903353812794254,
+      "probabilities": {
+        "keep": 0.19499595394064226,
+        "name": 0.42903353812794254,
+        "abstain": 0.37597050793141523
+      },
+      "logits": [
+        0.5872485041618347,
+        4.535470962524414,
+        3.8744380474090576
+      ],
+      "latency_ms": 158.49167900159955,
+      "token_count": 137,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Cigs, meaning the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the habit named Cigs, counting cigarettes. Alternative meaning: the ordinary number six.\n\nContext:\nI smoked \u00absix\u00bb cigarettes today."
+    },
+    {
+      "id": "habit-keep-3",
+      "source": "synthetic",
+      "category": "habit/keep",
+      "heard": "Six",
+      "canonical": "Cigs",
+      "context": "\u00abSix\u00bb people attended the meeting.",
+      "want": "keep",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.41624005834579897,
+      "probabilities": {
+        "keep": 0.20218604164965712,
+        "name": 0.41624005834579897,
+        "abstain": 0.38157390000454383
+      },
+      "logits": [
+        0.8446168303489685,
+        4.459968566894531,
+        4.024580478668213
+      ],
+      "latency_ms": 158.59011904103681,
+      "token_count": 137,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Cigs, meaning the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the habit named Cigs, counting cigarettes. Alternative meaning: the ordinary number six.\n\nContext:\n\u00abSix\u00bb people attended the meeting."
+    },
+    {
+      "id": "habit-keep-4",
+      "source": "synthetic",
+      "category": "habit/keep",
+      "heard": "six",
+      "canonical": "Cigs",
+      "context": "Set the Cigs habit target to \u00absix\u00bb cigarettes.",
+      "want": "keep",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.",
+      "choice": "name",
+      "confidence": 0.42525389471655817,
+      "probabilities": {
+        "keep": 0.19487955453399497,
+        "name": 0.42525389471655817,
+        "abstain": 0.3798665507494468
+      },
+      "logits": [
+        0.5590305328369141,
+        4.465938091278076,
+        3.900827407836914
+      ],
+      "latency_ms": 164.3023569486104,
+      "token_count": 141,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Cigs, meaning the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the habit named Cigs, counting cigarettes. Alternative meaning: the ordinary number six.\n\nContext:\nSet the Cigs habit target to \u00absix\u00bb cigarettes."
+    },
+    {
+      "id": "habit-abstain-1",
+      "source": "synthetic",
+      "category": "habit/abstain",
+      "heard": "sigs",
+      "canonical": "Cigs",
+      "context": "\u00absigs\u00bb.",
+      "want": "abstain",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.4166424522315853,
+      "probabilities": {
+        "keep": 0.20606222866471258,
+        "name": 0.4166424522315853,
+        "abstain": 0.37729531910370223
+      },
+      "logits": [
+        1.3099563121795654,
+        4.8350653648376465,
+        4.338379859924316
+      ],
+      "latency_ms": 155.53686901694164,
+      "token_count": 133,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Cigs, meaning the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the habit named Cigs, counting cigarettes. Alternative meaning: the ordinary number six.\n\nContext:\n\u00absigs\u00bb."
+    },
+    {
+      "id": "habit-abstain-2",
+      "source": "synthetic",
+      "category": "habit/abstain",
+      "heard": "sigs",
+      "canonical": "Cigs",
+      "context": "The note says \u00absigs\u00bb.",
+      "want": "abstain",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.43508301918588793,
+      "probabilities": {
+        "keep": 0.20629562900542528,
+        "name": 0.43508301918588793,
+        "abstain": 0.3586213518086867
+      },
+      "logits": [
+        1.1188304424285889,
+        4.855112552642822,
+        3.887430191040039
+      ],
+      "latency_ms": 157.51867601647973,
+      "token_count": 136,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Cigs, meaning the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the habit named Cigs, counting cigarettes. Alternative meaning: the ordinary number six.\n\nContext:\nThe note says \u00absigs\u00bb."
+    },
+    {
+      "id": "habit-abstain-3",
+      "source": "synthetic",
+      "category": "habit/abstain",
+      "heard": "sigs",
+      "canonical": "Cigs",
+      "context": "I heard the word \u00absigs\u00bb.",
+      "want": "abstain",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.424894409982916,
+      "probabilities": {
+        "keep": 0.20123522618218662,
+        "name": 0.424894409982916,
+        "abstain": 0.3738703638348973
+      },
+      "logits": [
+        0.9095267653465271,
+        4.651514530181885,
+        4.010973930358887
+      ],
+      "latency_ms": 159.75932800211012,
+      "token_count": 137,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Cigs, meaning the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the habit named Cigs, counting cigarettes. Alternative meaning: the ordinary number six.\n\nContext:\nI heard the word \u00absigs\u00bb."
+    },
+    {
+      "id": "habit-abstain-4",
+      "source": "synthetic",
+      "category": "habit/abstain",
+      "heard": "sigs",
+      "canonical": "Cigs",
+      "context": "What is \u00absigs\u00bb?",
+      "want": "abstain",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "reason": "The sentence does not establish whether this is the glossary referent.",
+      "choice": "name",
+      "confidence": 0.41561455130813735,
+      "probabilities": {
+        "keep": 0.21380016759842485,
+        "name": 0.41561455130813735,
+        "abstain": 0.37058528109343775
+      },
+      "logits": [
+        1.1257117986679077,
+        4.453880786895752,
+        3.879716157913208
+      ],
+      "latency_ms": 157.699418021366,
+      "token_count": 136,
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Cigs, meaning the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: the habit named Cigs, counting cigarettes. Alternative meaning: the ordinary number six.\n\nContext:\nWhat is \u00absigs\u00bb?"
+    }
+  ]
+}

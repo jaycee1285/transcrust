@@ -1,10 +1,12 @@
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
-use std::sync::{Arc, Mutex, mpsc};
+use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::{mpsc, Arc, Mutex};
 
 pub struct AudioCapture {
     stream: cpal::Stream,
     chunk_tx: Arc<Mutex<Option<mpsc::Sender<Vec<f32>>>>>,
     sample_rate: u32,
+    sample_count: Arc<AtomicUsize>,
 }
 
 impl AudioCapture {
@@ -30,6 +32,8 @@ impl AudioCapture {
 
         let chunk_tx: Arc<Mutex<Option<mpsc::Sender<Vec<f32>>>>> = Arc::new(Mutex::new(None));
         let tx_clone = chunk_tx.clone();
+        let sample_count = Arc::new(AtomicUsize::new(0));
+        let count_clone = sample_count.clone();
         let ch = channels as usize;
 
         let config = cpal::StreamConfig {
@@ -39,42 +43,40 @@ impl AudioCapture {
         };
 
         let stream = match supported.sample_format() {
-            cpal::SampleFormat::F32 => {
-                device.build_input_stream(
-                    &config,
-                    move |data: &[f32], _: &cpal::InputCallbackInfo| {
-                        let mono: Vec<f32> = if ch > 1 {
-                            data.chunks(ch).map(|frame| frame[0]).collect()
-                        } else {
-                            data.to_vec()
-                        };
-                        if let Some(tx) = tx_clone.lock().unwrap().as_ref() {
-                            let _ = tx.send(mono);
-                        }
-                    },
-                    |err| eprintln!("Audio stream error: {err}"),
-                    None,
-                )
-            }
-            cpal::SampleFormat::I16 => {
-                device.build_input_stream(
-                    &config,
-                    move |data: &[i16], _: &cpal::InputCallbackInfo| {
-                        let mono: Vec<f32> = if ch > 1 {
-                            data.chunks(ch)
-                                .map(|frame| frame[0] as f32 / i16::MAX as f32)
-                                .collect()
-                        } else {
-                            data.iter().map(|&s| s as f32 / i16::MAX as f32).collect()
-                        };
-                        if let Some(tx) = tx_clone.lock().unwrap().as_ref() {
-                            let _ = tx.send(mono);
-                        }
-                    },
-                    |err| eprintln!("Audio stream error: {err}"),
-                    None,
-                )
-            }
+            cpal::SampleFormat::F32 => device.build_input_stream(
+                &config,
+                move |data: &[f32], _: &cpal::InputCallbackInfo| {
+                    let mono: Vec<f32> = if ch > 1 {
+                        data.chunks(ch).map(|frame| frame[0]).collect()
+                    } else {
+                        data.to_vec()
+                    };
+                    if let Some(tx) = tx_clone.lock().unwrap().as_ref() {
+                        count_clone.fetch_add(mono.len(), Ordering::Relaxed);
+                        let _ = tx.send(mono);
+                    }
+                },
+                |err| eprintln!("Audio stream error: {err}"),
+                None,
+            ),
+            cpal::SampleFormat::I16 => device.build_input_stream(
+                &config,
+                move |data: &[i16], _: &cpal::InputCallbackInfo| {
+                    let mono: Vec<f32> = if ch > 1 {
+                        data.chunks(ch)
+                            .map(|frame| frame[0] as f32 / i16::MAX as f32)
+                            .collect()
+                    } else {
+                        data.iter().map(|&s| s as f32 / i16::MAX as f32).collect()
+                    };
+                    if let Some(tx) = tx_clone.lock().unwrap().as_ref() {
+                        count_clone.fetch_add(mono.len(), Ordering::Relaxed);
+                        let _ = tx.send(mono);
+                    }
+                },
+                |err| eprintln!("Audio stream error: {err}"),
+                None,
+            ),
             fmt => return Err(format!("Unsupported sample format: {fmt:?}")),
         }
         .map_err(|e| format!("Failed to build input stream: {e}"))?;
@@ -83,6 +85,7 @@ impl AudioCapture {
             stream,
             chunk_tx,
             sample_rate,
+            sample_count,
         })
     }
 
@@ -90,6 +93,7 @@ impl AudioCapture {
     /// The channel closes when `stop_recording()` is called.
     pub fn start_recording(&self) -> mpsc::Receiver<Vec<f32>> {
         let (tx, rx) = mpsc::channel();
+        self.sample_count.store(0, Ordering::Relaxed);
         *self.chunk_tx.lock().unwrap() = Some(tx);
         self.stream.play().unwrap();
         rx
@@ -99,6 +103,10 @@ impl AudioCapture {
     pub fn stop_recording(&self) {
         self.stream.pause().unwrap();
         *self.chunk_tx.lock().unwrap() = None;
+    }
+
+    pub fn captured_secs(&self) -> f32 {
+        self.sample_count.load(Ordering::Relaxed) as f32 / self.sample_rate as f32
     }
 
     pub fn sample_rate(&self) -> u32 {
@@ -339,7 +347,11 @@ fn resample(input: &[f32], from_rate: u32, to_rate: u32) -> Vec<f32> {
 
 /// Greatest common divisor, for reducing a rate pair to its phase count.
 fn gcd(a: u32, b: u32) -> u32 {
-    if b == 0 { a } else { gcd(b, a % b) }
+    if b == 0 {
+        a
+    } else {
+        gcd(b, a % b)
+    }
 }
 
 /// Normalised sinc, `sin(pi x) / (pi x)`, defined as 1 at the origin.

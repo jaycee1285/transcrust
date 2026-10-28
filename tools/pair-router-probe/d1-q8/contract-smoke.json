@@ -1,0 +1,48 @@
+[
+  {
+    "state": "I was charged twice this month, please refund one of them.",
+    "question": {
+      "type": "choice",
+      "instructions": "Which team should handle this?",
+      "criteria": {
+        "billing": "Charges, refunds, invoices",
+        "technical": "App or site faults",
+        "fraud": "Suspected unauthorised use"
+      }
+    },
+    "want": "billing",
+    "answer": {
+      "type": "choice",
+      "choice": "billing",
+      "confidence": 0.9932364821434021,
+      "probabilities": {
+        "billing": 0.9932364821434021,
+        "technical": 0.0052131530828773975,
+        "fraud": 0.0015504037728533149
+      }
+    }
+  },
+  {
+    "state": "The app crashes when I open settings.",
+    "question": {
+      "type": "choice",
+      "instructions": "Which team should handle this?",
+      "criteria": {
+        "billing": "Charges, refunds, invoices",
+        "technical": "App or site faults",
+        "fraud": "Suspected unauthorised use"
+      }
+    },
+    "want": "technical",
+    "answer": {
+      "type": "choice",
+      "choice": "technical",
+      "confidence": 0.9959612488746643,
+      "probabilities": {
+        "billing": 0.0021975077688694,
+        "technical": 0.9959612488746643,
+        "fraud": 0.0018412257777526975
+      }
+    }
+  }
+]

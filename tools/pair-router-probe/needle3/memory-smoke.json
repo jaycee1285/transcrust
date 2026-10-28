@@ -1,0 +1,30 @@
+{
+  "case_id": "record-backroom-1",
+  "peak_child_rss_mib": 78.6640625,
+  "response": {
+    "type": "call",
+    "success": true,
+    "error": null,
+    "error_code": null,
+    "reason": null,
+    "function_calls": [],
+    "suppressed_calls": [
+      {
+        "name": "classify",
+        "arguments": {
+          "decision": "name"
+        }
+      }
+    ],
+    "reasoning": "Three distinct calls: 'backroom vacuum' -> 'backroom vacuum', 'GSC check' -> 'GSC check', 'transcrust work' -> 'transcrust work', 'trash and recycling' -> 'trash and recycling', 'homework' -> 'homework', 'job supply' -> 'job supply', 'terrakeet 1P' -> 'Terrakeet 1",
+    "confidence": 0.2913,
+    "prefill_tps": 426.5,
+    "decode_tps": 329.8,
+    "peak_ram_mb": 78.7,
+    "validation": {
+      "ungrounded": [],
+      "negation": false
+    }
+  },
+  "note": "One representative long-input CLI process, independently measured with Linux getrusage; not the full-suite process maximum."
+}

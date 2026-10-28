@@ -1,5 +1,10 @@
 # Long-form dictation — four routes, one picker
 
+> Status correction 2026-10-06: Nemotron and the picker are implemented in
+> `src/nemotron.rs`, `src/picker.rs` and the daemon. The unbuilt descriptions
+> below are the original test plan, not current implementation status.
+> `transcrust --pick` opens the picker on an already running daemon.
+
 A test plan, not a decision. The decision it is *meant* to enable is whether
 transcrust ends up as two binaries' worth of behaviour behind one flag —
 `transcrust` and `transcrust --long` — with Granite demoted to research. That is

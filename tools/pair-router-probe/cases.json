@@ -1,0 +1,208 @@
+[
+  {
+    "id": "record-sigs-1",
+    "source": "record-2",
+    "heard": "Sigs",
+    "canonical": "Cigs",
+    "context": "by talking about some of the tasks, not just the habits, that I have in my app called Daylight that I use to both track time and keep habit counts. First, the four habits that I keep track of are job ads, which is at 0 out of 16, \u00abSigs\u00bb, or cigarettes, which is 0 out of 18, drink water, which is 0 out of 4, and monsters, which is 0 out of 6. The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, b",
+    "want": "name",
+    "name_description": "the habit named Cigs, counting cigarettes",
+    "keep_description": "ordinary prose about signs or signals",
+    "start": 278,
+    "end": 282
+  },
+  {
+    "id": "record-job-supply-1",
+    "source": "record-2",
+    "heard": "job supply",
+    "canonical": "Jobs apply",
+    "context": "he tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, \u00abjob supply\u00bb, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. At track start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA",
+    "want": "name",
+    "name_description": "the task named Jobs apply, applying for jobs",
+    "keep_description": "ordinary prose about the supply of jobs",
+    "start": 621,
+    "end": 631
+  },
+  {
+    "id": "record-terakeet-1",
+    "source": "record-2",
+    "heard": "terrakeet",
+    "canonical": "Terakeet",
+    "context": "t I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, \u00abterrakeet\u00bb 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. At track start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 2",
+    "want": "name",
+    "name_description": "the company named Terakeet, in a scheduled phone-call task",
+    "keep_description": "an unrelated word or name, not the company Terakeet",
+    "start": 633,
+    "end": 642
+  },
+  {
+    "id": "record-apptrack-1",
+    "source": "record-2",
+    "heard": "At track",
+    "canonical": "Apptrack",
+    "context": "tfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. \u00abAt track\u00bb start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I migh",
+    "want": "name",
+    "name_description": "the task named Apptrack, a project the speaker starts",
+    "keep_description": "ordinary prose about being at a track",
+    "start": 695,
+    "end": 703
+  },
+  {
+    "id": "record-orion-1",
+    "source": "record-2",
+    "heard": "orangue",
+    "canonical": "Rowan",
+    "context": "nclude Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I might say paid dominion 360 plus 10. I might also say something like \u00aborangue\u00bb laundry complete.",
+    "want": "name",
+    "name_description": "Rowan, the speaker's son, in his laundry task",
+    "keep_description": "an unrelated word or name, not the speaker's son Rowan",
+    "start": 968,
+    "end": 975
+  },
+  {
+    "id": "record-backroom-1",
+    "source": "record-2",
+    "heard": "backroom vacuum",
+    "canonical": "Back room vacuum",
+    "context": ", which is at 0 out of 16, Sigs, or cigarettes, which is 0 out of 18, drink water, which is 0 out of 4, and monsters, which is 0 out of 6. The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, \u00abbackroom vacuum\u00bb, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. A",
+    "want": "name",
+    "name_description": "the task named Back room vacuum",
+    "keep_description": "ordinary prose mentioning a vacuum rather than a named task",
+    "start": 481,
+    "end": 496
+  },
+  {
+    "id": "record-dominion-1",
+    "source": "record-2",
+    "heard": "paid dominion",
+    "canonical": "Pay Dominion",
+    "context": ", trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. At track start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, \u00abpaid dominion\u00bb 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I might say paid dominion 360 plus 10. I might also say something like orangue laundry complete.",
+    "want": "name",
+    "name_description": "the task or command Pay Dominion, paying an electricity bill",
+    "keep_description": "ordinary prose stating that a payment to Dominion was already made",
+    "start": 802,
+    "end": 815
+  },
+  {
+    "id": "record-dominion-2",
+    "source": "record-2",
+    "heard": "paid dominion",
+    "canonical": "Pay Dominion",
+    "context": "nning 8 30 a.m. At track start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I might say \u00abpaid dominion\u00bb 360 plus 10. I might also say something like orangue laundry complete.",
+    "want": "name",
+    "name_description": "the task or command Pay Dominion, paying an electricity bill",
+    "keep_description": "ordinary prose stating that a payment to Dominion was already made",
+    "start": 909,
+    "end": 922
+  },
+  {
+    "id": "dog-in-user-sentence",
+    "source": "typed",
+    "heard": "Gamble",
+    "canonical": "Gambol",
+    "context": "I love my dog \u00abGamble\u00bb and my son Rowan. My son Rowan's mother is named Nell. She and I used to go to the casino to gamble and play cards.",
+    "want": "name",
+    "name_description": "the dog named Gambol, belonging to the speaker",
+    "keep_description": "ordinary English about gambling, betting money or playing games of chance"
+  },
+  {
+    "id": "casino-in-user-sentence",
+    "source": "typed",
+    "heard": "gamble",
+    "canonical": "Gambol",
+    "context": "I love my dog Gamble and my son Rowan. My son Rowan's mother is named Nell. She and I used to go to the casino to \u00abgamble\u00bb and play cards.",
+    "want": "keep",
+    "name_description": "the dog named Gambol, belonging to the speaker",
+    "keep_description": "ordinary English about gambling, betting money or playing games of chance"
+  },
+  {
+    "id": "dog-lowercase",
+    "source": "typed",
+    "heard": "gamble",
+    "canonical": "Gambol",
+    "context": "I love my dog \u00abgamble\u00bb.",
+    "want": "name",
+    "name_description": "the dog named Gambol, belonging to the speaker",
+    "keep_description": "ordinary English about gambling, betting money or playing games of chance"
+  },
+  {
+    "id": "casino-short",
+    "source": "typed",
+    "heard": "gamble",
+    "canonical": "Gambol",
+    "context": "I like to \u00abgamble\u00bb and play poker with cards.",
+    "want": "keep",
+    "name_description": "the dog named Gambol, belonging to the speaker",
+    "keep_description": "ordinary English about gambling, betting money or playing games of chance"
+  },
+  {
+    "id": "casino-capitalized",
+    "source": "typed",
+    "heard": "Gamble",
+    "canonical": "Gambol",
+    "context": "\u00abGamble\u00bb and play cards at the casino.",
+    "want": "keep",
+    "name_description": "the dog named Gambol, belonging to the speaker",
+    "keep_description": "ordinary English about gambling, betting money or playing games of chance"
+  },
+  {
+    "id": "son-in-user-sentence",
+    "source": "typed",
+    "heard": "Rowan",
+    "canonical": "Rowan",
+    "context": "I love my dog Gamble and my son Rowan. My son \u00abRowan\u00bb's mother is named Nell. She and I used to go to the casino to gamble and play cards.",
+    "want": "name",
+    "name_description": "Rowan, the speaker's son",
+    "keep_description": "a different person named Rowan, not the speaker's son Rowan"
+  },
+  {
+    "id": "six-cards",
+    "source": "typed",
+    "heard": "six",
+    "canonical": "Cigs",
+    "context": "I dealt \u00absix\u00bb cards to each player.",
+    "want": "keep",
+    "name_description": "the habit named Cigs, counting cigarettes",
+    "keep_description": "the ordinary number six"
+  },
+  {
+    "id": "six-cigarettes",
+    "source": "typed",
+    "heard": "six",
+    "canonical": "Cigs",
+    "context": "My cigarette habit is called \u00absix\u00bb. Add two cigarettes.",
+    "want": "name",
+    "name_description": "the habit named Cigs, counting cigarettes",
+    "keep_description": "the ordinary number six"
+  },
+  {
+    "id": "job-supply-prose",
+    "source": "typed",
+    "heard": "job supply",
+    "canonical": "Jobs apply",
+    "context": "The \u00abjob supply\u00bb in this town has fallen.",
+    "want": "keep",
+    "name_description": "the task named Jobs apply, applying for jobs",
+    "keep_description": "ordinary prose about the supply of jobs"
+  },
+  {
+    "id": "track-prose",
+    "source": "typed",
+    "heard": "at track",
+    "canonical": "Apptrack",
+    "context": "I am \u00abat track\u00bb practice with my son.",
+    "want": "keep",
+    "name_description": "the task named Apptrack, a project the speaker starts",
+    "keep_description": "ordinary prose about being at a track"
+  },
+  {
+    "id": "dominion-past",
+    "source": "typed",
+    "heard": "paid Dominion",
+    "canonical": "Pay Dominion",
+    "context": "I \u00abpaid Dominion\u00bb yesterday and the balance is now zero.",
+    "want": "keep",
+    "name_description": "the task or command Pay Dominion, paying an electricity bill",
+    "keep_description": "ordinary prose stating that a payment to Dominion was already made"
+  }
+]

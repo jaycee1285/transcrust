@@ -23,12 +23,30 @@ impl Observer {
         desktop_notifications: bool,
         echo_stderr: bool,
     ) -> Result<Self, String> {
+        Self::with_log_name(
+            sample_chars,
+            desktop_notifications,
+            echo_stderr,
+            "latest.log",
+        )
+    }
+
+    pub fn dec_probe() -> Result<Self, String> {
+        Self::with_log_name(160, false, true, "dec-probe.log")
+    }
+
+    fn with_log_name(
+        sample_chars: usize,
+        desktop_notifications: bool,
+        echo_stderr: bool,
+        name: &str,
+    ) -> Result<Self, String> {
         let log_dir = std::env::current_dir()
             .map_err(|e| format!("failed to read cwd: {e}"))?
             .join("logs");
         fs::create_dir_all(&log_dir).map_err(|e| format!("failed to create log dir: {e}"))?;
 
-        let latest_path = log_dir.join("latest.log");
+        let latest_path = log_dir.join(name);
         let file = OpenOptions::new()
             .create(true)
             .truncate(true)

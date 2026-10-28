@@ -13,6 +13,7 @@ pub enum HotkeyEvent {
     /// Advance to the next mode. Fires on key-down only; the main loop
     /// declines it unless idle, exactly as the tray radio does.
     CycleMode,
+    CorrectLast,
 }
 
 fn parse_key(name: &str) -> Option<Key> {
@@ -41,15 +42,32 @@ fn parse_key(name: &str) -> Option<Key> {
         "RIGHTMETA" | "RMETA" => Some(Key::KEY_RIGHTMETA),
         "CAPSLOCK" => Some(Key::KEY_CAPSLOCK),
         // Letter keys (for modifier combos like Super+V)
-        "A" => Some(Key::KEY_A), "B" => Some(Key::KEY_B), "C" => Some(Key::KEY_C),
-        "D" => Some(Key::KEY_D), "E" => Some(Key::KEY_E), "F" => Some(Key::KEY_F),
-        "G" => Some(Key::KEY_G), "H" => Some(Key::KEY_H), "I" => Some(Key::KEY_I),
-        "J" => Some(Key::KEY_J), "K" => Some(Key::KEY_K), "L" => Some(Key::KEY_L),
-        "M" => Some(Key::KEY_M), "N" => Some(Key::KEY_N), "O" => Some(Key::KEY_O),
-        "P" => Some(Key::KEY_P), "Q" => Some(Key::KEY_Q), "R" => Some(Key::KEY_R),
-        "S" => Some(Key::KEY_S), "T" => Some(Key::KEY_T), "U" => Some(Key::KEY_U),
-        "V" => Some(Key::KEY_V), "W" => Some(Key::KEY_W), "X" => Some(Key::KEY_X),
-        "Y" => Some(Key::KEY_Y), "Z" => Some(Key::KEY_Z),
+        "A" => Some(Key::KEY_A),
+        "B" => Some(Key::KEY_B),
+        "C" => Some(Key::KEY_C),
+        "D" => Some(Key::KEY_D),
+        "E" => Some(Key::KEY_E),
+        "F" => Some(Key::KEY_F),
+        "G" => Some(Key::KEY_G),
+        "H" => Some(Key::KEY_H),
+        "I" => Some(Key::KEY_I),
+        "J" => Some(Key::KEY_J),
+        "K" => Some(Key::KEY_K),
+        "L" => Some(Key::KEY_L),
+        "M" => Some(Key::KEY_M),
+        "N" => Some(Key::KEY_N),
+        "O" => Some(Key::KEY_O),
+        "P" => Some(Key::KEY_P),
+        "Q" => Some(Key::KEY_Q),
+        "R" => Some(Key::KEY_R),
+        "S" => Some(Key::KEY_S),
+        "T" => Some(Key::KEY_T),
+        "U" => Some(Key::KEY_U),
+        "V" => Some(Key::KEY_V),
+        "W" => Some(Key::KEY_W),
+        "X" => Some(Key::KEY_X),
+        "Y" => Some(Key::KEY_Y),
+        "Z" => Some(Key::KEY_Z),
         "SPACE" => Some(Key::KEY_SPACE),
         _ => None,
     }
@@ -85,20 +103,26 @@ fn find_keyboard_device(config_device: Option<&str>) -> Result<Device, String> {
         }
     }
 
-    Err("No keyboard device found. Check input group membership or set hotkey.device in config".into())
+    Err(
+        "No keyboard device found. Check input group membership or set hotkey.device in config"
+            .into(),
+    )
 }
 
 /// Returns a sender alongside the receiver so another source — the `--long`
 /// mode SIGUSR1 handler — can inject the same events the keyboard produces,
 /// rather than duplicating the handling for them.
-pub async fn listen(config: &HotkeyConfig) -> (mpsc::Sender<HotkeyEvent>, mpsc::Receiver<HotkeyEvent>) {
+pub async fn listen(
+    config: &HotkeyConfig,
+) -> (mpsc::Sender<HotkeyEvent>, mpsc::Receiver<HotkeyEvent>) {
     let (tx, rx) = mpsc::channel(16);
 
     let (bound_modifiers, bound_key) = resolve_binding(config)
         .unwrap_or_else(|error| panic!("{error}. Use ScrollLock, F13-F20, Pause, PrtScr, etc."));
 
-    let trigger_key = parse_key(&bound_key)
-        .unwrap_or_else(|| panic!("Unknown key name: {bound_key}. Use ScrollLock, F13-F20, Pause, etc."));
+    let trigger_key = parse_key(&bound_key).unwrap_or_else(|| {
+        panic!("Unknown key name: {bound_key}. Use ScrollLock, F13-F20, Pause, etc.")
+    });
 
     let modifier_keys: Vec<Key> = bound_modifiers
         .iter()
@@ -133,17 +157,32 @@ pub async fn listen(config: &HotkeyConfig) -> (mpsc::Sender<HotkeyEvent>, mpsc::
             k
         })
         .collect();
-    // Every key whose held state has to be tracked, from either binding.
+    let correction = config.correct_chord.as_deref().map(|chord| {
+        let (mods, key) =
+            parse_chord(chord).unwrap_or_else(|| panic!("Invalid hotkey.correct_chord: {chord}"));
+        (
+            mods.iter()
+                .map(|m| parse_key(m).unwrap())
+                .collect::<Vec<_>>(),
+            parse_key(&key).unwrap(),
+        )
+    });
+    let correct_modifiers = correction
+        .as_ref()
+        .map(|(mods, _)| mods.as_slice())
+        .unwrap_or(&[]);
+    // Every key whose held state has to be tracked, from all bindings.
     let tracked: Vec<Key> = modifier_keys
         .iter()
         .chain(mode_modifier_keys.iter())
+        .chain(correct_modifiers.iter())
         .copied()
         .collect();
 
     let grab_while_held = config.grab;
 
-    let device = find_keyboard_device(config.device.as_deref())
-        .expect("Failed to find keyboard device");
+    let device =
+        find_keyboard_device(config.device.as_deref()).expect("Failed to find keyboard device");
 
     let mut stream = device
         .into_event_stream()
@@ -162,9 +201,20 @@ pub async fn listen(config: &HotkeyConfig) -> (mpsc::Sender<HotkeyEvent>, mpsc::
                 // Track modifier state
                 if tracked.contains(&key) {
                     match value {
-                        1 => { mods_held.insert(key); }
-                        0 => { mods_held.remove(&key); }
+                        1 => {
+                            mods_held.insert(key);
+                        }
+                        0 => {
+                            mods_held.remove(&key);
+                        }
                         _ => {}
+                    }
+                }
+
+                if let Some((mods, trigger)) = &correction {
+                    if key == *trigger && value == 1 && mods.iter().all(|m| mods_held.contains(m)) {
+                        let _ = tx.send(HotkeyEvent::CorrectLast).await;
+                        continue;
                     }
                 }
 
@@ -293,13 +343,39 @@ pub fn resolve_binding(config: &HotkeyConfig) -> Result<(Vec<String>, String), S
 pub fn is_silent_key(name: &str) -> bool {
     matches!(
         name.to_uppercase().as_str(),
-        "LEFTCTRL" | "LCTRL" | "RIGHTCTRL" | "RCTRL"
-            | "LEFTSHIFT" | "LSHIFT" | "RIGHTSHIFT" | "RSHIFT"
-            | "LEFTALT" | "LALT" | "RIGHTALT" | "RALT"
-            | "LEFTMETA" | "LMETA" | "SUPER" | "RIGHTMETA" | "RMETA"
-            | "PAUSE" | "SCROLLLOCK" | "PRTSCR" | "PRINT" | "PRINTSCREEN" | "SYSRQ"
-            | "MENU" | "COMPOSE"
-            | "F13" | "F14" | "F15" | "F16" | "F17" | "F18" | "F19" | "F20"
+        "LEFTCTRL"
+            | "LCTRL"
+            | "RIGHTCTRL"
+            | "RCTRL"
+            | "LEFTSHIFT"
+            | "LSHIFT"
+            | "RIGHTSHIFT"
+            | "RSHIFT"
+            | "LEFTALT"
+            | "LALT"
+            | "RIGHTALT"
+            | "RALT"
+            | "LEFTMETA"
+            | "LMETA"
+            | "SUPER"
+            | "RIGHTMETA"
+            | "RMETA"
+            | "PAUSE"
+            | "SCROLLLOCK"
+            | "PRTSCR"
+            | "PRINT"
+            | "PRINTSCREEN"
+            | "SYSRQ"
+            | "MENU"
+            | "COMPOSE"
+            | "F13"
+            | "F14"
+            | "F15"
+            | "F16"
+            | "F17"
+            | "F18"
+            | "F19"
+            | "F20"
     )
 }
 
@@ -308,11 +384,54 @@ pub fn is_silent_key(name: &str) -> bool {
 /// Exists so `--keys` can name a key it just saw. `parse_key` is a one-way
 /// match, and a probe that can only say "some key" is no better than guessing.
 const BINDABLE: &[&str] = &[
-    "LeftCtrl", "RightCtrl", "LeftShift", "RightShift", "LeftAlt", "RightAlt",
-    "LeftMeta", "RightMeta", "Pause", "ScrollLock", "PrtScr", "Menu", "CapsLock",
-    "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "Space",
-    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-    "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+    "LeftCtrl",
+    "RightCtrl",
+    "LeftShift",
+    "RightShift",
+    "LeftAlt",
+    "RightAlt",
+    "LeftMeta",
+    "RightMeta",
+    "Pause",
+    "ScrollLock",
+    "PrtScr",
+    "Menu",
+    "CapsLock",
+    "F13",
+    "F14",
+    "F15",
+    "F16",
+    "F17",
+    "F18",
+    "F19",
+    "F20",
+    "Space",
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
 ];
 
 fn name_for(key: Key) -> Option<&'static str> {
@@ -355,14 +474,19 @@ pub async fn probe_keys(device_name: Option<&str>) {
             Some(Ok(event)) => event,
             _ => break,
         };
-        let InputEventKind::Key(key) = event.kind() else { continue };
+        let InputEventKind::Key(key) = event.kind() else {
+            continue;
+        };
         let value = event.value();
         if value == 2 {
             continue; // auto-repeat: noise here, and the thing that leaks
         }
         let Some(name) = name_for(key) else {
             if value == 1 {
-                println!("  press    {:<12} — not bindable by transcrust", format!("{key:?}"));
+                println!(
+                    "  press    {:<12} — not bindable by transcrust",
+                    format!("{key:?}")
+                );
             }
             continue;
         };
@@ -373,7 +497,11 @@ pub async fn probe_keys(device_name: Option<&str>) {
         } else {
             held.retain(|h| *h != name);
         }
-        let leaks = if is_silent_key(name) { "silent" } else { "LEAKS a character" };
+        let leaks = if is_silent_key(name) {
+            "silent"
+        } else {
+            "LEAKS a character"
+        };
         let action = if value == 1 { "press  " } else { "release" };
         println!("  {action}  {name:<12} {leaks}");
         if value == 1 && held.len() > 1 {
@@ -405,7 +533,11 @@ pub fn list_devices() {
         if let Ok(device) = Device::open(&path) {
             if let Some(keys) = device.supported_keys() {
                 if keys.contains(Key::KEY_A) && keys.contains(Key::KEY_Z) {
-                    println!("  {} - {}", path.display(), device.name().unwrap_or("unknown"));
+                    println!(
+                        "  {} - {}",
+                        path.display(),
+                        device.name().unwrap_or("unknown")
+                    );
                 }
             }
         }
@@ -421,10 +553,24 @@ mod tests {
     #[test]
     fn every_silent_key_parses() {
         for name in [
-            "LEFTCTRL", "RIGHTCTRL", "LEFTSHIFT", "RIGHTSHIFT", "LEFTALT", "RIGHTALT",
-            "LEFTMETA", "RIGHTMETA", "SUPER", "PAUSE", "SCROLLLOCK", "F13", "F20",
+            "LEFTCTRL",
+            "RIGHTCTRL",
+            "LEFTSHIFT",
+            "RIGHTSHIFT",
+            "LEFTALT",
+            "RIGHTALT",
+            "LEFTMETA",
+            "RIGHTMETA",
+            "SUPER",
+            "PAUSE",
+            "SCROLLLOCK",
+            "F13",
+            "F20",
         ] {
-            assert!(parse_key(name).is_some(), "{name} is called silent but does not parse");
+            assert!(
+                parse_key(name).is_some(),
+                "{name} is called silent but does not parse"
+            );
             assert!(is_silent_key(name), "{name} should be silent");
         }
     }
@@ -455,7 +601,10 @@ mod tests {
         );
         assert_eq!(
             parse_chord("C-A-t"),
-            Some((vec!["LeftCtrl".to_string(), "LeftAlt".to_string()], "t".to_string()))
+            Some((
+                vec!["LeftCtrl".to_string(), "LeftAlt".to_string()],
+                "t".to_string()
+            ))
         );
         assert_eq!(parse_chord("Print"), Some((vec![], "Print".to_string())));
     }
@@ -464,7 +613,11 @@ mod tests {
     #[test]
     fn rejects_chords_it_cannot_bind() {
         assert_eq!(parse_chord("A-nope"), None);
-        assert_eq!(parse_chord("X-space"), None, "unknown prefix is not a modifier");
+        assert_eq!(
+            parse_chord("X-space"),
+            None,
+            "unknown prefix is not a modifier"
+        );
         assert_eq!(parse_chord(""), None);
         assert_eq!(parse_chord("A-"), None, "a dangling prefix binds nothing");
     }

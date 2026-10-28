@@ -13,6 +13,16 @@ pub struct Config {
     pub output: OutputConfig,
     #[serde(default)]
     pub observe: ObserveConfig,
+    #[serde(default)]
+    pub vocabulary: VocabularyConfig,
+}
+
+#[derive(Debug, Deserialize, Default)]
+pub struct VocabularyConfig {
+    /// Shared Markdown vocabulary. Defaults to ~/syncthing/john-vocab.md.
+    pub path: Option<PathBuf>,
+    /// Decoder vocabulary preference, 0 disables it; clamped to 0..=1.
+    pub boost: Option<f32>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -39,6 +49,9 @@ pub struct HotkeyConfig {
     /// desktop already has a full keymap and this should not claim a chord
     /// without being asked.
     pub mode_key: Option<String>,
+    /// Optional correct-last chord on the same evdev stream. A compositor
+    /// binding to --correct is preferred when the application also uses it.
+    pub correct_chord: Option<String>,
     #[serde(default)]
     pub mode_modifiers: Vec<String>,
 }
@@ -70,6 +83,7 @@ impl Default for HotkeyConfig {
             modifiers: default_modifiers(),
             device: None,
             mode_key: None,
+            correct_chord: None,
             mode_modifiers: Vec::new(),
         }
     }
@@ -163,13 +177,18 @@ pub fn load() -> Config {
             eprintln!("Config parse error: {e}, using defaults");
             toml::from_str("").unwrap()
         }),
-        Err(_) => {
-            toml::from_str("").unwrap()
-        }
+        Err(_) => toml::from_str("").unwrap(),
     };
     if let Ok(model_path) = std::env::var("TRANSCRUST_MODEL_PATH") {
         config.model.path = Some(model_path);
     }
+    crate::dictionary::configure(config.vocabulary.path.clone());
+    let boost = std::env::var("TRANSCRUST_VOCAB_BOOST")
+        .ok()
+        .and_then(|v| v.parse::<f32>().ok())
+        .or(config.vocabulary.boost)
+        .unwrap_or(1.0);
+    crate::dictionary::set_boost_strength(boost);
     config
 }
 

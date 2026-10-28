@@ -1,0 +1,503 @@
+{
+  "model": "/home/john/repos/dz/jev-options/rlcd-151m/model_fp16.onnx",
+  "model_sha256": "4db28305590c714e33c2cacb75a57ec941c72bb210e1266ba2c7d77e85ddc526",
+  "cases_file": "tools/pair-router-probe/cars.json",
+  "cases_sha256": "288a5a5445cc6d8642dee8b5411b46f159bbf7497214355903b455f33912bfde",
+  "decision_task": "referent",
+  "tokenizer_sha256": "8bb449eb0c037aae44115b65905bb339b8f3f74eb37067c19127feb3c0755723",
+  "calibrator_sha256": "af2a876993148efa0726b6ccf710fe2303897d20c0ce8c7c9036eb50f64d23de",
+  "temperature": 5.0069,
+  "onnxruntime": "1.24.4",
+  "scope": "sentence",
+  "provider": "CPUExecutionProvider",
+  "threads": 2,
+  "load_secs": 1.2679006400285289,
+  "cases": [
+    {
+      "id": "cars-lightning-name-1",
+      "source": "synthetic-cars",
+      "category": "lightning/name",
+      "heard": "lightning",
+      "canonical": "Lightning",
+      "context": "My son wants the red race car \u00ablightning\u00bb McQueen for his birthday.",
+      "want": "name",
+      "name_description": "Lightning McQueen, the racing-car character in the movie Cars",
+      "keep_description": "ordinary lightning, the electrical discharge during a storm",
+      "reason": "The sentence identifies the Cars character; restore the canonical spelling or capitalization.",
+      "choice": "name",
+      "confidence": 0.7488935576531571,
+      "probabilities": {
+        "keep": 0.05491759552870995,
+        "name": 0.7488935576531571,
+        "abstain": 0.1961888468181329
+      },
+      "logits": [
+        -5.360387325286865,
+        7.721456050872803,
+        1.0146175622940063
+      ],
+      "latency_ms": 141.5653980220668,
+      "token_count": 72,
+      "prompt": "<<LABEL>>It is ordinary lightning, the electrical discharge during a storm<<LABEL>>It is Lightning McQueen, the racing-car character in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son wants the red race car \u00ablightning\u00bb McQueen for his birthday."
+    },
+    {
+      "id": "cars-lightning-name-2",
+      "source": "synthetic-cars",
+      "category": "lightning/name",
+      "heard": "lightning",
+      "canonical": "Lightning",
+      "context": "In Cars, \u00ablightning\u00bb McQueen learns to value his friends.",
+      "want": "name",
+      "name_description": "Lightning McQueen, the racing-car character in the movie Cars",
+      "keep_description": "ordinary lightning, the electrical discharge during a storm",
+      "reason": "The sentence identifies the Cars character; restore the canonical spelling or capitalization.",
+      "choice": "name",
+      "confidence": 0.7330292535368559,
+      "probabilities": {
+        "keep": 0.06492778441392429,
+        "name": 0.7330292535368559,
+        "abstain": 0.20204296204921973
+      },
+      "logits": [
+        -4.488452911376953,
+        7.64782190322876,
+        1.1954035758972168
+      ],
+      "latency_ms": 135.5500710196793,
+      "token_count": 70,
+      "prompt": "<<LABEL>>It is ordinary lightning, the electrical discharge during a storm<<LABEL>>It is Lightning McQueen, the racing-car character in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nIn Cars, \u00ablightning\u00bb McQueen learns to value his friends."
+    },
+    {
+      "id": "cars-lightning-keep-1",
+      "source": "synthetic-cars",
+      "category": "lightning/keep",
+      "heard": "lightning",
+      "canonical": "Lightning",
+      "context": "We stopped watching Cars because \u00ablightning\u00bb struck near the house.",
+      "want": "keep",
+      "name_description": "Lightning McQueen, the racing-car character in the movie Cars",
+      "keep_description": "ordinary lightning, the electrical discharge during a storm",
+      "reason": "The sentence establishes a common-word meaning or a different person.",
+      "choice": "name",
+      "confidence": 0.529403191093162,
+      "probabilities": {
+        "keep": 0.14742729297716808,
+        "name": 0.529403191093162,
+        "abstain": 0.32316951592966997
+      },
+      "logits": [
+        -2.361609935760498,
+        4.039287090301514,
+        1.5680148601531982
+      ],
+      "latency_ms": 121.69766100123525,
+      "token_count": 69,
+      "prompt": "<<LABEL>>It is ordinary lightning, the electrical discharge during a storm<<LABEL>>It is Lightning McQueen, the racing-car character in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nWe stopped watching Cars because \u00ablightning\u00bb struck near the house."
+    },
+    {
+      "id": "cars-lightning-keep-2",
+      "source": "synthetic-cars",
+      "category": "lightning/keep",
+      "heard": "Lightning",
+      "canonical": "Lightning",
+      "context": "\u00abLightning\u00bb flashed across the sky during the storm.",
+      "want": "keep",
+      "name_description": "Lightning McQueen, the racing-car character in the movie Cars",
+      "keep_description": "ordinary lightning, the electrical discharge during a storm",
+      "reason": "The sentence establishes a common-word meaning or a different person.",
+      "choice": "keep",
+      "confidence": 0.4045521086647424,
+      "probabilities": {
+        "keep": 0.4045521086647424,
+        "name": 0.23349719965990073,
+        "abstain": 0.36195069167535693
+      },
+      "logits": [
+        1.9376529455184937,
+        -0.8141916990280151,
+        1.38052237033844
+      ],
+      "latency_ms": 119.71125198761001,
+      "token_count": 67,
+      "prompt": "<<LABEL>>It is ordinary lightning, the electrical discharge during a storm<<LABEL>>It is Lightning McQueen, the racing-car character in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n\u00abLightning\u00bb flashed across the sky during the storm."
+    },
+    {
+      "id": "cars-lightning-abstain-1",
+      "source": "synthetic-cars",
+      "category": "lightning/abstain",
+      "heard": "lightning",
+      "canonical": "Lightning",
+      "context": "Look at \u00ablightning\u00bb.",
+      "want": "abstain",
+      "name_description": "Lightning McQueen, the racing-car character in the movie Cars",
+      "keep_description": "ordinary lightning, the electrical discharge during a storm",
+      "reason": "The sentence does not identify a character or establish a common-word meaning.",
+      "choice": "name",
+      "confidence": 0.4043771027602501,
+      "probabilities": {
+        "keep": 0.21876327304554674,
+        "name": 0.4043771027602501,
+        "abstain": 0.3768596241942031
+      },
+      "logits": [
+        -1.317752480506897,
+        1.7582749128341675,
+        1.4054131507873535
+      ],
+      "latency_ms": 115.32156402245164,
+      "token_count": 61,
+      "prompt": "<<LABEL>>It is ordinary lightning, the electrical discharge during a storm<<LABEL>>It is Lightning McQueen, the racing-car character in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nLook at \u00ablightning\u00bb."
+    },
+    {
+      "id": "cars-lightning-abstain-2",
+      "source": "synthetic-cars",
+      "category": "lightning/abstain",
+      "heard": "lightning",
+      "canonical": "Lightning",
+      "context": "The note says \u00ablightning\u00bb.",
+      "want": "abstain",
+      "name_description": "Lightning McQueen, the racing-car character in the movie Cars",
+      "keep_description": "ordinary lightning, the electrical discharge during a storm",
+      "reason": "The sentence does not identify a character or establish a common-word meaning.",
+      "choice": "abstain",
+      "confidence": 0.40277037267885835,
+      "probabilities": {
+        "keep": 0.21307524848903228,
+        "name": 0.3841543788321094,
+        "abstain": 0.40277037267885835
+      },
+      "logits": [
+        -1.5231842994689941,
+        1.4278781414031982,
+        1.6648151874542236
+      ],
+      "latency_ms": 116.5349489892833,
+      "token_count": 62,
+      "prompt": "<<LABEL>>It is ordinary lightning, the electrical discharge during a storm<<LABEL>>It is Lightning McQueen, the racing-car character in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe note says \u00ablightning\u00bb."
+    },
+    {
+      "id": "cars-mater-name-1",
+      "source": "synthetic-cars",
+      "category": "mater/name",
+      "heard": "Mader",
+      "canonical": "Mater",
+      "context": "In Cars, the rusty tow truck \u00abMader\u00bb is Lightning McQueen's friend.",
+      "want": "name",
+      "name_description": "Mater, the tow-truck character and friend of Lightning McQueen in the movie Cars",
+      "keep_description": "a different person named Mader, or a mater meaning an animal or machine that mates or couples",
+      "reason": "The sentence identifies the Cars character; restore the canonical spelling or capitalization.",
+      "choice": "name",
+      "confidence": 0.6745323409075006,
+      "probabilities": {
+        "keep": 0.14541641023396867,
+        "name": 0.6745323409075006,
+        "abstain": 0.18005124885853077
+      },
+      "logits": [
+        0.26775285601615906,
+        7.9504313468933105,
+        1.3374274969100952
+      ],
+      "latency_ms": 159.48376199230552,
+      "token_count": 90,
+      "prompt": "<<LABEL>>It is a different person named Mader, or a mater meaning an animal or machine that mates or couples<<LABEL>>It is Mater, the tow-truck character and friend of Lightning McQueen in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nIn Cars, the rusty tow truck \u00abMader\u00bb is Lightning McQueen's friend."
+    },
+    {
+      "id": "cars-mater-name-2",
+      "source": "synthetic-cars",
+      "category": "mater/name",
+      "heard": "mater",
+      "canonical": "Mater",
+      "context": "My son wants a toy of the Cars tow truck named \u00abmater\u00bb.",
+      "want": "name",
+      "name_description": "Mater, the tow-truck character and friend of Lightning McQueen in the movie Cars",
+      "keep_description": "a different person named Mader, or a mater meaning an animal or machine that mates or couples",
+      "reason": "The sentence identifies the Cars character; restore the canonical spelling or capitalization.",
+      "choice": "name",
+      "confidence": 0.5195680793514507,
+      "probabilities": {
+        "keep": 0.24661815197982753,
+        "name": 0.5195680793514507,
+        "abstain": 0.2338137686687218
+      },
+      "logits": [
+        1.3038532733917236,
+        5.034778118133545,
+        1.0369040966033936
+      ],
+      "latency_ms": 149.30995501345024,
+      "token_count": 86,
+      "prompt": "<<LABEL>>It is a different person named Mader, or a mater meaning an animal or machine that mates or couples<<LABEL>>It is Mater, the tow-truck character and friend of Lightning McQueen in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son wants a toy of the Cars tow truck named \u00abmater\u00bb."
+    },
+    {
+      "id": "cars-mater-keep-1",
+      "source": "synthetic-cars",
+      "category": "mater/keep",
+      "heard": "Mader",
+      "canonical": "Mater",
+      "context": "\u00abMader\u00bb has that surname; he is not the Cars character.",
+      "want": "keep",
+      "name_description": "Mater, the tow-truck character and friend of Lightning McQueen in the movie Cars",
+      "keep_description": "a different person named Mader, or a mater meaning an animal or machine that mates or couples",
+      "reason": "The sentence establishes a common-word meaning or a different person.",
+      "choice": "keep",
+      "confidence": 0.6015550517632374,
+      "probabilities": {
+        "keep": 0.6015550517632374,
+        "name": 0.18957933471325283,
+        "abstain": 0.20886561352350982
+      },
+      "logits": [
+        6.652156829833984,
+        0.8706369996070862,
+        1.3557227849960327
+      ],
+      "latency_ms": 105.67696701036766,
+      "token_count": 86,
+      "prompt": "<<LABEL>>It is a different person named Mader, or a mater meaning an animal or machine that mates or couples<<LABEL>>It is Mater, the tow-truck character and friend of Lightning McQueen in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n\u00abMader\u00bb has that surname; he is not the Cars character."
+    },
+    {
+      "id": "cars-mater-keep-2",
+      "source": "synthetic-cars",
+      "category": "mater/keep",
+      "heard": "mater",
+      "canonical": "Mater",
+      "context": "This connector assembly robot is a \u00abmater\u00bb: it couples the two parts together.",
+      "want": "keep",
+      "name_description": "Mater, the tow-truck character and friend of Lightning McQueen in the movie Cars",
+      "keep_description": "a different person named Mader, or a mater meaning an animal or machine that mates or couples",
+      "reason": "The sentence establishes a common-word meaning or a different person.",
+      "choice": "keep",
+      "confidence": 0.3921096712073972,
+      "probabilities": {
+        "keep": 0.3921096712073972,
+        "name": 0.26175090011018215,
+        "abstain": 0.34613942868242065
+      },
+      "logits": [
+        2.1542441844940186,
+        0.13071413338184357,
+        1.5298842191696167
+      ],
+      "latency_ms": 102.38693695282564,
+      "token_count": 89,
+      "prompt": "<<LABEL>>It is a different person named Mader, or a mater meaning an animal or machine that mates or couples<<LABEL>>It is Mater, the tow-truck character and friend of Lightning McQueen in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThis connector assembly robot is a \u00abmater\u00bb: it couples the two parts together."
+    },
+    {
+      "id": "cars-mater-abstain-1",
+      "source": "synthetic-cars",
+      "category": "mater/abstain",
+      "heard": "Mader",
+      "canonical": "Mater",
+      "context": "\u00abMader\u00bb is outside.",
+      "want": "abstain",
+      "name_description": "Mater, the tow-truck character and friend of Lightning McQueen in the movie Cars",
+      "keep_description": "a different person named Mader, or a mater meaning an animal or machine that mates or couples",
+      "reason": "The sentence does not identify a character or establish a common-word meaning.",
+      "choice": "keep",
+      "confidence": 0.5337706104274067,
+      "probabilities": {
+        "keep": 0.5337706104274067,
+        "name": 0.19087931931608682,
+        "abstain": 0.2753500702565065
+      },
+      "logits": [
+        4.752694606781006,
+        -0.39602476358413696,
+        1.4385128021240234
+      ],
+      "latency_ms": 91.2125000031665,
+      "token_count": 78,
+      "prompt": "<<LABEL>>It is a different person named Mader, or a mater meaning an animal or machine that mates or couples<<LABEL>>It is Mater, the tow-truck character and friend of Lightning McQueen in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n\u00abMader\u00bb is outside."
+    },
+    {
+      "id": "cars-mater-abstain-2",
+      "source": "synthetic-cars",
+      "category": "mater/abstain",
+      "heard": "mater",
+      "canonical": "Mater",
+      "context": "I heard someone say \u00abmater\u00bb.",
+      "want": "abstain",
+      "name_description": "Mater, the tow-truck character and friend of Lightning McQueen in the movie Cars",
+      "keep_description": "a different person named Mader, or a mater meaning an animal or machine that mates or couples",
+      "reason": "The sentence does not identify a character or establish a common-word meaning.",
+      "choice": "keep",
+      "confidence": 0.4901167001604591,
+      "probabilities": {
+        "keep": 0.4901167001604591,
+        "name": 0.227401912620777,
+        "abstain": 0.28248138721876404
+      },
+      "logits": [
+        3.99756121635437,
+        0.15263986587524414,
+        1.2386047840118408
+      ],
+      "latency_ms": 93.75126101076603,
+      "token_count": 79,
+      "prompt": "<<LABEL>>It is a different person named Mader, or a mater meaning an animal or machine that mates or couples<<LABEL>>It is Mater, the tow-truck character and friend of Lightning McQueen in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI heard someone say \u00abmater\u00bb."
+    },
+    {
+      "id": "cars-flo-name-1",
+      "source": "synthetic-cars",
+      "category": "flo/name",
+      "heard": "flow",
+      "canonical": "Flo",
+      "context": "In Cars, \u00abflow\u00bb runs the V8 Cafe in Radiator Springs.",
+      "want": "name",
+      "name_description": "Flo, the character who runs the V8 Cafe in Radiator Springs in the movie Cars",
+      "keep_description": "ordinary flow, the movement of water, traffic or another substance",
+      "reason": "The sentence identifies the Cars character; restore the canonical spelling or capitalization.",
+      "choice": "name",
+      "confidence": 0.6815911278642494,
+      "probabilities": {
+        "keep": 0.13306580238799554,
+        "name": 0.6815911278642494,
+        "abstain": 0.18534306974775525
+      },
+      "logits": [
+        -0.6790639758110046,
+        7.500138759613037,
+        0.9800463318824768
+      ],
+      "latency_ms": 94.07373401336372,
+      "token_count": 79,
+      "prompt": "<<LABEL>>It is ordinary flow, the movement of water, traffic or another substance<<LABEL>>It is Flo, the character who runs the V8 Cafe in Radiator Springs in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nIn Cars, \u00abflow\u00bb runs the V8 Cafe in Radiator Springs."
+    },
+    {
+      "id": "cars-flo-name-2",
+      "source": "synthetic-cars",
+      "category": "flo/name",
+      "heard": "flow",
+      "canonical": "Flo",
+      "context": "My son wants a toy of \u00abflow\u00bb, the Cars character who runs the diner.",
+      "want": "name",
+      "name_description": "Flo, the character who runs the V8 Cafe in Radiator Springs in the movie Cars",
+      "keep_description": "ordinary flow, the movement of water, traffic or another substance",
+      "reason": "The sentence identifies the Cars character; restore the canonical spelling or capitalization.",
+      "choice": "name",
+      "confidence": 0.48492258918989406,
+      "probabilities": {
+        "keep": 0.20670573518856344,
+        "name": 0.48492258918989406,
+        "abstain": 0.30837167562154255
+      },
+      "logits": [
+        -0.6191318035125732,
+        3.650217056274414,
+        1.3836761713027954
+      ],
+      "latency_ms": 96.38200397603214,
+      "token_count": 81,
+      "prompt": "<<LABEL>>It is ordinary flow, the movement of water, traffic or another substance<<LABEL>>It is Flo, the character who runs the V8 Cafe in Radiator Springs in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son wants a toy of \u00abflow\u00bb, the Cars character who runs the diner."
+    },
+    {
+      "id": "cars-flo-keep-1",
+      "source": "synthetic-cars",
+      "category": "flo/keep",
+      "heard": "flow",
+      "canonical": "Flo",
+      "context": "The water \u00abflow\u00bb slowed when I closed the tap.",
+      "want": "keep",
+      "name_description": "Flo, the character who runs the V8 Cafe in Radiator Springs in the movie Cars",
+      "keep_description": "ordinary flow, the movement of water, traffic or another substance",
+      "reason": "The sentence establishes a common-word meaning or a different person.",
+      "choice": "abstain",
+      "confidence": 0.4756961724115026,
+      "probabilities": {
+        "keep": 0.3668163809792391,
+        "name": 0.15748744660925837,
+        "abstain": 0.4756961724115026
+      },
+      "logits": [
+        0.4470963776111603,
+        -3.78631591796875,
+        1.7484796047210693
+      ],
+      "latency_ms": 91.81868296582252,
+      "token_count": 75,
+      "prompt": "<<LABEL>>It is ordinary flow, the movement of water, traffic or another substance<<LABEL>>It is Flo, the character who runs the V8 Cafe in Radiator Springs in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe water \u00abflow\u00bb slowed when I closed the tap."
+    },
+    {
+      "id": "cars-flo-keep-2",
+      "source": "synthetic-cars",
+      "category": "flo/keep",
+      "heard": "flow",
+      "canonical": "Flo",
+      "context": "After watching Cars, we talked about traffic \u00abflow\u00bb.",
+      "want": "keep",
+      "name_description": "Flo, the character who runs the V8 Cafe in Radiator Springs in the movie Cars",
+      "keep_description": "ordinary flow, the movement of water, traffic or another substance",
+      "reason": "The sentence establishes a common-word meaning or a different person.",
+      "choice": "keep",
+      "confidence": 0.4193024147962164,
+      "probabilities": {
+        "keep": 0.4193024147962164,
+        "name": 0.1712830798034085,
+        "abstain": 0.409414505400375
+      },
+      "logits": [
+        1.6085262298583984,
+        -2.8740251064300537,
+        1.4890400171279907
+      ],
+      "latency_ms": 91.31310897646472,
+      "token_count": 74,
+      "prompt": "<<LABEL>>It is ordinary flow, the movement of water, traffic or another substance<<LABEL>>It is Flo, the character who runs the V8 Cafe in Radiator Springs in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nAfter watching Cars, we talked about traffic \u00abflow\u00bb."
+    },
+    {
+      "id": "cars-flo-abstain-1",
+      "source": "synthetic-cars",
+      "category": "flo/abstain",
+      "heard": "flow",
+      "canonical": "Flo",
+      "context": "Look at \u00abflow\u00bb.",
+      "want": "abstain",
+      "name_description": "Flo, the character who runs the V8 Cafe in Radiator Springs in the movie Cars",
+      "keep_description": "ordinary flow, the movement of water, traffic or another substance",
+      "reason": "The sentence does not identify a character or establish a common-word meaning.",
+      "choice": "keep",
+      "confidence": 0.4103612023916253,
+      "probabilities": {
+        "keep": 0.4103612023916253,
+        "name": 0.2430705556883172,
+        "abstain": 0.34656824192005753
+      },
+      "logits": [
+        2.037670850753784,
+        -0.5843725800514221,
+        1.1917150020599365
+      ],
+      "latency_ms": 82.86296698497608,
+      "token_count": 68,
+      "prompt": "<<LABEL>>It is ordinary flow, the movement of water, traffic or another substance<<LABEL>>It is Flo, the character who runs the V8 Cafe in Radiator Springs in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nLook at \u00abflow\u00bb."
+    },
+    {
+      "id": "cars-flo-abstain-2",
+      "source": "synthetic-cars",
+      "category": "flo/abstain",
+      "heard": "flow",
+      "canonical": "Flo",
+      "context": "The note only says \u00abflow\u00bb.",
+      "want": "abstain",
+      "name_description": "Flo, the character who runs the V8 Cafe in Radiator Springs in the movie Cars",
+      "keep_description": "ordinary flow, the movement of water, traffic or another substance",
+      "reason": "The sentence does not identify a character or establish a common-word meaning.",
+      "choice": "keep",
+      "confidence": 0.4120016485245267,
+      "probabilities": {
+        "keep": 0.4120016485245267,
+        "name": 0.2133329060620998,
+        "abstain": 0.3746654454133735
+      },
+      "logits": [
+        1.6886245012283325,
+        -1.6067842245101929,
+        1.212999701499939
+      ],
+      "latency_ms": 86.23811899451539,
+      "token_count": 70,
+      "prompt": "<<LABEL>>It is ordinary flow, the movement of water, traffic or another substance<<LABEL>>It is Flo, the character who runs the V8 Cafe in Radiator Springs in the movie Cars<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe note only says \u00abflow\u00bb."
+    }
+  ]
+}

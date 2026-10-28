@@ -61,7 +61,7 @@ fn index(state: AppState) -> usize {
     match state {
         AppState::Idle => 0,
         AppState::Recording => 1,
-        AppState::Transcribing => 2,
+        AppState::Transcribing | AppState::Reviewing => 2,
         AppState::Injecting => 3,
         AppState::Complete => 4,
         AppState::Error => 5,
@@ -81,18 +81,25 @@ fn distance(state: AppState, p: Point) -> f32 {
         // Capturing: a filled record dot.
         AppState::Recording => sd_circle(p, 0.55),
         // Working: an ellipsis.
-        AppState::Transcribing => sd_circle((p.0 + 0.58, p.1), 0.17)
+        AppState::Transcribing | AppState::Reviewing => sd_circle((p.0 + 0.58, p.1), 0.17)
             .min(sd_circle(p, 0.17))
             .min(sd_circle((p.0 - 0.58, p.1), 0.17)),
         // Injecting and Complete: a checkmark. This is the pair that Adwaita
         // could not draw from `emblem-ok-symbolic`.
-        AppState::Injecting | AppState::Complete => {
-            sd_segment(p, (-0.60, 0.02), (-0.18, 0.44), 0.13)
-                .min(sd_segment(p, (-0.18, 0.44), (0.60, -0.44), 0.13))
-        }
+        AppState::Injecting | AppState::Complete => sd_segment(
+            p,
+            (-0.60, 0.02),
+            (-0.18, 0.44),
+            0.13,
+        )
+        .min(sd_segment(p, (-0.18, 0.44), (0.60, -0.44), 0.13)),
         // Error: a cross.
-        AppState::Error => sd_segment(p, (-0.45, -0.45), (0.45, 0.45), 0.13)
-            .min(sd_segment(p, (-0.45, 0.45), (0.45, -0.45), 0.13)),
+        AppState::Error => sd_segment(p, (-0.45, -0.45), (0.45, 0.45), 0.13).min(sd_segment(
+            p,
+            (-0.45, 0.45),
+            (0.45, -0.45),
+            0.13,
+        )),
     }
 }
 

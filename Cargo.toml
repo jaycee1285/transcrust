@@ -13,6 +13,7 @@ wl-clipboard-rs = "0.8"
 toml = "0.8"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+sha2 = "0.10"
 dirs = "6"
 mimalloc = { version = "0.1", default-features = false }
 tokio-stream = "0.1"
@@ -28,6 +29,9 @@ rphonetic = { version = "3.0.6", default-features = false, features = ["embedded
 # Only for the offline paths (`--bench`, `--parakeet-direct <DIR> <WAV>`):
 # through the engine off the hotkey. Already in the tree as a transitive dep.
 hound = "3"
+eframe = { version = "0.33", default-features = false, features = ["default_fonts", "glow", "wayland", "x11"] }
+unicode-segmentation = "1"
+libc = "0.2"
 
 [profile.release]
 lto = "fat"

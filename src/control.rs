@@ -67,6 +67,12 @@ pub fn request_pick() -> Result<(), String> {
     signal_daemon("USR2", "pick")
 }
 
+/// SIGURG is otherwise ignored, so an old daemon will not be terminated by
+/// this new command. The daemon registers it alongside its other controls.
+pub fn request_correct() -> Result<(), String> {
+    signal_daemon("URG", "correct")
+}
+
 pub fn request_quit() -> Result<(), String> {
     signal_daemon("TERM", "quit")
 }
@@ -92,6 +98,8 @@ fn signal_daemon(signal: &str, what: &str) -> Result<(), String> {
     if status.success() {
         Ok(())
     } else {
-        Err(format!("{what} signal failed: kill exited with status {status}"))
+        Err(format!(
+            "{what} signal failed: kill exited with status {status}"
+        ))
     }
 }

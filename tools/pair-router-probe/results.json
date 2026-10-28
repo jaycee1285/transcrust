@@ -1,0 +1,488 @@
+{
+  "model": "/home/john/repos/dz/jev-options/rlcd-151m/model_fp16.onnx",
+  "model_sha256": "4db28305590c714e33c2cacb75a57ec941c72bb210e1266ba2c7d77e85ddc526",
+  "tokenizer_sha256": "8bb449eb0c037aae44115b65905bb339b8f3f74eb37067c19127feb3c0755723",
+  "calibrator_sha256": "af2a876993148efa0726b6ccf710fe2303897d20c0ce8c7c9036eb50f64d23de",
+  "temperature": 5.0069,
+  "onnxruntime": "1.24.4",
+  "provider": "CPUExecutionProvider",
+  "threads": 2,
+  "load_secs": 1.4687682120129466,
+  "cases": [
+    {
+      "id": "record-sigs-1",
+      "source": "record-2",
+      "heard": "Sigs",
+      "canonical": "Cigs",
+      "context": "by talking about some of the tasks, not just the habits, that I have in my app called Daylight that I use to both track time and keep habit counts. First, the four habits that I keep track of are job ads, which is at 0 out of 16, \u00abSigs\u00bb, or cigarettes, which is 0 out of 18, drink water, which is 0 out of 4, and monsters, which is 0 out of 6. The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, b",
+      "want": "name",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "ordinary prose about signs or signals",
+      "choice": "name",
+      "confidence": 0.6340812340546242,
+      "probabilities": {
+        "keep": 0.09000389555351669,
+        "name": 0.6340812340546242,
+        "abstain": 0.27591487039185913
+      },
+      "logits": [
+        -4.507538795471191,
+        5.267552852630615,
+        1.1013879776000977
+      ],
+      "latency_ms": 218.7622839701362,
+      "token_count": 161,
+      "prompt": "<<LABEL>>It is ordinary prose about signs or signals<<LABEL>>It is the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nby talking about some of the tasks, not just the habits, that I have in my app called Daylight that I use to both track time and keep habit counts. First, the four habits that I keep track of are job ads, which is at 0 out of 16, \u00abSigs\u00bb, or cigarettes, which is 0 out of 18, drink water, which is 0 out of 4, and monsters, which is 0 out of 6. The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, b"
+    },
+    {
+      "id": "record-job-supply-1",
+      "source": "record-2",
+      "heard": "job supply",
+      "canonical": "Jobs apply",
+      "context": "he tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, \u00abjob supply\u00bb, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. At track start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA",
+      "want": "name",
+      "name_description": "the task named Jobs apply, applying for jobs",
+      "keep_description": "ordinary prose about the supply of jobs",
+      "choice": "keep",
+      "confidence": 0.3475458699210407,
+      "probabilities": {
+        "keep": 0.3475458699210407,
+        "name": 0.34426245487406354,
+        "abstain": 0.3081916752048957
+      },
+      "logits": [
+        2.0025837421417236,
+        1.9550565481185913,
+        1.4008808135986328
+      ],
+      "latency_ms": 250.40670204907656,
+      "token_count": 169,
+      "prompt": "<<LABEL>>It is ordinary prose about the supply of jobs<<LABEL>>It is the task named Jobs apply, applying for jobs<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nhe tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, \u00abjob supply\u00bb, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. At track start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA"
+    },
+    {
+      "id": "record-terakeet-1",
+      "source": "record-2",
+      "heard": "terrakeet",
+      "canonical": "Terakeet",
+      "context": "t I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, \u00abterrakeet\u00bb 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. At track start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 2",
+      "want": "name",
+      "name_description": "the company named Terakeet, in a scheduled phone-call task",
+      "keep_description": "an unrelated word or name, not the company Terakeet",
+      "choice": "name",
+      "confidence": 0.44682134147245517,
+      "probabilities": {
+        "keep": 0.1882457463783342,
+        "name": 0.44682134147245517,
+        "abstain": 0.3649329121492107
+      },
+      "logits": [
+        -1.5463166236877441,
+        2.781700611114502,
+        1.7680772542953491
+      ],
+      "latency_ms": 266.41960500273854,
+      "token_count": 182,
+      "prompt": "<<LABEL>>It is an unrelated word or name, not the company Terakeet<<LABEL>>It is the company named Terakeet, in a scheduled phone-call task<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nt I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, \u00abterrakeet\u00bb 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. At track start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 2"
+    },
+    {
+      "id": "record-apptrack-1",
+      "source": "record-2",
+      "heard": "At track",
+      "canonical": "Apptrack",
+      "context": "tfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. \u00abAt track\u00bb start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I migh",
+      "want": "name",
+      "name_description": "the task named Apptrack, a project the speaker starts",
+      "keep_description": "ordinary prose about being at a track",
+      "choice": "keep",
+      "confidence": 0.3553630157554113,
+      "probabilities": {
+        "keep": 0.3553630157554113,
+        "name": 0.3429843158178085,
+        "abstain": 0.30165266842678007
+      },
+      "logits": [
+        2.3271119594573975,
+        2.1495916843414307,
+        1.5066633224487305
+      ],
+      "latency_ms": 268.811927002389,
+      "token_count": 174,
+      "prompt": "<<LABEL>>It is ordinary prose about being at a track<<LABEL>>It is the task named Apptrack, a project the speaker starts<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\ntfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. \u00abAt track\u00bb start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I migh"
+    },
+    {
+      "id": "record-orion-1",
+      "source": "record-2",
+      "heard": "orangue",
+      "canonical": "Rowan",
+      "context": "nclude Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I might say paid dominion 360 plus 10. I might also say something like \u00aborangue\u00bb laundry complete.",
+      "want": "name",
+      "name_description": "Rowan, the speaker's son, in his laundry task",
+      "keep_description": "an unrelated word or name, not the speaker's son Rowan",
+      "choice": "name",
+      "confidence": 0.5951959050875245,
+      "probabilities": {
+        "keep": 0.126720783502766,
+        "name": 0.5951959050875245,
+        "abstain": 0.27808331140970943
+      },
+      "logits": [
+        -2.2330710887908936,
+        5.512125015258789,
+        1.702025055885315
+      ],
+      "latency_ms": 146.74381696386263,
+      "token_count": 126,
+      "prompt": "<<LABEL>>It is an unrelated word or name, not the speaker's son Rowan<<LABEL>>It is Rowan, the speaker's son, in his laundry task<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nnclude Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I might say paid dominion 360 plus 10. I might also say something like \u00aborangue\u00bb laundry complete."
+    },
+    {
+      "id": "record-backroom-1",
+      "source": "record-2",
+      "heard": "backroom vacuum",
+      "canonical": "Back room vacuum",
+      "context": ", which is at 0 out of 16, Sigs, or cigarettes, which is 0 out of 18, drink water, which is 0 out of 4, and monsters, which is 0 out of 6. The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, \u00abbackroom vacuum\u00bb, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. A",
+      "want": "name",
+      "name_description": "the task named Back room vacuum",
+      "keep_description": "ordinary prose mentioning a vacuum rather than a named task",
+      "choice": "name",
+      "confidence": 0.5971563556147719,
+      "probabilities": {
+        "keep": 0.15030755387911027,
+        "name": 0.5971563556147719,
+        "abstain": 0.25253609050611775
+      },
+      "logits": [
+        -0.8629578351974487,
+        6.044037818908691,
+        1.7349754571914673
+      ],
+      "latency_ms": 229.27718196297064,
+      "token_count": 177,
+      "prompt": "<<LABEL>>It is ordinary prose mentioning a vacuum rather than a named task<<LABEL>>It is the task named Back room vacuum<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n, which is at 0 out of 16, Sigs, or cigarettes, which is 0 out of 18, drink water, which is 0 out of 4, and monsters, which is 0 out of 6. The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, \u00abbackroom vacuum\u00bb, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. A"
+    },
+    {
+      "id": "record-dominion-1",
+      "source": "record-2",
+      "heard": "paid dominion",
+      "canonical": "Pay Dominion",
+      "context": ", trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. At track start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, \u00abpaid dominion\u00bb 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I might say paid dominion 360 plus 10. I might also say something like orangue laundry complete.",
+      "want": "name",
+      "name_description": "the task or command Pay Dominion, paying an electricity bill",
+      "keep_description": "ordinary prose stating that a payment to Dominion was already made",
+      "choice": "name",
+      "confidence": 0.5717963493114006,
+      "probabilities": {
+        "keep": 0.17713109220562806,
+        "name": 0.5717963493114006,
+        "abstain": 0.2510725584829714
+      },
+      "logits": [
+        -0.8041965365409851,
+        5.063353538513184,
+        0.9424699544906616
+      ],
+      "latency_ms": 252.28989397874102,
+      "token_count": 169,
+      "prompt": "<<LABEL>>It is ordinary prose stating that a payment to Dominion was already made<<LABEL>>It is the task or command Pay Dominion, paying an electricity bill<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. At track start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, \u00abpaid dominion\u00bb 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I might say paid dominion 360 plus 10. I might also say something like orangue laundry complete."
+    },
+    {
+      "id": "record-dominion-2",
+      "source": "record-2",
+      "heard": "paid dominion",
+      "canonical": "Pay Dominion",
+      "context": "nning 8 30 a.m. At track start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I might say \u00abpaid dominion\u00bb 360 plus 10. I might also say something like orangue laundry complete.",
+      "want": "name",
+      "name_description": "the task or command Pay Dominion, paying an electricity bill",
+      "keep_description": "ordinary prose stating that a payment to Dominion was already made",
+      "choice": "name",
+      "confidence": 0.6133873966723501,
+      "probabilities": {
+        "keep": 0.16016068874589862,
+        "name": 0.6133873966723501,
+        "abstain": 0.22645191458175126
+      },
+      "logits": [
+        -1.089952826499939,
+        5.633408069610596,
+        0.6442120671272278
+      ],
+      "latency_ms": 180.59945601271465,
+      "token_count": 141,
+      "prompt": "<<LABEL>>It is ordinary prose stating that a payment to Dominion was already made<<LABEL>>It is the task or command Pay Dominion, paying an electricity bill<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nnning 8 30 a.m. At track start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I might say \u00abpaid dominion\u00bb 360 plus 10. I might also say something like orangue laundry complete."
+    },
+    {
+      "id": "dog-in-user-sentence",
+      "source": "typed",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "I love my dog \u00abGamble\u00bb and my son Rowan. My son Rowan's mother is named Nell. She and I used to go to the casino to gamble and play cards.",
+      "want": "name",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling, betting money or playing games of chance",
+      "choice": "name",
+      "confidence": 0.5461843387004124,
+      "probabilities": {
+        "keep": 0.25212532962959466,
+        "name": 0.5461843387004124,
+        "abstain": 0.20169033166999292
+      },
+      "logits": [
+        2.199518918991089,
+        6.070003986358643,
+        1.0820149183273315
+      ],
+      "latency_ms": 113.36261802352965,
+      "token_count": 95,
+      "prompt": "<<LABEL>>It is ordinary English about gambling, betting money or playing games of chance<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI love my dog \u00abGamble\u00bb and my son Rowan. My son Rowan's mother is named Nell. She and I used to go to the casino to gamble and play cards."
+    },
+    {
+      "id": "casino-in-user-sentence",
+      "source": "typed",
+      "heard": "gamble",
+      "canonical": "Gambol",
+      "context": "I love my dog Gamble and my son Rowan. My son Rowan's mother is named Nell. She and I used to go to the casino to \u00abgamble\u00bb and play cards.",
+      "want": "keep",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling, betting money or playing games of chance",
+      "choice": "name",
+      "confidence": 0.5341323050192838,
+      "probabilities": {
+        "keep": 0.2554722877307176,
+        "name": 0.5341323050192838,
+        "abstain": 0.21039540724999858
+      },
+      "logits": [
+        2.039548873901367,
+        5.732285976409912,
+        1.0675829648971558
+      ],
+      "latency_ms": 115.67139602266252,
+      "token_count": 95,
+      "prompt": "<<LABEL>>It is ordinary English about gambling, betting money or playing games of chance<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI love my dog Gamble and my son Rowan. My son Rowan's mother is named Nell. She and I used to go to the casino to \u00abgamble\u00bb and play cards."
+    },
+    {
+      "id": "dog-lowercase",
+      "source": "typed",
+      "heard": "gamble",
+      "canonical": "Gambol",
+      "context": "I love my dog \u00abgamble\u00bb.",
+      "want": "name",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling, betting money or playing games of chance",
+      "choice": "name",
+      "confidence": 0.5790654176057192,
+      "probabilities": {
+        "keep": 0.2264753366180043,
+        "name": 0.5790654176057192,
+        "abstain": 0.1944592457762764
+      },
+      "logits": [
+        1.6241974830627441,
+        6.3245720863342285,
+        0.8610786199569702
+      ],
+      "latency_ms": 87.17650803737342,
+      "token_count": 63,
+      "prompt": "<<LABEL>>It is ordinary English about gambling, betting money or playing games of chance<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI love my dog \u00abgamble\u00bb."
+    },
+    {
+      "id": "casino-short",
+      "source": "typed",
+      "heard": "gamble",
+      "canonical": "Gambol",
+      "context": "I like to \u00abgamble\u00bb and play poker with cards.",
+      "want": "keep",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling, betting money or playing games of chance",
+      "choice": "keep",
+      "confidence": 0.5459169900579248,
+      "probabilities": {
+        "keep": 0.5459169900579248,
+        "name": 0.16408295323993657,
+        "abstain": 0.29000005670213863
+      },
+      "logits": [
+        3.754493474960327,
+        -2.264275074005127,
+        0.5871995687484741
+      ],
+      "latency_ms": 84.86442395951599,
+      "token_count": 68,
+      "prompt": "<<LABEL>>It is ordinary English about gambling, betting money or playing games of chance<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI like to \u00abgamble\u00bb and play poker with cards."
+    },
+    {
+      "id": "casino-capitalized",
+      "source": "typed",
+      "heard": "Gamble",
+      "canonical": "Gambol",
+      "context": "\u00abGamble\u00bb and play cards at the casino.",
+      "want": "keep",
+      "name_description": "the dog named Gambol, belonging to the speaker",
+      "keep_description": "ordinary English about gambling, betting money or playing games of chance",
+      "choice": "keep",
+      "confidence": 0.5464021064205182,
+      "probabilities": {
+        "keep": 0.5464021064205182,
+        "name": 0.15848732176676322,
+        "abstain": 0.2951105718127185
+      },
+      "logits": [
+        4.017220497131348,
+        -2.179722309112549,
+        0.9329447746276855
+      ],
+      "latency_ms": 81.87153399921954,
+      "token_count": 66,
+      "prompt": "<<LABEL>>It is ordinary English about gambling, betting money or playing games of chance<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n\u00abGamble\u00bb and play cards at the casino."
+    },
+    {
+      "id": "son-in-user-sentence",
+      "source": "typed",
+      "heard": "Rowan",
+      "canonical": "Rowan",
+      "context": "I love my dog Gamble and my son Rowan. My son \u00abRowan\u00bb's mother is named Nell. She and I used to go to the casino to gamble and play cards.",
+      "want": "name",
+      "name_description": "Rowan, the speaker's son",
+      "keep_description": "a different person named Rowan, not the speaker's son Rowan",
+      "choice": "name",
+      "confidence": 0.6553005315528132,
+      "probabilities": {
+        "keep": 0.12850477077700204,
+        "name": 0.6553005315528132,
+        "abstain": 0.21619469767018482
+      },
+      "logits": [
+        -1.347107172012329,
+        6.8097734451293945,
+        1.2575490474700928
+      ],
+      "latency_ms": 113.27403300674632,
+      "token_count": 95,
+      "prompt": "<<LABEL>>It is a different person named Rowan, not the speaker's son Rowan<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI love my dog Gamble and my son Rowan. My son \u00abRowan\u00bb's mother is named Nell. She and I used to go to the casino to gamble and play cards."
+    },
+    {
+      "id": "six-cards",
+      "source": "typed",
+      "heard": "six",
+      "canonical": "Cigs",
+      "context": "I dealt \u00absix\u00bb cards to each player.",
+      "want": "keep",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "choice": "keep",
+      "confidence": 0.5736066494574119,
+      "probabilities": {
+        "keep": 0.5736066494574119,
+        "name": 0.09371487798247116,
+        "abstain": 0.332678472560117
+      },
+      "logits": [
+        4.138390064239502,
+        -4.932545185089111,
+        1.4107941389083862
+      ],
+      "latency_ms": 71.8447039835155,
+      "token_count": 55,
+      "prompt": "<<LABEL>>It is the ordinary number six<<LABEL>>It is the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI dealt \u00absix\u00bb cards to each player."
+    },
+    {
+      "id": "six-cigarettes",
+      "source": "typed",
+      "heard": "six",
+      "canonical": "Cigs",
+      "context": "My cigarette habit is called \u00absix\u00bb. Add two cigarettes.",
+      "want": "name",
+      "name_description": "the habit named Cigs, counting cigarettes",
+      "keep_description": "the ordinary number six",
+      "choice": "name",
+      "confidence": 0.5071802320200848,
+      "probabilities": {
+        "keep": 0.2969915655141261,
+        "name": 0.5071802320200848,
+        "abstain": 0.19582820246578928
+      },
+      "logits": [
+        2.9745395183563232,
+        5.654045581817627,
+        0.8893359899520874
+      ],
+      "latency_ms": 80.15359396813437,
+      "token_count": 57,
+      "prompt": "<<LABEL>>It is the ordinary number six<<LABEL>>It is the habit named Cigs, counting cigarettes<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy cigarette habit is called \u00absix\u00bb. Add two cigarettes."
+    },
+    {
+      "id": "job-supply-prose",
+      "source": "typed",
+      "heard": "job supply",
+      "canonical": "Jobs apply",
+      "context": "The \u00abjob supply\u00bb in this town has fallen.",
+      "want": "keep",
+      "name_description": "the task named Jobs apply, applying for jobs",
+      "keep_description": "ordinary prose about the supply of jobs",
+      "choice": "keep",
+      "confidence": 0.4695877145411613,
+      "probabilities": {
+        "keep": 0.4695877145411613,
+        "name": 0.23373092446128715,
+        "abstain": 0.29668136099755155
+      },
+      "logits": [
+        3.590005397796631,
+        0.09676863253116608,
+        1.2908549308776855
+      ],
+      "latency_ms": 77.13364198571071,
+      "token_count": 60,
+      "prompt": "<<LABEL>>It is ordinary prose about the supply of jobs<<LABEL>>It is the task named Jobs apply, applying for jobs<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe \u00abjob supply\u00bb in this town has fallen."
+    },
+    {
+      "id": "track-prose",
+      "source": "typed",
+      "heard": "at track",
+      "canonical": "Apptrack",
+      "context": "I am \u00abat track\u00bb practice with my son.",
+      "want": "keep",
+      "name_description": "the task named Apptrack, a project the speaker starts",
+      "keep_description": "ordinary prose about being at a track",
+      "choice": "keep",
+      "confidence": 0.48635752948445404,
+      "probabilities": {
+        "keep": 0.48635752948445404,
+        "name": 0.2517633450444276,
+        "abstain": 0.2618791254711183
+      },
+      "logits": [
+        3.8893020153045654,
+        0.5924863219261169,
+        0.789725661277771
+      ],
+      "latency_ms": 80.2979790023528,
+      "token_count": 62,
+      "prompt": "<<LABEL>>It is ordinary prose about being at a track<<LABEL>>It is the task named Apptrack, a project the speaker starts<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI am \u00abat track\u00bb practice with my son."
+    },
+    {
+      "id": "dominion-past",
+      "source": "typed",
+      "heard": "paid Dominion",
+      "canonical": "Pay Dominion",
+      "context": "I \u00abpaid Dominion\u00bb yesterday and the balance is now zero.",
+      "want": "keep",
+      "name_description": "the task or command Pay Dominion, paying an electricity bill",
+      "keep_description": "ordinary prose stating that a payment to Dominion was already made",
+      "choice": "keep",
+      "confidence": 0.46947715151845526,
+      "probabilities": {
+        "keep": 0.46947715151845526,
+        "name": 0.19734090995090925,
+        "abstain": 0.33318193853063555
+      },
+      "logits": [
+        3.136711835861206,
+        -1.2027027606964111,
+        1.4196909666061401
+      ],
+      "latency_ms": 85.56453499477357,
+      "token_count": 71,
+      "prompt": "<<LABEL>>It is ordinary prose stating that a payment to Dominion was already made<<LABEL>>It is the task or command Pay Dominion, paying an electricity bill<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI \u00abpaid Dominion\u00bb yesterday and the balance is now zero."
+    }
+  ]
+}

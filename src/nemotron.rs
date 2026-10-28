@@ -372,6 +372,7 @@ impl Nemotron {
         previous: &mut u32,
         out: &mut Vec<u32>,
         scores: &mut Vec<TokenScore>,
+        boost: &mut crate::boost::Boost,
     ) -> Result<(), String> {
         for step in 0..encodings.shape()[0] {
             let frame = encodings
@@ -382,7 +383,7 @@ impl Nemotron {
             let mut emitted = 0usize;
             while emitted < MAX_SYMBOLS_PER_FRAME {
                 let (logits, next_state) = self.joint_step(*previous, state, &frame)?;
-                let token = argmax(&logits) as u32;
+                let token = boost.select(&logits, BLANK_ID);
                 if token == BLANK_ID {
                     break;
                 }
@@ -415,10 +416,10 @@ pub struct TokenScore {
 }
 
 impl TokenScore {
-    /// Softmax over the joint's outputs, reduced to the top two. Computed
-    /// relative to the winning logit so a large value cannot overflow `exp`.
+    /// Raw probability of the selected token and strongest alternative. The
+    /// selected token may have won through weighting rather than raw argmax.
     fn from_logits(logits: &[f32], top: usize) -> Self {
-        let max = logits[top];
+        let max = logits.iter().copied().fold(f32::NEG_INFINITY, f32::max);
         let mut sum = 0.0f64;
         let mut second = f32::NEG_INFINITY;
         for (index, &value) in logits.iter().enumerate() {
@@ -428,22 +429,21 @@ impl TokenScore {
             }
         }
         Self {
-            p1: (1.0 / sum) as f32,
+            p1: (((logits[top] - max) as f64).exp() / sum) as f32,
             p2: (((second - max) as f64).exp() / sum) as f32,
         }
     }
 }
 
-fn argmax(values: &[f32]) -> usize {
-    let mut best = 0usize;
-    let mut best_value = f32::NEG_INFINITY;
-    for (index, value) in values.iter().enumerate() {
-        if *value > best_value {
-            best_value = *value;
-            best = index;
-        }
+#[cfg(test)]
+mod score_tests {
+    use super::*;
+    #[test]
+    fn boosted_choice_keeps_unboosted_probability() {
+        let score = TokenScore::from_logits(&[5.0, 4.0, 0.0], 1);
+        assert!(score.p1 > 0.26 && score.p1 < 0.28);
+        assert!(score.p2 > 0.72 && score.p2 < 0.74);
     }
-    best
 }
 
 fn extract3(
@@ -1327,6 +1327,7 @@ mod streaming_frontend_tests {
 /// here and then fed forward, never reset — which is also why `wav.rs` must not
 /// window this engine.
 pub struct StreamState {
+    boost: crate::boost::Boost,
     cache: Cache,
     decoder: DecoderState,
     previous: u32,
@@ -1343,6 +1344,7 @@ pub struct StreamState {
 impl Nemotron {
     pub fn stream_begin(&self) -> StreamState {
         StreamState {
+            boost: crate::boost::Boost::vocabulary(&self.vocab.pieces, BLANK_ID),
             cache: Cache::zeroed(&self.layout),
             decoder: (
                 Array3::zeros((2, 1, PRED_HIDDEN)),
@@ -1387,6 +1389,7 @@ impl Nemotron {
             let frames: Vec<Vec<f32>> = std::mem::take(&mut state.pending);
             self.stream_chunk(state, &frames)?;
         }
+        eprintln!("vocabulary: Nemotron weighted {} token paths; changed {} near-miss tokens", state.boost.phrases, state.boost.changes);
         Ok((self.vocab.detokenize(&state.tokens), state.chunks))
     }
 
@@ -1427,6 +1430,7 @@ impl Nemotron {
             &mut previous,
             &mut state.tokens,
             &mut state.scores,
+            &mut state.boost,
         )?;
         state.decoder = decoder;
         state.previous = previous;

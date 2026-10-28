@@ -17,6 +17,7 @@ struct TranscrustTray {
     /// Switch requests go to the main loop, which owns the service and is the
     /// only place allowed to swap it. The tray never builds a model itself.
     request_tx: mpsc::UnboundedSender<usize>,
+    correct_tx: mpsc::UnboundedSender<()>,
 }
 
 impl ksni::Tray for TranscrustTray {
@@ -39,7 +40,7 @@ impl ksni::Tray for TranscrustTray {
         match self.state {
             AppState::Idle => "media-playback-start-symbolic".into(),
             AppState::Recording => "media-record-symbolic".into(),
-            AppState::Transcribing => "content-loading-symbolic".into(),
+            AppState::Transcribing | AppState::Reviewing => "content-loading-symbolic".into(),
             AppState::Injecting => "object-select-symbolic".into(),
             AppState::Complete => "object-select-symbolic".into(),
             AppState::Error => "dialog-error-symbolic".into(),
@@ -58,6 +59,7 @@ impl ksni::Tray for TranscrustTray {
                 AppState::Idle => "Transcrust: Ready".into(),
                 AppState::Recording => "Transcrust: Recording".into(),
                 AppState::Transcribing => "Transcrust: Processing".into(),
+                AppState::Reviewing => "Transcrust: Correcting".into(),
                 AppState::Injecting => "Transcrust: Injecting".into(),
                 AppState::Complete => "Transcrust: Complete".into(),
                 AppState::Error => "Transcrust: Error".into(),
@@ -106,6 +108,15 @@ impl ksni::Tray for TranscrustTray {
         }
 
         items.push(MenuItem::Standard(StandardItem {
+            label: "Correct last dictation…".into(),
+            enabled: self.state == AppState::Idle,
+            activate: Box::new(|tray: &mut TranscrustTray| {
+                let _ = tray.correct_tx.send(());
+            }),
+            ..Default::default()
+        }));
+        items.push(MenuItem::Separator);
+        items.push(MenuItem::Standard(StandardItem {
             label: "Exit".into(),
             activate: Box::new(|_| std::process::exit(0)),
             ..Default::default()
@@ -120,6 +131,7 @@ pub async fn run_tray(
     engines: Vec<String>,
     mut active_rx: watch::Receiver<usize>,
     request_tx: mpsc::UnboundedSender<usize>,
+    correct_tx: mpsc::UnboundedSender<()>,
 ) {
     let service = ksni::TrayService::new(TranscrustTray {
         state: AppState::Idle,
@@ -127,6 +139,7 @@ pub async fn run_tray(
         engines,
         active: *active_rx.borrow(),
         request_tx,
+        correct_tx,
     });
     let handle = service.handle();
     // ksni requests `org.kde.StatusNotifierItem-<pid>-1` itself, calls
@@ -163,7 +176,6 @@ pub async fn run_tray(
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -178,6 +190,7 @@ mod tests {
             engines: engines.iter().map(|name| name.to_string()).collect(),
             active,
             request_tx,
+            correct_tx: mpsc::unbounded_channel().0,
         };
         (tray, request_rx)
     }

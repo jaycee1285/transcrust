@@ -1,5 +1,81 @@
 # Transcrust Runtime Stack
 
+Reconciled 2026-10-28 against the current source. `TASKBOARD.md` owns the ordered
+work; `Smoke-Human-transcrust.md` owns dated human observations. Sections explicitly
+marked historical describe their measurement date, not unfinished implementation.
+Linux correction UI is accepted; decision quality and Apple portability have
+separate gates. Phonon currently lives only in the mopvox Android experiment.
+
+## Opt-in contextual vocabulary (`--dec`, 2026-10-08)
+
+- `decision.rs` owns reloadable vocabulary, alias/casing candidates, immutable
+  two-sentence context, validated bounded replies, reverse UTF-8 edits and audits.
+- `d1.rs` keeps text Q8 loaded natively through the existing Rust `ort` and
+  `tokenizers` stack across utterances and ASR switches. No interpreter or child
+  process. Each occurrence is an independent padded row; all candidates run in
+  one ONNX call, matching upstream `probabilities_batch`. The local bundle is
+  manifest-verified, with no runtime network or media heads.
+- Only `--dec` disables decoder boosting and bypasses legacy vocabulary correction.
+  Shared deterministic cleanup/profile remains; long-form polish precedes Q8.
+  The adjudicator runs immediately before injection. Default behavior is unchanged.
+- Meanings/aliases live in the sole shared `~/syncthing/john-vocab.md`, reloaded
+  per utterance. Existing `[vocabulary].path` overrides it; habit/task entries
+  stay excluded. Optional `description:` / `ordinary:` accompany `heard:`.
+  No sidecar or bundled vocabulary fallback. `TRANSCRUST_DEC_MODEL` overrides
+  the model path; model lives under local-share models.
+- Startup budget 30s, per-utterance budget 15s. Failure preserves cleaned text;
+  failed models require daemon restart; ORT RunOptions terminates timed-out runs.
+- `logs/decisions.jsonl` records full raw/input/output, contexts, choices and timing.
+  Last-dictation raw/delivered fields remain distinct; wait includes adjudication.
+- `--fix TEXT --dec` exercises the same text path without injection and writes
+  `logs/dec-probe.log`. John's earlier serial-adapter live session reached
+  injection and exposed excessive per-occurrence latency. Post-port native live
+  acceptance is still open; do not erase the earlier observation or call it a
+  native-batch smoke.
+  Detailed contract and checks: `design-dec.md`.
+
+## Correct-last desktop adapter (2026-10-06)
+
+- `correction.rs` owns plain dictation data and short replacement proposals;
+  no UI, filesystem or platform APIs. Raw, delivered, corrected and the current
+  destination span are distinct so Copy/repeated replacement cannot corrupt the
+  length calculation.
+- `review.rs` owns the egui child process, JSON request/response, Keep/Drop UI
+  and latest-record persistence. The daemon owns the last dictation and refuses
+  recording/model switches while Reviewing. The child loads no model.
+- `review_theme.rs` reads GTK 4's `gtk.css` from the XDG config directory each
+  time the window opens: window/view foreground and background plus the accent
+  and its selection foreground. It resolves named aliases, hex and RGB(A)
+  definitions; missing palettes retain egui's system theme. Alpha foregrounds
+  are composited on the background before setting egui's text color.
+- The Nix shell/package supplies `TRANSCRUST_EGL_VENDOR_LIBRARY_FILENAMES`
+  pointing to Mesa from the same nixpkgs pin. `review.rs` maps this to GLVND's
+  `__EGL_VENDOR_LIBRARY_FILENAMES` only for the child. Host Mesa can require a
+  newer glibc than our binary: the resulting driver load failure surfaced as
+  glutin's misleading “provided display handle is not supported” error.
+- `--correct` uses SIGURG; tray and optional evdev correction chord send on the
+  same daemon channel. No chord is claimed by default. `--correct-chord C-A-c`
+  enables one for smoke without changing user config.
+- `inject.rs::replace_last` selects backward by grapheme count, then types the
+  corrected text. Linux requires the original editor to regain focus with its
+  caret at the end; this is a human acceptance gate, not a generic Wayland
+  text-range API. Failures retain the edit and reopen the window for recovery.
+- `dictionary.rs` keeps `heard:` records for learning, excludes habit/task
+  entries, merges kept proposals atomically and reloads on content changes.
+  Learned targets skip fuzzy post-correction; exact canonical casing remains.
+  Other original dictionary entries retain the legacy phonetic pass.
+- `boost.rs` scores canonical token paths before argmax in direct Parakeet and
+  Nemotron. Raw rank and logit-gap gates protect strong model choices. Blank
+  emissions preserve the prefix; failure links refund abandoned prefixes.
+  Nemotron's scorer belongs to `StreamState` and survives chunk boundaries.
+  No separate ONNX decode is added. `[vocabulary].boost` (0..1, default 1)
+  scales the calibration; `TRANSCRUST_VOCAB_BOOST` overrides it. A vocabulary
+  snapshot is read at each capture, so learning takes effect on the next one.
+  Other engines have no weighting yet; learned aliases never force replacement.
+  `[vocabulary].path` overrides the shared Markdown file.
+- Apple still reviews before pasting per Swiftype PRD. The crate split and
+  platform transcript parity have not been implemented by this Linux slice.
+
 ## Scope
 - Root Rust CLI app in `src/`
 - Granite Speech 5 470m TurboCTC, exported to ONNX at
@@ -19,7 +95,7 @@
 - Discovery is **family-keyed and greedy**, so new quantisations and point
   releases drop in without a code change:
   - A directory is a candidate when its name *starts with* a family word —
-    `FAMILY_KEYWORDS = ["parakeet", "granite"]`. The name only nominates;
+    `FAMILY_KEYWORDS = ["parakeet", "granite", "nemotron"]`. The name only nominates;
     `model_kind` confirms by contents and has the final say.
   - Inside a candidate, `pick_onnx` takes the best-quantised graph by
     `quant_rank`: int8 → int4 → fp32. Parakeet wants `encoder*.onnx` +
@@ -29,8 +105,9 @@
   - This fixed a latent bug: fp32 Parakeet (`encoder-model.onnx`, what
     `--download-model parakeet-tdt-0.6b` writes) was previously undetectable
     because only the int8/int4 filenames were enumerated.
-- Ordering is Parakeet, then Granite (`ModelKind::rank`), so an unpinned
-  install resolves exactly as it did before the switcher existed.
+- Ordering is Parakeet, Nemotron, then Granite (`ModelKind::rank`). Quantization
+  preference within one graph family remains int8, then int4, then unquantized;
+  an explicitly selected directory keeps its own installed variant.
 - **The tray owns activation, the main loop owns the swap.** `src/tray.rs`
   renders a `RadioGroup` of `discover_models` labels and sends the chosen index
   over an `mpsc` channel; `main.rs`'s select loop is the only place that builds
@@ -46,9 +123,10 @@
 - A switch is **refused unless the app is Idle** — swapping the service under a
   running job would strand the audio receiver its worker is draining. The user
   gets a "Busy" notification, since a silent snap-back reads as a broken menu.
-- The outgoing worker is not force-unloaded; it releases its model on its own
-  idle timeout (`observe.idle_timeout_secs`, default 60s). Expect both models
-  resident in RAM for up to that long after a switch.
+- Switching to a different model directory calls `TranscriptionService::shutdown`
+  on the outgoing service, releasing it instead of retaining both models until
+  the idle timeout. Two profiles over the same model keep the resident service.
+  An idle resident service still has its ordinary 60s unload policy.
 - The submenu is hidden when fewer than two models are installed.
 - **The job timeout belongs to the engine, not to `main`.**
   `TranscriptionService::timeout()` is per-engine rather than a global
@@ -96,8 +174,8 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
   bitmap is actually on the wire. **Rebuild with `cargo build` first** —
   `cargo test` does not refresh `target/debug/transcrust`, and a stale binary
   reports an empty `IconPixmap`.
-- TDT runtime from the crates.io `parakeet-rs` 0.3.5 crate (used as-shipped, not vendored).
-  Functionality is layered on top of the crate, not forked into it.
+- Direct Parakeet inference uses `src/parakeet_ort.rs`; crates.io `parakeet-rs`
+  0.3.5 is the fallback, consumed as shipped rather than vendored.
 - User model root at `~/.local/share/transcrust/models/` (int8 preferred, int4 supported)
 
 ## Authority
@@ -109,22 +187,24 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
 - `src/wav.rs`: `--wav` — offline files through the live seam, plus the windowing
 - `src/audio.rs`: capture, and the polyphase resampler every engine feeds through
 - `src/dictionary.rs` + `src/postprocess.rs`: post-transcription pipeline (see contract below)
-- TDT greedy decode (incl. duration-head frame-skip) lives in the `parakeet-rs` crate's
-  `model_tdt.rs`; transcrust uses it as-is — see Mutation Notes for the decode decision.
-- **The crate is why Parakeet looks like it has no confidence signal.** It runs
-  the decode internally and returns a `String`, discarding the joint's vocab
-  logits. Those logits are in `decoder_joint-model.onnx` and driving the two
-  sessions directly with `ort` — the pattern `granite.rs` and `vibevoice.rs`
-  already use — yields per-token probability, word confidence and timestamps
-  from the files already on disk. `murmure` does exactly this and does not
-  depend on the crate at all. `Parakeet-v3.md` §5 has the detail;
-  `TASKBOARD.md` Phase B is the work.
+- `src/correction.rs`: UI-independent dictation records and diff proposals.
+- `src/review.rs` + `src/review_theme.rs`: Linux review subprocess, persistence,
+  GTK palette and interaction with the daemon; not an extracted Apple adapter.
+- `src/decision.rs` + `src/d1.rs`: opt-in candidate generation and native batched
+  D1 execution. No shared library/crate/FFI boundary has been extracted yet.
+- TDT greedy decode with duration skipping is implemented in the direct driver;
+  the crate has its separate fallback decoder. The direct joint logits produce
+  token/word confidence. The crate's string boundary discards it; the model does
+  not lack it. See `Parakeet-v3.md` §5.
 
-## Observations
+## Historical startup observations
 - The original failure surface was not “bad model files”; it was an ORT/runtime mismatch.
 - `ort 2.0.0-rc.12` plus the Nix-provided runtime wedged before model open.
 - A matched `ort 2.0.0-rc.10` stack loaded `nemo128`, Whisper, and the Parakeet encoder/decoder normally.
 - The custom ORT logger callback also caused probe crashes and is intentionally not used now.
+- Those version comparisons describe an earlier mixed-runtime investigation.
+  `Cargo.lock` is the current resolved-version authority; these notes are not an
+  instruction to downgrade a working matched stack.
 
 ## The Resampler
 - `audio.rs::resample` is a **band-limited polyphase decimator** as of
@@ -156,9 +236,10 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
   capitalization (`capitalize_sentences`, last).
 - **Engine-agnostic by construction.** `TranscriptionService` (`src/transcription.rs`)
   is the only seam between the engines; every arm returns raw trimmed text and
-  none does any word, phrase, or vocabulary work of its own. There is exactly
-  one `fix_transcription` call on the live path, so all three engines get
-  identical correction, filler, punctuation, dictionary, and casing treatment.
+  all return text through the same deterministic cleanup seam. Direct Parakeet
+  and Nemotron additionally apply vocabulary preferences inside their decoders.
+  The live path chooses `fix_transcription` normally or
+  `fix_without_vocabulary` under `--dec`; it does not run both.
   Anything engine-specific belongs *before* that seam, not inside postprocess.
   The `— Long` profile (`mode::apply_profile`) is exactly that: it runs before
   the seam and hands the shared pipeline ordinary prose.
@@ -173,16 +254,18 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
   normally spaced words that the `\b`-based passes can chew. Blank is id 0
   (`<|blank|>`, flagged special); `greedy_ctc_ids` drops it explicitly *and*
   `decode` skips specials. Verified end-to-end via `--granite-smoke`.
-- Vocabulary is the phonetic dictionary and nothing else. No engine does
-  decode-time biasing: Parakeet's `vocab.txt` and the other two engines'
-  `tokenizer.json` are model vocabularies, not user vocabularies.
-  `~/.config/transcrust/dictionary.txt` is the single user-facing vocabulary
-  surface for both.
+- User vocabulary is `~/syncthing/john-vocab.md`, overridden by
+  `[vocabulary].path`. It feeds decoder boosting, learned correction proposals
+  and D1 descriptions/aliases. Habit/task entries are excluded from dictation.
+  Parakeet's `vocab.txt` and engine `tokenizer.json` files describe model token
+  inventories, not a second user dictionary. Under `--dec`, decoder boost is
+  zero and legacy vocabulary post-correction is bypassed.
 - The dictionary is the ported murmure leg: `rphonetic` with the `embedded_bm`
   feature (Beider-Morse rules compiled into the binary, no resource dir). It runs
   English-only via plain `encode()` — no language set, no French. It does a
-  whole-token phonetic swap against `~/.config/transcrust/dictionary.txt`, and is
-  a no-op when that file is absent.
+  whole-token phonetic pass over the shared vocabulary. Learned alias records
+  never force replacements and their canonical terms bypass fuzzy correction;
+  canonical casing is retained. See the correct-last section above.
 - **Harper is intentionally not in this pipeline.** `harper-core` is still a
   dependency and its known-good config survives as dead code in `postprocess.rs`,
   but it is not called. Reason: Harper is a probabilistic grammar layer that
@@ -191,9 +274,10 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
   job is exact non-standard vocabulary; a general-English re-ranker is the wrong
   shape at this stage, and murmure (the source pipeline) never put grammar here
   either. Removing Harper unblocked `tori -> Tauri`.
-- Consequence: no capitalization/punctuation grammar. Casing is left as the model
-  emitted it. If that becomes a problem, the answer is a small purpose-built
-  deterministic pass (or a toggled local post-processor), not re-adding Harper.
+- Deterministic spoken punctuation and sentence capitalization do run; Harper's
+  probabilistic grammar does not. After mode shaping and deterministic cleanup,
+  optional long-form polish runs, then optional D1 adjudication, then injection.
+  Raw, delivered and corrected text remain distinct in last-dictation state.
 
 ## Offline Files (`--wav`)
 - **`--wav` is how you test the live engine without a microphone.** It drives
@@ -278,8 +362,9 @@ Going 45s → 60s drops 52 windows to 39 and leaves WER and RTF unmoved, for
   names, products or numbers wants Parakeet and the extra five minutes.
 - These mis-hearings are precisely the case `dictionary.rs` was ported for —
   `kimmy` → `Kimi` is a textbook Beider-Morse collision. A populated
-  `~/.config/transcrust/dictionary.txt` would recover much of Granite's proper-noun
-  gap, at the cost of knowing the vocabulary in advance. Untested here.
+  user vocabulary was proposed to recover some of Granite's proper-noun gap,
+  at the cost of knowing terms in advance. That quality claim was untested in
+  this study. The current shared path is `~/syncthing/john-vocab.md`.
 - **The shared pipeline is a dictation pipeline, and `--wav` inherits that.**
   Filler removal deletes a speaker's real `you know`, and the spoken-punctuation
   pass turns a literal spoken "question mark" into `?`. Both are correct when

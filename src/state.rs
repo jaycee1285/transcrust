@@ -5,6 +5,7 @@ pub enum AppState {
     Idle,
     Recording,
     Transcribing,
+    Reviewing,
     Injecting,
     Complete,
     Error,

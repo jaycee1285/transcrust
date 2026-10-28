@@ -1,6 +1,76 @@
 # TASKBOARD
 
-> Revised 2026-09-06, replacing `TASKBOARD-command-channel.md`. Three things
+Status reconciled **2026-10-28** against source, John's smoke reports and the
+synced phone summaries. This is the only live board. Older phase rationale and
+timing tables below retain their measurement dates; they are not fresh test runs.
+
+## Current state
+
+| Surface | Built / tested | Remaining acceptance |
+|---|---|---|
+| Linux correct-last GUI | egui editor, tray/chord/`--correct`, Replace/Copy, Keep/Drop, GTK palette; John accepted the UI on 2026-10-06 | Preserve that behavior when the shared core is extracted |
+| Learned vocabulary | shared `~/syncthing/john-vocab.md`, configurable path, reload; bounded Parakeet/Nemotron boosting implemented | Boosting failed the mixed Gambol/gamble quality gate; it is not an accepted accuracy improvement |
+| Local decisions | opt-in `--dec`, native Rust D1 Q8, one padded batch per utterance, shared glossary, failure-preserves-text | Native batch integration has machine checks; a post-port live quality/latency verdict is still needed |
+| Live decision evidence | John's 2026-10-10 Parakeet/Nemotron session reached injection, applied dog-name repairs and preserved a zero-candidate take | That session used the earlier serial adapter; do not call it native-batch acceptance |
+| Mobile ASR experiment | Phonon comparison APK in `~/repos/mopvox`; Pixel 9a paired results from 2026-10-27/28 | No Phonon backend in transcrust and no D1 correction stage in mopvox |
+| Apple product | Linux adapter and correction data exist; Swiftype PRD defines the macOS/iOS contract | Shared crates/FFI, Apple parity, Mac shell/bundle and iOS integration are unbuilt |
+
+Detailed contracts: [correct-last](design-correct-last.md), [D1 decisions](design-dec.md),
+[runtime architecture](traverse/runtime-stack.md). Human observations and runnable
+smoke: [Smoke-Human-transcrust.md](Smoke-Human-transcrust.md).
+
+## Next, in order
+
+1. **Verify the native batch decision path live.** Run the existing `--dec` smoke;
+   record raw/cleaned/delivered text, candidate count and added wait. Exercise the
+   correction editor and next-utterance reload together. Gate: dog Gambol and
+   ordinary gamble/flow/bingo/chili survive in their own contexts; intentional
+   initials are not expanded. Record misses as misses; do not claim a general
+   accuracy win from the small adversarial suite. The GUI's accepted smoke does
+   not need to be repeated as if it had never happened.
+2. **Use the actual household errors for a bounded correction test.** The phone
+   summaries show Phonon's additional `meter`/`flow` errors for Mater/Flo. Use
+   those transcripts, their Cars context and the shared vocabulary; retain the
+   ordinary flow control and initial O. New aliases require reviewed learning,
+   not silent global substitutions. Gate: report repair/preservation choices,
+   total added latency and memory before considering mobile D1 integration.
+   This is a correction-stage test; it does not promote Phonon to a default ASR.
+3. **Extract the shared core/CLI/FFI boundary.** Follow `~/repos/swiftype/PRD.md`:
+   PCM/transcript/correction data independent of evdev, tray, Wayland and egui.
+   Gate: Linux behavior and regression fixtures survive the split. The PRD keeps
+   `tokenizers`/`onig` outside its minimal ASR core; explicitly settle the D1
+   boundary before pulling those dependencies into the iOS static library.
+4. **Establish Apple parity before the Mac shell.** Linux goldens from approved
+   public/recorded-for-CI fixtures, Apple Silicon CI, and the bundled ORT runtime
+   must produce the same transcripts. Record-2 audio remains local. Gate: text
+   parity; native Linux execution alone is not an Apple build check.
+5. **Build the Mac menu-bar/review shell and bundle.** Right-click menu, centered
+   editable review window, hold hotkey, focus-aware paste, stable signing and
+   permission smoke. Gate: the PRD's review-before-paste behavior and Enter/Esc
+   contract, including real-user acceptance on the target Mac.
+6. **Verify iOS integration through FFI.** Build/link against the iOS ORT framework
+   and exercise the phone's own review/input surface. Gate: device build/parity
+   and its platform acceptance sheet. Linux replace-last automation is not that
+   contract. Family-device use remains offline; APIs stay research baselines.
+
+These items precede the older corpus/command-channel backlog below. Completed
+research is [decision-experiments.md](decision-experiments.md), not another board.
+
+## Checkpoint and evidence
+
+The 2026-10-28 reconciliation checkpoints the implemented review, weighting and
+native decision paths together with their local research evidence in Git.
+Generated interpreter caches are ignored. Model weights, raw voice recordings
+and runtime logs remain outside version history; no remote push is part of this
+checkpoint. This pass changes documentation/tracking, not runtime behavior.
+
+Verification: 148 functional tests passed, two installed-model tests ignored in
+the ordinary suite; the D1 native batch/parity/cancellation test was run
+separately. The known debug-only resampler timing assertion is explicitly
+excluded, rather than presented as passing. Fresh machine checks do not replace
+the pending native live smoke or Apple platform gates.
+
+> Historical ordering rationale, 2026-09-06 (not current implementation status), replacing `TASKBOARD-command-channel.md`. Three things
 > changed my mind about my own ordering from earlier the same night:
 >
 > 1. The audio path has an unfixed defect that **confounds every measurement
@@ -26,12 +96,88 @@
 > not history-versus-live — both files held open items, which is how two updates
 > in one day each landed on only one of them and a third landed on neither.
 
-## The bet
+## Implemented correction and decision work
 
-Everything in `murmure` that transcrust never ported — confidence gating,
-bigram repair, phrase boosting — is scaffolding that reconstructs output shape
-Parakeet already emits natively. That is why it was never ported for dictation,
-and that reasoning stands.
+### Live decision dogfood — `--dec` (2026-10-08)
+
+- [x] Resident native Rust text-only Q8 model wired before injection; decoder boost
+      and legacy vocabulary replacement disabled only under `--dec`.
+      Descriptions, aliases and kept correction pairs reload from the sole shared
+      `~/syncthing/john-vocab.md` (`[vocabulary].path` override). Immutable
+      two-sentence contexts, per-occurrence bounded choices, UTF-8 edits, atomic
+      fallback and 15s utterance budget. Model installed; tested descriptions/aliases
+      merged into shared vocabulary, preserving existing entries.
+- [x] Python runtime adapter replaced with existing Rust ORT/tokenizers.
+      Native upstream batch shape submits all occurrences in one graph call.
+      Saved token/marker parity, batch/single Q8 probability parity and native
+      cancellation/recovery pass. Four-thread two-question probe: 1.15s.
+- [x] Native batch parity/overflow/cancellation checks and headless `--fix --dec`.
+      Actual shared-vocabulary two-name probe: both repaired in 1.52s total.
+      Shared-file reload/deletion regression: all eight decision tests pass.
+      Functional suite: 148 pass, two ignored (native model test passed separately);
+      pre-existing debug resampler timing
+      assertion fails under load and is excluded from the functional rerun.
+- [x] Initial live dogfood observed (2026-10-10): serial adapter, both ASR engines,
+      successful delivery; Nemotron repaired two dog-name occurrences, then a
+      single mixed dog/son case. Zero candidates cost 32 ms. Two candidates cost
+      about 2.17s, prompting the native Rust/batch replacement. See the smoke ledger.
+- [ ] Post-port native live acceptance: `nix develop -c cargo run -- --dec --smoke` after tray Exit.
+      Check actual ASR quality, wait per occurrence, correction replacement and
+      next-utterance learning. Compact starter text test still overcorrects the
+      casino verb and misses Rowan: integration works; quality remains empirical.
+      Contract, paths, failure behavior and checks: `design-dec.md`.
+
+### Correct last dictation — implemented and UI accepted (2026-10-06)
+
+Linux dogfoods the shared correction engine through an on-demand review window:
+dictate → deliver → `--correct` or tray “Correct last dictation…” → edit →
+Replace → Keep/Drop short replacement proposals. Retain raw, delivered and
+corrected text separately. Accepted `heard:` pairs use a configurable vocabulary
+path and take effect without restarting. Rewrites are edits, not vocabulary.
+
+This slice precedes corpus-first work below. It does **not** replace Swiftype's
+macOS review-before-paste contract or the Apple platform acceptance gates.
+The core/cli/ffi split and transcript parity remain prerequisites for Apple work;
+Linux's correction logic must remain independent of Wayland and the review UI.
+
+Status correction: Nemotron streaming and the fuzzel picker are implemented.
+`--pick` requests a picker from a running daemon; startup does not open it.
+Phase A's resampler and Phase B's direct driver are also implemented, despite
+older introductory prose below describing their pre-implementation state.
+
+- [x] Linux correction interface and shared diff data implemented: `--correct`,
+      optional `--correct-chord`, tray entry, egui editor, Replace/Copy and
+      Keep/Drop proposals. Configurable vocabulary path, learning records and
+      reload are wired. Latest dictation/correction retained without audio.
+- [x] Human smoke: John reports “Smoke clears” (2026-10-06), with the correction
+      flow going smoothly after the Mesa/glibc runtime fix.
+      Instructions in `Smoke-Human-transcrust.md`. Acceptance is John's use,
+      not the passing parser tests.
+
+- [ ] **Learning semantics follow-up:** kept pairs are weighted vocabulary
+      candidates, not hard substitutions. John's smoke produced “play poker
+      and Gambol with cards” through `heard: gamble`. Move E.1's bounded
+      decode-time weighting ahead of further correction-learning acceptance.
+      Gate: “I love my dog Gambol. I like to gamble and play poker with cards.”
+      Preserve both meanings and the successful Rowan/transcrust/Nell cases.
+      UI acceptance stands. Weighting is now implemented in direct Parakeet
+      and Nemotron; learned hard/fuzzy substitutions are removed. Parser/scorer
+      tests and actual model inference pass. **Human weighting smoke failed:**
+      one wrong verb became two errors (Gamble for the dog and Rowan for Rowan).
+      The original one-error result remains the baseline.
+
+- [x] **Bounded-choice research recorded.** Verdict/OpenJev, Needle 3, d1 Q8/Q4,
+      glossary/two-sentence/Cars/Bluey probes and authorized API baselines are
+      recorded in [decision-experiments.md](decision-experiments.md) and
+      `tools/pair-router-probe/`. They are evidence, not unchecked implementation
+      tasks. Native `--dec` exists; quality acceptance remains a separate gate.
+
+The original command-channel rationale deferred murmure's confidence gating,
+bigram repair and phrase boosting because Parakeet already supplied much of the
+output shape. Correction learning later exposed a separate need: bounded
+vocabulary weighting was implemented, and opt-in D1 adjudication followed. Those
+implemented paths are recorded above; the remaining command work below is still
+gated on its own measurements.
 
 It is worth pointing at **commands**, where output shape is irrelevant and the
 vocabulary is closed. And it runs on **Parakeet**, not Granite: the joint's
@@ -45,7 +191,7 @@ recorded that as a model property. It is a crate boundary. See `Parakeet-v3.md` 
 
 ## Phase A — Fix the audio path (do this first)
 
-`audio.rs::resample` is linear interpolation with **no anti-aliasing filter**,
+Before A.1, `audio.rs::resample` used linear interpolation with **no anti-aliasing filter**,
 and this machine captures at 44100 Hz. Measured response, and where each band
 folds to when decimated to 16 kHz:
 
@@ -314,9 +460,14 @@ John encountered the idea this week. Building six subtasks ahead of evidence is
 the VibeVoice mistake in a different costume: 705 lines written before the
 protocol was checked.
 
-Do not start before C.2 has enough entries to evaluate the kill criterion.
+Original scheduling gate: do not start before C.2 has evaluation material.
+John advanced E.1 on 2026-10-06 after correction smoke demonstrated that hard
+alias substitution does not meet the learning contract. Broad false-positive
+measurement still requires corpus material.
 
-- [ ] **E.1 — Port `boost_tree.rs`.** 295 lines, weighted Aho-Corasick, written
+- [ ] **E.1 — Decode-time vocabulary weighting.** Built 2026-10-06 in
+      `boost.rs`, direct Parakeet and streaming Nemotron; human weighting smoke
+      failed (Gambol/gamble acceptance above). Original design: 295 lines, weighted Aho-Corasick, written
       for *greedy* decode — it adds trie scores to non-blank logits before
       argmax, which is exactly where B.3 puts you. Take the calibrated
       constants: top-K 5 at phrase start relaxing to 20 at depth 3 (*"in greedy

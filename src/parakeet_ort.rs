@@ -373,6 +373,7 @@ impl LoadedParakeet {
         let mut previous: Option<u32> = None;
         let mut step = 0usize;
         let mut emitted_here = 0usize;
+        let mut boost = crate::boost::Boost::vocabulary(&self.vocab.pieces, blank);
 
         while step < frames {
             // The joint wants [1, 1024, 1]: one batch, 1024 channels, one frame.
@@ -387,7 +388,7 @@ impl LoadedParakeet {
                 .ok_or_else(|| "Parakeet joint logits were not contiguous".to_string())?;
             let (vocab_logits, duration_logits) = slice.split_at(self.vocab_width);
 
-            let token = argmax(vocab_logits) as u32;
+            let token = boost.select(vocab_logits, blank);
             if token != blank {
                 tokens.push(TimedToken {
                     id: token,
@@ -412,6 +413,7 @@ impl LoadedParakeet {
                 emitted_here = 0;
             }
         }
+        eprintln!("vocabulary: Parakeet weighted {} token paths; changed {} near-miss tokens", boost.phrases, boost.changes);
         Ok(tokens)
     }
 }

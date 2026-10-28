@@ -1,0 +1,10 @@
+{
+  "cpu": "13th Gen Intel(R) Core(TM) i5-1345U",
+  "logical_cpus": 12,
+  "load_average_during_run": [
+    6.17236328125,
+    5.81982421875,
+    3.78369140625
+  ],
+  "note": "Other Rust builds were active during this measurement; timings are not isolated."
+}

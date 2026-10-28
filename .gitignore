@@ -9,3 +9,7 @@
 
 # Reference clones read during design work, not part of the build.
 murmure/
+
+# Generated research interpreter caches are not experiment evidence.
+__pycache__/
+*.py[cod]

@@ -1,0 +1,14 @@
+{
+  "audio": "/home/john/syncthing/Record-2.wav",
+  "sha256": "a6336203c76cf9afd66c547d3399829af82ebca48ac4fe8bc25c79b20a47e28c",
+  "transcript_sha256": "3faa5131eafa414d4f434823d857bcc837ba5b11cb235ffbcad06fd733b26c0c",
+  "asr_command": "TRANSCRUST_VOCAB_BOOST=0 nix develop -c target/debug/transcrust --wav /tmp/transcrust-pair-probe-record-2.wav --mode parakeet",
+  "label_sources": [
+    "fixtures/record-2-2026-09-12/KEY.md",
+    "dayshade/core/src/test/kotlin/dayshade/ManglingsTest.kt",
+    "~/syncthing/dayshade/pairs.md",
+    "~/syncthing/DayLight/Tasks",
+    "John's supplied dog/son/casino example"
+  ],
+  "notes": "Selected repair-span labels, not a complete audio reference; typed controls are not recorded speech."
+}

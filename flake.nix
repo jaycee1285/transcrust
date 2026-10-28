@@ -28,14 +28,19 @@
                 || pkgs.lib.hasSuffix ".tar.xz" base);
         };
 
-        runtimeDeps = libs.transcrust;
+        # egui's native window dynamically loads EGL/OpenGL and xkbcommon.
+        guiRuntimeDeps = with pkgs; [ libGL libxkbcommon libx11 libxcursor libxi libxrandr ];
+        runtimeDeps = libs.transcrust ++ guiRuntimeDeps;
+        # The host Mesa driver can require a newer glibc than this flake's
+        # binary. Give only the review subprocess a driver from the same pin.
+        reviewEglVendor = "${pkgs.mesa}/share/glvnd/egl_vendor.d/50_mesa.json";
 
         # PATH-wrapped tools (binaries the app shells out to, not libraries)
         # llama-cpp supplies llama-server, which --long uses to run s1-mini as
         # the normalisation pass. Without it on PATH transcrust falls back to the
         # ONNX build silently and loses about 6x on token rate, so it belongs in
         # the wrapper rather than being assumed present.
-        runtimeTools = with pkgs; [ wtype dotool ydotool libnotify llama-cpp ];
+        runtimeTools = with pkgs; [ wtype dotool ydotool libnotify llama-cpp fuzzel ];
 
         unwrapped = pkgs.rustPlatform.buildRustPackage {
           pname = "transcrust-unwrapped";
@@ -61,7 +66,15 @@
           ];
           buildInputs = runtimeDeps ++ runtimeTools;
 
+          LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath runtimeDeps;
+          TRANSCRUST_EGL_VENDOR_LIBRARY_FILENAMES = reviewEglVendor;
+
           LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
+        };
+
+        # Optional offline model research only; never part of the app runtime.
+        devShells.pair-probe = pkgs.mkShell {
+          packages = [ (pkgs.python3.withPackages (p: [ p.onnxruntime p.tokenizers p.numpy ])) ];
         };
 
         packages.default = pkgs.symlinkJoin {
@@ -70,7 +83,9 @@
           nativeBuildInputs = [ pkgs.makeWrapper ];
           postBuild = ''
             wrapProgram $out/bin/transcrust \
-              --prefix PATH : "${pkgs.lib.makeBinPath runtimeTools}"
+              --prefix PATH : "${pkgs.lib.makeBinPath runtimeTools}" \
+              --set TRANSCRUST_EGL_VENDOR_LIBRARY_FILENAMES "${reviewEglVendor}" \
+              --prefix LD_LIBRARY_PATH : "${pkgs.lib.makeLibraryPath runtimeDeps}"
           '';
         };
       });

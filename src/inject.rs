@@ -99,3 +99,38 @@ async fn type_with_dotool(text: &str) -> Result<(), String> {
         Err(format!("dotool exited with status {status}"))
     }
 }
+
+pub fn copy_correction(text: &str) -> Result<(), String> {
+    copy_to_clipboard(text)
+}
+
+/// Linux contract: the review has closed, the editor regains focus, and its
+/// caret is immediately after `original`. Selecting first avoids deleting the
+/// span before the replacement is available. Never silently retry selection:
+/// a partially executed key sequence is not safe to repeat.
+pub async fn replace_last(original: &str, corrected: &str) -> Result<(), String> {
+    use unicode_segmentation::UnicodeSegmentation;
+    let count = original.graphemes(true).count();
+    if count == 0 || count > 20_000 {
+        return Err("Replacement span is empty or too large; use Copy".into());
+    }
+    // Put the recovery text on the clipboard before attempting replacement.
+    copy_to_clipboard(corrected)?;
+    let mut command = tokio::process::Command::new("wtype");
+    command.args(["-M", "shift"]);
+    for _ in 0..count {
+        command.args(["-k", "Left"]);
+    }
+    command.args(["-m", "shift", "--", corrected]);
+    let status = command
+        .status()
+        .await
+        .map_err(|e| format!("Could not replace with wtype: {e}"))?;
+    if status.success() {
+        Ok(())
+    } else {
+        Err(format!(
+            "Replacement failed ({status}); use the corrected clipboard text"
+        ))
+    }
+}

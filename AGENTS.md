@@ -17,11 +17,12 @@ are deliberate.
 | `design-dictation-as-control.md` | the unbuilt half: dictation as a command channel |
 | `design-long-form-routes.md` | the four long-form dictation routes, their acceptance gates, and the fuzzel picker |
 
-## State as of 2026-09-06
+## State reconciled 2026-10-28
 
-Two engines: **Parakeet TDT 0.6B v3** (default, int4) and **Granite Speech 5
-470m TurboCTC** (int8). Three *modes* — modes are `(model, profile)` pairs, so
-`Granite — Long` is the same directory with a repair profile.
+Three engine families: **Parakeet TDT** (default, int4; Ultra supported),
+**Granite Speech 5 470m TurboCTC** (int8), and **Nemotron Speech Streaming EN**
+(int4, toggle capture). Modes carry model, profile and capture policy.
+`Granite — Long` uses the same directory with a repair profile.
 
 VibeVoice was evaluated and removed the same night. Postmortem, with weights
 inventory and timing tables, at **`~/syncthing/vibevoice-asr-15/`** — outside
@@ -34,8 +35,23 @@ Recently built and worth knowing about:
 - `observe.corpus = true` — banks every dictation as WAV + JSON under
   `~/.local/share/transcrust/corpus/`. That directory has its own README.
 - `src/parakeet_ort.rs` — Parakeet driven directly through `ort`, recovering the
-  per-token confidence `parakeet-rs` discards. **Built, tested, and not yet
-  wired into the live path.** Resolving that is Phase B.
+  per-token confidence `parakeet-rs` discards. **Wired into the live path**,
+  with a crate fallback if the direct graph set is absent or broken.
+- `--pick` opens fuzzel on a running daemon; startup does not open the picker.
+- Correct last dictation: `--correct`, optional `--correct-chord C-A-c`, and a
+  tray entry open an egui editor. Replace/Copy and Keep/Drop vocabulary proposals
+  are wired; **the GUI and GTK palette passed John's 2026-10-06 smoke**.
+  Learned vocabulary accuracy is a separate, still-open gate. See `design-correct-last.md` and
+  `Smoke-Human-transcrust.md`. Apple's review-before-paste contract remains in
+  `~/repos/swiftype/PRD.md`; the crate split and parity gates are still pending.
+- `--dec` is implemented in native Rust (`src/decision.rs`, `src/d1.rs`), using
+  resident D1 Q8 and one padded batch for all candidate occurrences. No runtime
+  Python. John's earlier serial-adapter live test is recorded; native post-port
+  live acceptance remains open. Both decision descriptions and learned aliases
+  belong in `~/syncthing/john-vocab.md` (or `[vocabulary].path`).
+- Phonon is a **mopvox Android trial**, not a transcrust engine. Phone findings
+  and remaining correction/Apple work are summarized at the top of `TASKBOARD.md`.
+  Its current-state table and ordered next steps outrank historical phase prose.
 
 ## Three facts that are easy to get wrong
 
@@ -47,9 +63,9 @@ Recently built and worth knowing about:
    twice — the VibeVoice encoder returned the traced frame count for any input,
    and Granite's pad-to-512 is a hard constraint despite a dynamic declaration.
    Verify shapes by running the graph, not by reading its metadata.
-3. **The audio path is suspect and unfixed.** `audio.rs` resamples 44100 → 16000
-   by linear interpolation with no anti-aliasing filter. It confounds any
-   accuracy measurement taken before Phase A.
+3. **The resampler was fixed, not proven to improve accuracy.** `audio.rs` uses
+   a band-limited polyphase decimator. A.2 did not demonstrate an accuracy win
+   on codec-limited speech; real microphone replay remains open.
 
 ## House style
 

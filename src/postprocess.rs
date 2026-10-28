@@ -329,6 +329,15 @@ fn capitalize_sentences(text: &str) -> String {
 /// purpose-built pass rather than a 20 MB linter. [`apply_harper`] is kept for
 /// reference only.
 pub fn fix_transcription(text: &str) -> String {
+    fix_inner(text, true)
+}
+
+/// The contextual decision pass owns vocabulary replacement in --dec mode.
+pub fn fix_without_vocabulary(text: &str) -> String {
+    fix_inner(text, false)
+}
+
+fn fix_inner(text: &str, vocabulary: bool) -> String {
     if text.is_empty() {
         return String::new();
     }
@@ -337,7 +346,11 @@ pub fn fix_transcription(text: &str) -> String {
     let text = clean_repetitions(&text);
     let text = remove_fillers(&text);
     let text = replace_spoken_punctuation(&text);
-    let text = crate::dictionary::correct(&text);
+    let text = if vocabulary {
+        crate::dictionary::correct(&text)
+    } else {
+        text
+    };
     capitalize_sentences(&text)
 }
 

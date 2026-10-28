@@ -125,3 +125,19 @@ idle_timeout_secs = 60
 # its own README, and every accuracy gate in design-long-form-routes.md
 # reads from it.
 # corpus = true
+# Correct last dictation: preferably bind a compositor chord to
+# `transcrust --correct`. For a daemon-side binding on the evdev device,
+# add correct_chord = "C-A-c" under [hotkey], or launch with
+# `transcrust --smoke --correct-chord C-A-c`. No correction chord is claimed
+# by default; the tray entry always works.
+
+[vocabulary]
+# Shared with mopvox/dayshade. Re-read on each dictation; kept corrections apply
+# immediately. Use an absolute path (a TOML string does not expand ~).
+# path = "/home/john/syncthing/john-vocab.md"
+
+# Decode-time vocabulary preference for direct Parakeet and Nemotron.
+# 1.0 uses the calibrated near-miss boost; lower it if prose gets biased.
+# 0.0 disables weighting. TRANSCRUST_VOCAB_BOOST overrides this for an A/B run.
+# Learned heard: pairs are records, not global replacement rules.
+# boost = 1.0
