@@ -10,7 +10,7 @@ timing tables below retain their measurement dates; they are not fresh test runs
 |---|---|---|
 | Linux correct-last GUI | egui editor, tray/chord/`--correct`, Replace/Copy, Keep/Drop, GTK palette; John accepted the UI on 2026-10-06 | Preserve that behavior when the shared core is extracted |
 | Learned vocabulary | shared `~/syncthing/john-vocab.md`, configurable path, reload; bounded Parakeet/Nemotron boosting implemented | Boosting failed the mixed Gambol/gamble quality gate; it is not an accepted accuracy improvement |
-| Local decisions | opt-in `--dec`, native Rust D1 Q8, one padded batch per utterance; John reports very good corrections on 2026-10-29 | Delay is tolerable but slower than desired; detailed preservation and correction/reload gates remain open |
+| Local decisions | opt-in `--dec`, native Rust D1 Q8, one padded batch per utterance; John accepts the desktop test as-is for now on 2026-10-29 | Preserve Q8 quality; mobile latency/RAM still require device measurement, not desktop acceptance |
 | Live decision evidence | John's 2026-10-10 Parakeet/Nemotron session reached injection, applied dog-name repairs and preserved a zero-candidate take | That session used the earlier serial adapter; do not call it native-batch acceptance |
 | Mobile ASR experiment | Phonon comparison APK in `~/repos/mopvox`; Pixel 9a paired results from 2026-10-27/28 | No Phonon backend in transcrust and no D1 correction stage in mopvox |
 | Apple product | Linux adapter and correction data exist; Swiftype PRD defines the macOS/iOS contract | Shared crates/FFI, Apple parity, Mac shell/bundle and iOS integration are unbuilt |
@@ -21,38 +21,27 @@ smoke: [Smoke-Human-transcrust.md](Smoke-Human-transcrust.md).
 
 ## Next, in order
 
-1. **Complete the remaining native decision acceptance checks.** John's
-   2026-10-29 feedback is positive: corrections are really good, latency is close
-   but slower than desired. Keep Q8 and its prompt unchanged while assessing
-   performance; an offline Q4 comparison already exists, not a live Q4 verdict.
-   For the remaining explicit cases, run the existing `--dec` smoke;
-   record raw/cleaned/delivered text, candidate count and added wait. Exercise the
-   correction editor and next-utterance reload together. Gate: dog Gambol and
-   ordinary gamble/flow/bingo/chili survive in their own contexts; intentional
-   initials are not expanded. Record misses as misses; do not claim a general
-   accuracy win from the small adversarial suite. The GUI's accepted smoke does
-   not need to be repeated as if it had never happened.
-2. **Use the actual household errors for a bounded correction test.** The phone
+1. **Use the actual household errors for a bounded correction test.** The phone
    summaries show Phonon's additional `meter`/`flow` errors for Mater/Flo. Use
    those transcripts, their Cars context and the shared vocabulary; retain the
    ordinary flow control and initial O. New aliases require reviewed learning,
    not silent global substitutions. Gate: report repair/preservation choices,
    total added latency and memory before considering mobile D1 integration.
    This is a correction-stage test; it does not promote Phonon to a default ASR.
-3. **Extract the shared core/CLI/FFI boundary.** Follow `~/repos/swiftype/PRD.md`:
+2. **Extract the shared core/CLI/FFI boundary.** Follow `~/repos/swiftype/PRD.md`:
    PCM/transcript/correction data independent of evdev, tray, Wayland and egui.
    Gate: Linux behavior and regression fixtures survive the split. The PRD keeps
    `tokenizers`/`onig` outside its minimal ASR core; explicitly settle the D1
    boundary before pulling those dependencies into the iOS static library.
-4. **Establish Apple parity before the Mac shell.** Linux goldens from approved
+3. **Establish Apple parity before the Mac shell.** Linux goldens from approved
    public/recorded-for-CI fixtures, Apple Silicon CI, and the bundled ORT runtime
    must produce the same transcripts. Record-2 audio remains local. Gate: text
    parity; native Linux execution alone is not an Apple build check.
-5. **Build the Mac menu-bar/review shell and bundle.** Right-click menu, centered
+4. **Build the Mac menu-bar/review shell and bundle.** Right-click menu, centered
    editable review window, hold hotkey, focus-aware paste, stable signing and
    permission smoke. Gate: the PRD's review-before-paste behavior and Enter/Esc
    contract, including real-user acceptance on the target Mac.
-6. **Verify iOS integration through FFI.** Build/link against the iOS ORT framework
+5. **Verify iOS integration through FFI.** Build/link against the iOS ORT framework
    and exercise the phone's own review/input surface. Gate: device build/parity
    and its platform acceptance sheet. Linux replace-last automation is not that
    contract. Family-device use remains offline; APIs stay research baselines.
@@ -128,12 +117,13 @@ the pending native live smoke or Apple platform gates.
 - [x] Native live dogfood feedback (2026-10-29): John reports “the corrections
       are really good” and delay “not too bad”, although slower than desired.
       Q8 quality should be preserved; this is not a request to change quantization.
-- [ ] Remaining explicit preservation and correction/reload checks:
-      `nix develop -c cargo run -- --dec --smoke` after tray Exit.
-      Check actual ASR quality, wait per occurrence, correction replacement and
-      next-utterance learning. Compact starter text test still overcorrects the
-      casino verb and misses Rowan: integration works; quality remains empirical.
-      Contract, paths, failure behavior and checks: `design-dec.md`.
+- [x] Desktop native Q8 test accepted as-is for now (2026-10-29). Further smoke
+      repetitions are not a prerequisite for the next slice. This does not
+      certify every synthetic preservation case or mobile latency. Keep the
+      model/prompt baseline unchanged; retain known misses as regression material.
+- [ ] Mobile decision readiness: measure added wait, memory and first-use cost
+      on the actual device before family-app acceptance. Desktop tolerance is
+      not a mobile performance budget. Contract and checks: `design-dec.md`.
 
 ### Correct last dictation — implemented and UI accepted (2026-10-06)
 

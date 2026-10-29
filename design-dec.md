@@ -1,9 +1,10 @@
 # Live contextual vocabulary dogfood — `--dec`
 
 Status updated 2026-10-29: native implementation and machine checks exist;
-John reports really good live corrections and tolerable but slower-than-desired
-latency. Preserve Q8 quality; explicit preservation/reload checks and latency
-improvement remain open. See `Smoke-Human-transcrust.md` for the ledger
+John accepts the desktop native Q8 test as-is for now, with really good
+corrections and tolerable but slower-than-desired latency. Preserve that baseline;
+mobile latency/RAM must be measured separately. This is not blanket certification
+of the synthetic suite. See `Smoke-Human-transcrust.md` for the ledger
 and `TASKBOARD.md` for the next steps; research history is `decision-experiments.md`.
 The Linux experiment leaves the Apple review-before-paste contract unchanged.
 

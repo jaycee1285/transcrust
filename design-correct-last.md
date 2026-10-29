@@ -3,8 +3,8 @@
 Status reconciled 2026-10-28: Linux GUI and GTK palette accepted by John on
 2026-10-06. Vocabulary weighting failed its subsequent quality gate. Native
 opt-in D1 adjudication is implemented separately in `design-dec.md`; its
-native live feedback is positive; latency and explicit integration checks remain
-open. The shared crate/FFI extraction and
+native desktop Q8 test is accepted as-is for now (2026-10-29); mobile latency/RAM
+remain open. The shared crate/FFI extraction and
 Apple shells are not built. Current order and gates: `TASKBOARD.md`.
 
 Linux's keyboard-first dogfooding route for Swiftype's shared correction engine.

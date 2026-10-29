@@ -11,6 +11,7 @@
 | 2026-10-10 native port | Batch/single/saved-Q8 parity and ORT cancellation/recovery passed; native two-name text probe took 1.52s | Machine evidence; no recorded post-port live acceptance yet |
 | 2026-10-27/28 Android | Phonon/Parakeet comparison summaries in `~/syncthing/mopvox/phonon-trial/results/` | Separate ASR experiment, no phone D1 correction inference yet |
 | 2026-10-29 native live feedback | John: corrections “really good”, delay “not too bad” but slower than desired; “really close” | Positive native dogfood evidence; preserve Q8 quality. Detailed preservation/reload checks and latency work remain open |
+| 2026-10-29 acceptance | John: “We can accept the test as is for now”; mobile delay remains a concern | Desktop native Q8 accepted for current dogfood. Mobile readiness is a separate future gate; no further desktop smoke repetition is required now |
 
 The live desktop evidence remains in ignored `logs/latest.log` and
 `logs/decisions.jsonl`; the observations above survive log rotation. Log timestamps
@@ -18,7 +19,7 @@ and the old startup message identify the serial implementation. Do not credit
 native batching with tests run before that port. No new live GUI smoke was run
 during this documentation reconciliation.
 
-## Contextual decisions — positive native feedback; remaining checks pending
+## Contextual decisions — desktop native Q8 accepted for now; mobile latency open
 
 Stop the old daemon through tray Exit, then:
 

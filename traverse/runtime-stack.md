@@ -30,8 +30,8 @@ separate gates. Phonon currently lives only in the mopvox Android experiment.
 - `--fix TEXT --dec` exercises the same text path without injection and writes
   `logs/dec-probe.log`. John's earlier serial-adapter live session reached
   injection and exposed excessive per-occurrence latency. On 2026-10-29 John
-  reports really good native live corrections with tolerable but noticeable
-  delay. Detailed preservation/reload gates remain open. The earlier serial
+  accepts native desktop Q8 as-is for now, with really good corrections and
+  tolerable but noticeable delay. Mobile latency/RAM remain unverified. The earlier serial
   observation and the later native feedback are separate evidence.
   Detailed contract and checks: `design-dec.md`.
 
