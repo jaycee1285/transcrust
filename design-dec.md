@@ -1,8 +1,9 @@
 # Live contextual vocabulary dogfood — `--dec`
 
-Status reconciled 2026-10-28: native implementation and machine checks exist;
-initial serial-adapter live testing is recorded. Post-port native live quality
-and latency acceptance remain open. See `Smoke-Human-transcrust.md` for the ledger
+Status updated 2026-10-29: native implementation and machine checks exist;
+John reports really good live corrections and tolerable but slower-than-desired
+latency. Preserve Q8 quality; explicit preservation/reload checks and latency
+improvement remain open. See `Smoke-Human-transcrust.md` for the ledger
 and `TASKBOARD.md` for the next steps; research history is `decision-experiments.md`.
 The Linux experiment leaves the Apple review-before-paste contract unchanged.
 

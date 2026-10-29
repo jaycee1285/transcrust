@@ -46,8 +46,8 @@ Recently built and worth knowing about:
   `~/repos/swiftype/PRD.md`; the crate split and parity gates are still pending.
 - `--dec` is implemented in native Rust (`src/decision.rs`, `src/d1.rs`), using
   resident D1 Q8 and one padded batch for all candidate occurrences. No runtime
-  Python. John's earlier serial-adapter live test is recorded; native post-port
-  live acceptance remains open. Both decision descriptions and learned aliases
+  Python. Native live feedback on 2026-10-29 is positive on correction quality;
+  latency and explicit preservation/reload gates remain open. Both descriptions and learned aliases
   belong in `~/syncthing/john-vocab.md` (or `[vocabulary].path`).
 - Phonon is a **mopvox Android trial**, not a transcrust engine. Phone findings
   and remaining correction/Apple work are summarized at the top of `TASKBOARD.md`.

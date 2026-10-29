@@ -10,7 +10,7 @@ timing tables below retain their measurement dates; they are not fresh test runs
 |---|---|---|
 | Linux correct-last GUI | egui editor, tray/chord/`--correct`, Replace/Copy, Keep/Drop, GTK palette; John accepted the UI on 2026-10-06 | Preserve that behavior when the shared core is extracted |
 | Learned vocabulary | shared `~/syncthing/john-vocab.md`, configurable path, reload; bounded Parakeet/Nemotron boosting implemented | Boosting failed the mixed Gambol/gamble quality gate; it is not an accepted accuracy improvement |
-| Local decisions | opt-in `--dec`, native Rust D1 Q8, one padded batch per utterance, shared glossary, failure-preserves-text | Native batch integration has machine checks; a post-port live quality/latency verdict is still needed |
+| Local decisions | opt-in `--dec`, native Rust D1 Q8, one padded batch per utterance; John reports very good corrections on 2026-10-29 | Delay is tolerable but slower than desired; detailed preservation and correction/reload gates remain open |
 | Live decision evidence | John's 2026-10-10 Parakeet/Nemotron session reached injection, applied dog-name repairs and preserved a zero-candidate take | That session used the earlier serial adapter; do not call it native-batch acceptance |
 | Mobile ASR experiment | Phonon comparison APK in `~/repos/mopvox`; Pixel 9a paired results from 2026-10-27/28 | No Phonon backend in transcrust and no D1 correction stage in mopvox |
 | Apple product | Linux adapter and correction data exist; Swiftype PRD defines the macOS/iOS contract | Shared crates/FFI, Apple parity, Mac shell/bundle and iOS integration are unbuilt |
@@ -21,7 +21,11 @@ smoke: [Smoke-Human-transcrust.md](Smoke-Human-transcrust.md).
 
 ## Next, in order
 
-1. **Verify the native batch decision path live.** Run the existing `--dec` smoke;
+1. **Complete the remaining native decision acceptance checks.** John's
+   2026-10-29 feedback is positive: corrections are really good, latency is close
+   but slower than desired. Keep Q8 and its prompt unchanged while assessing
+   performance; an offline Q4 comparison already exists, not a live Q4 verdict.
+   For the remaining explicit cases, run the existing `--dec` smoke;
    record raw/cleaned/delivered text, candidate count and added wait. Exercise the
    correction editor and next-utterance reload together. Gate: dog Gambol and
    ordinary gamble/flow/bingo/chili survive in their own contexts; intentional
@@ -121,7 +125,11 @@ the pending native live smoke or Apple platform gates.
       successful delivery; Nemotron repaired two dog-name occurrences, then a
       single mixed dog/son case. Zero candidates cost 32 ms. Two candidates cost
       about 2.17s, prompting the native Rust/batch replacement. See the smoke ledger.
-- [ ] Post-port native live acceptance: `nix develop -c cargo run -- --dec --smoke` after tray Exit.
+- [x] Native live dogfood feedback (2026-10-29): John reports “the corrections
+      are really good” and delay “not too bad”, although slower than desired.
+      Q8 quality should be preserved; this is not a request to change quantization.
+- [ ] Remaining explicit preservation and correction/reload checks:
+      `nix develop -c cargo run -- --dec --smoke` after tray Exit.
       Check actual ASR quality, wait per occurrence, correction replacement and
       next-utterance learning. Compact starter text test still overcorrects the
       casino verb and misses Rowan: integration works; quality remains empirical.

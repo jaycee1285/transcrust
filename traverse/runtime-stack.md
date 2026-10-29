@@ -29,9 +29,10 @@ separate gates. Phonon currently lives only in the mopvox Android experiment.
   Last-dictation raw/delivered fields remain distinct; wait includes adjudication.
 - `--fix TEXT --dec` exercises the same text path without injection and writes
   `logs/dec-probe.log`. John's earlier serial-adapter live session reached
-  injection and exposed excessive per-occurrence latency. Post-port native live
-  acceptance is still open; do not erase the earlier observation or call it a
-  native-batch smoke.
+  injection and exposed excessive per-occurrence latency. On 2026-10-29 John
+  reports really good native live corrections with tolerable but noticeable
+  delay. Detailed preservation/reload gates remain open. The earlier serial
+  observation and the later native feedback are separate evidence.
   Detailed contract and checks: `design-dec.md`.
 
 ## Correct-last desktop adapter (2026-10-06)
