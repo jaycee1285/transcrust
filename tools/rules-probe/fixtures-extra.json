@@ -1,0 +1,122 @@
+[
+  {
+    "id": "x-infl-gambled",
+    "arm": "single",
+    "source": "synthetic",
+    "want": "keep",
+    "candidate": {
+      "canonical": "Gambol"
+    },
+    "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nHe «gambled» away his allowance."
+  },
+  {
+    "id": "x-infl-gambling",
+    "arm": "single",
+    "source": "synthetic",
+    "want": "keep",
+    "candidate": {
+      "canonical": "Gambol"
+    },
+    "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nWe were «gambling» on the weather."
+  },
+  {
+    "id": "x-infl-flowing",
+    "arm": "single",
+    "source": "synthetic",
+    "want": "keep",
+    "candidate": {
+      "canonical": "Flo"
+    },
+    "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nThe water kept «flowing» over the rocks."
+  },
+  {
+    "id": "x-infl-flows",
+    "arm": "single",
+    "source": "synthetic",
+    "want": "keep",
+    "candidate": {
+      "canonical": "Flo"
+    },
+    "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nThe river «flows» past the house."
+  },
+  {
+    "id": "x-anim-chili-laughed",
+    "arm": "single",
+    "source": "synthetic",
+    "want": "name",
+    "candidate": {
+      "canonical": "Chili"
+    },
+    "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\n«Chili» laughed at the joke."
+  },
+  {
+    "id": "x-anim-lightning-smiled",
+    "arm": "single",
+    "source": "synthetic",
+    "want": "name",
+    "candidate": {
+      "canonical": "Lightning McQueen"
+    },
+    "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\n«Lightning» smiled and waved."
+  },
+  {
+    "id": "x-anim-flow-said",
+    "arm": "single",
+    "source": "synthetic",
+    "want": "name",
+    "candidate": {
+      "canonical": "Flo"
+    },
+    "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nThen «flow» said hello to everyone."
+  },
+  {
+    "id": "x-anim-gamble-barked",
+    "arm": "single",
+    "source": "synthetic",
+    "want": "name",
+    "candidate": {
+      "canonical": "Gambol"
+    },
+    "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\n«Gamble» barked at the door."
+  },
+  {
+    "id": "x-ctrl-lightning-struck",
+    "arm": "single",
+    "source": "synthetic",
+    "want": "keep",
+    "candidate": {
+      "canonical": "Lightning McQueen"
+    },
+    "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nThe «lightning» struck the old tree."
+  },
+  {
+    "id": "x-ctrl-played-bingo",
+    "arm": "single",
+    "source": "synthetic",
+    "want": "keep",
+    "candidate": {
+      "canonical": "Bingo"
+    },
+    "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nWe played «bingo» at school."
+  },
+  {
+    "id": "x-ctrl-ate-chili",
+    "arm": "single",
+    "source": "synthetic",
+    "want": "keep",
+    "candidate": {
+      "canonical": "Chili"
+    },
+    "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nI ate «chili» for dinner."
+  },
+  {
+    "id": "x-ctrl-go-with-flow",
+    "arm": "single",
+    "source": "synthetic",
+    "want": "keep",
+    "candidate": {
+      "canonical": "Flo"
+    },
+    "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nJust go with the «flow» today."
+  }
+]

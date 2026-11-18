@@ -8,10 +8,10 @@ Each scenario judges one marked occurrence, with the target sentence alone and t
 | dog-context-name | two | name | name | 0.642 | I was thinking about gamble. She is my dog, and I was planning her next walk. | I was thinking about Gambol. She is my dog, and I was planning her next walk. |
 | dog-context-keep | single | abstain | keep | 0.000 | I was thinking about gamble. | I was thinking about gamble. |
 | dog-context-keep | two | keep | keep | 0.000 | I was thinking about gamble. I meant betting money at the casino. | I was thinking about gamble. I meant betting money at the casino. |
-| son-context-name | single | abstain | keep | 0.193 | I spoke to Rowan. | I spoke to Rowan. |
-| son-context-name | two | name | keep | 0.105 | He is my son, and I was reminding him about his lunchbox. I spoke to Rowan. | He is my son, and I was reminding him about his lunchbox. I spoke to Rowan. |
-| son-context-keep | single | abstain | keep | 0.193 | I spoke to Rowan. | I spoke to Rowan. |
-| son-context-keep | two | keep | keep | 0.083 | She is my colleague, and her name really is spelled Rowan. I spoke to Rowan. | She is my colleague, and her name really is spelled Rowan. I spoke to Rowan. |
+| son-context-name | single | abstain | keep | 0.193 | I spoke to Rowen. | I spoke to Rowen. |
+| son-context-name | two | name | keep | 0.105 | He is my son, and I was reminding him about his lunchbox. I spoke to Rowen. | He is my son, and I was reminding him about his lunchbox. I spoke to Rowen. |
+| son-context-keep | single | abstain | keep | 0.193 | I spoke to Rowen. | I spoke to Rowen. |
+| son-context-keep | two | keep | keep | 0.083 | She is my colleague, and her name really is spelled Rowen. I spoke to Rowen. | She is my colleague, and her name really is spelled Rowen. I spoke to Rowen. |
 | mother-context-name | single | abstain | keep | 0.008 | I heard Knell. | I heard Knell. |
 | mother-context-name | two | name | name | 0.819 | I heard Knell. She is my son Rowan's mother, and she was calling him home. | I heard Nell. She is my son Rowan's mother, and she was calling him home. |
 | mother-context-keep | single | abstain | keep | 0.008 | I heard Knell. | I heard Knell. |
@@ -38,8 +38,8 @@ Each scenario judges one marked occurrence, with the target sentence alone and t
 | flo-context-keep | two | keep | keep | 0.058 | He drew arrows showing how water moves down a river. My son drew flow. | He drew arrows showing how water moves down a river. My son drew flow. |
 | dog-neighbor-name | single | keep | keep | 0.000 | I like to Gamble and play poker with cards. | I like to Gamble and play poker with cards. |
 | dog-neighbor-name | two | keep | keep | 0.039 | I like to Gamble and play poker with cards. I love my dog Gambol. | I like to Gamble and play poker with cards. I love my dog Gambol. |
-| son-neighbor-name | single | keep | keep | 0.077 | My colleague Rowan is presenting the report. | My colleague Rowan is presenting the report. |
-| son-neighbor-name | two | keep | name | 0.739 | My son Rowan is at school. My colleague Rowan is presenting the report. | My son Rowan is at school. My colleague Rowan is presenting the report. |
+| son-neighbor-name | single | keep | keep | 0.077 | My colleague Rowen is presenting the report. | My colleague Rowen is presenting the report. |
+| son-neighbor-name | two | keep | name | 0.739 | My son Rowan is at school. My colleague Rowen is presenting the report. | My son Rowan is at school. My colleague Rowan is presenting the report. |
 | mother-neighbor-name | single | keep | keep | 0.001 | A Knell is the sound of a bell marking a death. | A Knell is the sound of a bell marking a death. |
 | mother-neighbor-name | two | keep | keep | 0.027 | A Knell is the sound of a bell marking a death. Nell is picking up my son. | A Knell is the sound of a bell marking a death. Nell is picking up my son. |
 | project-neighbor-name | single | keep | keep | 0.030 | The label uses trans crust to describe movement through a crust. | The label uses trans crust to describe movement through a crust. |
@@ -56,7 +56,7 @@ Each scenario judges one marked occurrence, with the target sentence alone and t
 | initial-before | two | keep | name | 0.684 | His full name is Rowan. My son O needs his lunchbox; use only his initial here. | His full name is Rowan. My son Rowan needs his lunchbox; use only his initial here. |
 | initial-after | single | keep | keep | 0.012 | Please refer to my son as O in this message. | Please refer to my son as O in this message. |
 | initial-after | two | keep | keep | 0.192 | Please refer to my son as O in this message. Rowan is his full name, which I keep private online. | Please refer to my son as O in this message. Rowan is his full name, which I keep private online. |
-| quoted-orian | single | keep | keep | 0.153 | Copy the label exactly as written: Rowan. | Copy the label exactly as written: Rowan. |
-| quoted-orian | two | keep | name | 0.760 | It belongs to my son Rowan. Copy the label exactly as written: Rowan. | It belongs to my son Rowan. Copy the label exactly as written: Rowan. |
+| quoted-rowen | single | keep | keep | 0.153 | Copy the label exactly as written: Rowen. | Copy the label exactly as written: Rowen. |
+| quoted-rowen | two | keep | name | 0.760 | It belongs to my son Rowan. Copy the label exactly as written: Rowen. | It belongs to my son Rowan. Copy the label exactly as written: Rowan. |
 | quoted-flow | single | keep | keep | 0.281 | Keep the quoted word exactly as written: flow. | Keep the quoted word exactly as written: flow. |
 | quoted-flow | two | keep | name | 0.917 | Keep the quoted word exactly as written: flow. My son was describing Flo from Cars. | Keep the quoted word exactly as written: Flo. My son was describing Flo from Cars. |

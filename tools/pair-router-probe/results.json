@@ -110,7 +110,7 @@
       "prompt": "<<LABEL>>It is ordinary prose about being at a track<<LABEL>>It is the task named Apptrack, a project the speaker starts<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\ntfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. \u00abAt track\u00bb start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I migh"
     },
     {
-      "id": "record-orion-1",
+      "id": "record-rowan-1",
       "source": "record-2",
       "heard": "orangue",
       "canonical": "Rowan",
@@ -214,7 +214,7 @@
       "source": "typed",
       "heard": "Gamble",
       "canonical": "Gambol",
-      "context": "I love my dog \u00abGamble\u00bb and my son Rowan. My son Rowan's mother is named Nell. She and I used to go to the casino to gamble and play cards.",
+      "context": "I love my dog \u00abGamble\u00bb and my son Rowan. My son Rowen's mother is named Nell. She and I used to go to the casino to gamble and play cards.",
       "want": "name",
       "name_description": "the dog named Gambol, belonging to the speaker",
       "keep_description": "ordinary English about gambling, betting money or playing games of chance",
@@ -232,14 +232,14 @@
       ],
       "latency_ms": 113.36261802352965,
       "token_count": 95,
-      "prompt": "<<LABEL>>It is ordinary English about gambling, betting money or playing games of chance<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI love my dog \u00abGamble\u00bb and my son Rowan. My son Rowan's mother is named Nell. She and I used to go to the casino to gamble and play cards."
+      "prompt": "<<LABEL>>It is ordinary English about gambling, betting money or playing games of chance<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI love my dog \u00abGamble\u00bb and my son Rowan. My son Rowen's mother is named Nell. She and I used to go to the casino to gamble and play cards."
     },
     {
       "id": "casino-in-user-sentence",
       "source": "typed",
       "heard": "gamble",
       "canonical": "Gambol",
-      "context": "I love my dog Gamble and my son Rowan. My son Rowan's mother is named Nell. She and I used to go to the casino to \u00abgamble\u00bb and play cards.",
+      "context": "I love my dog Gamble and my son Rowan. My son Rowen's mother is named Nell. She and I used to go to the casino to \u00abgamble\u00bb and play cards.",
       "want": "keep",
       "name_description": "the dog named Gambol, belonging to the speaker",
       "keep_description": "ordinary English about gambling, betting money or playing games of chance",
@@ -257,7 +257,7 @@
       ],
       "latency_ms": 115.67139602266252,
       "token_count": 95,
-      "prompt": "<<LABEL>>It is ordinary English about gambling, betting money or playing games of chance<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI love my dog Gamble and my son Rowan. My son Rowan's mother is named Nell. She and I used to go to the casino to \u00abgamble\u00bb and play cards."
+      "prompt": "<<LABEL>>It is ordinary English about gambling, betting money or playing games of chance<<LABEL>>It is the dog named Gambol, belonging to the speaker<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI love my dog Gamble and my son Rowan. My son Rowen's mother is named Nell. She and I used to go to the casino to \u00abgamble\u00bb and play cards."
     },
     {
       "id": "dog-lowercase",
@@ -337,12 +337,12 @@
     {
       "id": "son-in-user-sentence",
       "source": "typed",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "I love my dog Gamble and my son Rowan. My son \u00abRowan\u00bb's mother is named Nell. She and I used to go to the casino to gamble and play cards.",
+      "context": "I love my dog Gamble and my son Rowan. My son \u00abRowen\u00bb's mother is named Nell. She and I used to go to the casino to gamble and play cards.",
       "want": "name",
       "name_description": "Rowan, the speaker's son",
-      "keep_description": "a different person named Rowan, not the speaker's son Rowan",
+      "keep_description": "a different person named Rowen, not the speaker's son Rowan",
       "choice": "name",
       "confidence": 0.6553005315528132,
       "probabilities": {
@@ -357,7 +357,7 @@
       ],
       "latency_ms": 113.27403300674632,
       "token_count": 95,
-      "prompt": "<<LABEL>>It is a different person named Rowan, not the speaker's son Rowan<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI love my dog Gamble and my son Rowan. My son \u00abRowan\u00bb's mother is named Nell. She and I used to go to the casino to gamble and play cards."
+      "prompt": "<<LABEL>>It is a different person named Rowen, not the speaker's son Rowan<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nI love my dog Gamble and my son Rowan. My son \u00abRowen\u00bb's mother is named Nell. She and I used to go to the casino to gamble and play cards."
     },
     {
       "id": "six-cards",

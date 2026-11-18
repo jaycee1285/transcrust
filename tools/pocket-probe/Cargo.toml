@@ -1,0 +1,21 @@
+[package]
+name = "pocket-probe"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# Standalone: not part of the transcrust workspace; nothing in the app depends on it.
+[workspace]
+
+[dependencies]
+candle-core = "0.9.2"
+serde_json = "1"
+tokenizers = { version = "0.22", default-features = false, features = ["onig"] }
+
+[profile.release]
+opt-level = 3
+debug = false
+
+[[bin]]
+name = "pocket-probe"
+path = "main.rs"

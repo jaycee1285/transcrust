@@ -42,8 +42,8 @@ This is a small diagnostic, not a trained or calibrated production benchmark. Co
 |---|---|---|---|---|
 | dog-context-name | I was thinking about «gamble». / abstain | She is my dog, and I was planning her next walk. / name | keep (0.000) → name (0.642) | keep (0.000) → keep (0.208) |
 | dog-context-keep | I was thinking about «gamble». / abstain | I meant betting money at the casino. / keep | keep (0.000) → keep (0.000) | keep (0.000) → keep (0.000) |
-| son-context-name | I spoke to «Rowan». / abstain | He is my son, and I was reminding him about his lunchbox. / name | keep (0.193) → keep (0.105) | keep (0.341) → keep (0.392) |
-| son-context-keep | I spoke to «Rowan». / abstain | She is my colleague, and her name really is spelled Rowan. / keep | keep (0.193) → keep (0.083) | keep (0.341) → keep (0.024) |
+| son-context-name | I spoke to «Rowen». / abstain | He is my son, and I was reminding him about his lunchbox. / name | keep (0.193) → keep (0.105) | keep (0.341) → keep (0.392) |
+| son-context-keep | I spoke to «Rowen». / abstain | She is my colleague, and her name really is spelled Rowen. / keep | keep (0.193) → keep (0.083) | keep (0.341) → keep (0.024) |
 | mother-context-name | I heard «Knell». / abstain | She is my son Rowan's mother, and she was calling him home. / name | keep (0.008) → name (0.819) | keep (0.024) → name (0.734) |
 | mother-context-keep | I heard «Knell». / abstain | It was the sound of the funeral bell. / keep | keep (0.008) → keep (0.002) | keep (0.024) → keep (0.004) |
 | project-context-name | I was discussing «trans crust». / abstain | It is the Linux push-to-talk dictation app I use. / name | keep (0.001) → name (0.974) | keep (0.001) → name (0.964) |
@@ -57,7 +57,7 @@ This is a small diagnostic, not a trained or calibrated production benchmark. Co
 | flo-context-name | My son drew «flow». / abstain | She was serving the other Cars characters at the V8 Cafe. / name | keep (0.027) → name (0.964) | keep (0.078) → name (0.914) |
 | flo-context-keep | My son drew «flow». / abstain | He drew arrows showing how water moves down a river. / keep | keep (0.027) → keep (0.058) | keep (0.078) → keep (0.247) |
 | dog-neighbor-name | I like to «Gamble» and play poker with cards. / keep | I love my dog Gambol. / keep | keep (0.000) → keep (0.039) | keep (0.000) → keep (0.031) |
-| son-neighbor-name | My colleague «Rowan» is presenting the report. / keep | My son Rowan is at school. / keep | keep (0.077) → name (0.739) | keep (0.203) → name (0.733) |
+| son-neighbor-name | My colleague «Rowen» is presenting the report. / keep | My son Rowan is at school. / keep | keep (0.077) → name (0.739) | keep (0.203) → name (0.733) |
 | mother-neighbor-name | A «Knell» is the sound of a bell marking a death. / keep | Nell is picking up my son. / keep | keep (0.001) → keep (0.027) | keep (0.006) → keep (0.013) |
 | project-neighbor-name | The label uses «trans crust» to describe movement through a crust. / keep | I closed the transcrust dictation app. / keep | keep (0.030) → name (0.813) | keep (0.040) → name (0.811) |
 | habit-neighbor-name | I smoked «six» cigarettes today. / keep | I track them in my Cigs habit. / keep | keep (0.386) → name (0.964) | keep (0.440) → name (0.923) |
@@ -66,7 +66,7 @@ This is a small diagnostic, not a trained or calibrated production benchmark. Co
 | flo-neighbor-name | The river has a strong «flow» after the rain. / keep | My son was talking about Flo from Cars. / keep | keep (0.047) → name (0.819) | keep (0.237) → name (0.874) |
 | initial-before | My son «O» needs his lunchbox; use only his initial here. / keep | His full name is Rowan. / keep | keep (0.060) → name (0.684) | keep (0.173) → name (0.525) |
 | initial-after | Please refer to my son as «O» in this message. / keep | Rowan is his full name, which I keep private online. / keep | keep (0.012) → keep (0.192) | keep (0.093) → keep (0.491) |
-| quoted-orian | Copy the label exactly as written: «Rowan». / keep | It belongs to my son Rowan. / keep | keep (0.153) → name (0.760) | keep (0.272) → name (0.873) |
+| quoted-rowen | Copy the label exactly as written: «Rowen». / keep | It belongs to my son Rowan. / keep | keep (0.153) → name (0.760) | keep (0.272) → name (0.873) |
 | quoted-flow | Keep the quoted word exactly as written: «flow». / keep | My son was describing Flo from Cars. / keep | keep (0.281) → name (0.917) | keep (0.322) → name (0.816) |
 
 Parenthesized probabilities are P(name), not P(chosen). [Q4 full inputs/outputs](two-sentence-q4/report.md) · [Q8 full inputs/outputs](two-sentence-q8/report.md)

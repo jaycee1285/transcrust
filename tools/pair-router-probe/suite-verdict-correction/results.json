@@ -341,9 +341,9 @@
       "id": "son-name-1",
       "source": "synthetic",
       "category": "son/name",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "My son \u00abRowan\u00bb forgot his lunchbox.",
+      "context": "My son \u00abRowen\u00bb forgot his lunchbox.",
       "want": "name",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -362,15 +362,15 @@
       ],
       "latency_ms": 177.7385930181481,
       "token_count": 151,
-      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nMy son \u00abRowan\u00bb forgot his lunchbox."
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nMy son \u00abRowen\u00bb forgot his lunchbox."
     },
     {
       "id": "son-name-2",
       "source": "synthetic",
       "category": "son/name",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "Please pack my son \u00abRowan\u00bb's school bag.",
+      "context": "Please pack my son \u00abRowen\u00bb's school bag.",
       "want": "name",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -389,15 +389,15 @@
       ],
       "latency_ms": 187.3599499813281,
       "token_count": 153,
-      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nPlease pack my son \u00abRowan\u00bb's school bag."
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nPlease pack my son \u00abRowen\u00bb's school bag."
     },
     {
       "id": "son-name-3",
       "source": "synthetic",
       "category": "son/name",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "Nell and I co-parent our son \u00abRowan\u00bb.",
+      "context": "Nell and I co-parent our son \u00abRowen\u00bb.",
       "want": "name",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -416,15 +416,15 @@
       ],
       "latency_ms": 181.7335599916987,
       "token_count": 153,
-      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nNell and I co-parent our son \u00abRowan\u00bb."
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nNell and I co-parent our son \u00abRowen\u00bb."
     },
     {
       "id": "son-name-4",
       "source": "synthetic",
       "category": "son/name",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "My son's name is \u00abRowan\u00bb.",
+      "context": "My son's name is \u00abRowen\u00bb.",
       "want": "name",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -443,7 +443,7 @@
       ],
       "latency_ms": 182.3729689931497,
       "token_count": 149,
-      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nMy son's name is \u00abRowan\u00bb."
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nMy son's name is \u00abRowen\u00bb."
     },
     {
       "id": "son-keep-1",
@@ -503,9 +503,9 @@
       "id": "son-keep-3",
       "source": "synthetic",
       "category": "son/keep",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "My colleague \u00abRowan\u00bb is a different person from my son Rowan.",
+      "context": "My colleague \u00abRowen\u00bb is a different person from my son Rowan.",
       "want": "keep",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -524,15 +524,15 @@
       ],
       "latency_ms": 182.52913997275755,
       "token_count": 156,
-      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nMy colleague \u00abRowan\u00bb is a different person from my son Rowan."
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nMy colleague \u00abRowen\u00bb is a different person from my son Rowan."
     },
     {
       "id": "son-keep-4",
       "source": "synthetic",
       "category": "son/keep",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "The author spells her name \u00abRowan\u00bb, without an o at the end.",
+      "context": "The author spells her name \u00abRowen\u00bb, without an o at the end.",
       "want": "keep",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -551,15 +551,15 @@
       ],
       "latency_ms": 182.75185098173097,
       "token_count": 156,
-      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nThe author spells her name \u00abRowan\u00bb, without an o at the end."
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nThe author spells her name \u00abRowen\u00bb, without an o at the end."
     },
     {
       "id": "son-abstain-1",
       "source": "synthetic",
       "category": "son/abstain",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "\u00abRowan\u00bb.",
+      "context": "\u00abRowen\u00bb.",
       "want": "abstain",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -578,15 +578,15 @@
       ],
       "latency_ms": 172.41541302064434,
       "token_count": 144,
-      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\n\u00abRowan\u00bb."
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\n\u00abRowen\u00bb."
     },
     {
       "id": "son-abstain-2",
       "source": "synthetic",
       "category": "son/abstain",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "Ask \u00abRowan\u00bb about it.",
+      "context": "Ask \u00abRowen\u00bb about it.",
       "want": "abstain",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -605,15 +605,15 @@
       ],
       "latency_ms": 173.9257510052994,
       "token_count": 148,
-      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nAsk \u00abRowan\u00bb about it."
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nAsk \u00abRowen\u00bb about it."
     },
     {
       "id": "son-abstain-3",
       "source": "synthetic",
       "category": "son/abstain",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "Someone called \u00abRowan\u00bb left a message.",
+      "context": "Someone called \u00abRowen\u00bb left a message.",
       "want": "abstain",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -632,15 +632,15 @@
       ],
       "latency_ms": 191.19707797653973,
       "token_count": 150,
-      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nSomeone called \u00abRowan\u00bb left a message."
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nSomeone called \u00abRowen\u00bb left a message."
     },
     {
       "id": "son-abstain-4",
       "source": "synthetic",
       "category": "son/abstain",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "The label says \u00abRowan\u00bb.",
+      "context": "The label says \u00abRowen\u00bb.",
       "want": "abstain",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -659,7 +659,7 @@
       ],
       "latency_ms": 172.03031602548435,
       "token_count": 147,
-      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nThe label says \u00abRowan\u00bb."
+      "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nThe label says \u00abRowen\u00bb."
     },
     {
       "id": "mother-name-1",

@@ -136,7 +136,7 @@ its wait display now includes processing through the decision stage.
 An optional no-microphone/no-injection path uses the same code:
 
 ```sh
-nix develop -c cargo run --release -- --fix 'I love my dog Gamble. I like to gamble and play poker with cards. My son Rowan likes Flo from Cars.' --dec
+nix develop -c cargo run --release -- --fix 'I love my dog Gamble. I like to gamble and play poker with cards. My son Rowen likes Flo from Cars.' --dec
 ```
 
 Its phase log is `logs/dec-probe.log`, preserving the daemon's latest log.

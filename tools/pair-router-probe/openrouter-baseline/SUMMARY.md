@@ -19,8 +19,8 @@ the model's native typed-choice serialization. Expected labels are never sent.
 
 Both API models preserve both privacy initials in both prompt arms. Jev also
 preserves the storm lightning sentence, ordinary gamble, numbers, and the
-different person named Rowan. Clef's preservation errors are the explicitly
-different spelling Rowan (P(name) 0.7021) and "Set the Cigs habit target to six
+different person named Rowen. Clef's preservation errors are the explicitly
+different spelling Rowen (P(name) 0.7021) and "Set the Cigs habit target to six
 cigarettes" (0.9619). In Cars it changes "Mader has that surname; he is not
 the Cars character" to Mater (0.85). This is the saved local sentence scope:
 the existing sentence extractor splits after the abbreviation "Mr." and drops

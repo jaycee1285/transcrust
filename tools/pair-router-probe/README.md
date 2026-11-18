@@ -55,7 +55,7 @@ The same interpretation labels are supplied on positive and negative examples.
 The passage arm changes the casino verb to Gambol when the earlier dog sentence
 is in its input, despite marking the casino occurrence. Sentence scope instead
 chooses Gambol for the dog, keeps gamble at the casino, and chooses Rowan for
-Rowan. This is evidence for scoping the classifier to the affected sentence,
+Rowen. This is evidence for scoping the classifier to the affected sentence,
 not proof of a model's ability to attend to arbitrary marked spans in long text.
 
 Both arms miss `job supply → Jobs apply` and `At track → Apptrack`. Those title
@@ -200,3 +200,7 @@ nix develop .#pair-probe -c python3 tools/pair-router-probe/d1.py --quantization
 
 The original-glossary control uses `--glossary tools/pair-router-probe/glossary.md`
 and `--output-dir tools/pair-router-probe/bluey-q8-original-glossary`.
+
+## Name scrub (2026-11-18)
+
+Name scrub (2026-11-18): the household child's name and its misheard variants were replaced (Rowan / Rowen) in saved inputs, outputs and receipts after the runs. Probabilities were computed on the original text; reruns on the scrubbed files may differ slightly.

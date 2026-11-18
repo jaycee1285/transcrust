@@ -45,7 +45,7 @@ recording” worker log overstates actual overlap on this route. Fix remains ope
 
 John tried both and reports “That was brutal.” Banked take:
 `2026-11-14T00-12-36Z.wav` + JSON, 41.69s. ASR 4.24s, decisions 1.54s,
-5.79s before typing begins. Raw has transcest, news ed, O'Ryan, flower and
+5.79s before typing begins. Raw has transcest, news ed, Ro'wan, flower and
 “in a bath”; decisions considered only lightning McQueen/Mater and changed
 those two. User corrected the text; log records successful replacement.
 This is not a quality acceptance. Audio and last-dictation corrected text are
@@ -143,7 +143,7 @@ remarkably fast. This does not establish desktop or shared mobile-decision accep
 | Date / path | Evidence | Interpretation |
 |---|---|---|
 | 2026-10-06 Linux review | John: “Smoke clears”; replacement/correction flow smooth; GTK FG/BG/accent also passed | GUI accepted; this is not vocabulary-quality or Apple acceptance |
-| Following weighting smoke | Ordinary gamble became Gambol; later dog Gamble / son Rowan increased the error count | Bounded decoder weighting is implemented but failed that quality gate |
+| Following weighting smoke | Ordinary gamble became Gambol; later dog Gamble / son Rowen increased the error count | Bounded decoder weighting is implemented but failed that quality gate |
 | 2026-10-10 live `--dec`, serial adapter | Parakeet and Nemotron delivered text; two dog-name occurrences repaired at P(name) .981/.961; single dog/son case repaired at .551; zero-candidate take added 32 ms | Initial live path was exercised; do not label all human testing “not done” |
 | Same serial session latency | Two candidates added about 2.17s; one added about 1s | John rejected that latency; this prompted native Rust batched inference |
 | 2026-10-10 native port | Batch/single/saved-Q8 parity and ORT cancellation/recovery passed; native two-name text probe took 1.52s | Machine evidence; no recorded post-port live acceptance yet |

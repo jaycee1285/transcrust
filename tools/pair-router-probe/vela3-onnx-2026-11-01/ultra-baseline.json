@@ -1844,16 +1844,16 @@
         "arm": "single",
         "candidate": null,
         "category": "disambiguate-name",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "hypotheses": [
-          "The occurrence of \"Rowan\" in \"I spoke to Rowan.\" refers to a different person or an intentional initial, not the full name of the speaker's son.",
-          "The occurrence of \"Rowan\" in \"I spoke to Rowan.\" refers to Rowan, the speaker's son."
+          "The occurrence of \"Rowen\" in \"I spoke to Rowen.\" refers to a different person or an intentional initial, not the full name of the speaker's son.",
+          "The occurrence of \"Rowen\" in \"I spoke to Rowen.\" refers to Rowan, the speaker's son."
         ],
         "id": "son-context-name",
         "source": "synthetic",
         "split": "eval",
-        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nI spoke to «Rowan».",
-        "target": "I spoke to «Rowan».",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nI spoke to «Rowen».",
+        "target": "I spoke to «Rowen».",
         "want": "abstain"
       },
       "choice": "name",
@@ -1871,23 +1871,23 @@
         "instructions": "What does the marked span refer to in this spoken sentence?",
         "type": "choice"
       },
-      "state": "I spoke to «Rowan»."
+      "state": "I spoke to «Rowen»."
     },
     {
       "case": {
         "arm": "two",
         "candidate": null,
         "category": "disambiguate-name",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "hypotheses": [
-          "The occurrence of \"Rowan\" in \"I spoke to Rowan.\" refers to a different person or an intentional initial, not the full name of the speaker's son.",
-          "The occurrence of \"Rowan\" in \"I spoke to Rowan.\" refers to Rowan, the speaker's son."
+          "The occurrence of \"Rowen\" in \"I spoke to Rowen.\" refers to a different person or an intentional initial, not the full name of the speaker's son.",
+          "The occurrence of \"Rowen\" in \"I spoke to Rowen.\" refers to Rowan, the speaker's son."
         ],
         "id": "son-context-name",
         "source": "synthetic",
         "split": "eval",
-        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nHe is my son, and I was reminding him about his lunchbox. I spoke to «Rowan».",
-        "target": "I spoke to «Rowan».",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nHe is my son, and I was reminding him about his lunchbox. I spoke to «Rowen».",
+        "target": "I spoke to «Rowen».",
         "want": "name"
       },
       "choice": "name",
@@ -1905,23 +1905,23 @@
         "instructions": "What does the marked span refer to in this spoken sentence?",
         "type": "choice"
       },
-      "state": "He is my son, and I was reminding him about his lunchbox. I spoke to «Rowan»."
+      "state": "He is my son, and I was reminding him about his lunchbox. I spoke to «Rowen»."
     },
     {
       "case": {
         "arm": "single",
         "candidate": null,
         "category": "disambiguate-keep",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "hypotheses": [
-          "The occurrence of \"Rowan\" in \"I spoke to Rowan.\" refers to a different person or an intentional initial, not the full name of the speaker's son.",
-          "The occurrence of \"Rowan\" in \"I spoke to Rowan.\" refers to Rowan, the speaker's son."
+          "The occurrence of \"Rowen\" in \"I spoke to Rowen.\" refers to a different person or an intentional initial, not the full name of the speaker's son.",
+          "The occurrence of \"Rowen\" in \"I spoke to Rowen.\" refers to Rowan, the speaker's son."
         ],
         "id": "son-context-keep",
         "source": "synthetic",
         "split": "eval",
-        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nI spoke to «Rowan».",
-        "target": "I spoke to «Rowan».",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nI spoke to «Rowen».",
+        "target": "I spoke to «Rowen».",
         "want": "abstain"
       },
       "choice": "name",
@@ -1939,23 +1939,23 @@
         "instructions": "What does the marked span refer to in this spoken sentence?",
         "type": "choice"
       },
-      "state": "I spoke to «Rowan»."
+      "state": "I spoke to «Rowen»."
     },
     {
       "case": {
         "arm": "two",
         "candidate": null,
         "category": "disambiguate-keep",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "hypotheses": [
-          "The occurrence of \"Rowan\" in \"I spoke to Rowan.\" refers to a different person or an intentional initial, not the full name of the speaker's son.",
-          "The occurrence of \"Rowan\" in \"I spoke to Rowan.\" refers to Rowan, the speaker's son."
+          "The occurrence of \"Rowen\" in \"I spoke to Rowen.\" refers to a different person or an intentional initial, not the full name of the speaker's son.",
+          "The occurrence of \"Rowen\" in \"I spoke to Rowen.\" refers to Rowan, the speaker's son."
         ],
         "id": "son-context-keep",
         "source": "synthetic",
         "split": "eval",
-        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nShe is my colleague, and her name really is spelled Rowan. I spoke to «Rowan».",
-        "target": "I spoke to «Rowan».",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nShe is my colleague, and her name really is spelled Rowen. I spoke to «Rowen».",
+        "target": "I spoke to «Rowen».",
         "want": "keep"
       },
       "choice": "keep",
@@ -1973,7 +1973,7 @@
         "instructions": "What does the marked span refer to in this spoken sentence?",
         "type": "choice"
       },
-      "state": "She is my colleague, and her name really is spelled Rowan. I spoke to «Rowan»."
+      "state": "She is my colleague, and her name really is spelled Rowen. I spoke to «Rowen»."
     },
     {
       "case": {
@@ -2864,16 +2864,16 @@
         "arm": "single",
         "candidate": null,
         "category": "name-distractor",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "hypotheses": [
-          "The occurrence of \"Rowan\" in \"My colleague Rowan is presenting the report.\" refers to a different person or an intentional initial, not the full name of the speaker's son.",
-          "The occurrence of \"Rowan\" in \"My colleague Rowan is presenting the report.\" refers to Rowan, the speaker's son."
+          "The occurrence of \"Rowen\" in \"My colleague Rowen is presenting the report.\" refers to a different person or an intentional initial, not the full name of the speaker's son.",
+          "The occurrence of \"Rowen\" in \"My colleague Rowen is presenting the report.\" refers to Rowan, the speaker's son."
         ],
         "id": "son-neighbor-name",
         "source": "synthetic",
         "split": "dev",
-        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nMy colleague «Rowan» is presenting the report.",
-        "target": "My colleague «Rowan» is presenting the report.",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nMy colleague «Rowen» is presenting the report.",
+        "target": "My colleague «Rowen» is presenting the report.",
         "want": "keep"
       },
       "choice": "keep",
@@ -2891,23 +2891,23 @@
         "instructions": "What does the marked span refer to in this spoken sentence?",
         "type": "choice"
       },
-      "state": "My colleague «Rowan» is presenting the report."
+      "state": "My colleague «Rowen» is presenting the report."
     },
     {
       "case": {
         "arm": "two",
         "candidate": null,
         "category": "name-distractor",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "hypotheses": [
-          "The occurrence of \"Rowan\" in \"My colleague Rowan is presenting the report.\" refers to a different person or an intentional initial, not the full name of the speaker's son.",
-          "The occurrence of \"Rowan\" in \"My colleague Rowan is presenting the report.\" refers to Rowan, the speaker's son."
+          "The occurrence of \"Rowen\" in \"My colleague Rowen is presenting the report.\" refers to a different person or an intentional initial, not the full name of the speaker's son.",
+          "The occurrence of \"Rowen\" in \"My colleague Rowen is presenting the report.\" refers to Rowan, the speaker's son."
         ],
         "id": "son-neighbor-name",
         "source": "synthetic",
         "split": "dev",
-        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nMy son Rowan is at school. My colleague «Rowan» is presenting the report.",
-        "target": "My colleague «Rowan» is presenting the report.",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nMy son Rowan is at school. My colleague «Rowen» is presenting the report.",
+        "target": "My colleague «Rowen» is presenting the report.",
         "want": "keep"
       },
       "choice": "name",
@@ -2925,7 +2925,7 @@
         "instructions": "What does the marked span refer to in this spoken sentence?",
         "type": "choice"
       },
-      "state": "My son Rowan is at school. My colleague «Rowan» is presenting the report."
+      "state": "My son Rowan is at school. My colleague «Rowen» is presenting the report."
     },
     {
       "case": {
@@ -3476,16 +3476,16 @@
         "arm": "single",
         "candidate": null,
         "category": "intentional-spelling",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "hypotheses": [
-          "The occurrence of \"Rowan\" in \"Copy the label exactly as written: Rowan.\" refers to a different person or an intentional initial, not the full name of the speaker's son.",
-          "The occurrence of \"Rowan\" in \"Copy the label exactly as written: Rowan.\" refers to Rowan, the speaker's son."
+          "The occurrence of \"Rowen\" in \"Copy the label exactly as written: Rowen.\" refers to a different person or an intentional initial, not the full name of the speaker's son.",
+          "The occurrence of \"Rowen\" in \"Copy the label exactly as written: Rowen.\" refers to Rowan, the speaker's son."
         ],
-        "id": "quoted-orian",
+        "id": "quoted-rowen",
         "source": "synthetic",
         "split": "diagnostic",
-        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nCopy the label exactly as written: «Rowan».",
-        "target": "Copy the label exactly as written: «Rowan».",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nCopy the label exactly as written: «Rowen».",
+        "target": "Copy the label exactly as written: «Rowen».",
         "want": "keep"
       },
       "choice": "name",
@@ -3503,23 +3503,23 @@
         "instructions": "What does the marked span refer to in this spoken sentence?",
         "type": "choice"
       },
-      "state": "Copy the label exactly as written: «Rowan»."
+      "state": "Copy the label exactly as written: «Rowen»."
     },
     {
       "case": {
         "arm": "two",
         "candidate": null,
         "category": "intentional-spelling",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "hypotheses": [
-          "The occurrence of \"Rowan\" in \"Copy the label exactly as written: Rowan.\" refers to a different person or an intentional initial, not the full name of the speaker's son.",
-          "The occurrence of \"Rowan\" in \"Copy the label exactly as written: Rowan.\" refers to Rowan, the speaker's son."
+          "The occurrence of \"Rowen\" in \"Copy the label exactly as written: Rowen.\" refers to a different person or an intentional initial, not the full name of the speaker's son.",
+          "The occurrence of \"Rowen\" in \"Copy the label exactly as written: Rowen.\" refers to Rowan, the speaker's son."
         ],
-        "id": "quoted-orian",
+        "id": "quoted-rowen",
         "source": "synthetic",
         "split": "diagnostic",
-        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nIt belongs to my son Rowan. Copy the label exactly as written: «Rowan».",
-        "target": "Copy the label exactly as written: «Rowan».",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4 year old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n\nDictation:\nIt belongs to my son Rowan. Copy the label exactly as written: «Rowen».",
+        "target": "Copy the label exactly as written: «Rowen».",
         "want": "keep"
       },
       "choice": "name",
@@ -3537,7 +3537,7 @@
         "instructions": "What does the marked span refer to in this spoken sentence?",
         "type": "choice"
       },
-      "state": "It belongs to my son Rowan. Copy the label exactly as written: «Rowan»."
+      "state": "It belongs to my son Rowan. Copy the label exactly as written: «Rowen»."
     },
     {
       "case": {

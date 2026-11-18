@@ -27,7 +27,7 @@ Model load: 1.20s. Median inference: 83ms.
 | record-job-supply-1 | job supply → Jobs apply | name | keep | 0.377 | 0.315 | 0.308 |
 | record-terakeet-1 | terrakeet → Terakeet | name | name | 0.179 | 0.471 | 0.350 |
 | record-apptrack-1 | At track → Apptrack | name | keep | 0.480 | 0.255 | 0.265 |
-| record-orion-1 | orangue → Rowan | name | name | 0.166 | 0.553 | 0.281 |
+| record-rowan-1 | orangue → Rowan | name | name | 0.166 | 0.553 | 0.281 |
 | record-backroom-1 | backroom vacuum → Back room vacuum | name | name | 0.119 | 0.659 | 0.223 |
 | record-dominion-1 | paid dominion → Pay Dominion | name | name | 0.166 | 0.538 | 0.296 |
 | record-dominion-2 | paid dominion → Pay Dominion | name | name | 0.337 | 0.376 | 0.287 |
@@ -36,7 +36,7 @@ Model load: 1.20s. Median inference: 83ms.
 | dog-lowercase | gamble → Gambol | name | name | 0.226 | 0.579 | 0.194 |
 | casino-short | gamble → Gambol | keep | keep | 0.546 | 0.164 | 0.290 |
 | casino-capitalized | Gamble → Gambol | keep | keep | 0.546 | 0.158 | 0.295 |
-| son-in-user-sentence | Rowan → Rowan | name | name | 0.166 | 0.615 | 0.219 |
+| son-in-user-sentence | Rowen → Rowan | name | name | 0.166 | 0.615 | 0.219 |
 | six-cards | six → Cigs | keep | keep | 0.574 | 0.094 | 0.333 |
 | six-cigarettes | six → Cigs | name | name | 0.335 | 0.479 | 0.186 |
 | job-supply-prose | job supply → Jobs apply | keep | keep | 0.470 | 0.234 | 0.297 |
@@ -53,7 +53,7 @@ Model load: 1.20s. Median inference: 83ms.
 
 **record-apptrack-1** (record-2): «At track» start.
 
-**record-orion-1** (record-2): I might also say something like «orangue» laundry complete.
+**record-rowan-1** (record-2): I might also say something like «orangue» laundry complete.
 
 **record-backroom-1** (record-2): The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, «backroom vacuum», bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m.
 
@@ -71,7 +71,7 @@ Model load: 1.20s. Median inference: 83ms.
 
 **casino-capitalized** (typed): «Gamble» and play cards at the casino.
 
-**son-in-user-sentence** (typed): My son «Rowan»'s mother is named Nell.
+**son-in-user-sentence** (typed): My son «Rowen»'s mother is named Nell.
 
 **six-cards** (typed): I dealt «six» cards to each player.
 

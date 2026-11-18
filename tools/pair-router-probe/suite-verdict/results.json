@@ -340,9 +340,9 @@
       "id": "son-name-1",
       "source": "synthetic",
       "category": "son/name",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "My son \u00abRowan\u00bb forgot his lunchbox.",
+      "context": "My son \u00abRowen\u00bb forgot his lunchbox.",
       "want": "name",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -361,15 +361,15 @@
       ],
       "latency_ms": 84.14620702387765,
       "token_count": 68,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son \u00abRowan\u00bb forgot his lunchbox."
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son \u00abRowen\u00bb forgot his lunchbox."
     },
     {
       "id": "son-name-2",
       "source": "synthetic",
       "category": "son/name",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "Please pack my son \u00abRowan\u00bb's school bag.",
+      "context": "Please pack my son \u00abRowen\u00bb's school bag.",
       "want": "name",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -388,15 +388,15 @@
       ],
       "latency_ms": 86.10820199828595,
       "token_count": 70,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nPlease pack my son \u00abRowan\u00bb's school bag."
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nPlease pack my son \u00abRowen\u00bb's school bag."
     },
     {
       "id": "son-name-3",
       "source": "synthetic",
       "category": "son/name",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "Nell and I co-parent our son \u00abRowan\u00bb.",
+      "context": "Nell and I co-parent our son \u00abRowen\u00bb.",
       "want": "name",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -415,15 +415,15 @@
       ],
       "latency_ms": 85.05813800729811,
       "token_count": 70,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nNell and I co-parent our son \u00abRowan\u00bb."
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nNell and I co-parent our son \u00abRowen\u00bb."
     },
     {
       "id": "son-name-4",
       "source": "synthetic",
       "category": "son/name",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "My son's name is \u00abRowan\u00bb.",
+      "context": "My son's name is \u00abRowen\u00bb.",
       "want": "name",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -442,7 +442,7 @@
       ],
       "latency_ms": 81.56134595628828,
       "token_count": 66,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son's name is \u00abRowan\u00bb."
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son's name is \u00abRowen\u00bb."
     },
     {
       "id": "son-keep-1",
@@ -502,9 +502,9 @@
       "id": "son-keep-3",
       "source": "synthetic",
       "category": "son/keep",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "My colleague \u00abRowan\u00bb is a different person from my son Rowan.",
+      "context": "My colleague \u00abRowen\u00bb is a different person from my son Rowan.",
       "want": "keep",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -523,15 +523,15 @@
       ],
       "latency_ms": 90.65836999798194,
       "token_count": 73,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy colleague \u00abRowan\u00bb is a different person from my son Rowan."
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy colleague \u00abRowen\u00bb is a different person from my son Rowan."
     },
     {
       "id": "son-keep-4",
       "source": "synthetic",
       "category": "son/keep",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "The author spells her name \u00abRowan\u00bb, without an o at the end.",
+      "context": "The author spells her name \u00abRowen\u00bb, without an o at the end.",
       "want": "keep",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -550,15 +550,15 @@
       ],
       "latency_ms": 90.21141397533938,
       "token_count": 73,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe author spells her name \u00abRowan\u00bb, without an o at the end."
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe author spells her name \u00abRowen\u00bb, without an o at the end."
     },
     {
       "id": "son-abstain-1",
       "source": "synthetic",
       "category": "son/abstain",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "\u00abRowan\u00bb.",
+      "context": "\u00abRowen\u00bb.",
       "want": "abstain",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -577,15 +577,15 @@
       ],
       "latency_ms": 77.23827101290226,
       "token_count": 61,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n\u00abRowan\u00bb."
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n\u00abRowen\u00bb."
     },
     {
       "id": "son-abstain-2",
       "source": "synthetic",
       "category": "son/abstain",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "Ask \u00abRowan\u00bb about it.",
+      "context": "Ask \u00abRowen\u00bb about it.",
       "want": "abstain",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -604,15 +604,15 @@
       ],
       "latency_ms": 80.2659600158222,
       "token_count": 65,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nAsk \u00abRowan\u00bb about it."
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nAsk \u00abRowen\u00bb about it."
     },
     {
       "id": "son-abstain-3",
       "source": "synthetic",
       "category": "son/abstain",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "Someone called \u00abRowan\u00bb left a message.",
+      "context": "Someone called \u00abRowen\u00bb left a message.",
       "want": "abstain",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -631,15 +631,15 @@
       ],
       "latency_ms": 83.56578898383304,
       "token_count": 67,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nSomeone called \u00abRowan\u00bb left a message."
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nSomeone called \u00abRowen\u00bb left a message."
     },
     {
       "id": "son-abstain-4",
       "source": "synthetic",
       "category": "son/abstain",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "The label says \u00abRowan\u00bb.",
+      "context": "The label says \u00abRowen\u00bb.",
       "want": "abstain",
       "name_description": "Rowan, the speaker's son",
       "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -658,7 +658,7 @@
       ],
       "latency_ms": 77.67955597955734,
       "token_count": 64,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe label says \u00abRowan\u00bb."
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe label says \u00abRowen\u00bb."
     },
     {
       "id": "mother-name-1",

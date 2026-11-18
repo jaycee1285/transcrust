@@ -53,7 +53,7 @@ of a better discriminator here.
 
 All 100 saved expanded-glossary rows were evaluated. The table excludes the
 eight privacy-initial/explicit-spelling diagnostic rows (four per scope), as
-previously requested. Remaining cases still include contrived “other Rowan”
+previously requested. Remaining cases still include contrived “other Rowen”
 controls and hand-authored labels; this is a development diagnostic, not a
 representative dictation accuracy estimate. Single/two inputs are correlated.
 

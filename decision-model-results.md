@@ -8,6 +8,10 @@ remains the work/acceptance tracker. No models were rerun to write this report.
 and [November10 GLiDE review](decision-model-review-2026-11-10-glide.md). No new
 inference scores are added to this results inventory by those reviews.
 
+**Added 2026-11-18:** the Pocket-0.3B-Dec probe (Models table) and
+[Rules first on real audio](#rules-first-on-real-audio-2026-11-18). Both are new runs, not
+recompilations.
+
 Rejected/parked model download caches were removed on 2026-11-02; saved evidence
 and runners remain. See [cleanup record](decision-model-cleanup.md). Their
 reproduction commands download the pinned artifacts again when needed.
@@ -26,6 +30,7 @@ reproduction commands download the pinned artifacts again when needed.
 | [BGE Reranker Base](https://huggingface.co/BAAI/bge-reranker-base) | Xenova Q8 ONNX export | Same paired-hypothesis surface and policy fitting | Name-biased ranking and batch-sensitive results; not promoted |
 | [EmbeddingGemma 2 typed decision](https://huggingface.co/mrm8488/embeddinggemma-2-ft-typed-decision) | Published decision.js Q8 bundle; FP32 computation | Encoder/head reference checks, 32 phone decisions with and without global glossary | Smaller memory, but ordinary-word preservation fails |
 | [d3-lite](https://huggingface.co/vllm-sr/d3-lite) | Published decision.js Q8 bundle; native Rust CPU port | Full supported public reference checks and 32 phone decisions | Ordinary-word preservation fails; broader synthetic escalation deferred |
+| [MNN-Pocket-0.3B-Dec](decision-model-review-2026-11-08.md) | Native Candle port of Qwen3 + LoRA + pointer head, F32 (2026-11-18) | Independent numpy parity (2.8e-5), synthetic 100 rows, phone replay, window and name-or-word question arms | **Parked.** Repairs 19/28 vs Ultra 28/28, unwanted 21/64 vs 12/64, fails "to gamble" in every arm, 1.65 GiB RSS (~5.5× Ultra). [Report](tools/pocket-probe/README.md) |
 | `typesafe/jev-1.13` | OpenRouter API, resolved snapshot recorded in receipts | Early 157-case quality baseline | Strong reference; **not an offline deployment option** |
 | `cloudflare/clef-flash` | OpenRouter API, routed providers recorded in receipts | Same early 157-case quality baseline | Quality reference only; distinct from local Clef-text |
 | [Laya](https://huggingface.co/convaiinnovations/laya) | Card/reference discussion | No saved correction inference benchmark found in this repo | Reviewed candidate; no measured score assigned here |
@@ -231,6 +236,39 @@ after phone preservation failures. This absence is not a zero score.
 Sources: [Vela/current-Ultra paired report](tools/pair-router-probe/vela3-onnx-2026-11-01/README.md),
 [paired NLI/reranker report](tools/pair-router-probe/cross-encoder-q8/README.md),
 [THX report](tools/pair-router-probe/thx-01-native/README.md).
+
+## Rules first on real audio (2026-11-18)
+
+**Setup:**
+- The v2 homophone chain from [design-vocab-gate.md](design-vocab-gate.md) runs first. A model sees only the cases the rules pass.
+- **Data:** two sets of John's real takes.
+  - **read-aloud:** fresh Parakeet output, 16 decisions.
+  - **phonon-trial:** the household WAV through saved Parakeet, saved Phonon and fresh Parakeet, 45 decisions. Same recording as the earlier household set, so not independent.
+- Each set has two arms: the sentence alone, and the sentence plus its neighbour.
+- **Gate, stated before the run:** 0 unwanted names on household sets.
+- Raw rows are in gitignored `tools/rules-probe/private/model-real-audio/` (household sentences; this repo is public).
+
+**Rules alone:**
+- 0 wrong on both sets.
+- They made every needed repair: 10/10 and 30/30.
+- Every case they passed should have stayed an ordinary word. So on this data a model can only add errors.
+
+**Unwanted names after the model (household, both sets pooled):**
+
+| Model | Sentence only | With neighbour sentence | Peak RSS |
+|---|---:|---:|---:|
+| D1 Q8 | 0 | 1 (Lightning McQueen) | ~710 MiB |
+| UltraBERT INT4, real glossary descriptions | 8 (Chili, Bingo) | 9 (+ Lightning McQueen) | 459 MiB |
+| UltraBERT INT4, stripped (current app) | **0** | 1 (Lightning McQueen) | 301 MiB |
+
+**Gate: failed** for real-glossary Ultra and for every neighbour-sentence arm.
+- **Real glossary descriptions:** the Bluey entries pull Ultra to "name" on ordinary "chili" (p up to 0.98) and "bingo" (0.49–0.74).
+- **Neighbour sentence:** every model names an ordinary "lightning" when the previous sentence mentions Cars. This is the same leak the rules fixed in v2-local.
+
+**Decision (John, 2026-11-18):** the model gets one sentence and no glossary. The glossary feeds the rules only.
+- The clean row was selected after the run, so it was a hypothesis until fresh audio confirmed it.
+- **Fresh audio (same day):** 11-18 script, 17 spans, key written before recording. v3 rules + Ultra stripped, one sentence: **0 unwanted names**, 8/10 repairs; the misses were two items in a list of Bluey names. D1 in the same slot named an ordinary "matter" (p 0.71), which fails the gate. One take, so this is confirmation, not proof.
+- **Not tested here: dayshade's pad takes.** They're the app used as a memo pad, 55 takes of commands, bug notes and notes, and they include vocabulary (Gambol, transcrust, flownote, dayshade). The fixture built so far covers only 6 takes and 3 function-word cases, which are now context-only. A real pad fixture is still to build.
 
 ## RAM, weights and time to typing
 

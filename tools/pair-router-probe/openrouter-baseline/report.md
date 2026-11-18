@@ -75,7 +75,7 @@ Local timings measure inference only; API timings include network/queue/processi
 | sentence | typesafe/jev-1.13 | record-sigs-1 | name | name | 0.960 | First, the four habits that I keep track of are job ads, which is at 0 out of 16, Sigs, or cigarettes, which is 0 out of 18, drink water, which is 0 out of 4, and monsters, which is 0 out of 6. → First, the four habits that I keep track of are job ads, which is at 0 out of 16, Cigs, or cigarettes, which is 0 out of 18, drink water, which is 0 out of 4, and monsters, which is 0 out of 6. |
 | sentence | cloudflare/clef-flash | record-sigs-1 | name | name | 0.947 | First, the four habits that I keep track of are job ads, which is at 0 out of 16, Sigs, or cigarettes, which is 0 out of 18, drink water, which is 0 out of 4, and monsters, which is 0 out of 6. → First, the four habits that I keep track of are job ads, which is at 0 out of 16, Cigs, or cigarettes, which is 0 out of 18, drink water, which is 0 out of 4, and monsters, which is 0 out of 6. |
 | sentence | typesafe/jev-1.13 | record-job-supply-1 | name | name | 0.910 | he tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. → he tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, Jobs apply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. |
-| sentence | typesafe/jev-1.13 | record-orion-1 | name | name | 0.550 | I might also say something like orangue laundry complete. → I might also say something like Rowan laundry complete. |
+| sentence | typesafe/jev-1.13 | record-rowan-1 | name | name | 0.550 | I might also say something like orangue laundry complete. → I might also say something like Rowan laundry complete. |
 | sentence | typesafe/jev-1.13 | record-terakeet-1 | name | name | 0.950 | t I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. → t I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, Terakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. |
 | sentence | typesafe/jev-1.13 | record-backroom-1 | name | name | 0.970 | The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. → The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, Back room vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. |
 | sentence | typesafe/jev-1.13 | record-dominion-1 | name | name | 0.780 | Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. → Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, Pay Dominion 360, pay BJWSA 100, Nell 220. |
@@ -86,7 +86,7 @@ Local timings measure inference only; API timings include network/queue/processi
 | sentence | typesafe/jev-1.13 | casino-short | keep | keep | 0.950 | I like to gamble and play poker with cards. → I like to gamble and play poker with cards. |
 | sentence | typesafe/jev-1.13 | record-apptrack-1 | name | name | 0.380 | At track start. → Apptrack start. |
 | sentence | typesafe/jev-1.13 | casino-capitalized | keep | keep | 0.970 | Gamble and play cards at the casino. → Gamble and play cards at the casino. |
-| sentence | typesafe/jev-1.13 | son-in-user-sentence | name | name | 0.980 | My son Rowan's mother is named Nell. → My son Rowan's mother is named Nell. |
+| sentence | typesafe/jev-1.13 | son-in-user-sentence | name | name | 0.980 | My son Rowen's mother is named Nell. → My son Rowan's mother is named Nell. |
 | sentence | typesafe/jev-1.13 | job-supply-prose | keep | keep | 0.980 | The job supply in this town has fallen. → The job supply in this town has fallen. |
 | sentence | typesafe/jev-1.13 | six-cigarettes | name | name | 0.870 | My cigarette habit is called six. → My cigarette habit is called Cigs. |
 | sentence | typesafe/jev-1.13 | six-cards | keep | keep | 0.980 | I dealt six cards to each player. → I dealt six cards to each player. |
@@ -104,18 +104,18 @@ Local timings measure inference only; API timings include network/queue/processi
 | suite-verdict | typesafe/jev-1.13 | dog-abstain-1 | abstain | keep | 0.480 | Gamble. → Gamble. |
 | suite-verdict | typesafe/jev-1.13 | dog-abstain-4 | abstain | keep | 0.550 | The note only says Gamble. → The note only says Gamble. |
 | suite-verdict | typesafe/jev-1.13 | dog-abstain-3 | abstain | keep | 0.680 | I heard someone say Gamble. → I heard someone say Gamble. |
-| suite-verdict | typesafe/jev-1.13 | son-name-1 | name | name | 0.990 | My son Rowan forgot his lunchbox. → My son Rowan forgot his lunchbox. |
-| suite-verdict | typesafe/jev-1.13 | son-name-3 | name | name | 0.950 | Nell and I co-parent our son Rowan. → Nell and I co-parent our son Rowan. |
-| suite-verdict | typesafe/jev-1.13 | son-name-4 | name | name | 0.970 | My son's name is Rowan. → My son's name is Rowan. |
+| suite-verdict | typesafe/jev-1.13 | son-name-1 | name | name | 0.990 | My son Rowen forgot his lunchbox. → My son Rowan forgot his lunchbox. |
+| suite-verdict | typesafe/jev-1.13 | son-name-3 | name | name | 0.950 | Nell and I co-parent our son Rowen. → Nell and I co-parent our son Rowan. |
+| suite-verdict | typesafe/jev-1.13 | son-name-4 | name | name | 0.970 | My son's name is Rowen. → My son's name is Rowan. |
 | suite-verdict | typesafe/jev-1.13 | son-keep-1 | keep | keep | 0.970 | I deliberately call my son O online to protect his privacy; keep that initial. → I deliberately call my son O online to protect his privacy; keep that initial. |
 | suite-verdict | typesafe/jev-1.13 | son-keep-2 | keep | keep | 0.840 | My son O needs his lunchbox; use only his initial in this message. → My son O needs his lunchbox; use only his initial in this message. |
-| suite-verdict | typesafe/jev-1.13 | son-keep-3 | keep | keep | 0.500 | My colleague Rowan is a different person from my son Rowan. → My colleague Rowan is a different person from my son Rowan. |
-| suite-verdict | typesafe/jev-1.13 | son-keep-4 | keep | abstain | 0.480 | The author spells her name Rowan, without an o at the end. → The author spells her name Rowan, without an o at the end. |
-| suite-verdict | typesafe/jev-1.13 | son-name-2 | name | name | 0.980 | Please pack my son Rowan's school bag. → Please pack my son Rowan's school bag. |
-| suite-verdict | typesafe/jev-1.13 | son-abstain-1 | abstain | name | 0.630 | Rowan. → Rowan. |
-| suite-verdict | typesafe/jev-1.13 | son-abstain-2 | abstain | name | 0.590 | Ask Rowan about it. → Ask Rowan about it. |
-| suite-verdict | typesafe/jev-1.13 | son-abstain-3 | abstain | name | 0.590 | Someone called Rowan left a message. → Someone called Rowan left a message. |
-| suite-verdict | typesafe/jev-1.13 | son-abstain-4 | abstain | name | 0.740 | The label says Rowan. → The label says Rowan. |
+| suite-verdict | typesafe/jev-1.13 | son-keep-3 | keep | keep | 0.500 | My colleague Rowen is a different person from my son Rowan. → My colleague Rowen is a different person from my son Rowan. |
+| suite-verdict | typesafe/jev-1.13 | son-keep-4 | keep | abstain | 0.480 | The author spells her name Rowen, without an o at the end. → The author spells her name Rowen, without an o at the end. |
+| suite-verdict | typesafe/jev-1.13 | son-name-2 | name | name | 0.980 | Please pack my son Rowen's school bag. → Please pack my son Rowan's school bag. |
+| suite-verdict | typesafe/jev-1.13 | son-abstain-1 | abstain | name | 0.630 | Rowen. → Rowan. |
+| suite-verdict | typesafe/jev-1.13 | son-abstain-2 | abstain | name | 0.590 | Ask Rowen about it. → Ask Rowan about it. |
+| suite-verdict | typesafe/jev-1.13 | son-abstain-3 | abstain | name | 0.590 | Someone called Rowen left a message. → Someone called Rowan left a message. |
+| suite-verdict | typesafe/jev-1.13 | son-abstain-4 | abstain | name | 0.740 | The label says Rowen. → The label says Rowan. |
 | suite-verdict | typesafe/jev-1.13 | mother-name-1 | name | name | 0.960 | My son's mother Knell will collect him from school. → My son's mother Nell will collect him from school. |
 | suite-verdict | typesafe/jev-1.13 | mother-name-2 | name | name | 0.920 | Rowan's mother is named knell. → Rowan's mother is named Nell. |
 | suite-verdict | typesafe/jev-1.13 | mother-name-3 | name | name | 0.970 | I co-parent with Rowan's mother Knell. → I co-parent with Rowan's mother Nell. |
@@ -182,18 +182,18 @@ Local timings measure inference only; API timings include network/queue/processi
 | suite-verdict-correction | typesafe/jev-1.13 | dog-abstain-2 | abstain | name | 0.520 | Tell Gamble. → Tell Gambol. |
 | suite-verdict-correction | typesafe/jev-1.13 | dog-abstain-3 | abstain | abstain | 0.490 | I heard someone say Gamble. → I heard someone say Gamble. |
 | suite-verdict-correction | typesafe/jev-1.13 | dog-abstain-4 | abstain | abstain | 0.510 | The note only says Gamble. → The note only says Gamble. |
-| suite-verdict-correction | typesafe/jev-1.13 | son-name-1 | name | name | 0.610 | My son Rowan forgot his lunchbox. → My son Rowan forgot his lunchbox. |
-| suite-verdict-correction | typesafe/jev-1.13 | son-name-3 | name | name | 0.640 | Nell and I co-parent our son Rowan. → Nell and I co-parent our son Rowan. |
-| suite-verdict-correction | typesafe/jev-1.13 | son-name-2 | name | name | 0.470 | Please pack my son Rowan's school bag. → Please pack my son Rowan's school bag. |
-| suite-verdict-correction | typesafe/jev-1.13 | son-name-4 | name | name | 0.660 | My son's name is Rowan. → My son's name is Rowan. |
+| suite-verdict-correction | typesafe/jev-1.13 | son-name-1 | name | name | 0.610 | My son Rowen forgot his lunchbox. → My son Rowan forgot his lunchbox. |
+| suite-verdict-correction | typesafe/jev-1.13 | son-name-3 | name | name | 0.640 | Nell and I co-parent our son Rowen. → Nell and I co-parent our son Rowan. |
+| suite-verdict-correction | typesafe/jev-1.13 | son-name-2 | name | name | 0.470 | Please pack my son Rowen's school bag. → Please pack my son Rowan's school bag. |
+| suite-verdict-correction | typesafe/jev-1.13 | son-name-4 | name | name | 0.660 | My son's name is Rowen. → My son's name is Rowan. |
 | suite-verdict-correction | typesafe/jev-1.13 | son-keep-1 | keep | keep | 1.000 | I deliberately call my son O online to protect his privacy; keep that initial. → I deliberately call my son O online to protect his privacy; keep that initial. |
 | suite-verdict-correction | typesafe/jev-1.13 | son-keep-2 | keep | keep | 0.990 | My son O needs his lunchbox; use only his initial in this message. → My son O needs his lunchbox; use only his initial in this message. |
-| suite-verdict-correction | typesafe/jev-1.13 | son-keep-3 | keep | keep | 0.970 | My colleague Rowan is a different person from my son Rowan. → My colleague Rowan is a different person from my son Rowan. |
-| suite-verdict-correction | typesafe/jev-1.13 | son-keep-4 | keep | keep | 0.720 | The author spells her name Rowan, without an o at the end. → The author spells her name Rowan, without an o at the end. |
-| suite-verdict-correction | typesafe/jev-1.13 | son-abstain-1 | abstain | abstain | 0.530 | Rowan. → Rowan. |
-| suite-verdict-correction | typesafe/jev-1.13 | son-abstain-2 | abstain | keep | 0.420 | Ask Rowan about it. → Ask Rowan about it. |
-| suite-verdict-correction | typesafe/jev-1.13 | son-abstain-3 | abstain | abstain | 0.610 | Someone called Rowan left a message. → Someone called Rowan left a message. |
-| suite-verdict-correction | typesafe/jev-1.13 | son-abstain-4 | abstain | abstain | 0.530 | The label says Rowan. → The label says Rowan. |
+| suite-verdict-correction | typesafe/jev-1.13 | son-keep-3 | keep | keep | 0.970 | My colleague Rowen is a different person from my son Rowan. → My colleague Rowen is a different person from my son Rowan. |
+| suite-verdict-correction | typesafe/jev-1.13 | son-keep-4 | keep | keep | 0.720 | The author spells her name Rowen, without an o at the end. → The author spells her name Rowen, without an o at the end. |
+| suite-verdict-correction | typesafe/jev-1.13 | son-abstain-1 | abstain | abstain | 0.530 | Rowen. → Rowen. |
+| suite-verdict-correction | typesafe/jev-1.13 | son-abstain-2 | abstain | keep | 0.420 | Ask Rowen about it. → Ask Rowen about it. |
+| suite-verdict-correction | typesafe/jev-1.13 | son-abstain-3 | abstain | abstain | 0.610 | Someone called Rowen left a message. → Someone called Rowen left a message. |
+| suite-verdict-correction | typesafe/jev-1.13 | son-abstain-4 | abstain | abstain | 0.530 | The label says Rowen. → The label says Rowen. |
 | suite-verdict-correction | typesafe/jev-1.13 | mother-name-1 | name | name | 0.780 | My son's mother Knell will collect him from school. → My son's mother Nell will collect him from school. |
 | suite-verdict-correction | typesafe/jev-1.13 | mother-name-2 | name | name | 0.830 | Rowan's mother is named knell. → Rowan's mother is named Nell. |
 | suite-verdict-correction | typesafe/jev-1.13 | mother-name-3 | name | name | 0.770 | I co-parent with Rowan's mother Knell. → I co-parent with Rowan's mother Nell. |
@@ -233,7 +233,7 @@ Local timings measure inference only; API timings include network/queue/processi
 | sentence | cloudflare/clef-flash | record-job-supply-1 | name | name | 0.979 | he tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. → he tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, Jobs apply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. |
 | sentence | cloudflare/clef-flash | record-terakeet-1 | name | name | 0.925 | t I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. → t I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, Terakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. |
 | sentence | cloudflare/clef-flash | record-apptrack-1 | name | name | 0.722 | At track start. → Apptrack start. |
-| sentence | cloudflare/clef-flash | record-orion-1 | name | keep | 0.677 | I might also say something like orangue laundry complete. → I might also say something like orangue laundry complete. |
+| sentence | cloudflare/clef-flash | record-rowan-1 | name | keep | 0.677 | I might also say something like orangue laundry complete. → I might also say something like orangue laundry complete. |
 | sentence | cloudflare/clef-flash | record-backroom-1 | name | name | 0.902 | The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. → The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, Back room vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. |
 | sentence | cloudflare/clef-flash | record-dominion-1 | name | name | 0.855 | Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. → Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, Pay Dominion 360, pay BJWSA 100, Nell 220. |
 | sentence | cloudflare/clef-flash | record-dominion-2 | name | name | 0.939 | To give an example of a command that I might add, I might say paid dominion 360 plus 10. → To give an example of a command that I might add, I might say Pay Dominion 360 plus 10. |
@@ -241,7 +241,7 @@ Local timings measure inference only; API timings include network/queue/processi
 | sentence | cloudflare/clef-flash | casino-in-user-sentence | keep | keep | 0.952 | She and I used to go to the casino to gamble and play cards. → She and I used to go to the casino to gamble and play cards. |
 | sentence | cloudflare/clef-flash | casino-short | keep | keep | 0.965 | I like to gamble and play poker with cards. → I like to gamble and play poker with cards. |
 | sentence | cloudflare/clef-flash | casino-capitalized | keep | keep | 0.964 | Gamble and play cards at the casino. → Gamble and play cards at the casino. |
-| sentence | cloudflare/clef-flash | son-in-user-sentence | name | name | 0.627 | My son Rowan's mother is named Nell. → My son Rowan's mother is named Nell. |
+| sentence | cloudflare/clef-flash | son-in-user-sentence | name | name | 0.627 | My son Rowen's mother is named Nell. → My son Rowan's mother is named Nell. |
 | sentence | cloudflare/clef-flash | six-cards | keep | keep | 0.938 | I dealt six cards to each player. → I dealt six cards to each player. |
 | sentence | cloudflare/clef-flash | six-cigarettes | name | name | 0.761 | My cigarette habit is called six. → My cigarette habit is called Cigs. |
 | sentence | cloudflare/clef-flash | dog-lowercase | name | name | 0.956 | I love my dog gamble. → I love my dog Gambol. |
@@ -259,18 +259,18 @@ Local timings measure inference only; API timings include network/queue/processi
 | suite-verdict | cloudflare/clef-flash | dog-abstain-2 | abstain | keep | 0.793 | Tell Gamble. → Tell Gamble. |
 | suite-verdict | cloudflare/clef-flash | dog-abstain-1 | abstain | keep | 0.947 | Gamble. → Gamble. |
 | suite-verdict | cloudflare/clef-flash | dog-abstain-4 | abstain | keep | 0.876 | The note only says Gamble. → The note only says Gamble. |
-| suite-verdict | cloudflare/clef-flash | son-name-1 | name | keep | 0.522 | My son Rowan forgot his lunchbox. → My son Rowan forgot his lunchbox. |
+| suite-verdict | cloudflare/clef-flash | son-name-1 | name | keep | 0.522 | My son Rowen forgot his lunchbox. → My son Rowen forgot his lunchbox. |
 | suite-verdict | cloudflare/clef-flash | dog-abstain-3 | abstain | keep | 0.952 | I heard someone say Gamble. → I heard someone say Gamble. |
-| suite-verdict | cloudflare/clef-flash | son-name-2 | name | name | 0.738 | Please pack my son Rowan's school bag. → Please pack my son Rowan's school bag. |
+| suite-verdict | cloudflare/clef-flash | son-name-2 | name | name | 0.738 | Please pack my son Rowen's school bag. → Please pack my son Rowan's school bag. |
 | suite-verdict | cloudflare/clef-flash | son-keep-1 | keep | keep | 0.925 | I deliberately call my son O online to protect his privacy; keep that initial. → I deliberately call my son O online to protect his privacy; keep that initial. |
-| suite-verdict | cloudflare/clef-flash | son-name-3 | name | name | 0.673 | Nell and I co-parent our son Rowan. → Nell and I co-parent our son Rowan. |
-| suite-verdict | cloudflare/clef-flash | son-name-4 | name | name | 0.761 | My son's name is Rowan. → My son's name is Rowan. |
-| suite-verdict | cloudflare/clef-flash | son-keep-3 | keep | keep | 0.586 | My colleague Rowan is a different person from my son Rowan. → My colleague Rowan is a different person from my son Rowan. |
-| suite-verdict | cloudflare/clef-flash | son-keep-4 | keep | name | 0.702 | The author spells her name Rowan, without an o at the end. → The author spells her name Rowan, without an o at the end. |
-| suite-verdict | cloudflare/clef-flash | son-abstain-1 | abstain | name | 0.662 | Rowan. → Rowan. |
-| suite-verdict | cloudflare/clef-flash | son-abstain-2 | abstain | name | 0.734 | Ask Rowan about it. → Ask Rowan about it. |
-| suite-verdict | cloudflare/clef-flash | son-abstain-3 | abstain | keep | 0.680 | Someone called Rowan left a message. → Someone called Rowan left a message. |
-| suite-verdict | cloudflare/clef-flash | son-abstain-4 | abstain | name | 0.575 | The label says Rowan. → The label says Rowan. |
+| suite-verdict | cloudflare/clef-flash | son-name-3 | name | name | 0.673 | Nell and I co-parent our son Rowen. → Nell and I co-parent our son Rowan. |
+| suite-verdict | cloudflare/clef-flash | son-name-4 | name | name | 0.761 | My son's name is Rowen. → My son's name is Rowan. |
+| suite-verdict | cloudflare/clef-flash | son-keep-3 | keep | keep | 0.586 | My colleague Rowen is a different person from my son Rowan. → My colleague Rowen is a different person from my son Rowan. |
+| suite-verdict | cloudflare/clef-flash | son-keep-4 | keep | name | 0.702 | The author spells her name Rowen, without an o at the end. → The author spells her name Rowan, without an o at the end. |
+| suite-verdict | cloudflare/clef-flash | son-abstain-1 | abstain | name | 0.662 | Rowen. → Rowan. |
+| suite-verdict | cloudflare/clef-flash | son-abstain-2 | abstain | name | 0.734 | Ask Rowen about it. → Ask Rowan about it. |
+| suite-verdict | cloudflare/clef-flash | son-abstain-3 | abstain | keep | 0.680 | Someone called Rowen left a message. → Someone called Rowen left a message. |
+| suite-verdict | cloudflare/clef-flash | son-abstain-4 | abstain | name | 0.575 | The label says Rowen. → The label says Rowan. |
 | suite-verdict | cloudflare/clef-flash | son-keep-2 | keep | keep | 0.863 | My son O needs his lunchbox; use only his initial in this message. → My son O needs his lunchbox; use only his initial in this message. |
 | suite-verdict | cloudflare/clef-flash | mother-name-2 | name | name | 0.550 | Rowan's mother is named knell. → Rowan's mother is named Nell. |
 | suite-verdict | cloudflare/clef-flash | mother-name-3 | name | name | 0.924 | I co-parent with Rowan's mother Knell. → I co-parent with Rowan's mother Nell. |
@@ -338,25 +338,25 @@ Local timings measure inference only; API timings include network/queue/processi
 | suite-verdict-correction | cloudflare/clef-flash | dog-abstain-1 | abstain | keep | 0.451 | Gamble. → Gamble. |
 | suite-verdict-correction | cloudflare/clef-flash | dog-abstain-3 | abstain | keep | 0.503 | I heard someone say Gamble. → I heard someone say Gamble. |
 | suite-verdict-correction | cloudflare/clef-flash | dog-abstain-4 | abstain | keep | 0.597 | The note only says Gamble. → The note only says Gamble. |
-| suite-verdict-correction | cloudflare/clef-flash | son-name-1 | name | name | 0.631 | My son Rowan forgot his lunchbox. → My son Rowan forgot his lunchbox. |
-| suite-verdict-correction | cloudflare/clef-flash | son-name-2 | name | name | 0.610 | Please pack my son Rowan's school bag. → Please pack my son Rowan's school bag. |
-| suite-verdict-correction | cloudflare/clef-flash | son-name-3 | name | name | 0.657 | Nell and I co-parent our son Rowan. → Nell and I co-parent our son Rowan. |
-| suite-verdict-correction | cloudflare/clef-flash | son-name-4 | name | keep | 0.517 | My son's name is Rowan. → My son's name is Rowan. |
+| suite-verdict-correction | cloudflare/clef-flash | son-name-1 | name | name | 0.631 | My son Rowen forgot his lunchbox. → My son Rowan forgot his lunchbox. |
+| suite-verdict-correction | cloudflare/clef-flash | son-name-2 | name | name | 0.610 | Please pack my son Rowen's school bag. → Please pack my son Rowan's school bag. |
+| suite-verdict-correction | cloudflare/clef-flash | son-name-3 | name | name | 0.657 | Nell and I co-parent our son Rowen. → Nell and I co-parent our son Rowan. |
+| suite-verdict-correction | cloudflare/clef-flash | son-name-4 | name | keep | 0.517 | My son's name is Rowen. → My son's name is Rowen. |
 | suite-verdict-correction | cloudflare/clef-flash | son-keep-1 | keep | keep | 0.963 | I deliberately call my son O online to protect his privacy; keep that initial. → I deliberately call my son O online to protect his privacy; keep that initial. |
 | suite-verdict-correction | cloudflare/clef-flash | son-keep-2 | keep | keep | 0.905 | My son O needs his lunchbox; use only his initial in this message. → My son O needs his lunchbox; use only his initial in this message. |
-| suite-verdict-correction | cloudflare/clef-flash | son-keep-3 | keep | keep | 0.826 | My colleague Rowan is a different person from my son Rowan. → My colleague Rowan is a different person from my son Rowan. |
-| suite-verdict-correction | cloudflare/clef-flash | son-keep-4 | keep | keep | 0.771 | The author spells her name Rowan, without an o at the end. → The author spells her name Rowan, without an o at the end. |
-| suite-verdict-correction | cloudflare/clef-flash | son-abstain-1 | abstain | abstain | 0.373 | Rowan. → Rowan. |
-| suite-verdict-correction | cloudflare/clef-flash | son-abstain-2 | abstain | keep | 0.406 | Ask Rowan about it. → Ask Rowan about it. |
+| suite-verdict-correction | cloudflare/clef-flash | son-keep-3 | keep | keep | 0.826 | My colleague Rowen is a different person from my son Rowan. → My colleague Rowen is a different person from my son Rowan. |
+| suite-verdict-correction | cloudflare/clef-flash | son-keep-4 | keep | keep | 0.771 | The author spells her name Rowen, without an o at the end. → The author spells her name Rowen, without an o at the end. |
+| suite-verdict-correction | cloudflare/clef-flash | son-abstain-1 | abstain | abstain | 0.373 | Rowen. → Rowen. |
+| suite-verdict-correction | cloudflare/clef-flash | son-abstain-2 | abstain | keep | 0.406 | Ask Rowen about it. → Ask Rowen about it. |
 | suite-verdict-correction | cloudflare/clef-flash | mother-name-1 | name | name | 0.790 | My son's mother Knell will collect him from school. → My son's mother Nell will collect him from school. |
-| suite-verdict-correction | cloudflare/clef-flash | son-abstain-3 | abstain | abstain | 0.443 | Someone called Rowan left a message. → Someone called Rowan left a message. |
+| suite-verdict-correction | cloudflare/clef-flash | son-abstain-3 | abstain | abstain | 0.443 | Someone called Rowen left a message. → Someone called Rowen left a message. |
 | suite-verdict-correction | cloudflare/clef-flash | mother-name-2 | name | name | 0.786 | Rowan's mother is named knell. → Rowan's mother is named Nell. |
 | suite-verdict-correction | cloudflare/clef-flash | mother-name-3 | name | name | 0.542 | I co-parent with Rowan's mother Knell. → I co-parent with Rowan's mother Nell. |
 | suite-verdict-correction | cloudflare/clef-flash | mother-name-4 | name | name | 0.794 | Please send Rowan's mother Knell the custody schedule. → Please send Rowan's mother Nell the custody schedule. |
 | suite-verdict-correction | cloudflare/clef-flash | mother-keep-1 | keep | keep | 0.918 | The church bell sounded a funeral knell. → The church bell sounded a funeral knell. |
 | suite-verdict-correction | cloudflare/clef-flash | mother-keep-2 | keep | keep | 0.920 | That decision was the death knell for the business. → That decision was the death knell for the business. |
 | suite-verdict-correction | cloudflare/clef-flash | mother-keep-4 | keep | keep | 0.921 | Nell heard the mournful knell of the bell. → Nell heard the mournful knell of the bell. |
-| suite-verdict-correction | cloudflare/clef-flash | son-abstain-4 | abstain | keep | 0.354 | The label says Rowan. → The label says Rowan. |
+| suite-verdict-correction | cloudflare/clef-flash | son-abstain-4 | abstain | keep | 0.354 | The label says Rowen. → The label says Rowen. |
 | suite-verdict-correction | cloudflare/clef-flash | mother-keep-3 | keep | keep | 0.836 | Knell means the sound of a bell marking a death. → Knell means the sound of a bell marking a death. |
 | suite-verdict-correction | cloudflare/clef-flash | mother-abstain-1 | abstain | keep | 0.670 | Knell. → Knell. |
 | suite-verdict-correction | cloudflare/clef-flash | mother-abstain-4 | abstain | keep | 0.885 | Write down Knell. → Write down Knell. |

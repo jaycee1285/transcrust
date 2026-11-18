@@ -1,0 +1,6 @@
+target/
+# Per-entry results contain family names; this repo is public. Keep them local.
+out/
+# Frequency list: LDC/Norvig terms (personal/research use). Fetch locally, never commit.
+data/20k.txt
+data/20k.LICENSE.md

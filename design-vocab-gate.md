@@ -62,21 +62,36 @@ opened, or after a cue word ("dog …", "task …"). Never as a global boost.
    Built on the laptop and shipped as `john-vocab.index.json` so mopvox and swiftype load
    identical data.
 
-## 4. When the chain runs: uncertainty, not presence (John, 2026-11-17)
+## 4. When the chain runs: presence, settled by the rules (John, 2026-11-18)
 
-**Phrase boosting is presence-triggered.** Aho-Corasick / GPU-PB, as in murmure and transcrust's
-Nemotron boosting, fires whenever a phrase's tokens appear, with no context. It's only safe for
-phrases that couldn't occur otherwise, so it can never resolve a homophone.
+*This replaces the 2026-11-17 version, "uncertainty, not presence", which ran the chain only where
+the decode was unsure.*
 
-**This design is uncertainty-triggered.** From the **unboosted** decode, take each word's logit
-margin (top-1 minus top-2) or its token entropy:
-- **Confident:** leave the word alone, whatever the dictionary says.
-- **Unsure, *and* the span's phoneme n-grams hit a dictionary entry:** run the chain below on that
-  span only.
+**Phrase boosting is presence-triggered *and unconditional*.** Aho-Corasick / GPU-PB, as in murmure
+and transcrust's Nemotron boosting, swaps whenever a phrase's tokens appear, with no context. It's
+only safe for phrases that couldn't occur otherwise, so it can never resolve a homophone. That was
+the reason for the uncertainty trigger.
 
-The model is never steered. It reports where it's guessing, and the rules decide only there.
-murmure's fixed 0.45 confidence cutoff is the crude version of this. Calibrate the margin
-threshold on John's takes.
+**This design is presence-triggered, but every hit is *decided*, not swapped.** Every occurrence of
+a vocabulary term, a `heard:` alias or a word that sounds identical to one goes through the chain
+in section 5. The chain defaults to leaving the word alone.
+
+**Why the trigger changed (evidence, 2026-11-18):**
+- Parakeet wrote the homophones at 0.99–1.00 confidence, including "Gamble" meaning Gambol
+  (11-18 read-aloud, and 2 of 3 Gambol mentions in the dayshade pad). An uncertainty trigger
+  never sees those.
+- Mater came in at 0.15–0.18; confidence tracks rare names, not homophones.
+- The cost is negligible. Glossary words are about 1% of John's real dictation, the rules take
+  ~40 µs a hit, and only what the rules pass reaches the model. Expected added time is
+  n × h × p × t ≈ 2 s per 1,000 words on the laptop, concentrated in the few sentences that
+  carry a name.
+- Across four real-voice sets (read-aloud, phonon-trial, 11-18, smoke take), no rule produced a
+  wrong name.
+
+**What remains of confidence:** a recorded *reason*, not a gate ("low decode confidence 0.15").
+
+**What remains of the scorer (section 3):** an authoring-time check when a word is added
+("sounds identical to *matter*: needs context"), not a runtime gate.
 
 ## 5. The homophone chain (tier 0 and 1; each step can decide)
 
@@ -95,7 +110,14 @@ and say it differently.
 5. **Fixed phrases:** "Lightning McQueen", "Flo and Mater"; the characters co-occur.
 6. **Per-speaker prior:** on the kid's devices, Cars names win close calls; in John's dictation,
    the common word wins.
-7. **Only then, the decision model** (0.3–0.8B, keep / name / abstain), defaulting to abstain.
+   - **No context, no model (John, 2026-11-18).** If the sentence carries nothing to judge
+     beyond the span (e.g. "Bingo!" alone), the prior decides and the model is skipped. A model
+     fed one context-free word only replays its training-data word frequency; the prior does that
+     deterministically, per speaker, with a stated reason.
+7. **Only then, the decision model** (0.3–0.8B, keep / name / abstain), defaulting to abstain. It
+   sees **the current sentence only and no glossary** (decided 2026-11-18). A neighbouring
+   sentence made every model wrongly name an ordinary "lightning", and glossary descriptions made
+   UltraBERT name ordinary "chili"/"bingo".
 
 Optional leftovers parser: Link Grammar (rule-based) or UDPipe (small), about 1 ms per sentence,
 run only on sentences containing a tier 0 or 1 hit. Rules 1–4 take microseconds.
@@ -137,4 +159,4 @@ go beyond both.
       transcrust's port.
   - **One idea worth adding here:** a **per-word confidence gate** (above 0.45, never
     fuzzy-correct), as a free step 0 before the homophone chain. Confidence comes from the
-    unboosted logits.
+    unboosted logits. *Superseded 2026-11-18 (section 4): the 11-18 take showed homophones at 0.99–1.00, so a confidence gate would skip exactly the Gambol cases. Confidence is now only a recorded reason.*

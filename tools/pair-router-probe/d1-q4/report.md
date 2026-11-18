@@ -83,7 +83,7 @@ Exact decisions are raw choices, independent of the edit floor. KEEP and abstain
 | sentence | record-job-supply-1 | name | keep | 0.527 | 0.343 | 0.130 | he tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. → he tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. |
 | sentence | record-terakeet-1 | name | keep | 0.440 | 0.286 | 0.274 | t I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. → t I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. |
 | sentence | record-apptrack-1 | name | keep | 0.466 | 0.224 | 0.310 | At track start. → At track start. |
-| sentence | record-orion-1 | name | name | 0.179 | 0.464 | 0.356 | I might also say something like orangue laundry complete. → I might also say something like Rowan laundry complete. |
+| sentence | record-rowan-1 | name | name | 0.179 | 0.464 | 0.356 | I might also say something like orangue laundry complete. → I might also say something like Rowan laundry complete. |
 | sentence | record-backroom-1 | name | name | 0.415 | 0.495 | 0.090 | The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. → The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, Back room vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. |
 | sentence | record-dominion-1 | name | keep | 0.882 | 0.007 | 0.110 | Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. → Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. |
 | sentence | record-dominion-2 | name | keep | 0.507 | 0.034 | 0.459 | To give an example of a command that I might add, I might say paid dominion 360 plus 10. → To give an example of a command that I might add, I might say paid dominion 360 plus 10. |
@@ -92,7 +92,7 @@ Exact decisions are raw choices, independent of the edit floor. KEEP and abstain
 | sentence | dog-lowercase | name | keep | 0.617 | 0.354 | 0.029 | I love my dog gamble. → I love my dog gamble. |
 | sentence | casino-short | keep | keep | 0.996 | 0.000 | 0.004 | I like to gamble and play poker with cards. → I like to gamble and play poker with cards. |
 | sentence | casino-capitalized | keep | keep | 0.976 | 0.000 | 0.024 | Gamble and play cards at the casino. → Gamble and play cards at the casino. |
-| sentence | son-in-user-sentence | name | keep | 0.885 | 0.011 | 0.104 | My son Rowan's mother is named Nell. → My son Rowan's mother is named Nell. |
+| sentence | son-in-user-sentence | name | keep | 0.885 | 0.011 | 0.104 | My son Rowen's mother is named Nell. → My son Rowen's mother is named Nell. |
 | sentence | six-cards | keep | keep | 0.997 | 0.000 | 0.003 | I dealt six cards to each player. → I dealt six cards to each player. |
 | sentence | six-cigarettes | name | keep | 0.846 | 0.148 | 0.007 | My cigarette habit is called six. → My cigarette habit is called six. |
 | sentence | job-supply-prose | keep | keep | 0.467 | 0.210 | 0.323 | The job supply in this town has fallen. → The job supply in this town has fallen. |
@@ -110,18 +110,18 @@ Exact decisions are raw choices, independent of the edit floor. KEEP and abstain
 | suite-verdict | dog-abstain-2 | abstain | keep | 0.950 | 0.000 | 0.049 | Tell Gamble. → Tell Gamble. |
 | suite-verdict | dog-abstain-3 | abstain | keep | 0.958 | 0.000 | 0.042 | I heard someone say Gamble. → I heard someone say Gamble. |
 | suite-verdict | dog-abstain-4 | abstain | keep | 0.872 | 0.003 | 0.125 | The note only says Gamble. → The note only says Gamble. |
-| suite-verdict | son-name-1 | name | name | 0.091 | 0.887 | 0.022 | My son Rowan forgot his lunchbox. → My son Rowan forgot his lunchbox. |
-| suite-verdict | son-name-2 | name | name | 0.295 | 0.643 | 0.061 | Please pack my son Rowan's school bag. → Please pack my son Rowan's school bag. |
-| suite-verdict | son-name-3 | name | name | 0.078 | 0.885 | 0.037 | Nell and I co-parent our son Rowan. → Nell and I co-parent our son Rowan. |
-| suite-verdict | son-name-4 | name | name | 0.082 | 0.892 | 0.026 | My son's name is Rowan. → My son's name is Rowan. |
+| suite-verdict | son-name-1 | name | name | 0.091 | 0.887 | 0.022 | My son Rowen forgot his lunchbox. → My son Rowan forgot his lunchbox. |
+| suite-verdict | son-name-2 | name | name | 0.295 | 0.643 | 0.061 | Please pack my son Rowen's school bag. → Please pack my son Rowan's school bag. |
+| suite-verdict | son-name-3 | name | name | 0.078 | 0.885 | 0.037 | Nell and I co-parent our son Rowen. → Nell and I co-parent our son Rowan. |
+| suite-verdict | son-name-4 | name | name | 0.082 | 0.892 | 0.026 | My son's name is Rowen. → My son's name is Rowan. |
 | suite-verdict | son-keep-1 | keep | keep | 0.896 | 0.089 | 0.015 | I deliberately call my son O online to protect his privacy; keep that initial. → I deliberately call my son O online to protect his privacy; keep that initial. |
 | suite-verdict | son-keep-2 | keep | keep | 0.673 | 0.312 | 0.015 | My son O needs his lunchbox; use only his initial in this message. → My son O needs his lunchbox; use only his initial in this message. |
-| suite-verdict | son-keep-3 | keep | keep | 0.769 | 0.127 | 0.104 | My colleague Rowan is a different person from my son Rowan. → My colleague Rowan is a different person from my son Rowan. |
-| suite-verdict | son-keep-4 | keep | abstain | 0.375 | 0.210 | 0.415 | The author spells her name Rowan, without an o at the end. → The author spells her name Rowan, without an o at the end. |
-| suite-verdict | son-abstain-1 | abstain | name | 0.284 | 0.511 | 0.205 | Rowan. → Rowan. |
-| suite-verdict | son-abstain-2 | abstain | name | 0.245 | 0.706 | 0.049 | Ask Rowan about it. → Ask Rowan about it. |
-| suite-verdict | son-abstain-3 | abstain | keep | 0.908 | 0.082 | 0.010 | Someone called Rowan left a message. → Someone called Rowan left a message. |
-| suite-verdict | son-abstain-4 | abstain | keep | 0.538 | 0.342 | 0.120 | The label says Rowan. → The label says Rowan. |
+| suite-verdict | son-keep-3 | keep | keep | 0.769 | 0.127 | 0.104 | My colleague Rowen is a different person from my son Rowan. → My colleague Rowen is a different person from my son Rowan. |
+| suite-verdict | son-keep-4 | keep | abstain | 0.375 | 0.210 | 0.415 | The author spells her name Rowen, without an o at the end. → The author spells her name Rowen, without an o at the end. |
+| suite-verdict | son-abstain-1 | abstain | name | 0.284 | 0.511 | 0.205 | Rowen. → Rowan. |
+| suite-verdict | son-abstain-2 | abstain | name | 0.245 | 0.706 | 0.049 | Ask Rowen about it. → Ask Rowan about it. |
+| suite-verdict | son-abstain-3 | abstain | keep | 0.908 | 0.082 | 0.010 | Someone called Rowen left a message. → Someone called Rowen left a message. |
+| suite-verdict | son-abstain-4 | abstain | keep | 0.538 | 0.342 | 0.120 | The label says Rowen. → The label says Rowen. |
 | suite-verdict | mother-name-1 | name | name | 0.068 | 0.804 | 0.128 | My son's mother Knell will collect him from school. → My son's mother Nell will collect him from school. |
 | suite-verdict | mother-name-2 | name | name | 0.080 | 0.892 | 0.029 | Rowan's mother is named knell. → Rowan's mother is named Nell. |
 | suite-verdict | mother-name-3 | name | name | 0.102 | 0.843 | 0.054 | I co-parent with Rowan's mother Knell. → I co-parent with Rowan's mother Nell. |
@@ -188,18 +188,18 @@ Exact decisions are raw choices, independent of the edit floor. KEEP and abstain
 | suite-verdict-correction | dog-abstain-2 | abstain | name | 0.157 | 0.660 | 0.183 | Tell Gamble. → Tell Gambol. |
 | suite-verdict-correction | dog-abstain-3 | abstain | name | 0.255 | 0.584 | 0.161 | I heard someone say Gamble. → I heard someone say Gambol. |
 | suite-verdict-correction | dog-abstain-4 | abstain | name | 0.144 | 0.754 | 0.101 | The note only says Gamble. → The note only says Gambol. |
-| suite-verdict-correction | son-name-1 | name | name | 0.358 | 0.536 | 0.107 | My son Rowan forgot his lunchbox. → My son Rowan forgot his lunchbox. |
-| suite-verdict-correction | son-name-2 | name | keep | 0.497 | 0.276 | 0.226 | Please pack my son Rowan's school bag. → Please pack my son Rowan's school bag. |
-| suite-verdict-correction | son-name-3 | name | keep | 0.619 | 0.199 | 0.182 | Nell and I co-parent our son Rowan. → Nell and I co-parent our son Rowan. |
-| suite-verdict-correction | son-name-4 | name | keep | 0.705 | 0.158 | 0.137 | My son's name is Rowan. → My son's name is Rowan. |
+| suite-verdict-correction | son-name-1 | name | name | 0.358 | 0.536 | 0.107 | My son Rowen forgot his lunchbox. → My son Rowan forgot his lunchbox. |
+| suite-verdict-correction | son-name-2 | name | keep | 0.497 | 0.276 | 0.226 | Please pack my son Rowen's school bag. → Please pack my son Rowen's school bag. |
+| suite-verdict-correction | son-name-3 | name | keep | 0.619 | 0.199 | 0.182 | Nell and I co-parent our son Rowen. → Nell and I co-parent our son Rowen. |
+| suite-verdict-correction | son-name-4 | name | keep | 0.705 | 0.158 | 0.137 | My son's name is Rowen. → My son's name is Rowen. |
 | suite-verdict-correction | son-keep-1 | keep | keep | 0.943 | 0.021 | 0.037 | I deliberately call my son O online to protect his privacy; keep that initial. → I deliberately call my son O online to protect his privacy; keep that initial. |
 | suite-verdict-correction | son-keep-2 | keep | keep | 0.949 | 0.014 | 0.037 | My son O needs his lunchbox; use only his initial in this message. → My son O needs his lunchbox; use only his initial in this message. |
-| suite-verdict-correction | son-keep-3 | keep | keep | 0.707 | 0.078 | 0.215 | My colleague Rowan is a different person from my son Rowan. → My colleague Rowan is a different person from my son Rowan. |
-| suite-verdict-correction | son-keep-4 | keep | keep | 0.607 | 0.290 | 0.103 | The author spells her name Rowan, without an o at the end. → The author spells her name Rowan, without an o at the end. |
-| suite-verdict-correction | son-abstain-1 | abstain | keep | 0.534 | 0.289 | 0.177 | Rowan. → Rowan. |
-| suite-verdict-correction | son-abstain-2 | abstain | keep | 0.602 | 0.139 | 0.259 | Ask Rowan about it. → Ask Rowan about it. |
-| suite-verdict-correction | son-abstain-3 | abstain | keep | 0.680 | 0.223 | 0.097 | Someone called Rowan left a message. → Someone called Rowan left a message. |
-| suite-verdict-correction | son-abstain-4 | abstain | name | 0.322 | 0.513 | 0.165 | The label says Rowan. → The label says Rowan. |
+| suite-verdict-correction | son-keep-3 | keep | keep | 0.707 | 0.078 | 0.215 | My colleague Rowen is a different person from my son Rowan. → My colleague Rowen is a different person from my son Rowan. |
+| suite-verdict-correction | son-keep-4 | keep | keep | 0.607 | 0.290 | 0.103 | The author spells her name Rowen, without an o at the end. → The author spells her name Rowen, without an o at the end. |
+| suite-verdict-correction | son-abstain-1 | abstain | keep | 0.534 | 0.289 | 0.177 | Rowen. → Rowen. |
+| suite-verdict-correction | son-abstain-2 | abstain | keep | 0.602 | 0.139 | 0.259 | Ask Rowen about it. → Ask Rowen about it. |
+| suite-verdict-correction | son-abstain-3 | abstain | keep | 0.680 | 0.223 | 0.097 | Someone called Rowen left a message. → Someone called Rowen left a message. |
+| suite-verdict-correction | son-abstain-4 | abstain | name | 0.322 | 0.513 | 0.165 | The label says Rowen. → The label says Rowan. |
 | suite-verdict-correction | mother-name-1 | name | name | 0.352 | 0.392 | 0.256 | My son's mother Knell will collect him from school. → My son's mother Nell will collect him from school. |
 | suite-verdict-correction | mother-name-2 | name | name | 0.209 | 0.646 | 0.146 | Rowan's mother is named knell. → Rowan's mother is named Nell. |
 | suite-verdict-correction | mother-name-3 | name | name | 0.325 | 0.380 | 0.295 | I co-parent with Rowan's mother Knell. → I co-parent with Rowan's mother Nell. |

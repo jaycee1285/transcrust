@@ -10,10 +10,10 @@ Shared glossary SHA-256: d01d31c61937138b25fbb62d9fd66f24744488fe02a5f344420c02d
 | dog-context-name | two | name | keep | 0.461 | I was thinking about gamble. She is my dog, and I was planning her next walk. | I was thinking about gamble. She is my dog, and I was planning her next walk. |
 | dog-context-keep | single | abstain | keep | 0.007 | I was thinking about gamble. | I was thinking about gamble. |
 | dog-context-keep | two | keep | keep | 0.008 | I was thinking about gamble. I meant betting money at the casino. | I was thinking about gamble. I meant betting money at the casino. |
-| son-context-name | single | abstain | name | 0.567 | I spoke to Rowan. | I spoke to Rowan. |
-| son-context-name | two | name | keep | 0.259 | He is my son, and I was reminding him about his lunchbox. I spoke to Rowan. | He is my son, and I was reminding him about his lunchbox. I spoke to Rowan. |
-| son-context-keep | single | abstain | name | 0.567 | I spoke to Rowan. | I spoke to Rowan. |
-| son-context-keep | two | keep | keep | 0.134 | She is my colleague, and her name really is spelled Rowan. I spoke to Rowan. | She is my colleague, and her name really is spelled Rowan. I spoke to Rowan. |
+| son-context-name | single | abstain | name | 0.567 | I spoke to Rowen. | I spoke to Rowan. |
+| son-context-name | two | name | keep | 0.259 | He is my son, and I was reminding him about his lunchbox. I spoke to Rowen. | He is my son, and I was reminding him about his lunchbox. I spoke to Rowen. |
+| son-context-keep | single | abstain | name | 0.567 | I spoke to Rowen. | I spoke to Rowan. |
+| son-context-keep | two | keep | keep | 0.134 | She is my colleague, and her name really is spelled Rowen. I spoke to Rowen. | She is my colleague, and her name really is spelled Rowen. I spoke to Rowen. |
 | mother-context-name | single | abstain | keep | 0.147 | I heard Knell. | I heard Knell. |
 | mother-context-name | two | name | name | 0.843 | I heard Knell. She is my son Rowan's mother, and she was calling him home. | I heard Nell. She is my son Rowan's mother, and she was calling him home. |
 | mother-context-keep | single | abstain | keep | 0.147 | I heard Knell. | I heard Knell. |
@@ -40,8 +40,8 @@ Shared glossary SHA-256: d01d31c61937138b25fbb62d9fd66f24744488fe02a5f344420c02d
 | flo-context-keep | two | keep | keep | 0.327 | He drew arrows showing how water moves down a river. My son drew flow. | He drew arrows showing how water moves down a river. My son drew flow. |
 | dog-neighbor-name | single | keep | keep | 0.002 | I like to Gamble and play poker with cards. | I like to Gamble and play poker with cards. |
 | dog-neighbor-name | two | keep | keep | 0.084 | I like to Gamble and play poker with cards. I love my dog Gambol. | I like to Gamble and play poker with cards. I love my dog Gambol. |
-| son-neighbor-name | single | keep | name | 0.792 | My colleague Rowan is presenting the report. | My colleague Rowan is presenting the report. |
-| son-neighbor-name | two | keep | name | 0.982 | My son Rowan is at school. My colleague Rowan is presenting the report. | My son Rowan is at school. My colleague Rowan is presenting the report. |
+| son-neighbor-name | single | keep | name | 0.792 | My colleague Rowen is presenting the report. | My colleague Rowan is presenting the report. |
+| son-neighbor-name | two | keep | name | 0.982 | My son Rowan is at school. My colleague Rowen is presenting the report. | My son Rowan is at school. My colleague Rowan is presenting the report. |
 | mother-neighbor-name | single | keep | keep | 0.083 | A Knell is the sound of a bell marking a death. | A Knell is the sound of a bell marking a death. |
 | mother-neighbor-name | two | keep | keep | 0.106 | A Knell is the sound of a bell marking a death. Nell is picking up my son. | A Knell is the sound of a bell marking a death. Nell is picking up my son. |
 | project-neighbor-name | single | keep | abstain | 0.046 | The label uses trans crust to describe movement through a crust. | The label uses trans crust to describe movement through a crust. |
@@ -58,8 +58,8 @@ Shared glossary SHA-256: d01d31c61937138b25fbb62d9fd66f24744488fe02a5f344420c02d
 | initial-before | two | keep | name | 0.650 | His full name is Rowan. My son O needs his lunchbox; use only his initial here. | His full name is Rowan. My son Rowan needs his lunchbox; use only his initial here. |
 | initial-after | single | keep | keep | 0.177 | Please refer to my son as O in this message. | Please refer to my son as O in this message. |
 | initial-after | two | keep | name | 0.736 | Please refer to my son as O in this message. Rowan is his full name, which I keep private online. | Please refer to my son as Rowan in this message. Rowan is his full name, which I keep private online. |
-| quoted-orian | single | keep | keep | 0.249 | Copy the label exactly as written: Rowan. | Copy the label exactly as written: Rowan. |
-| quoted-orian | two | keep | name | 0.853 | It belongs to my son Rowan. Copy the label exactly as written: Rowan. | It belongs to my son Rowan. Copy the label exactly as written: Rowan. |
+| quoted-rowen | single | keep | keep | 0.249 | Copy the label exactly as written: Rowen. | Copy the label exactly as written: Rowen. |
+| quoted-rowen | two | keep | name | 0.853 | It belongs to my son Rowan. Copy the label exactly as written: Rowen. | It belongs to my son Rowan. Copy the label exactly as written: Rowan. |
 | quoted-flow | single | keep | name | 0.690 | Keep the quoted word exactly as written: flow. | Keep the quoted word exactly as written: Flo. |
 | quoted-flow | two | keep | name | 0.877 | Keep the quoted word exactly as written: flow. My son was describing Flo from Cars. | Keep the quoted word exactly as written: Flo. My son was describing Flo from Cars. |
 | bluey-bingo-explicit-1 | single | name | abstain | 0.212 | My son wants a toy of bingo, the little sister from Bluey. | My son wants a toy of bingo, the little sister from Bluey. |

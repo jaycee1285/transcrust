@@ -1,0 +1,11 @@
+[package]
+name = "vocab-score"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "Deterministic tier scoring for john-vocab.md entries (design-vocab-gate.md step 2)"
+
+# Standalone: not a member of the transcrust workspace yet.
+[workspace]
+
+[dependencies]

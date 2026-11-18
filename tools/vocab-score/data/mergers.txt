@@ -1,0 +1,21 @@
+# Accent-merger collapse rules, applied in order to ARPAbet phones (stress removed).
+# Format:
+#   map A -> B                 everywhere
+#   before X,Y: A,B -> C       when the next phone is X or Y
+#   between-vowels: A,B -> C   when flanked by vowels on both sides
+# Profile: us-general. The goal is accent robustness: two strings that any common
+# American accent can make identical must collapse to the same form.
+
+# cot = caught (LOT/THOUGHT merger)
+map AO -> AA
+
+# Mary = marry = merry (vowels before R)
+before R: AE,EY -> EH
+
+# pin = pen before nasals (Southern, widespread)
+before N,M,NG: EH -> IH
+
+# flapping: latter = ladder, matter/madder (t/d between vowels)
+between-vowels: T,D -> DX
+
+# au profile (bloey, not active here): trap-bath split, non-rhotic final R.

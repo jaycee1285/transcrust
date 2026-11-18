@@ -53,18 +53,18 @@ Model load: 1.14s. Median inference: 182ms.
 | dog-abstain-2 | Gamble → Gambol | abstain | name | 0.179 | 0.433 | 0.388 |
 | dog-abstain-3 | Gamble → Gambol | abstain | name | 0.181 | 0.452 | 0.366 |
 | dog-abstain-4 | Gamble → Gambol | abstain | name | 0.188 | 0.448 | 0.364 |
-| son-name-1 | Rowan → Rowan | name | name | 0.168 | 0.428 | 0.405 |
-| son-name-2 | Rowan → Rowan | name | name | 0.176 | 0.416 | 0.407 |
-| son-name-3 | Rowan → Rowan | name | name | 0.179 | 0.420 | 0.401 |
-| son-name-4 | Rowan → Rowan | name | name | 0.176 | 0.420 | 0.404 |
+| son-name-1 | Rowen → Rowan | name | name | 0.168 | 0.428 | 0.405 |
+| son-name-2 | Rowen → Rowan | name | name | 0.176 | 0.416 | 0.407 |
+| son-name-3 | Rowen → Rowan | name | name | 0.179 | 0.420 | 0.401 |
+| son-name-4 | Rowen → Rowan | name | name | 0.176 | 0.420 | 0.404 |
 | son-keep-1 | O → Rowan | keep | abstain | 0.204 | 0.390 | 0.405 |
 | son-keep-2 | O → Rowan | keep | name | 0.181 | 0.423 | 0.395 |
-| son-keep-3 | Rowan → Rowan | keep | name | 0.173 | 0.420 | 0.407 |
-| son-keep-4 | Rowan → Rowan | keep | name | 0.170 | 0.436 | 0.394 |
-| son-abstain-1 | Rowan → Rowan | abstain | abstain | 0.168 | 0.414 | 0.418 |
-| son-abstain-2 | Rowan → Rowan | abstain | name | 0.168 | 0.419 | 0.412 |
-| son-abstain-3 | Rowan → Rowan | abstain | abstain | 0.179 | 0.409 | 0.413 |
-| son-abstain-4 | Rowan → Rowan | abstain | name | 0.163 | 0.432 | 0.404 |
+| son-keep-3 | Rowen → Rowan | keep | name | 0.173 | 0.420 | 0.407 |
+| son-keep-4 | Rowen → Rowan | keep | name | 0.170 | 0.436 | 0.394 |
+| son-abstain-1 | Rowen → Rowan | abstain | abstain | 0.168 | 0.414 | 0.418 |
+| son-abstain-2 | Rowen → Rowan | abstain | name | 0.168 | 0.419 | 0.412 |
+| son-abstain-3 | Rowen → Rowan | abstain | abstain | 0.179 | 0.409 | 0.413 |
+| son-abstain-4 | Rowen → Rowan | abstain | name | 0.163 | 0.432 | 0.404 |
 | mother-name-1 | Knell → Nell | name | name | 0.180 | 0.422 | 0.398 |
 | mother-name-2 | knell → Nell | name | name | 0.178 | 0.426 | 0.396 |
 | mother-name-3 | Knell → Nell | name | name | 0.180 | 0.420 | 0.399 |
@@ -152,19 +152,19 @@ Expected **abstain**: The sentence does not establish whether this is the glossa
 
 Expected **abstain**: The sentence does not establish whether this is the glossary referent.
 
-**son-name-1** (synthetic): My son «Rowan» forgot his lunchbox.
+**son-name-1** (synthetic): My son «Rowen» forgot his lunchbox.
 
 Expected **name**: The sentence explicitly identifies the supplied glossary referent.
 
-**son-name-2** (synthetic): Please pack my son «Rowan»'s school bag.
+**son-name-2** (synthetic): Please pack my son «Rowen»'s school bag.
 
 Expected **name**: The sentence explicitly identifies the supplied glossary referent.
 
-**son-name-3** (synthetic): Nell and I co-parent our son «Rowan».
+**son-name-3** (synthetic): Nell and I co-parent our son «Rowen».
 
 Expected **name**: The sentence explicitly identifies the supplied glossary referent.
 
-**son-name-4** (synthetic): My son's name is «Rowan».
+**son-name-4** (synthetic): My son's name is «Rowen».
 
 Expected **name**: The sentence explicitly identifies the supplied glossary referent.
 
@@ -176,27 +176,27 @@ Expected **keep**: The sentence specifies an ordinary meaning, another referent,
 
 Expected **keep**: The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.
 
-**son-keep-3** (synthetic): My colleague «Rowan» is a different person from my son Rowan.
+**son-keep-3** (synthetic): My colleague «Rowen» is a different person from my son Rowan.
 
 Expected **keep**: The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.
 
-**son-keep-4** (synthetic): The author spells her name «Rowan», without an o at the end.
+**son-keep-4** (synthetic): The author spells her name «Rowen», without an o at the end.
 
 Expected **keep**: The sentence specifies an ordinary meaning, another referent, or spelling that must be preserved.
 
-**son-abstain-1** (synthetic): «Rowan».
+**son-abstain-1** (synthetic): «Rowen».
 
 Expected **abstain**: The sentence does not establish whether this is the glossary referent.
 
-**son-abstain-2** (synthetic): Ask «Rowan» about it.
+**son-abstain-2** (synthetic): Ask «Rowen» about it.
 
 Expected **abstain**: The sentence does not establish whether this is the glossary referent.
 
-**son-abstain-3** (synthetic): Someone called «Rowan» left a message.
+**son-abstain-3** (synthetic): Someone called «Rowen» left a message.
 
 Expected **abstain**: The sentence does not establish whether this is the glossary referent.
 
-**son-abstain-4** (synthetic): The label says «Rowan».
+**son-abstain-4** (synthetic): The label says «Rowen».
 
 Expected **abstain**: The sentence does not establish whether this is the glossary referent.
 

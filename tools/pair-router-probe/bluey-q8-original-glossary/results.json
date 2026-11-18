@@ -790,16 +790,16 @@
       "case": {
         "id": "son-context-name",
         "category": "disambiguate-name",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "I spoke to «Rowan».",
+        "context": "I spoke to «Rowen».",
         "want": "abstain",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "a67c92c978fbb2826930c483987024368f2e0effb031042d0f36c5bc3dd5c4e2",
-      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nI spoke to «Rowan».",
+      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nI spoke to «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -966,16 +966,16 @@
       "case": {
         "id": "son-context-name",
         "category": "disambiguate-name",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "He is my son, and I was reminding him about his lunchbox. I spoke to «Rowan».",
+        "context": "He is my son, and I was reminding him about his lunchbox. I spoke to «Rowen».",
         "want": "name",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "a67c92c978fbb2826930c483987024368f2e0effb031042d0f36c5bc3dd5c4e2",
-      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nHe is my son, and I was reminding him about his lunchbox. I spoke to «Rowan».",
+      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nHe is my son, and I was reminding him about his lunchbox. I spoke to «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -1158,16 +1158,16 @@
       "case": {
         "id": "son-context-keep",
         "category": "disambiguate-keep",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "I spoke to «Rowan».",
+        "context": "I spoke to «Rowen».",
         "want": "abstain",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "a67c92c978fbb2826930c483987024368f2e0effb031042d0f36c5bc3dd5c4e2",
-      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nI spoke to «Rowan».",
+      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nI spoke to «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -1334,16 +1334,16 @@
       "case": {
         "id": "son-context-keep",
         "category": "disambiguate-keep",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "She is my colleague, and her name really is spelled Rowan. I spoke to «Rowan».",
+        "context": "She is my colleague, and her name really is spelled Rowen. I spoke to «Rowen».",
         "want": "keep",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "a67c92c978fbb2826930c483987024368f2e0effb031042d0f36c5bc3dd5c4e2",
-      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nShe is my colleague, and her name really is spelled Rowan. I spoke to «Rowan».",
+      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nShe is my colleague, and her name really is spelled Rowen. I spoke to «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -6291,16 +6291,16 @@
       "case": {
         "id": "son-neighbor-name",
         "category": "name-distractor",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "My colleague «Rowan» is presenting the report.",
+        "context": "My colleague «Rowen» is presenting the report.",
         "want": "keep",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "a67c92c978fbb2826930c483987024368f2e0effb031042d0f36c5bc3dd5c4e2",
-      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nMy colleague «Rowan» is presenting the report.",
+      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nMy colleague «Rowen» is presenting the report.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -6471,16 +6471,16 @@
       "case": {
         "id": "son-neighbor-name",
         "category": "name-distractor",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "My son Rowan is at school. My colleague «Rowan» is presenting the report.",
+        "context": "My son Rowan is at school. My colleague «Rowen» is presenting the report.",
         "want": "keep",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "a67c92c978fbb2826930c483987024368f2e0effb031042d0f36c5bc3dd5c4e2",
-      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nMy son Rowan is at school. My colleague «Rowan» is presenting the report.",
+      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nMy son Rowan is at school. My colleague «Rowen» is presenting the report.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -9645,18 +9645,18 @@
     {
       "arm": "single",
       "case": {
-        "id": "quoted-orian",
+        "id": "quoted-rowen",
         "category": "intentional-spelling",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "Copy the label exactly as written: «Rowan».",
+        "context": "Copy the label exactly as written: «Rowen».",
         "want": "keep",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "a67c92c978fbb2826930c483987024368f2e0effb031042d0f36c5bc3dd5c4e2",
-      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nCopy the label exactly as written: «Rowan».",
+      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nCopy the label exactly as written: «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -9825,18 +9825,18 @@
     {
       "arm": "two",
       "case": {
-        "id": "quoted-orian",
+        "id": "quoted-rowen",
         "category": "intentional-spelling",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "It belongs to my son Rowan. Copy the label exactly as written: «Rowan».",
+        "context": "It belongs to my son Rowan. Copy the label exactly as written: «Rowen».",
         "want": "keep",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "a67c92c978fbb2826930c483987024368f2e0effb031042d0f36c5bc3dd5c4e2",
-      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nIt belongs to my son Rowan. Copy the label exactly as written: «Rowan».",
+      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nIt belongs to my son Rowan. Copy the label exactly as written: «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",

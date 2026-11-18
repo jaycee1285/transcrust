@@ -813,7 +813,7 @@
     {
       "arm": "sentence",
       "case": {
-        "id": "record-orion-1",
+        "id": "record-rowan-1",
         "source": "record-2",
         "heard": "orangue",
         "canonical": "Rowan",
@@ -2161,12 +2161,12 @@
       "case": {
         "id": "son-in-user-sentence",
         "source": "typed",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "My son «Rowan»'s mother is named Nell.",
+        "context": "My son «Rowen»'s mother is named Nell.",
         "want": "name",
         "name_description": "Rowan, the speaker's son",
-        "keep_description": "a different person named Rowan, not the speaker's son Rowan",
+        "keep_description": "a different person named Rowen, not the speaker's son Rowan",
         "choice": "name",
         "confidence": 0.6149971448421411,
         "probabilities": {
@@ -2181,16 +2181,16 @@
         ],
         "latency_ms": 82.53588498337194,
         "token_count": 67,
-        "prompt": "<<LABEL>>It is a different person named Rowan, not the speaker's son Rowan<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son «Rowan»'s mother is named Nell."
+        "prompt": "<<LABEL>>It is a different person named Rowen, not the speaker's son Rowan<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son «Rowen»'s mother is named Nell."
       },
       "baseline_sha256": "6d60a2cc73d72cbeab94e28ff2f518e8ae39f40ddd03d5eb3ab8a45ce3ef35e3",
-      "state": "My son «Rowan»'s mother is named Nell.",
+      "state": "My son «Rowen»'s mother is named Nell.",
       "questions": {
         "decision": {
           "type": "choice",
           "instructions": "What does the marked span refer to in this spoken sentence?",
           "criteria": {
-            "keep": "It is a different person named Rowan, not the speaker's son Rowan",
+            "keep": "It is a different person named Rowen, not the speaker's son Rowan",
             "name": "It is Rowan, the speaker's son",
             "abstain": "insufficient evidence"
           }
@@ -4509,9 +4509,9 @@
         "id": "son-name-1",
         "source": "synthetic",
         "category": "son/name",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "My son «Rowan» forgot his lunchbox.",
+        "context": "My son «Rowen» forgot his lunchbox.",
         "want": "name",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -4530,10 +4530,10 @@
         ],
         "latency_ms": 84.14620702387765,
         "token_count": 68,
-        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son «Rowan» forgot his lunchbox."
+        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son «Rowen» forgot his lunchbox."
       },
       "baseline_sha256": "fe608776f5cd55d0010e2b77b079bc114d9bbc345b1588663dfe591b8ca21d42",
-      "state": "My son «Rowan» forgot his lunchbox.",
+      "state": "My son «Rowen» forgot his lunchbox.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -4646,9 +4646,9 @@
         "id": "son-name-2",
         "source": "synthetic",
         "category": "son/name",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "Please pack my son «Rowan»'s school bag.",
+        "context": "Please pack my son «Rowen»'s school bag.",
         "want": "name",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -4667,10 +4667,10 @@
         ],
         "latency_ms": 86.10820199828595,
         "token_count": 70,
-        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nPlease pack my son «Rowan»'s school bag."
+        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nPlease pack my son «Rowen»'s school bag."
       },
       "baseline_sha256": "fe608776f5cd55d0010e2b77b079bc114d9bbc345b1588663dfe591b8ca21d42",
-      "state": "Please pack my son «Rowan»'s school bag.",
+      "state": "Please pack my son «Rowen»'s school bag.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -4785,9 +4785,9 @@
         "id": "son-name-3",
         "source": "synthetic",
         "category": "son/name",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "Nell and I co-parent our son «Rowan».",
+        "context": "Nell and I co-parent our son «Rowen».",
         "want": "name",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -4806,10 +4806,10 @@
         ],
         "latency_ms": 85.05813800729811,
         "token_count": 70,
-        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nNell and I co-parent our son «Rowan»."
+        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nNell and I co-parent our son «Rowen»."
       },
       "baseline_sha256": "fe608776f5cd55d0010e2b77b079bc114d9bbc345b1588663dfe591b8ca21d42",
-      "state": "Nell and I co-parent our son «Rowan».",
+      "state": "Nell and I co-parent our son «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -4924,9 +4924,9 @@
         "id": "son-name-4",
         "source": "synthetic",
         "category": "son/name",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "My son's name is «Rowan».",
+        "context": "My son's name is «Rowen».",
         "want": "name",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -4945,10 +4945,10 @@
         ],
         "latency_ms": 81.56134595628828,
         "token_count": 66,
-        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son's name is «Rowan»."
+        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son's name is «Rowen»."
       },
       "baseline_sha256": "fe608776f5cd55d0010e2b77b079bc114d9bbc345b1588663dfe591b8ca21d42",
-      "state": "My son's name is «Rowan».",
+      "state": "My son's name is «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -5347,9 +5347,9 @@
         "id": "son-keep-3",
         "source": "synthetic",
         "category": "son/keep",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "My colleague «Rowan» is a different person from my son Rowan.",
+        "context": "My colleague «Rowen» is a different person from my son Rowan.",
         "want": "keep",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -5368,10 +5368,10 @@
         ],
         "latency_ms": 90.65836999798194,
         "token_count": 73,
-        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy colleague «Rowan» is a different person from my son Rowan."
+        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy colleague «Rowen» is a different person from my son Rowan."
       },
       "baseline_sha256": "fe608776f5cd55d0010e2b77b079bc114d9bbc345b1588663dfe591b8ca21d42",
-      "state": "My colleague «Rowan» is a different person from my son Rowan.",
+      "state": "My colleague «Rowen» is a different person from my son Rowan.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -5488,9 +5488,9 @@
         "id": "son-keep-4",
         "source": "synthetic",
         "category": "son/keep",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "The author spells her name «Rowan», without an o at the end.",
+        "context": "The author spells her name «Rowen», without an o at the end.",
         "want": "keep",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -5509,10 +5509,10 @@
         ],
         "latency_ms": 90.21141397533938,
         "token_count": 73,
-        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe author spells her name «Rowan», without an o at the end."
+        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe author spells her name «Rowen», without an o at the end."
       },
       "baseline_sha256": "fe608776f5cd55d0010e2b77b079bc114d9bbc345b1588663dfe591b8ca21d42",
-      "state": "The author spells her name «Rowan», without an o at the end.",
+      "state": "The author spells her name «Rowen», without an o at the end.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -5630,9 +5630,9 @@
         "id": "son-abstain-1",
         "source": "synthetic",
         "category": "son/abstain",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "«Rowan».",
+        "context": "«Rowen».",
         "want": "abstain",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -5651,10 +5651,10 @@
         ],
         "latency_ms": 77.23827101290226,
         "token_count": 61,
-        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n«Rowan»."
+        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n«Rowen»."
       },
       "baseline_sha256": "fe608776f5cd55d0010e2b77b079bc114d9bbc345b1588663dfe591b8ca21d42",
-      "state": "«Rowan».",
+      "state": "«Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -5760,9 +5760,9 @@
         "id": "son-abstain-2",
         "source": "synthetic",
         "category": "son/abstain",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "Ask «Rowan» about it.",
+        "context": "Ask «Rowen» about it.",
         "want": "abstain",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -5781,10 +5781,10 @@
         ],
         "latency_ms": 80.2659600158222,
         "token_count": 65,
-        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nAsk «Rowan» about it."
+        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nAsk «Rowen» about it."
       },
       "baseline_sha256": "fe608776f5cd55d0010e2b77b079bc114d9bbc345b1588663dfe591b8ca21d42",
-      "state": "Ask «Rowan» about it.",
+      "state": "Ask «Rowen» about it.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -5894,9 +5894,9 @@
         "id": "son-abstain-3",
         "source": "synthetic",
         "category": "son/abstain",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "Someone called «Rowan» left a message.",
+        "context": "Someone called «Rowen» left a message.",
         "want": "abstain",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -5915,10 +5915,10 @@
         ],
         "latency_ms": 83.56578898383304,
         "token_count": 67,
-        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nSomeone called «Rowan» left a message."
+        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nSomeone called «Rowen» left a message."
       },
       "baseline_sha256": "fe608776f5cd55d0010e2b77b079bc114d9bbc345b1588663dfe591b8ca21d42",
-      "state": "Someone called «Rowan» left a message.",
+      "state": "Someone called «Rowen» left a message.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -6031,9 +6031,9 @@
         "id": "son-abstain-4",
         "source": "synthetic",
         "category": "son/abstain",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "The label says «Rowan».",
+        "context": "The label says «Rowen».",
         "want": "abstain",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -6052,10 +6052,10 @@
         ],
         "latency_ms": 77.67955597955734,
         "token_count": 64,
-        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe label says «Rowan»."
+        "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nThe label says «Rowen»."
       },
       "baseline_sha256": "fe608776f5cd55d0010e2b77b079bc114d9bbc345b1588663dfe591b8ca21d42",
-      "state": "The label says «Rowan».",
+      "state": "The label says «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -16154,9 +16154,9 @@
         "id": "son-name-1",
         "source": "synthetic",
         "category": "son/name",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "My son «Rowan» forgot his lunchbox.",
+        "context": "My son «Rowen» forgot his lunchbox.",
         "want": "name",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -16175,10 +16175,10 @@
         ],
         "latency_ms": 177.7385930181481,
         "token_count": 151,
-        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nMy son «Rowan» forgot his lunchbox."
+        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nMy son «Rowen» forgot his lunchbox."
       },
       "baseline_sha256": "9b0cc2d51c92a995cce8719efaa454737eae2f8d835682e7449d66bcf7613c30",
-      "state": "My son «Rowan» forgot his lunchbox.",
+      "state": "My son «Rowen» forgot his lunchbox.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -16372,9 +16372,9 @@
         "id": "son-name-2",
         "source": "synthetic",
         "category": "son/name",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "Please pack my son «Rowan»'s school bag.",
+        "context": "Please pack my son «Rowen»'s school bag.",
         "want": "name",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -16393,10 +16393,10 @@
         ],
         "latency_ms": 187.3599499813281,
         "token_count": 153,
-        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nPlease pack my son «Rowan»'s school bag."
+        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nPlease pack my son «Rowen»'s school bag."
       },
       "baseline_sha256": "9b0cc2d51c92a995cce8719efaa454737eae2f8d835682e7449d66bcf7613c30",
-      "state": "Please pack my son «Rowan»'s school bag.",
+      "state": "Please pack my son «Rowen»'s school bag.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -16592,9 +16592,9 @@
         "id": "son-name-3",
         "source": "synthetic",
         "category": "son/name",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "Nell and I co-parent our son «Rowan».",
+        "context": "Nell and I co-parent our son «Rowen».",
         "want": "name",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -16613,10 +16613,10 @@
         ],
         "latency_ms": 181.7335599916987,
         "token_count": 153,
-        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nNell and I co-parent our son «Rowan»."
+        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nNell and I co-parent our son «Rowen»."
       },
       "baseline_sha256": "9b0cc2d51c92a995cce8719efaa454737eae2f8d835682e7449d66bcf7613c30",
-      "state": "Nell and I co-parent our son «Rowan».",
+      "state": "Nell and I co-parent our son «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -16812,9 +16812,9 @@
         "id": "son-name-4",
         "source": "synthetic",
         "category": "son/name",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "My son's name is «Rowan».",
+        "context": "My son's name is «Rowen».",
         "want": "name",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -16833,10 +16833,10 @@
         ],
         "latency_ms": 182.3729689931497,
         "token_count": 149,
-        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nMy son's name is «Rowan»."
+        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nMy son's name is «Rowen»."
       },
       "baseline_sha256": "9b0cc2d51c92a995cce8719efaa454737eae2f8d835682e7449d66bcf7613c30",
-      "state": "My son's name is «Rowan».",
+      "state": "My son's name is «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -17478,9 +17478,9 @@
         "id": "son-keep-3",
         "source": "synthetic",
         "category": "son/keep",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "My colleague «Rowan» is a different person from my son Rowan.",
+        "context": "My colleague «Rowen» is a different person from my son Rowan.",
         "want": "keep",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -17499,10 +17499,10 @@
         ],
         "latency_ms": 182.52913997275755,
         "token_count": 156,
-        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nMy colleague «Rowan» is a different person from my son Rowan."
+        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nMy colleague «Rowen» is a different person from my son Rowan."
       },
       "baseline_sha256": "9b0cc2d51c92a995cce8719efaa454737eae2f8d835682e7449d66bcf7613c30",
-      "state": "My colleague «Rowan» is a different person from my son Rowan.",
+      "state": "My colleague «Rowen» is a different person from my son Rowan.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -17700,9 +17700,9 @@
         "id": "son-keep-4",
         "source": "synthetic",
         "category": "son/keep",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "The author spells her name «Rowan», without an o at the end.",
+        "context": "The author spells her name «Rowen», without an o at the end.",
         "want": "keep",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -17721,10 +17721,10 @@
         ],
         "latency_ms": 182.75185098173097,
         "token_count": 156,
-        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nThe author spells her name «Rowan», without an o at the end."
+        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nThe author spells her name «Rowen», without an o at the end."
       },
       "baseline_sha256": "9b0cc2d51c92a995cce8719efaa454737eae2f8d835682e7449d66bcf7613c30",
-      "state": "The author spells her name «Rowan», without an o at the end.",
+      "state": "The author spells her name «Rowen», without an o at the end.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -17923,9 +17923,9 @@
         "id": "son-abstain-1",
         "source": "synthetic",
         "category": "son/abstain",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "«Rowan».",
+        "context": "«Rowen».",
         "want": "abstain",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -17944,10 +17944,10 @@
         ],
         "latency_ms": 172.41541302064434,
         "token_count": 144,
-        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\n«Rowan»."
+        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\n«Rowen»."
       },
       "baseline_sha256": "9b0cc2d51c92a995cce8719efaa454737eae2f8d835682e7449d66bcf7613c30",
-      "state": "«Rowan».",
+      "state": "«Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -18134,9 +18134,9 @@
         "id": "son-abstain-2",
         "source": "synthetic",
         "category": "son/abstain",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "Ask «Rowan» about it.",
+        "context": "Ask «Rowen» about it.",
         "want": "abstain",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -18155,10 +18155,10 @@
         ],
         "latency_ms": 173.9257510052994,
         "token_count": 148,
-        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nAsk «Rowan» about it."
+        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nAsk «Rowen» about it."
       },
       "baseline_sha256": "9b0cc2d51c92a995cce8719efaa454737eae2f8d835682e7449d66bcf7613c30",
-      "state": "Ask «Rowan» about it.",
+      "state": "Ask «Rowen» about it.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -18349,9 +18349,9 @@
         "id": "son-abstain-3",
         "source": "synthetic",
         "category": "son/abstain",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "Someone called «Rowan» left a message.",
+        "context": "Someone called «Rowen» left a message.",
         "want": "abstain",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -18370,10 +18370,10 @@
         ],
         "latency_ms": 191.19707797653973,
         "token_count": 150,
-        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nSomeone called «Rowan» left a message."
+        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nSomeone called «Rowen» left a message."
       },
       "baseline_sha256": "9b0cc2d51c92a995cce8719efaa454737eae2f8d835682e7449d66bcf7613c30",
-      "state": "Someone called «Rowan» left a message.",
+      "state": "Someone called «Rowen» left a message.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -18567,9 +18567,9 @@
         "id": "son-abstain-4",
         "source": "synthetic",
         "category": "son/abstain",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
-        "context": "The label says «Rowan».",
+        "context": "The label says «Rowen».",
         "want": "abstain",
         "name_description": "Rowan, the speaker's son",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
@@ -18588,10 +18588,10 @@
         ],
         "latency_ms": 172.03031602548435,
         "token_count": 147,
-        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nThe label says «Rowan»."
+        "prompt": "<<LABEL>>It is text that should be preserved exactly as written, including intentional initials, quoted spellings, other people and ordinary words<<LABEL>>It is a transcription error that should be replaced with Rowan, meaning Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: Should the marked text be corrected to the supplied vocabulary name? Preserve intentional initials and spellings. Correct only when the sentence establishes a transcription error. If the intended meaning is unclear, there is insufficient evidence. Vocabulary fact: Rowan, the speaker's son. Alternative meaning: a different person or an intentional initial, not the full name of the speaker's son.\n\nContext:\nThe label says «Rowen»."
       },
       "baseline_sha256": "9b0cc2d51c92a995cce8719efaa454737eae2f8d835682e7449d66bcf7613c30",
-      "state": "The label says «Rowan».",
+      "state": "The label says «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",

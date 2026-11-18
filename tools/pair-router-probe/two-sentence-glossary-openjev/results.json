@@ -725,16 +725,16 @@
       "case": {
         "id": "son-context-name",
         "category": "disambiguate-name",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "I spoke to «Rowan».",
+        "context": "I spoke to «Rowen».",
         "want": "abstain",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "8efdf9a0b33498082fa3a874437b74ffe98652ea5f3e849a4f319689bee520a1",
-      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nI spoke to «Rowan».",
+      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nI spoke to «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -763,7 +763,7 @@
         0.9651206731796265
       ],
       "latency_ms": 151.38668700819835,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nVocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nI spoke to «Rowan».",
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nVocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nI spoke to «Rowen».",
       "input_ids": [
         50281,
         50368,
@@ -901,16 +901,16 @@
       "case": {
         "id": "son-context-name",
         "category": "disambiguate-name",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "He is my son, and I was reminding him about his lunchbox. I spoke to «Rowan».",
+        "context": "He is my son, and I was reminding him about his lunchbox. I spoke to «Rowen».",
         "want": "name",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "8efdf9a0b33498082fa3a874437b74ffe98652ea5f3e849a4f319689bee520a1",
-      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nHe is my son, and I was reminding him about his lunchbox. I spoke to «Rowan».",
+      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nHe is my son, and I was reminding him about his lunchbox. I spoke to «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -939,7 +939,7 @@
         0.938725471496582
       ],
       "latency_ms": 175.9326889878139,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nVocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nHe is my son, and I was reminding him about his lunchbox. I spoke to «Rowan».",
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nVocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nHe is my son, and I was reminding him about his lunchbox. I spoke to «Rowen».",
       "input_ids": [
         50281,
         50368,
@@ -1092,16 +1092,16 @@
       "case": {
         "id": "son-context-keep",
         "category": "disambiguate-keep",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "I spoke to «Rowan».",
+        "context": "I spoke to «Rowen».",
         "want": "abstain",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "8efdf9a0b33498082fa3a874437b74ffe98652ea5f3e849a4f319689bee520a1",
-      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nI spoke to «Rowan».",
+      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nI spoke to «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -1130,7 +1130,7 @@
         0.9651206731796265
       ],
       "latency_ms": 149.60770297329873,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nVocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nI spoke to «Rowan».",
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nVocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nI spoke to «Rowen».",
       "input_ids": [
         50281,
         50368,
@@ -1268,16 +1268,16 @@
       "case": {
         "id": "son-context-keep",
         "category": "disambiguate-keep",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "She is my colleague, and her name really is spelled Rowan. I spoke to «Rowan».",
+        "context": "She is my colleague, and her name really is spelled Rowen. I spoke to «Rowen».",
         "want": "keep",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "8efdf9a0b33498082fa3a874437b74ffe98652ea5f3e849a4f319689bee520a1",
-      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nShe is my colleague, and her name really is spelled Rowan. I spoke to «Rowan».",
+      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nShe is my colleague, and her name really is spelled Rowen. I spoke to «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -1306,7 +1306,7 @@
         0.7924572825431824
       ],
       "latency_ms": 166.90259199822322,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nVocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nShe is my colleague, and her name really is spelled Rowan. I spoke to «Rowan».",
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nVocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nShe is my colleague, and her name really is spelled Rowen. I spoke to «Rowen».",
       "input_ids": [
         50281,
         50368,
@@ -6207,16 +6207,16 @@
       "case": {
         "id": "son-neighbor-name",
         "category": "name-distractor",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "My colleague «Rowan» is presenting the report.",
+        "context": "My colleague «Rowen» is presenting the report.",
         "want": "keep",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "8efdf9a0b33498082fa3a874437b74ffe98652ea5f3e849a4f319689bee520a1",
-      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nMy colleague «Rowan» is presenting the report.",
+      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nMy colleague «Rowen» is presenting the report.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -6245,7 +6245,7 @@
         1.1363422870635986
       ],
       "latency_ms": 154.3009969755076,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nVocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nMy colleague «Rowan» is presenting the report.",
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nVocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nMy colleague «Rowen» is presenting the report.",
       "input_ids": [
         50281,
         50368,
@@ -6387,16 +6387,16 @@
       "case": {
         "id": "son-neighbor-name",
         "category": "name-distractor",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "My son Rowan is at school. My colleague «Rowan» is presenting the report.",
+        "context": "My son Rowan is at school. My colleague «Rowen» is presenting the report.",
         "want": "keep",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "8efdf9a0b33498082fa3a874437b74ffe98652ea5f3e849a4f319689bee520a1",
-      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nMy son Rowan is at school. My colleague «Rowan» is presenting the report.",
+      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nMy son Rowan is at school. My colleague «Rowen» is presenting the report.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -6425,7 +6425,7 @@
         1.100795865058899
       ],
       "latency_ms": 171.68309399858117,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nVocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nMy son Rowan is at school. My colleague «Rowan» is presenting the report.",
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nVocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nMy son Rowan is at school. My colleague «Rowen» is presenting the report.",
       "input_ids": [
         50281,
         50368,
@@ -9558,18 +9558,18 @@
     {
       "arm": "single",
       "case": {
-        "id": "quoted-orian",
+        "id": "quoted-rowen",
         "category": "intentional-spelling",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "Copy the label exactly as written: «Rowan».",
+        "context": "Copy the label exactly as written: «Rowen».",
         "want": "keep",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "8efdf9a0b33498082fa3a874437b74ffe98652ea5f3e849a4f319689bee520a1",
-      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nCopy the label exactly as written: «Rowan».",
+      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nCopy the label exactly as written: «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -9598,7 +9598,7 @@
         0.9141435027122498
       ],
       "latency_ms": 155.36122297635302,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nVocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nCopy the label exactly as written: «Rowan».",
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nVocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nCopy the label exactly as written: «Rowen».",
       "input_ids": [
         50281,
         50368,
@@ -9738,18 +9738,18 @@
     {
       "arm": "two",
       "case": {
-        "id": "quoted-orian",
+        "id": "quoted-rowen",
         "category": "intentional-spelling",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "It belongs to my son Rowan. Copy the label exactly as written: «Rowan».",
+        "context": "It belongs to my son Rowan. Copy the label exactly as written: «Rowen».",
         "want": "keep",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "8efdf9a0b33498082fa3a874437b74ffe98652ea5f3e849a4f319689bee520a1",
-      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nIt belongs to my son Rowan. Copy the label exactly as written: «Rowan».",
+      "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nIt belongs to my son Rowan. Copy the label exactly as written: «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -9778,7 +9778,7 @@
         0.8536182045936584
       ],
       "latency_ms": 167.78093099128455,
-      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nVocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nIt belongs to my son Rowan. Copy the label exactly as written: «Rowan».",
+      "prompt": "<<LABEL>>It is a different person or an intentional initial, not the full name of the speaker's son<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nVocabulary glossary:\n| Term | Description |\n|---|---|\n| Gambol | pet dog |\n| Rowan | son |\n| Transcrust | software project |\n| Flo | Cars movie character |\n| Lightning McQueen | Cars movie character |\n\nDictation:\nIt belongs to my son Rowan. Copy the label exactly as written: «Rowen».",
       "input_ids": [
         50281,
         50368,

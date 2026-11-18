@@ -550,16 +550,16 @@
       "case": {
         "id": "son-context-name",
         "category": "disambiguate-name",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "I spoke to «Rowan».",
+        "context": "I spoke to «Rowen».",
         "want": "abstain",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "8efdf9a0b33498082fa3a874437b74ffe98652ea5f3e849a4f319689bee520a1",
-      "state": "I spoke to «Rowan».",
+      "state": "I spoke to «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -667,16 +667,16 @@
       "case": {
         "id": "son-context-name",
         "category": "disambiguate-name",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "He is my son, and I was reminding him about his lunchbox. I spoke to «Rowan».",
+        "context": "He is my son, and I was reminding him about his lunchbox. I spoke to «Rowen».",
         "want": "name",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "8efdf9a0b33498082fa3a874437b74ffe98652ea5f3e849a4f319689bee520a1",
-      "state": "He is my son, and I was reminding him about his lunchbox. I spoke to «Rowan».",
+      "state": "He is my son, and I was reminding him about his lunchbox. I spoke to «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -800,16 +800,16 @@
       "case": {
         "id": "son-context-keep",
         "category": "disambiguate-keep",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "I spoke to «Rowan».",
+        "context": "I spoke to «Rowen».",
         "want": "abstain",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "8efdf9a0b33498082fa3a874437b74ffe98652ea5f3e849a4f319689bee520a1",
-      "state": "I spoke to «Rowan».",
+      "state": "I spoke to «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -917,16 +917,16 @@
       "case": {
         "id": "son-context-keep",
         "category": "disambiguate-keep",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "She is my colleague, and her name really is spelled Rowan. I spoke to «Rowan».",
+        "context": "She is my colleague, and her name really is spelled Rowen. I spoke to «Rowen».",
         "want": "keep",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "8efdf9a0b33498082fa3a874437b74ffe98652ea5f3e849a4f319689bee520a1",
-      "state": "She is my colleague, and her name really is spelled Rowan. I spoke to «Rowan».",
+      "state": "She is my colleague, and her name really is spelled Rowen. I spoke to «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -4281,16 +4281,16 @@
       "case": {
         "id": "son-neighbor-name",
         "category": "name-distractor",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "My colleague «Rowan» is presenting the report.",
+        "context": "My colleague «Rowen» is presenting the report.",
         "want": "keep",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "8efdf9a0b33498082fa3a874437b74ffe98652ea5f3e849a4f319689bee520a1",
-      "state": "My colleague «Rowan» is presenting the report.",
+      "state": "My colleague «Rowen» is presenting the report.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -4402,16 +4402,16 @@
       "case": {
         "id": "son-neighbor-name",
         "category": "name-distractor",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "My son Rowan is at school. My colleague «Rowan» is presenting the report.",
+        "context": "My son Rowan is at school. My colleague «Rowen» is presenting the report.",
         "want": "keep",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "8efdf9a0b33498082fa3a874437b74ffe98652ea5f3e849a4f319689bee520a1",
-      "state": "My son Rowan is at school. My colleague «Rowan» is presenting the report.",
+      "state": "My son Rowan is at school. My colleague «Rowen» is presenting the report.",
       "questions": {
         "decision": {
           "type": "choice",
@@ -6573,18 +6573,18 @@
     {
       "arm": "single",
       "case": {
-        "id": "quoted-orian",
+        "id": "quoted-rowen",
         "category": "intentional-spelling",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "Copy the label exactly as written: «Rowan».",
+        "context": "Copy the label exactly as written: «Rowen».",
         "want": "keep",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "8efdf9a0b33498082fa3a874437b74ffe98652ea5f3e849a4f319689bee520a1",
-      "state": "Copy the label exactly as written: «Rowan».",
+      "state": "Copy the label exactly as written: «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",
@@ -6694,18 +6694,18 @@
     {
       "arm": "two",
       "case": {
-        "id": "quoted-orian",
+        "id": "quoted-rowen",
         "category": "intentional-spelling",
-        "heard": "Rowan",
+        "heard": "Rowen",
         "canonical": "Rowan",
         "keep_description": "a different person or an intentional initial, not the full name of the speaker's son",
         "name_description": "Rowan, the speaker's son",
-        "context": "It belongs to my son Rowan. Copy the label exactly as written: «Rowan».",
+        "context": "It belongs to my son Rowan. Copy the label exactly as written: «Rowen».",
         "want": "keep",
         "source": "synthetic-two-sentence"
       },
       "baseline_sha256": "8efdf9a0b33498082fa3a874437b74ffe98652ea5f3e849a4f319689bee520a1",
-      "state": "It belongs to my son Rowan. Copy the label exactly as written: «Rowan».",
+      "state": "It belongs to my son Rowan. Copy the label exactly as written: «Rowen».",
       "questions": {
         "decision": {
           "type": "choice",

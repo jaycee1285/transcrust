@@ -36,8 +36,8 @@ Each call launches the CLI anew. Round-trip time includes model load and process
 | sentence | forced | record-terakeet-1 | name | invalid | 0.602 | t I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. → t I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. |
 | sentence | default | record-apptrack-1 | name | abstain | 1.000 | At track start. → At track start. |
 | sentence | forced | record-apptrack-1 | name | name | 1.000 | At track start. → Apptrack start. |
-| sentence | default | record-orion-1 | name | abstain | 0.998 | I might also say something like orangue laundry complete. → I might also say something like orangue laundry complete. |
-| sentence | forced | record-orion-1 | name | name | 0.998 | I might also say something like orangue laundry complete. → I might also say something like Rowan laundry complete. |
+| sentence | default | record-rowan-1 | name | abstain | 0.998 | I might also say something like orangue laundry complete. → I might also say something like orangue laundry complete. |
+| sentence | forced | record-rowan-1 | name | name | 0.998 | I might also say something like orangue laundry complete. → I might also say something like Rowan laundry complete. |
 | sentence | default | record-backroom-1 | name | abstain | 0.291 | The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. → The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. |
 | sentence | forced | record-backroom-1 | name | name | 0.291 | The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. → The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, Back room vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. |
 | sentence | default | record-dominion-1 | name | abstain | 0.165 | Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. → Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. |
@@ -54,8 +54,8 @@ Each call launches the CLI anew. Round-trip time includes model load and process
 | sentence | forced | casino-short | keep | name | 0.232 | I like to gamble and play poker with cards. → I like to Gambol and play poker with cards. |
 | sentence | default | casino-capitalized | keep | abstain | 0.204 | Gamble and play cards at the casino. → Gamble and play cards at the casino. |
 | sentence | forced | casino-capitalized | keep | name | 0.204 | Gamble and play cards at the casino. → Gambol and play cards at the casino. |
-| sentence | default | son-in-user-sentence | name | name | 0.224 | My son Rowan's mother is named Nell. → My son Rowan's mother is named Nell. |
-| sentence | forced | son-in-user-sentence | name | name | 0.224 | My son Rowan's mother is named Nell. → My son Rowan's mother is named Nell. |
+| sentence | default | son-in-user-sentence | name | name | 0.224 | My son Rowen's mother is named Nell. → My son Rowan's mother is named Nell. |
+| sentence | forced | son-in-user-sentence | name | name | 0.224 | My son Rowen's mother is named Nell. → My son Rowan's mother is named Nell. |
 | sentence | default | six-cards | keep | abstain | 1.000 | I dealt six cards to each player. → I dealt six cards to each player. |
 | sentence | forced | six-cards | keep | name | 1.000 | I dealt six cards to each player. → I dealt Cigs cards to each player. |
 | sentence | default | six-cigarettes | name | abstain | 0.797 | My cigarette habit is called six. → My cigarette habit is called six. |
@@ -90,30 +90,30 @@ Each call launches the CLI anew. Round-trip time includes model load and process
 | suite-verdict | forced | dog-abstain-3 | abstain | name | 1.000 | I heard someone say Gamble. → I heard someone say Gambol. |
 | suite-verdict | default | dog-abstain-4 | abstain | abstain | 0.969 | The note only says Gamble. → The note only says Gamble. |
 | suite-verdict | forced | dog-abstain-4 | abstain | name | 0.969 | The note only says Gamble. → The note only says Gambol. |
-| suite-verdict | default | son-name-1 | name | abstain | 0.933 | My son Rowan forgot his lunchbox. → My son Rowan forgot his lunchbox. |
-| suite-verdict | forced | son-name-1 | name | abstain | 0.933 | My son Rowan forgot his lunchbox. → My son Rowan forgot his lunchbox. |
-| suite-verdict | default | son-name-2 | name | abstain | 0.725 | Please pack my son Rowan's school bag. → Please pack my son Rowan's school bag. |
-| suite-verdict | forced | son-name-2 | name | name | 0.725 | Please pack my son Rowan's school bag. → Please pack my son Rowan's school bag. |
-| suite-verdict | default | son-name-3 | name | abstain | 0.997 | Nell and I co-parent our son Rowan. → Nell and I co-parent our son Rowan. |
-| suite-verdict | forced | son-name-3 | name | name | 0.997 | Nell and I co-parent our son Rowan. → Nell and I co-parent our son Rowan. |
-| suite-verdict | default | son-name-4 | name | name | 1.000 | My son's name is Rowan. → My son's name is Rowan. |
-| suite-verdict | forced | son-name-4 | name | name | 1.000 | My son's name is Rowan. → My son's name is Rowan. |
+| suite-verdict | default | son-name-1 | name | abstain | 0.933 | My son Rowen forgot his lunchbox. → My son Rowen forgot his lunchbox. |
+| suite-verdict | forced | son-name-1 | name | abstain | 0.933 | My son Rowen forgot his lunchbox. → My son Rowen forgot his lunchbox. |
+| suite-verdict | default | son-name-2 | name | abstain | 0.725 | Please pack my son Rowen's school bag. → Please pack my son Rowen's school bag. |
+| suite-verdict | forced | son-name-2 | name | name | 0.725 | Please pack my son Rowen's school bag. → Please pack my son Rowan's school bag. |
+| suite-verdict | default | son-name-3 | name | abstain | 0.997 | Nell and I co-parent our son Rowen. → Nell and I co-parent our son Rowen. |
+| suite-verdict | forced | son-name-3 | name | name | 0.997 | Nell and I co-parent our son Rowen. → Nell and I co-parent our son Rowan. |
+| suite-verdict | default | son-name-4 | name | name | 1.000 | My son's name is Rowen. → My son's name is Rowan. |
+| suite-verdict | forced | son-name-4 | name | name | 1.000 | My son's name is Rowen. → My son's name is Rowan. |
 | suite-verdict | default | son-keep-1 | keep | keep | 0.558 | I deliberately call my son O online to protect his privacy; keep that initial. → I deliberately call my son O online to protect his privacy; keep that initial. |
 | suite-verdict | forced | son-keep-1 | keep | keep | 0.558 | I deliberately call my son O online to protect his privacy; keep that initial. → I deliberately call my son O online to protect his privacy; keep that initial. |
 | suite-verdict | default | son-keep-2 | keep | abstain | 0.997 | My son O needs his lunchbox; use only his initial in this message. → My son O needs his lunchbox; use only his initial in this message. |
 | suite-verdict | forced | son-keep-2 | keep | name | 0.997 | My son O needs his lunchbox; use only his initial in this message. → My son Rowan needs his lunchbox; use only his initial in this message. |
-| suite-verdict | default | son-keep-3 | keep | abstain | 0.914 | My colleague Rowan is a different person from my son Rowan. → My colleague Rowan is a different person from my son Rowan. |
-| suite-verdict | forced | son-keep-3 | keep | invalid | 0.914 | My colleague Rowan is a different person from my son Rowan. → My colleague Rowan is a different person from my son Rowan. |
-| suite-verdict | default | son-keep-4 | keep | name | 0.629 | The author spells her name Rowan, without an o at the end. → The author spells her name Rowan, without an o at the end. |
-| suite-verdict | forced | son-keep-4 | keep | name | 0.629 | The author spells her name Rowan, without an o at the end. → The author spells her name Rowan, without an o at the end. |
-| suite-verdict | default | son-abstain-1 | abstain | abstain | 1.000 | Rowan. → Rowan. |
-| suite-verdict | forced | son-abstain-1 | abstain | name | 1.000 | Rowan. → Rowan. |
-| suite-verdict | default | son-abstain-2 | abstain | abstain | 1.000 | Ask Rowan about it. → Ask Rowan about it. |
-| suite-verdict | forced | son-abstain-2 | abstain | name | 1.000 | Ask Rowan about it. → Ask Rowan about it. |
-| suite-verdict | default | son-abstain-3 | abstain | abstain | 1.000 | Someone called Rowan left a message. → Someone called Rowan left a message. |
-| suite-verdict | forced | son-abstain-3 | abstain | name | 1.000 | Someone called Rowan left a message. → Someone called Rowan left a message. |
-| suite-verdict | default | son-abstain-4 | abstain | abstain | 1.000 | The label says Rowan. → The label says Rowan. |
-| suite-verdict | forced | son-abstain-4 | abstain | name | 1.000 | The label says Rowan. → The label says Rowan. |
+| suite-verdict | default | son-keep-3 | keep | abstain | 0.914 | My colleague Rowen is a different person from my son Rowan. → My colleague Rowen is a different person from my son Rowan. |
+| suite-verdict | forced | son-keep-3 | keep | invalid | 0.914 | My colleague Rowen is a different person from my son Rowan. → My colleague Rowen is a different person from my son Rowan. |
+| suite-verdict | default | son-keep-4 | keep | name | 0.629 | The author spells her name Rowen, without an o at the end. → The author spells her name Rowan, without an o at the end. |
+| suite-verdict | forced | son-keep-4 | keep | name | 0.629 | The author spells her name Rowen, without an o at the end. → The author spells her name Rowan, without an o at the end. |
+| suite-verdict | default | son-abstain-1 | abstain | abstain | 1.000 | Rowen. → Rowen. |
+| suite-verdict | forced | son-abstain-1 | abstain | name | 1.000 | Rowen. → Rowan. |
+| suite-verdict | default | son-abstain-2 | abstain | abstain | 1.000 | Ask Rowen about it. → Ask Rowen about it. |
+| suite-verdict | forced | son-abstain-2 | abstain | name | 1.000 | Ask Rowen about it. → Ask Rowan about it. |
+| suite-verdict | default | son-abstain-3 | abstain | abstain | 1.000 | Someone called Rowen left a message. → Someone called Rowen left a message. |
+| suite-verdict | forced | son-abstain-3 | abstain | name | 1.000 | Someone called Rowen left a message. → Someone called Rowan left a message. |
+| suite-verdict | default | son-abstain-4 | abstain | abstain | 1.000 | The label says Rowen. → The label says Rowen. |
+| suite-verdict | forced | son-abstain-4 | abstain | name | 1.000 | The label says Rowen. → The label says Rowan. |
 | suite-verdict | default | mother-name-1 | name | abstain | 0.642 | My son's mother Knell will collect him from school. → My son's mother Knell will collect him from school. |
 | suite-verdict | forced | mother-name-1 | name | abstain | 0.642 | My son's mother Knell will collect him from school. → My son's mother Knell will collect him from school. |
 | suite-verdict | default | mother-name-2 | name | name | 0.993 | Rowan's mother is named knell. → Rowan's mother is named Nell. |
@@ -246,30 +246,30 @@ Each call launches the CLI anew. Round-trip time includes model load and process
 | suite-verdict-correction | forced | dog-abstain-3 | abstain | name | 0.883 | I heard someone say Gamble. → I heard someone say Gambol. |
 | suite-verdict-correction | default | dog-abstain-4 | abstain | abstain | 0.878 | The note only says Gamble. → The note only says Gamble. |
 | suite-verdict-correction | forced | dog-abstain-4 | abstain | name | 0.878 | The note only says Gamble. → The note only says Gambol. |
-| suite-verdict-correction | default | son-name-1 | name | abstain | 0.901 | My son Rowan forgot his lunchbox. → My son Rowan forgot his lunchbox. |
-| suite-verdict-correction | forced | son-name-1 | name | abstain | 0.901 | My son Rowan forgot his lunchbox. → My son Rowan forgot his lunchbox. |
-| suite-verdict-correction | default | son-name-2 | name | abstain | 1.000 | Please pack my son Rowan's school bag. → Please pack my son Rowan's school bag. |
-| suite-verdict-correction | forced | son-name-2 | name | name | 0.917 | Please pack my son Rowan's school bag. → Please pack my son Rowan's school bag. |
-| suite-verdict-correction | default | son-name-3 | name | abstain | 0.313 | Nell and I co-parent our son Rowan. → Nell and I co-parent our son Rowan. |
-| suite-verdict-correction | forced | son-name-3 | name | name | 0.313 | Nell and I co-parent our son Rowan. → Nell and I co-parent our son Rowan. |
-| suite-verdict-correction | default | son-name-4 | name | name | 1.000 | My son's name is Rowan. → My son's name is Rowan. |
-| suite-verdict-correction | forced | son-name-4 | name | name | 1.000 | My son's name is Rowan. → My son's name is Rowan. |
+| suite-verdict-correction | default | son-name-1 | name | abstain | 0.901 | My son Rowen forgot his lunchbox. → My son Rowen forgot his lunchbox. |
+| suite-verdict-correction | forced | son-name-1 | name | abstain | 0.901 | My son Rowen forgot his lunchbox. → My son Rowen forgot his lunchbox. |
+| suite-verdict-correction | default | son-name-2 | name | abstain | 1.000 | Please pack my son Rowen's school bag. → Please pack my son Rowen's school bag. |
+| suite-verdict-correction | forced | son-name-2 | name | name | 0.917 | Please pack my son Rowen's school bag. → Please pack my son Rowan's school bag. |
+| suite-verdict-correction | default | son-name-3 | name | abstain | 0.313 | Nell and I co-parent our son Rowen. → Nell and I co-parent our son Rowen. |
+| suite-verdict-correction | forced | son-name-3 | name | name | 0.313 | Nell and I co-parent our son Rowen. → Nell and I co-parent our son Rowan. |
+| suite-verdict-correction | default | son-name-4 | name | name | 1.000 | My son's name is Rowen. → My son's name is Rowan. |
+| suite-verdict-correction | forced | son-name-4 | name | name | 1.000 | My son's name is Rowen. → My son's name is Rowan. |
 | suite-verdict-correction | default | son-keep-1 | keep | keep | 0.519 | I deliberately call my son O online to protect his privacy; keep that initial. → I deliberately call my son O online to protect his privacy; keep that initial. |
 | suite-verdict-correction | forced | son-keep-1 | keep | keep | 0.519 | I deliberately call my son O online to protect his privacy; keep that initial. → I deliberately call my son O online to protect his privacy; keep that initial. |
 | suite-verdict-correction | default | son-keep-2 | keep | abstain | 0.989 | My son O needs his lunchbox; use only his initial in this message. → My son O needs his lunchbox; use only his initial in this message. |
 | suite-verdict-correction | forced | son-keep-2 | keep | name | 0.989 | My son O needs his lunchbox; use only his initial in this message. → My son Rowan needs his lunchbox; use only his initial in this message. |
-| suite-verdict-correction | default | son-keep-3 | keep | abstain | 0.269 | My colleague Rowan is a different person from my son Rowan. → My colleague Rowan is a different person from my son Rowan. |
-| suite-verdict-correction | forced | son-keep-3 | keep | name | 0.269 | My colleague Rowan is a different person from my son Rowan. → My colleague Rowan is a different person from my son Rowan. |
-| suite-verdict-correction | default | son-keep-4 | keep | name | 1.000 | The author spells her name Rowan, without an o at the end. → The author spells her name Rowan, without an o at the end. |
-| suite-verdict-correction | forced | son-keep-4 | keep | name | 1.000 | The author spells her name Rowan, without an o at the end. → The author spells her name Rowan, without an o at the end. |
-| suite-verdict-correction | default | son-abstain-1 | abstain | abstain | 0.596 | Rowan. → Rowan. |
-| suite-verdict-correction | forced | son-abstain-1 | abstain | name | 0.596 | Rowan. → Rowan. |
-| suite-verdict-correction | default | son-abstain-2 | abstain | abstain | 0.945 | Ask Rowan about it. → Ask Rowan about it. |
-| suite-verdict-correction | forced | son-abstain-2 | abstain | name | 0.945 | Ask Rowan about it. → Ask Rowan about it. |
-| suite-verdict-correction | default | son-abstain-3 | abstain | abstain | 0.993 | Someone called Rowan left a message. → Someone called Rowan left a message. |
-| suite-verdict-correction | forced | son-abstain-3 | abstain | name | 0.993 | Someone called Rowan left a message. → Someone called Rowan left a message. |
-| suite-verdict-correction | default | son-abstain-4 | abstain | abstain | 0.890 | The label says Rowan. → The label says Rowan. |
-| suite-verdict-correction | forced | son-abstain-4 | abstain | name | 0.890 | The label says Rowan. → The label says Rowan. |
+| suite-verdict-correction | default | son-keep-3 | keep | abstain | 0.269 | My colleague Rowen is a different person from my son Rowan. → My colleague Rowen is a different person from my son Rowan. |
+| suite-verdict-correction | forced | son-keep-3 | keep | name | 0.269 | My colleague Rowen is a different person from my son Rowan. → My colleague Rowan is a different person from my son Rowan. |
+| suite-verdict-correction | default | son-keep-4 | keep | name | 1.000 | The author spells her name Rowen, without an o at the end. → The author spells her name Rowan, without an o at the end. |
+| suite-verdict-correction | forced | son-keep-4 | keep | name | 1.000 | The author spells her name Rowen, without an o at the end. → The author spells her name Rowan, without an o at the end. |
+| suite-verdict-correction | default | son-abstain-1 | abstain | abstain | 0.596 | Rowen. → Rowen. |
+| suite-verdict-correction | forced | son-abstain-1 | abstain | name | 0.596 | Rowen. → Rowan. |
+| suite-verdict-correction | default | son-abstain-2 | abstain | abstain | 0.945 | Ask Rowen about it. → Ask Rowen about it. |
+| suite-verdict-correction | forced | son-abstain-2 | abstain | name | 0.945 | Ask Rowen about it. → Ask Rowan about it. |
+| suite-verdict-correction | default | son-abstain-3 | abstain | abstain | 0.993 | Someone called Rowen left a message. → Someone called Rowen left a message. |
+| suite-verdict-correction | forced | son-abstain-3 | abstain | name | 0.993 | Someone called Rowen left a message. → Someone called Rowan left a message. |
+| suite-verdict-correction | default | son-abstain-4 | abstain | abstain | 0.890 | The label says Rowen. → The label says Rowen. |
+| suite-verdict-correction | forced | son-abstain-4 | abstain | name | 0.890 | The label says Rowen. → The label says Rowan. |
 | suite-verdict-correction | default | mother-name-1 | name | abstain | 0.844 | My son's mother Knell will collect him from school. → My son's mother Knell will collect him from school. |
 | suite-verdict-correction | forced | mother-name-1 | name | name | 0.844 | My son's mother Knell will collect him from school. → My son's mother Nell will collect him from school. |
 | suite-verdict-correction | default | mother-name-2 | name | name | 0.998 | Rowan's mother is named knell. → Rowan's mother is named Nell. |

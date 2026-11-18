@@ -202,7 +202,9 @@ struct Candidate {
     question: Value,
 }
 
-// Include the previous sentence, or the following one for the first sentence.
+// The current sentence only (John, 2026-11-18). A neighbouring sentence made every
+// model name an ordinary "lightning" after a Cars sentence; see
+// decision-model-results.md, "Rules first on real audio".
 // Offsets are UTF-8 byte offsets, so applying edits never splits a code point.
 fn context_range(text: &str, start: usize, end: usize) -> (usize, usize) {
     let mut spans = Vec::new();
@@ -241,14 +243,10 @@ fn context_range(text: &str, start: usize, end: usize) -> (usize, usize) {
     if from < text.len() {
         spans.push((from, text.len()));
     }
-    let Some(i) = spans.iter().position(|&(a, b)| a <= start && b >= end) else {
-        return (0, text.len());
-    };
-    if i > 0 {
-        (spans[i - 1].0, spans[i].1)
-    } else {
-        (spans[i].0, spans.get(i + 1).unwrap_or(&spans[i]).1)
-    }
+    spans
+        .into_iter()
+        .find(|&(a, b)| a <= start && b >= end)
+        .unwrap_or((0, text.len()))
 }
 
 #[cfg(test)]
@@ -687,7 +685,7 @@ mod tests {
         let u = candidates_for(text, &terms, Backend::Ultra).unwrap();
         let d = candidates_for(text, &terms, Backend::D1).unwrap();
         assert_eq!(u.len(), d.len());
-        assert_eq!(u[0].state, "My dog «Gamble» is here. Water has flow.");
+        assert_eq!(u[0].state, "My dog «Gamble» is here.");
         assert!(!u[0].state.contains("Vocabulary glossary"));
         assert!(d[0].state.starts_with("Vocabulary glossary:"));
         assert_eq!(u[0].question, d[0].question);
@@ -834,7 +832,9 @@ mod tests {
         let text = "Éloïse likes my dog Gamble.I gamble with cards. Water has flow.";
         let found = candidates(text, &terms()).unwrap();
         assert_eq!(found.len(), 3);
-        assert!(found[1].state.contains("Éloïse"));
+        // One sentence only: neither neighbour reaches the model.
+        assert!(found[1].state.contains("I «gamble» with cards."));
+        assert!(!found[1].state.contains("Éloïse"));
         assert!(!found[1].state.contains("Water"));
         let result = |choice| Verdict {
             choice,
@@ -866,7 +866,7 @@ mod tests {
         });
         terms.push(Term {
             canonical: "Rowan".into(),
-            heard: vec!["Rowan".into()],
+            heard: vec!["Rowen".into()],
             ..Default::default()
         });
         assert!(candidates("I gamble. My son O is here.", &terms)
@@ -875,9 +875,9 @@ mod tests {
     }
     #[test]
     fn reload_parser_preserves_descriptions_and_excludes_tasks() {
-        let terms=parse("## Rowan\ndescription: son\nordinary: other person\nheard: Rowan, Rowan\n## Cigs\nkind: habit\nheard: six\n");
+        let terms=parse("## Rowan\ndescription: son\nordinary: other person\nheard: Rowen, Roan\n## Cigs\nkind: habit\nheard: six\n");
         assert_eq!(terms.len(), 1);
-        assert_eq!(terms[0].heard, vec!["Rowan", "Rowan"]);
+        assert_eq!(terms[0].heard, vec!["Rowen", "Roan"]);
         assert_eq!(terms[0].description, "son");
     }
     #[test]
@@ -903,9 +903,9 @@ mod tests {
 
     #[test]
     fn abbreviations_and_decimals_stay_in_the_sentence() {
-        let text = "Dr. Nell saw 2.5 dogs. I gamble. Then we leave.";
+        let text = "Dr. Smith saw 2.5 dogs and I gamble. Then we leave.";
         let found = candidates(text, &terms()).unwrap();
-        assert!(found[0].state.contains("Dr. Nell saw 2.5 dogs."));
+        assert!(found[0].state.contains("Dr. Smith saw 2.5 dogs and I «gamble»."));
         assert!(!found[0].state.contains("Then we leave"));
     }
     #[test]

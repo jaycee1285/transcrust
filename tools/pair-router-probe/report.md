@@ -25,7 +25,7 @@ Model load: 1.47s. Median inference: 113ms.
 | record-job-supply-1 | job supply → Jobs apply | name | keep | 0.348 | 0.344 | 0.308 |
 | record-terakeet-1 | terrakeet → Terakeet | name | name | 0.188 | 0.447 | 0.365 |
 | record-apptrack-1 | At track → Apptrack | name | keep | 0.355 | 0.343 | 0.302 |
-| record-orion-1 | orangue → Rowan | name | name | 0.127 | 0.595 | 0.278 |
+| record-rowan-1 | orangue → Rowan | name | name | 0.127 | 0.595 | 0.278 |
 | record-backroom-1 | backroom vacuum → Back room vacuum | name | name | 0.150 | 0.597 | 0.253 |
 | record-dominion-1 | paid dominion → Pay Dominion | name | name | 0.177 | 0.572 | 0.251 |
 | record-dominion-2 | paid dominion → Pay Dominion | name | name | 0.160 | 0.613 | 0.226 |
@@ -34,7 +34,7 @@ Model load: 1.47s. Median inference: 113ms.
 | dog-lowercase | gamble → Gambol | name | name | 0.226 | 0.579 | 0.194 |
 | casino-short | gamble → Gambol | keep | keep | 0.546 | 0.164 | 0.290 |
 | casino-capitalized | Gamble → Gambol | keep | keep | 0.546 | 0.158 | 0.295 |
-| son-in-user-sentence | Rowan → Rowan | name | name | 0.129 | 0.655 | 0.216 |
+| son-in-user-sentence | Rowen → Rowan | name | name | 0.129 | 0.655 | 0.216 |
 | six-cards | six → Cigs | keep | keep | 0.574 | 0.094 | 0.333 |
 | six-cigarettes | six → Cigs | name | name | 0.297 | 0.507 | 0.196 |
 | job-supply-prose | job supply → Jobs apply | keep | keep | 0.470 | 0.234 | 0.297 |
@@ -51,7 +51,7 @@ Model load: 1.47s. Median inference: 113ms.
 
 **record-apptrack-1** (record-2): tfit and snack, backroom vacuum, bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. «At track» start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I migh
 
-**record-orion-1** (record-2): nclude Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I might say paid dominion 360 plus 10. I might also say something like «orangue» laundry complete.
+**record-rowan-1** (record-2): nclude Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I might say paid dominion 360 plus 10. I might also say something like «orangue» laundry complete.
 
 **record-backroom-1** (record-2): , which is at 0 out of 16, Sigs, or cigarettes, which is 0 out of 18, drink water, which is 0 out of 4, and monsters, which is 0 out of 6. The tasks that I currently have today are CHB, incog clear, dinner six, Outfit and snack, «backroom vacuum», bath and candies 8, BR reminder, GSC check, echo check in, transcrust work, trash and recycling out and to curb, homework, job supply, terrakeet 1P phone 30M, DMV 28 Munch Road beginning 8 30 a.m. A
 
@@ -59,9 +59,9 @@ Model load: 1.47s. Median inference: 113ms.
 
 **record-dominion-2** (record-2): nning 8 30 a.m. At track start. Some of my upcoming tasks include Rowan Laundry, OT, O laundry check, grocery list update, paid dominion 360, pay BJWSA 100, Nell 220. To give an example of a command that I might add, I might say «paid dominion» 360 plus 10. I might also say something like orangue laundry complete.
 
-**dog-in-user-sentence** (typed): I love my dog «Gamble» and my son Rowan. My son Rowan's mother is named Nell. She and I used to go to the casino to gamble and play cards.
+**dog-in-user-sentence** (typed): I love my dog «Gamble» and my son Rowan. My son Rowen's mother is named Nell. She and I used to go to the casino to gamble and play cards.
 
-**casino-in-user-sentence** (typed): I love my dog Gamble and my son Rowan. My son Rowan's mother is named Nell. She and I used to go to the casino to «gamble» and play cards.
+**casino-in-user-sentence** (typed): I love my dog Gamble and my son Rowan. My son Rowen's mother is named Nell. She and I used to go to the casino to «gamble» and play cards.
 
 **dog-lowercase** (typed): I love my dog «gamble».
 
@@ -69,7 +69,7 @@ Model load: 1.47s. Median inference: 113ms.
 
 **casino-capitalized** (typed): «Gamble» and play cards at the casino.
 
-**son-in-user-sentence** (typed): I love my dog Gamble and my son Rowan. My son «Rowan»'s mother is named Nell. She and I used to go to the casino to gamble and play cards.
+**son-in-user-sentence** (typed): I love my dog Gamble and my son Rowan. My son «Rowen»'s mother is named Nell. She and I used to go to the casino to gamble and play cards.
 
 **six-cards** (typed): I dealt «six» cards to each player.
 

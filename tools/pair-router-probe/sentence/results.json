@@ -119,7 +119,7 @@
       "prompt": "<<LABEL>>It is ordinary prose about being at a track<<LABEL>>It is the task named Apptrack, a project the speaker starts<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\n\u00abAt track\u00bb start."
     },
     {
-      "id": "record-orion-1",
+      "id": "record-rowan-1",
       "source": "record-2",
       "heard": "orangue",
       "canonical": "Rowan",
@@ -354,12 +354,12 @@
     {
       "id": "son-in-user-sentence",
       "source": "typed",
-      "heard": "Rowan",
+      "heard": "Rowen",
       "canonical": "Rowan",
-      "context": "My son \u00abRowan\u00bb's mother is named Nell.",
+      "context": "My son \u00abRowen\u00bb's mother is named Nell.",
       "want": "name",
       "name_description": "Rowan, the speaker's son",
-      "keep_description": "a different person named Rowan, not the speaker's son Rowan",
+      "keep_description": "a different person named Rowen, not the speaker's son Rowan",
       "choice": "name",
       "confidence": 0.6149971448421411,
       "probabilities": {
@@ -374,7 +374,7 @@
       ],
       "latency_ms": 82.53588498337194,
       "token_count": 67,
-      "prompt": "<<LABEL>>It is a different person named Rowan, not the speaker's son Rowan<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son \u00abRowan\u00bb's mother is named Nell."
+      "prompt": "<<LABEL>>It is a different person named Rowen, not the speaker's son Rowan<<LABEL>>It is Rowan, the speaker's son<<LABEL>>insufficient evidence<<SEP>>Question: What does the marked span refer to in this spoken sentence?\n\nContext:\nMy son \u00abRowen\u00bb's mother is named Nell."
     },
     {
       "id": "six-cards",

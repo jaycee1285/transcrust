@@ -40,8 +40,8 @@
       "arm": "single",
       "split": "eval",
       "want": "abstain",
-      "heard": "Rowan",
-      "state": "I spoke to «Rowan».",
+      "heard": "Rowen",
+      "state": "I spoke to «Rowen».",
       "vela": "keep",
       "ultra": "name"
     },
@@ -51,8 +51,8 @@
       "arm": "single",
       "split": "eval",
       "want": "abstain",
-      "heard": "Rowan",
-      "state": "I spoke to «Rowan».",
+      "heard": "Rowen",
+      "state": "I spoke to «Rowen».",
       "vela": "keep",
       "ultra": "name"
     },

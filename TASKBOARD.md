@@ -34,13 +34,41 @@ smoke: [Smoke-Human-transcrust.md](Smoke-Human-transcrust.md).
 
 ## Next, in order
 
+### Decision model sees one sentence, no glossary (decided 2026-11-18, not built)
+John's call, after the real-audio rules-then-model run
+([results](decision-model-results.md#rules-first-on-real-audio-2026-11-18)). The glossary belongs
+to the rules; the model judges grammar only.
+- [x] **One sentence (built 2026-11-18):** `context_range` in `crates/decision/src/lib.rs`
+      now returns the current sentence only. Every model wrongly named an ordinary "lightning"
+      when it could see the neighbouring sentence. Unit tests pass. The ignored
+      `ultra_native_matches_research_and_cancels` compares against saved two-sentence fixtures,
+      so expect it to differ if run. Live dictation smoke: John.
+- [ ] **No glossary:** keep the stripped glossary for UltraBERT, which it already uses. Do not
+      pass the real glossary descriptions: with them, it names ordinary "chili"/"bingo" at up to
+      0.98.
+- [x] **Confirm on fresh audio (2026-11-18):** `~/syncthing/11-18.md`, 17 spans, key written
+      before recording. v3 rules + Ultra (stripped, one sentence): **0 unwanted**, 2/10 missed (a
+      list of Bluey names, which the model kept as ordinary words). D1 in the same slot named an
+      ordinary "matter" (0.71). One take; results in gitignored
+      `tools/rules-probe/private/11-18/`.
+- [x] **Trigger decided (John, 2026-11-18): presence, settled by the rules.** Parakeet wrote
+      gamble/flow/matter at 0.99–1.00, including "Gamble" meaning Gambol, so an uncertainty
+      trigger misses them. No tiers at runtime; the scorer becomes an authoring-time check, and
+      confidence is a logged reason only. [design-vocab-gate.md §4](design-vocab-gate.md).
+- [ ] **No context, no model:** when the sentence holds nothing but the span ("Bingo!"), skip the
+      model and let the per-speaker prior (chain step 6) decide, with a logged reason.
+- [x] **Rule 3 stays** for gamble/bandit (John, 2026-11-18). Its only failure found was an
+      invented phrase ("bandit gang").
+- **Not yet: a confidence floor.** John, 2026-11-18: one exception (Lightning at 0.97) already
+  beats it.
+
 ### Retire the murmure-derived legs (decided 2026-11-18, not started)
 John's call: take murmure out and use our own design. It's better, and transcrust is now AGPL
 (`LICENSE`, `NOTICE.md`) because it carries murmure-derived code.
 - **Remove:**
   - `crates/core/src/dictionary.rs` (the Beider-Morse whole-token swap);
   - global boosting in `boost.rs` (the presence-triggered boost that failed the Gambol gate).
-- **Replace with:** the scorer, uncertainty trigger and homophone chain in
+- **Replace with:** the presence trigger and homophone chain (scorer at authoring time) in
   [design-vocab-gate.md](design-vocab-gate.md).
 - **Acceptance, in this order:**
   1. **Parity on the distinct-word cases the old leg fixed** (tier 2: "tori → Tauri", "kubernetis →
@@ -514,7 +542,7 @@ older introductory prose below describing their pre-implementation state.
       UI acceptance stands. Weighting is now implemented in direct Parakeet
       and Nemotron; learned hard/fuzzy substitutions are removed. Parser/scorer
       tests and actual model inference pass. **Human weighting smoke failed:**
-      one wrong verb became two errors (Gamble for the dog and Rowan for Rowan).
+      one wrong verb became two errors (Gamble for the dog and Rowen for Rowan).
       The original one-error result remains the baseline.
 
 - [x] **Bounded-choice research recorded.** Verdict/OpenJev, Needle 3, d1 Q8/Q4,

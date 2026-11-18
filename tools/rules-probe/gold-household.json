@@ -1,0 +1,7 @@
+{
+  "_note": "Household rows carry want=null in cases.json. Labels here come from the read-aloud script in tools/pair-router-probe/phone-household-q8/evidence/reference.md (intended meaning of each marked span). Keyed by id; same label for both arms. Casing-only rows (Transcrust -> transcrust) are labelled name because applying the canonical is the intended edit. This is the script's intent, not independently verified spoken ground truth.",
+  "parakeet-0": "name", "parakeet-1": "keep", "parakeet-2": "keep", "parakeet-3": "keep",
+  "parakeet-4": "keep", "parakeet-5": "keep", "parakeet-6": "name",
+  "phonon-0": "name", "phonon-1": "keep", "phonon-2": "name", "phonon-3": "keep",
+  "phonon-4": "name", "phonon-5": "keep", "phonon-6": "keep", "phonon-7": "keep", "phonon-8": "name"
+}

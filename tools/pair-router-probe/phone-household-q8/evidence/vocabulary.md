@@ -71,7 +71,7 @@ heard: Voice
 kind: person
 description: son
 ordinary: a different person or an intentional initial, not the full name of the speaker's son
-heard: Rowan
+heard: Rowen
 
 ## Flo
 kind: person

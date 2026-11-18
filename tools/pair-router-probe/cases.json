@@ -48,7 +48,7 @@
     "end": 703
   },
   {
-    "id": "record-orion-1",
+    "id": "record-rowan-1",
     "source": "record-2",
     "heard": "orangue",
     "canonical": "Rowan",
@@ -100,7 +100,7 @@
     "source": "typed",
     "heard": "Gamble",
     "canonical": "Gambol",
-    "context": "I love my dog \u00abGamble\u00bb and my son Rowan. My son Rowan's mother is named Nell. She and I used to go to the casino to gamble and play cards.",
+    "context": "I love my dog \u00abGamble\u00bb and my son Rowan. My son Rowen's mother is named Nell. She and I used to go to the casino to gamble and play cards.",
     "want": "name",
     "name_description": "the dog named Gambol, belonging to the speaker",
     "keep_description": "ordinary English about gambling, betting money or playing games of chance"
@@ -110,7 +110,7 @@
     "source": "typed",
     "heard": "gamble",
     "canonical": "Gambol",
-    "context": "I love my dog Gamble and my son Rowan. My son Rowan's mother is named Nell. She and I used to go to the casino to \u00abgamble\u00bb and play cards.",
+    "context": "I love my dog Gamble and my son Rowan. My son Rowen's mother is named Nell. She and I used to go to the casino to \u00abgamble\u00bb and play cards.",
     "want": "keep",
     "name_description": "the dog named Gambol, belonging to the speaker",
     "keep_description": "ordinary English about gambling, betting money or playing games of chance"
@@ -148,12 +148,12 @@
   {
     "id": "son-in-user-sentence",
     "source": "typed",
-    "heard": "Rowan",
+    "heard": "Rowen",
     "canonical": "Rowan",
-    "context": "I love my dog Gamble and my son Rowan. My son \u00abRowan\u00bb's mother is named Nell. She and I used to go to the casino to gamble and play cards.",
+    "context": "I love my dog Gamble and my son Rowan. My son \u00abRowen\u00bb's mother is named Nell. She and I used to go to the casino to gamble and play cards.",
     "want": "name",
     "name_description": "Rowan, the speaker's son",
-    "keep_description": "a different person named Rowan, not the speaker's son Rowan"
+    "keep_description": "a different person named Rowen, not the speaker's son Rowan"
   },
   {
     "id": "six-cards",
