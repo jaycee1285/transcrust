@@ -1,0 +1,247 @@
+{
+  "count": 132,
+  "changes": [
+    {
+      "id": "parakeet-1",
+      "source": "parakeet",
+      "arm": "two",
+      "split": "phone",
+      "want": null,
+      "heard": "gamble",
+      "state": "My dog Gamble is an Australian shepherd. I like to «gamble» and play poker with cards.",
+      "vela": "keep",
+      "ultra": "name"
+    },
+    {
+      "id": "phonon-1",
+      "source": "phonon",
+      "arm": "two",
+      "split": "phone",
+      "want": null,
+      "heard": "gamble",
+      "state": "My dog Gamble is an Australian shepherd. I like to «gamble» and play poker with cards.",
+      "vela": "keep",
+      "ultra": "name"
+    },
+    {
+      "id": "phonon-4",
+      "source": "phonon",
+      "arm": "two",
+      "split": "phone",
+      "want": null,
+      "heard": "bandit",
+      "state": "Lightning lit the sky, and water began to flow. Bluey and Bingo played with Chilean «bandit».",
+      "vela": "abstain",
+      "ultra": "keep"
+    },
+    {
+      "id": "son-context-name",
+      "source": "synthetic",
+      "arm": "single",
+      "split": "eval",
+      "want": "abstain",
+      "heard": "Rowan",
+      "state": "I spoke to «Rowan».",
+      "vela": "keep",
+      "ultra": "name"
+    },
+    {
+      "id": "son-context-keep",
+      "source": "synthetic",
+      "arm": "single",
+      "split": "eval",
+      "want": "abstain",
+      "heard": "Rowan",
+      "state": "I spoke to «Rowan».",
+      "vela": "keep",
+      "ultra": "name"
+    },
+    {
+      "id": "lightning-context-name",
+      "source": "synthetic",
+      "arm": "single",
+      "split": "eval",
+      "want": "abstain",
+      "heard": "lightning",
+      "state": "My son drew «lightning».",
+      "vela": "keep",
+      "ultra": "abstain"
+    },
+    {
+      "id": "lightning-context-name",
+      "source": "synthetic",
+      "arm": "two",
+      "split": "eval",
+      "want": "name",
+      "heard": "lightning",
+      "state": "He gave the red race car eyes and the number 95. My son drew «lightning».",
+      "vela": "keep",
+      "ultra": "name"
+    },
+    {
+      "id": "lightning-context-keep",
+      "source": "synthetic",
+      "arm": "single",
+      "split": "eval",
+      "want": "abstain",
+      "heard": "lightning",
+      "state": "My son drew «lightning».",
+      "vela": "keep",
+      "ultra": "abstain"
+    },
+    {
+      "id": "mater-context-keep",
+      "source": "synthetic",
+      "arm": "two",
+      "split": "eval",
+      "want": "keep",
+      "heard": "Mader",
+      "state": "My son drew «Mader». It was a portrait of our neighbor, whose surname is spelled Mader.",
+      "vela": "name",
+      "ultra": "keep"
+    },
+    {
+      "id": "flo-context-name",
+      "source": "synthetic",
+      "arm": "two",
+      "split": "eval",
+      "want": "name",
+      "heard": "flow",
+      "state": "She was serving the other Cars characters at the V8 Cafe. My son drew «flow».",
+      "vela": "keep",
+      "ultra": "name"
+    },
+    {
+      "id": "mother-neighbor-name",
+      "source": "synthetic",
+      "arm": "two",
+      "split": "dev",
+      "want": "keep",
+      "heard": "Knell",
+      "state": "A «Knell» is the sound of a bell marking a death. Nell is picking up my son.",
+      "vela": "keep",
+      "ultra": "name"
+    },
+    {
+      "id": "project-neighbor-name",
+      "source": "synthetic",
+      "arm": "two",
+      "split": "dev",
+      "want": "keep",
+      "heard": "trans crust",
+      "state": "I closed the transcrust dictation app. The label uses «trans crust» to describe movement through a crust.",
+      "vela": "keep",
+      "ultra": "name"
+    },
+    {
+      "id": "mater-neighbor-name",
+      "source": "synthetic",
+      "arm": "single",
+      "split": "eval",
+      "want": "keep",
+      "heard": "Mader",
+      "state": "Our neighbor Mr «Mader» repaired the fence.",
+      "vela": "name",
+      "ultra": "keep"
+    },
+    {
+      "id": "mater-neighbor-name",
+      "source": "synthetic",
+      "arm": "two",
+      "split": "eval",
+      "want": "keep",
+      "heard": "Mader",
+      "state": "Our neighbor Mr «Mader» repaired the fence. My son was watching Mater in Cars.",
+      "vela": "name",
+      "ultra": "keep"
+    },
+    {
+      "id": "initial-before",
+      "source": "synthetic",
+      "arm": "single",
+      "split": "diagnostic",
+      "want": "keep",
+      "heard": "O",
+      "state": "My son «O» needs his lunchbox; use only his initial here.",
+      "vela": "name",
+      "ultra": "keep"
+    },
+    {
+      "id": "initial-after",
+      "source": "synthetic",
+      "arm": "single",
+      "split": "diagnostic",
+      "want": "keep",
+      "heard": "O",
+      "state": "Please refer to my son as «O» in this message.",
+      "vela": "name",
+      "ultra": "keep"
+    },
+    {
+      "id": "bluey-chili-context-name",
+      "source": "synthetic",
+      "arm": "two",
+      "split": "eval",
+      "want": "name",
+      "heard": "chili",
+      "state": "He meant the mom of Bluey and Bingo. My son asked about «chili».",
+      "vela": "keep",
+      "ultra": "name"
+    },
+    {
+      "id": "bluey-chili-common-1",
+      "source": "synthetic",
+      "arm": "two",
+      "split": "dev",
+      "want": "keep",
+      "heard": "chili",
+      "state": "My son was watching Chili and her daughters in Bluey. I cooked a pot of «chili» with beans for dinner.",
+      "vela": "keep",
+      "ultra": "name"
+    },
+    {
+      "id": "bluey-bandit-context-name",
+      "source": "synthetic",
+      "arm": "single",
+      "split": "eval",
+      "want": "abstain",
+      "heard": "bandit",
+      "state": "My son asked about «bandit».",
+      "vela": "abstain",
+      "ultra": "keep"
+    },
+    {
+      "id": "bluey-bandit-context-common",
+      "source": "synthetic",
+      "arm": "single",
+      "split": "eval",
+      "want": "abstain",
+      "heard": "bandit",
+      "state": "My son asked about «bandit».",
+      "vela": "abstain",
+      "ultra": "keep"
+    },
+    {
+      "id": "bluey-bandit-common-1",
+      "source": "synthetic",
+      "arm": "two",
+      "split": "eval",
+      "want": "keep",
+      "heard": "bandit",
+      "state": "My son was talking about Bandit from Bluey. The «bandit» stole the travelers' money.",
+      "vela": "keep",
+      "ultra": "name"
+    },
+    {
+      "id": "bluey-bluey-color-neighbor",
+      "source": "synthetic",
+      "arm": "two",
+      "split": "eval",
+      "want": "keep",
+      "heard": "blue",
+      "state": "My son was watching Bluey with his mom. The sky looks «blue» today.",
+      "vela": "keep",
+      "ultra": "name"
+    }
+  ]
+}

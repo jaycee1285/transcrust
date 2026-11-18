@@ -1,0 +1,5 @@
+file	errors	reference_words	wer_percent
+/tmp/transcrust-d1-context-first/parakeet-single.txt	2	79	2.53
+/tmp/transcrust-d1-context-first/parakeet-two.txt	3	79	3.80
+/tmp/transcrust-d1-context-first/phonon-single.txt	4	79	5.06
+/tmp/transcrust-d1-context-first/phonon-two.txt	4	79	5.06

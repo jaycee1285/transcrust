@@ -1,0 +1,1516 @@
+{
+  "batches": [
+    {
+      "arm": "single",
+      "cached_texts": 21,
+      "candidates": 7,
+      "seconds": 16.039272811,
+      "source": "parakeet"
+    },
+    {
+      "arm": "two",
+      "cached_texts": 28,
+      "candidates": 7,
+      "seconds": 14.217984963,
+      "source": "parakeet"
+    },
+    {
+      "arm": "single",
+      "cached_texts": 30,
+      "candidates": 9,
+      "seconds": 3.700031251,
+      "source": "phonon"
+    },
+    {
+      "arm": "two",
+      "cached_texts": 35,
+      "candidates": 9,
+      "seconds": 10.997327845000001,
+      "source": "phonon"
+    }
+  ],
+  "load_seconds": 0.89391626,
+  "model": "eg2",
+  "rows": [
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Gambol",
+          "end": 13,
+          "heard": "Gamble",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary English about gambling or betting money",
+              "name": "It is Gambol, pet dog"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 7,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog «Gamble» is an Australian shepherd. I like to gamble and play poker with cards."
+        },
+        "category": "household",
+        "heard": "Gamble",
+        "hypotheses": [
+          "The occurrence of \"Gamble\" in \"My dog Gamble is an Australian shepherd.\" refers to ordinary English about gambling or betting money.",
+          "The occurrence of \"Gamble\" in \"My dog Gamble is an Australian shepherd.\" refers to Gambol, pet dog."
+        ],
+        "id": "parakeet-0",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog «Gamble» is an Australian shepherd.",
+        "target": "My dog «Gamble» is an Australian shepherd.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.22281972268430086,
+        0.48624225827927425,
+        0.2909380190364249
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog «Gamble» is an Australian shepherd.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary English about gambling or betting money",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Gambol, pet dog",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Gambol",
+          "end": 57,
+          "heard": "gamble",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary English about gambling or betting money",
+              "name": "It is Gambol, pet dog"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 51,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog Gamble is an Australian shepherd. I like to «gamble» and play poker with cards."
+        },
+        "category": "household",
+        "heard": "gamble",
+        "hypotheses": [
+          "The occurrence of \"gamble\" in \"I like to gamble and play poker with cards.\" refers to ordinary English about gambling or betting money.",
+          "The occurrence of \"gamble\" in \"I like to gamble and play poker with cards.\" refers to Gambol, pet dog."
+        ],
+        "id": "parakeet-1",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nI like to «gamble» and play poker with cards.",
+        "target": "I like to «gamble» and play poker with cards.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.3941612517869392,
+        0.4007655699625471,
+        0.2050731782505137
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nI like to «gamble» and play poker with cards.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary English about gambling or betting money",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Gambol, pet dog",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Flo",
+          "end": 204,
+          "heard": "flow",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary flow, the movement of water, traffic or another substance",
+              "name": "It is Flo, Cars movie character, runs the V8 Cafe"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 200,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning McQueen raced past Mater and Flo. Lightning lit the sky, and water began to «flow»."
+        },
+        "category": "household",
+        "heard": "flow",
+        "hypotheses": [
+          "The occurrence of \"flow\" in \"Lightning lit the sky, and water began to flow.\" refers to ordinary flow, the movement of water, traffic or another substance.",
+          "The occurrence of \"flow\" in \"Lightning lit the sky, and water began to flow.\" refers to Flo, Cars movie character, runs the V8 Cafe."
+        ],
+        "id": "parakeet-2",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning lit the sky, and water began to «flow».",
+        "target": "Lightning lit the sky, and water began to «flow».",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.2939253879053324,
+        0.3974832398990094,
+        0.3085913721956581
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning lit the sky, and water began to «flow».",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary flow, the movement of water, traffic or another substance",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Flo, Cars movie character, runs the V8 Cafe",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Chili",
+          "end": 262,
+          "heard": "chili",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary chili, the food or pepper, or chilly meaning cold",
+              "name": "It is Chili, Bluey and Bingo's mom"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 257,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean Bandit. We ate «chili» and played bingo after the show."
+        },
+        "category": "household",
+        "heard": "chili",
+        "hypotheses": [
+          "The occurrence of \"chili\" in \"We ate chili and played bingo after the show.\" refers to ordinary chili, the food or pepper, or chilly meaning cold.",
+          "The occurrence of \"chili\" in \"We ate chili and played bingo after the show.\" refers to Chili, Bluey and Bingo's mom."
+        ],
+        "id": "parakeet-3",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nWe ate «chili» and played bingo after the show.",
+        "target": "We ate «chili» and played bingo after the show.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.23146873729520925,
+        0.5791569752713848,
+        0.18937428743340604
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nWe ate «chili» and played bingo after the show.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary chili, the food or pepper, or chilly meaning cold",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Chili, Bluey and Bingo's mom",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Bingo",
+          "end": 279,
+          "heard": "bingo",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is the ordinary game bingo or its name",
+              "name": "It is Bingo, Bluey's 4-year-old sister"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 274,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean Bandit. We ate chili and played «bingo» after the show."
+        },
+        "category": "household",
+        "heard": "bingo",
+        "hypotheses": [
+          "The occurrence of \"bingo\" in \"We ate chili and played bingo after the show.\" refers to the ordinary game bingo or its name.",
+          "The occurrence of \"bingo\" in \"We ate chili and played bingo after the show.\" refers to Bingo, Bluey's 4-year-old sister."
+        ],
+        "id": "parakeet-4",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nWe ate chili and played «bingo» after the show.",
+        "target": "We ate chili and played «bingo» after the show.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.32886213791640895,
+        0.45227944692033545,
+        0.21885841516325555
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nWe ate chili and played «bingo» after the show.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is the ordinary game bingo or its name",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Bingo, Bluey's 4-year-old sister",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Bandit",
+          "end": 311,
+          "heard": "bandit",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+              "name": "It is Bandit, Bluey and Bingo's dad"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 305,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nWe ate chili and played bingo after the show. I said a «bandit» stole the cards."
+        },
+        "category": "household",
+        "heard": "bandit",
+        "hypotheses": [
+          "The occurrence of \"bandit\" in \"I said a bandit stole the cards.\" refers to an ordinary bandit, a robber or outlaw, or ordinary separate words band it.",
+          "The occurrence of \"bandit\" in \"I said a bandit stole the cards.\" refers to Bandit, Bluey and Bingo's dad."
+        ],
+        "id": "parakeet-5",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nI said a «bandit» stole the cards.",
+        "target": "I said a «bandit» stole the cards.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.20508749205158983,
+        0.6454404779468427,
+        0.14947203000156742
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nI said a «bandit» stole the cards.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Bandit, Bluey and Bingo's dad",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "transcrust",
+          "end": 377,
+          "heard": "Transcrust",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary prose about material passing through a crust, not an application name",
+              "name": "It is transcrust, software project"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 367,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nI said a bandit stole the cards. This Linux software project is called «Transcrust»."
+        },
+        "category": "household",
+        "heard": "Transcrust",
+        "hypotheses": [
+          "The occurrence of \"Transcrust\" in \"This Linux software project is called Transcrust.\" refers to ordinary prose about material passing through a crust, not an application name.",
+          "The occurrence of \"Transcrust\" in \"This Linux software project is called Transcrust.\" refers to transcrust, software project."
+        ],
+        "id": "parakeet-6",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nThis Linux software project is called «Transcrust».",
+        "target": "This Linux software project is called «Transcrust».",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.2007039204027548,
+        0.606792119827633,
+        0.19250395976961215
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nThis Linux software project is called «Transcrust».",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary prose about material passing through a crust, not an application name",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is transcrust, software project",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Gambol",
+          "end": 13,
+          "heard": "Gamble",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary English about gambling or betting money",
+              "name": "It is Gambol, pet dog"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 7,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog «Gamble» is an Australian shepherd. I like to gamble and play poker with cards."
+        },
+        "category": "household",
+        "heard": "Gamble",
+        "hypotheses": [
+          "The occurrence of \"Gamble\" in \"My dog Gamble is an Australian shepherd.\" refers to ordinary English about gambling or betting money.",
+          "The occurrence of \"Gamble\" in \"My dog Gamble is an Australian shepherd.\" refers to Gambol, pet dog."
+        ],
+        "id": "parakeet-0",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog «Gamble» is an Australian shepherd. I like to gamble and play poker with cards.",
+        "target": "My dog «Gamble» is an Australian shepherd.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.33554855969831265,
+        0.4422794165110881,
+        0.2221720237905993
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog «Gamble» is an Australian shepherd. I like to gamble and play poker with cards.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary English about gambling or betting money",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Gambol, pet dog",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Gambol",
+          "end": 57,
+          "heard": "gamble",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary English about gambling or betting money",
+              "name": "It is Gambol, pet dog"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 51,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog Gamble is an Australian shepherd. I like to «gamble» and play poker with cards."
+        },
+        "category": "household",
+        "heard": "gamble",
+        "hypotheses": [
+          "The occurrence of \"gamble\" in \"I like to gamble and play poker with cards.\" refers to ordinary English about gambling or betting money.",
+          "The occurrence of \"gamble\" in \"I like to gamble and play poker with cards.\" refers to Gambol, pet dog."
+        ],
+        "id": "parakeet-1",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog Gamble is an Australian shepherd. I like to «gamble» and play poker with cards.",
+        "target": "I like to «gamble» and play poker with cards.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.3298042106346564,
+        0.46702289258472796,
+        0.20317289678061562
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog Gamble is an Australian shepherd. I like to «gamble» and play poker with cards.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary English about gambling or betting money",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Gambol, pet dog",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Flo",
+          "end": 204,
+          "heard": "flow",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary flow, the movement of water, traffic or another substance",
+              "name": "It is Flo, Cars movie character, runs the V8 Cafe"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 200,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning McQueen raced past Mater and Flo. Lightning lit the sky, and water began to «flow»."
+        },
+        "category": "household",
+        "heard": "flow",
+        "hypotheses": [
+          "The occurrence of \"flow\" in \"Lightning lit the sky, and water began to flow.\" refers to ordinary flow, the movement of water, traffic or another substance.",
+          "The occurrence of \"flow\" in \"Lightning lit the sky, and water began to flow.\" refers to Flo, Cars movie character, runs the V8 Cafe."
+        ],
+        "id": "parakeet-2",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning McQueen raced past Mater and Flo. Lightning lit the sky, and water began to «flow».",
+        "target": "Lightning lit the sky, and water began to «flow».",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.2699640696497745,
+        0.4404110434392066,
+        0.28962488691101895
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning McQueen raced past Mater and Flo. Lightning lit the sky, and water began to «flow».",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary flow, the movement of water, traffic or another substance",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Flo, Cars movie character, runs the V8 Cafe",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Chili",
+          "end": 262,
+          "heard": "chili",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary chili, the food or pepper, or chilly meaning cold",
+              "name": "It is Chili, Bluey and Bingo's mom"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 257,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean Bandit. We ate «chili» and played bingo after the show."
+        },
+        "category": "household",
+        "heard": "chili",
+        "hypotheses": [
+          "The occurrence of \"chili\" in \"We ate chili and played bingo after the show.\" refers to ordinary chili, the food or pepper, or chilly meaning cold.",
+          "The occurrence of \"chili\" in \"We ate chili and played bingo after the show.\" refers to Chili, Bluey and Bingo's mom."
+        ],
+        "id": "parakeet-3",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean Bandit. We ate «chili» and played bingo after the show.",
+        "target": "We ate «chili» and played bingo after the show.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.16082282305150422,
+        0.6918292084486882,
+        0.14734796849980755
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean Bandit. We ate «chili» and played bingo after the show.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary chili, the food or pepper, or chilly meaning cold",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Chili, Bluey and Bingo's mom",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Bingo",
+          "end": 279,
+          "heard": "bingo",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is the ordinary game bingo or its name",
+              "name": "It is Bingo, Bluey's 4-year-old sister"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 274,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean Bandit. We ate chili and played «bingo» after the show."
+        },
+        "category": "household",
+        "heard": "bingo",
+        "hypotheses": [
+          "The occurrence of \"bingo\" in \"We ate chili and played bingo after the show.\" refers to the ordinary game bingo or its name.",
+          "The occurrence of \"bingo\" in \"We ate chili and played bingo after the show.\" refers to Bingo, Bluey's 4-year-old sister."
+        ],
+        "id": "parakeet-4",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean Bandit. We ate chili and played «bingo» after the show.",
+        "target": "We ate chili and played «bingo» after the show.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.2955266761180499,
+        0.5447692682483715,
+        0.1597040556335786
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean Bandit. We ate chili and played «bingo» after the show.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is the ordinary game bingo or its name",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Bingo, Bluey's 4-year-old sister",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Bandit",
+          "end": 311,
+          "heard": "bandit",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+              "name": "It is Bandit, Bluey and Bingo's dad"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 305,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nWe ate chili and played bingo after the show. I said a «bandit» stole the cards."
+        },
+        "category": "household",
+        "heard": "bandit",
+        "hypotheses": [
+          "The occurrence of \"bandit\" in \"I said a bandit stole the cards.\" refers to an ordinary bandit, a robber or outlaw, or ordinary separate words band it.",
+          "The occurrence of \"bandit\" in \"I said a bandit stole the cards.\" refers to Bandit, Bluey and Bingo's dad."
+        ],
+        "id": "parakeet-5",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nWe ate chili and played bingo after the show. I said a «bandit» stole the cards.",
+        "target": "I said a «bandit» stole the cards.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.19146260165899878,
+        0.6192884772894971,
+        0.1892489210515041
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nWe ate chili and played bingo after the show. I said a «bandit» stole the cards.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Bandit, Bluey and Bingo's dad",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "transcrust",
+          "end": 377,
+          "heard": "Transcrust",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary prose about material passing through a crust, not an application name",
+              "name": "It is transcrust, software project"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 367,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nI said a bandit stole the cards. This Linux software project is called «Transcrust»."
+        },
+        "category": "household",
+        "heard": "Transcrust",
+        "hypotheses": [
+          "The occurrence of \"Transcrust\" in \"This Linux software project is called Transcrust.\" refers to ordinary prose about material passing through a crust, not an application name.",
+          "The occurrence of \"Transcrust\" in \"This Linux software project is called Transcrust.\" refers to transcrust, software project."
+        ],
+        "id": "parakeet-6",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nI said a bandit stole the cards. This Linux software project is called «Transcrust».",
+        "target": "This Linux software project is called «Transcrust».",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.14703670465947438,
+        0.6844933643826395,
+        0.16846993095788598
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nI said a bandit stole the cards. This Linux software project is called «Transcrust».",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary prose about material passing through a crust, not an application name",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is transcrust, software project",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Gambol",
+          "end": 13,
+          "heard": "Gamble",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary English about gambling or betting money",
+              "name": "It is Gambol, pet dog"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 7,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog «Gamble» is an Australian shepherd. I like to gamble and play poker with cards."
+        },
+        "category": "household",
+        "heard": "Gamble",
+        "hypotheses": [
+          "The occurrence of \"Gamble\" in \"My dog Gamble is an Australian shepherd.\" refers to ordinary English about gambling or betting money.",
+          "The occurrence of \"Gamble\" in \"My dog Gamble is an Australian shepherd.\" refers to Gambol, pet dog."
+        ],
+        "id": "phonon-0",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog «Gamble» is an Australian shepherd.",
+        "target": "My dog «Gamble» is an Australian shepherd.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.22281972268430086,
+        0.48624225827927425,
+        0.2909380190364249
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog «Gamble» is an Australian shepherd.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary English about gambling or betting money",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Gambol, pet dog",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Gambol",
+          "end": 57,
+          "heard": "gamble",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary English about gambling or betting money",
+              "name": "It is Gambol, pet dog"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 51,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog Gamble is an Australian shepherd. I like to «gamble» and play poker with cards."
+        },
+        "category": "household",
+        "heard": "gamble",
+        "hypotheses": [
+          "The occurrence of \"gamble\" in \"I like to gamble and play poker with cards.\" refers to ordinary English about gambling or betting money.",
+          "The occurrence of \"gamble\" in \"I like to gamble and play poker with cards.\" refers to Gambol, pet dog."
+        ],
+        "id": "phonon-1",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nI like to «gamble» and play poker with cards.",
+        "target": "I like to «gamble» and play poker with cards.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.3941612517869392,
+        0.4007655699625471,
+        0.2050731782505137
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nI like to «gamble» and play poker with cards.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary English about gambling or betting money",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Gambol, pet dog",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Flo",
+          "end": 157,
+          "heard": "flow",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary flow, the movement of water, traffic or another substance",
+              "name": "It is Flo, Cars movie character, runs the V8 Cafe"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 153,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy son O and I watched Cars. Lightning McQueen raced past meter and «flow»."
+        },
+        "category": "household",
+        "heard": "flow",
+        "hypotheses": [
+          "The occurrence of \"flow\" in \"Lightning McQueen raced past meter and flow.\" refers to ordinary flow, the movement of water, traffic or another substance.",
+          "The occurrence of \"flow\" in \"Lightning McQueen raced past meter and flow.\" refers to Flo, Cars movie character, runs the V8 Cafe."
+        ],
+        "id": "phonon-2",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning McQueen raced past meter and «flow».",
+        "target": "Lightning McQueen raced past meter and «flow».",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.29604785887929036,
+        0.4921097295589221,
+        0.2118424115617874
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning McQueen raced past meter and «flow».",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary flow, the movement of water, traffic or another substance",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Flo, Cars movie character, runs the V8 Cafe",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Flo",
+          "end": 205,
+          "heard": "flow",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary flow, the movement of water, traffic or another substance",
+              "name": "It is Flo, Cars movie character, runs the V8 Cafe"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 201,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning McQueen raced past meter and flow. Lightning lit the sky, and water began to «flow»."
+        },
+        "category": "household",
+        "heard": "flow",
+        "hypotheses": [
+          "The occurrence of \"flow\" in \"Lightning lit the sky, and water began to flow.\" refers to ordinary flow, the movement of water, traffic or another substance.",
+          "The occurrence of \"flow\" in \"Lightning lit the sky, and water began to flow.\" refers to Flo, Cars movie character, runs the V8 Cafe."
+        ],
+        "id": "phonon-3",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning lit the sky, and water began to «flow».",
+        "target": "Lightning lit the sky, and water began to «flow».",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.2939253879053324,
+        0.3974832398990094,
+        0.3085913721956581
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning lit the sky, and water began to «flow».",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary flow, the movement of water, traffic or another substance",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Flo, Cars movie character, runs the V8 Cafe",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Bandit",
+          "end": 249,
+          "heard": "bandit",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+              "name": "It is Bandit, Bluey and Bingo's dad"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 243,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning lit the sky, and water began to flow. Bluey and Bingo played with Chilean «bandit»."
+        },
+        "category": "household",
+        "heard": "bandit",
+        "hypotheses": [
+          "The occurrence of \"bandit\" in \"Bluey and Bingo played with Chilean bandit.\" refers to an ordinary bandit, a robber or outlaw, or ordinary separate words band it.",
+          "The occurrence of \"bandit\" in \"Bluey and Bingo played with Chilean bandit.\" refers to Bandit, Bluey and Bingo's dad."
+        ],
+        "id": "phonon-4",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean «bandit».",
+        "target": "Bluey and Bingo played with Chilean «bandit».",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.15784767841129743,
+        0.704625488695843,
+        0.13752683289285972
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean «bandit».",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Bandit, Bluey and Bingo's dad",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Chili",
+          "end": 263,
+          "heard": "chili",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary chili, the food or pepper, or chilly meaning cold",
+              "name": "It is Chili, Bluey and Bingo's mom"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 258,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean bandit. We ate «chili» and played bingo after the show."
+        },
+        "category": "household",
+        "heard": "chili",
+        "hypotheses": [
+          "The occurrence of \"chili\" in \"We ate chili and played bingo after the show.\" refers to ordinary chili, the food or pepper, or chilly meaning cold.",
+          "The occurrence of \"chili\" in \"We ate chili and played bingo after the show.\" refers to Chili, Bluey and Bingo's mom."
+        ],
+        "id": "phonon-5",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nWe ate «chili» and played bingo after the show.",
+        "target": "We ate «chili» and played bingo after the show.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.23146873729520925,
+        0.5791569752713848,
+        0.18937428743340604
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nWe ate «chili» and played bingo after the show.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary chili, the food or pepper, or chilly meaning cold",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Chili, Bluey and Bingo's mom",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Bingo",
+          "end": 280,
+          "heard": "bingo",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is the ordinary game bingo or its name",
+              "name": "It is Bingo, Bluey's 4-year-old sister"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 275,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean bandit. We ate chili and played «bingo» after the show."
+        },
+        "category": "household",
+        "heard": "bingo",
+        "hypotheses": [
+          "The occurrence of \"bingo\" in \"We ate chili and played bingo after the show.\" refers to the ordinary game bingo or its name.",
+          "The occurrence of \"bingo\" in \"We ate chili and played bingo after the show.\" refers to Bingo, Bluey's 4-year-old sister."
+        ],
+        "id": "phonon-6",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nWe ate chili and played «bingo» after the show.",
+        "target": "We ate chili and played «bingo» after the show.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.32886213791640895,
+        0.45227944692033545,
+        0.21885841516325555
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nWe ate chili and played «bingo» after the show.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is the ordinary game bingo or its name",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Bingo, Bluey's 4-year-old sister",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Bandit",
+          "end": 312,
+          "heard": "bandit",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+              "name": "It is Bandit, Bluey and Bingo's dad"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 306,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nWe ate chili and played bingo after the show. I said a «bandit» stole the cards."
+        },
+        "category": "household",
+        "heard": "bandit",
+        "hypotheses": [
+          "The occurrence of \"bandit\" in \"I said a bandit stole the cards.\" refers to an ordinary bandit, a robber or outlaw, or ordinary separate words band it.",
+          "The occurrence of \"bandit\" in \"I said a bandit stole the cards.\" refers to Bandit, Bluey and Bingo's dad."
+        ],
+        "id": "phonon-7",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nI said a «bandit» stole the cards.",
+        "target": "I said a «bandit» stole the cards.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.20508749205158983,
+        0.6454404779468427,
+        0.14947203000156742
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nI said a «bandit» stole the cards.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Bandit, Bluey and Bingo's dad",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "transcrust",
+          "end": 378,
+          "heard": "Transcrust",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary prose about material passing through a crust, not an application name",
+              "name": "It is transcrust, software project"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 368,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nI said a bandit stole the cards. This Linux software project is called «Transcrust»."
+        },
+        "category": "household",
+        "heard": "Transcrust",
+        "hypotheses": [
+          "The occurrence of \"Transcrust\" in \"This Linux software project is called Transcrust.\" refers to ordinary prose about material passing through a crust, not an application name.",
+          "The occurrence of \"Transcrust\" in \"This Linux software project is called Transcrust.\" refers to transcrust, software project."
+        ],
+        "id": "phonon-8",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nThis Linux software project is called «Transcrust».",
+        "target": "This Linux software project is called «Transcrust».",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.2007039204027548,
+        0.606792119827633,
+        0.19250395976961215
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nThis Linux software project is called «Transcrust».",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary prose about material passing through a crust, not an application name",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is transcrust, software project",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Gambol",
+          "end": 13,
+          "heard": "Gamble",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary English about gambling or betting money",
+              "name": "It is Gambol, pet dog"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 7,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog «Gamble» is an Australian shepherd. I like to gamble and play poker with cards."
+        },
+        "category": "household",
+        "heard": "Gamble",
+        "hypotheses": [
+          "The occurrence of \"Gamble\" in \"My dog Gamble is an Australian shepherd.\" refers to ordinary English about gambling or betting money.",
+          "The occurrence of \"Gamble\" in \"My dog Gamble is an Australian shepherd.\" refers to Gambol, pet dog."
+        ],
+        "id": "phonon-0",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog «Gamble» is an Australian shepherd. I like to gamble and play poker with cards.",
+        "target": "My dog «Gamble» is an Australian shepherd.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.33554855969831265,
+        0.4422794165110881,
+        0.2221720237905993
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog «Gamble» is an Australian shepherd. I like to gamble and play poker with cards.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary English about gambling or betting money",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Gambol, pet dog",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Gambol",
+          "end": 57,
+          "heard": "gamble",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary English about gambling or betting money",
+              "name": "It is Gambol, pet dog"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 51,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog Gamble is an Australian shepherd. I like to «gamble» and play poker with cards."
+        },
+        "category": "household",
+        "heard": "gamble",
+        "hypotheses": [
+          "The occurrence of \"gamble\" in \"I like to gamble and play poker with cards.\" refers to ordinary English about gambling or betting money.",
+          "The occurrence of \"gamble\" in \"I like to gamble and play poker with cards.\" refers to Gambol, pet dog."
+        ],
+        "id": "phonon-1",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog Gamble is an Australian shepherd. I like to «gamble» and play poker with cards.",
+        "target": "I like to «gamble» and play poker with cards.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.3298042106346564,
+        0.46702289258472796,
+        0.20317289678061562
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy dog Gamble is an Australian shepherd. I like to «gamble» and play poker with cards.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary English about gambling or betting money",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Gambol, pet dog",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Flo",
+          "end": 157,
+          "heard": "flow",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary flow, the movement of water, traffic or another substance",
+              "name": "It is Flo, Cars movie character, runs the V8 Cafe"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 153,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy son O and I watched Cars. Lightning McQueen raced past meter and «flow»."
+        },
+        "category": "household",
+        "heard": "flow",
+        "hypotheses": [
+          "The occurrence of \"flow\" in \"Lightning McQueen raced past meter and flow.\" refers to ordinary flow, the movement of water, traffic or another substance.",
+          "The occurrence of \"flow\" in \"Lightning McQueen raced past meter and flow.\" refers to Flo, Cars movie character, runs the V8 Cafe."
+        ],
+        "id": "phonon-2",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy son O and I watched Cars. Lightning McQueen raced past meter and «flow».",
+        "target": "Lightning McQueen raced past meter and «flow».",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.27911265912951366,
+        0.44254853067479355,
+        0.2783388101956928
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nMy son O and I watched Cars. Lightning McQueen raced past meter and «flow».",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary flow, the movement of water, traffic or another substance",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Flo, Cars movie character, runs the V8 Cafe",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Flo",
+          "end": 205,
+          "heard": "flow",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary flow, the movement of water, traffic or another substance",
+              "name": "It is Flo, Cars movie character, runs the V8 Cafe"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 201,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning McQueen raced past meter and flow. Lightning lit the sky, and water began to «flow»."
+        },
+        "category": "household",
+        "heard": "flow",
+        "hypotheses": [
+          "The occurrence of \"flow\" in \"Lightning lit the sky, and water began to flow.\" refers to ordinary flow, the movement of water, traffic or another substance.",
+          "The occurrence of \"flow\" in \"Lightning lit the sky, and water began to flow.\" refers to Flo, Cars movie character, runs the V8 Cafe."
+        ],
+        "id": "phonon-3",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning McQueen raced past meter and flow. Lightning lit the sky, and water began to «flow».",
+        "target": "Lightning lit the sky, and water began to «flow».",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.29785697248446347,
+        0.41896041326616706,
+        0.2831826142493696
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning McQueen raced past meter and flow. Lightning lit the sky, and water began to «flow».",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary flow, the movement of water, traffic or another substance",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Flo, Cars movie character, runs the V8 Cafe",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Bandit",
+          "end": 249,
+          "heard": "bandit",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+              "name": "It is Bandit, Bluey and Bingo's dad"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 243,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning lit the sky, and water began to flow. Bluey and Bingo played with Chilean «bandit»."
+        },
+        "category": "household",
+        "heard": "bandit",
+        "hypotheses": [
+          "The occurrence of \"bandit\" in \"Bluey and Bingo played with Chilean bandit.\" refers to an ordinary bandit, a robber or outlaw, or ordinary separate words band it.",
+          "The occurrence of \"bandit\" in \"Bluey and Bingo played with Chilean bandit.\" refers to Bandit, Bluey and Bingo's dad."
+        ],
+        "id": "phonon-4",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning lit the sky, and water began to flow. Bluey and Bingo played with Chilean «bandit».",
+        "target": "Bluey and Bingo played with Chilean «bandit».",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.14468161919765063,
+        0.6643529711650321,
+        0.1909654096373172
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nLightning lit the sky, and water began to flow. Bluey and Bingo played with Chilean «bandit».",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Bandit, Bluey and Bingo's dad",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Chili",
+          "end": 263,
+          "heard": "chili",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary chili, the food or pepper, or chilly meaning cold",
+              "name": "It is Chili, Bluey and Bingo's mom"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 258,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean bandit. We ate «chili» and played bingo after the show."
+        },
+        "category": "household",
+        "heard": "chili",
+        "hypotheses": [
+          "The occurrence of \"chili\" in \"We ate chili and played bingo after the show.\" refers to ordinary chili, the food or pepper, or chilly meaning cold.",
+          "The occurrence of \"chili\" in \"We ate chili and played bingo after the show.\" refers to Chili, Bluey and Bingo's mom."
+        ],
+        "id": "phonon-5",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean bandit. We ate «chili» and played bingo after the show.",
+        "target": "We ate «chili» and played bingo after the show.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.17466270341867052,
+        0.6812153177219968,
+        0.14412197885933267
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean bandit. We ate «chili» and played bingo after the show.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary chili, the food or pepper, or chilly meaning cold",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Chili, Bluey and Bingo's mom",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Bingo",
+          "end": 280,
+          "heard": "bingo",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is the ordinary game bingo or its name",
+              "name": "It is Bingo, Bluey's 4-year-old sister"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 275,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean bandit. We ate chili and played «bingo» after the show."
+        },
+        "category": "household",
+        "heard": "bingo",
+        "hypotheses": [
+          "The occurrence of \"bingo\" in \"We ate chili and played bingo after the show.\" refers to the ordinary game bingo or its name.",
+          "The occurrence of \"bingo\" in \"We ate chili and played bingo after the show.\" refers to Bingo, Bluey's 4-year-old sister."
+        ],
+        "id": "phonon-6",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean bandit. We ate chili and played «bingo» after the show.",
+        "target": "We ate chili and played «bingo» after the show.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.29425237443636476,
+        0.5460060087380144,
+        0.15974161682562096
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nBluey and Bingo played with Chilean bandit. We ate chili and played «bingo» after the show.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is the ordinary game bingo or its name",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Bingo, Bluey's 4-year-old sister",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Bandit",
+          "end": 312,
+          "heard": "bandit",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+              "name": "It is Bandit, Bluey and Bingo's dad"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 306,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nWe ate chili and played bingo after the show. I said a «bandit» stole the cards."
+        },
+        "category": "household",
+        "heard": "bandit",
+        "hypotheses": [
+          "The occurrence of \"bandit\" in \"I said a bandit stole the cards.\" refers to an ordinary bandit, a robber or outlaw, or ordinary separate words band it.",
+          "The occurrence of \"bandit\" in \"I said a bandit stole the cards.\" refers to Bandit, Bluey and Bingo's dad."
+        ],
+        "id": "phonon-7",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nWe ate chili and played bingo after the show. I said a «bandit» stole the cards.",
+        "target": "I said a «bandit» stole the cards.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.19146260165899878,
+        0.6192884772894971,
+        0.1892489210515041
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nWe ate chili and played bingo after the show. I said a «bandit» stole the cards.",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is Bandit, Bluey and Bingo's dad",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "transcrust",
+          "end": 378,
+          "heard": "Transcrust",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary prose about material passing through a crust, not an application name",
+              "name": "It is transcrust, software project"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 368,
+          "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nI said a bandit stole the cards. This Linux software project is called «Transcrust»."
+        },
+        "category": "household",
+        "heard": "Transcrust",
+        "hypotheses": [
+          "The occurrence of \"Transcrust\" in \"This Linux software project is called Transcrust.\" refers to ordinary prose about material passing through a crust, not an application name.",
+          "The occurrence of \"Transcrust\" in \"This Linux software project is called Transcrust.\" refers to transcrust, software project."
+        ],
+        "id": "phonon-8",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nI said a bandit stole the cards. This Linux software project is called «Transcrust».",
+        "target": "This Linux software project is called «Transcrust».",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.14703670465947438,
+        0.6844933643826395,
+        0.16846993095788598
+      ],
+      "rendered_eg2": [
+        "workflow:  | state: Vocabulary glossary:\n| Term | Description |\n|---|---|\n| Kubernetes | the user's vocabulary term Kubernetes |\n| Wayland | the user's vocabulary term Wayland |\n| Svelte | the user's vocabulary term Svelte |\n| Syncthing | the user's vocabulary term Syncthing |\n| transcrust | software project |\n| Gambol | pet dog |\n| Nell | son's mom |\n| Void | the user's vocabulary term Void |\n| Rowan | son |\n| Flo | Cars movie character, runs the V8 Cafe |\n| Lightning McQueen | Cars movie character, race car |\n| Mater | Cars movie character, tow truck |\n| Bluey | 6-year-old main character, blue heeler |\n| Bingo | Bluey's 4-year-old sister |\n| Chili | Bluey and Bingo's mom |\n| Bandit | Bluey and Bingo's dad |\n| Cars theme | the user's vocabulary term Cars theme |\n\nDictation:\nI said a bandit stole the cards. This Linux software project is called «Transcrust».",
+        "choice question: What does the marked span refer to in this spoken sentence?",
+        "question: What does the marked span refer to in this spoken sentence? | answer: keep: It is ordinary prose about material passing through a crust, not an application name",
+        "question: What does the marked span refer to in this spoken sentence? | answer: name: It is transcrust, software project",
+        "question: What does the marked span refer to in this spoken sentence? | answer: abstain: insufficient evidence"
+      ]
+    }
+  ],
+  "signature": {
+    "manifest.json": "e872280438ae0c5a77114b72c1608c166787e84b28fe89dbd0b5dd6241c89550",
+    "native_source": "154908a70427c44ef212708b318ff8090b7f6e621bc447a4f8dbd50a50e6eb56",
+    "reference.json": "0e46af2eb73b5c7bd26c5f5ea1e10e507a2939ff67fee6eb71dcec5fb5d87e28",
+    "tokenizer.json": "dba1bf6b56fe71d2cc69a771a037fa6a7dac2e41f33ed3e1b3254b90fa17c3a5",
+    "weights.bin": "4ab373232624a889707669cfe3163b81e98ec762affff02505a72286af810792"
+  },
+  "wall_seconds": 45.851020748
+}

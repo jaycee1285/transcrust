@@ -1,0 +1,17 @@
+Vela fast/stripped "parakeet" "single": 7 candidates, 6 graph calls, 1.837s
+Vela fast/stripped "parakeet" "two": 7 candidates, 7 graph calls, 2.218s
+Vela fast/stripped "phonon" "single": 9 candidates, 8 graph calls, 2.533s
+Vela fast/stripped "phonon" "two": 9 candidates, 9 graph calls, 2.861s
+Vela fast/stripped "synthetic" "single": 8 candidates, 7 graph calls, 2.221s
+Vela fast/stripped "synthetic" "single": 8 candidates, 8 graph calls, 2.362s
+Vela fast/stripped "synthetic" "single": 8 candidates, 6 graph calls, 2.108s
+Vela fast/stripped "synthetic" "single": 8 candidates, 8 graph calls, 2.709s
+Vela fast/stripped "synthetic" "single": 8 candidates, 8 graph calls, 2.397s
+Vela fast/stripped "synthetic" "single": 8 candidates, 7 graph calls, 2.467s
+Vela fast/stripped "synthetic" "single": 8 candidates, 8 graph calls, 2.509s
+Vela fast/stripped "synthetic" "single": 8 candidates, 8 graph calls, 2.532s
+Vela fast/stripped "synthetic" "single": 8 candidates, 8 graph calls, 2.598s
+Vela fast/stripped "synthetic" "single": 8 candidates, 8 graph calls, 2.530s
+Vela fast/stripped "synthetic" "single": 8 candidates, 8 graph calls, 2.774s
+Vela fast/stripped "synthetic" "single": 8 candidates, 8 graph calls, 2.781s
+Vela fast/stripped "synthetic" "single": 4 candidates, 4 graph calls, 1.365s

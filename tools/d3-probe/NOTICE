@@ -1,0 +1,19 @@
+d1.js
+Copyright 2026 the d1.js contributors. Licensed under the Apache License, Version 2.0 (LICENSE).
+
+The matrix-unit matmul kernel (src/kernels.ts, matmulSgmat16) is derived from ONNX Runtime's WebGPU
+MatMulNBits "prefill_sgmat" kernel, Copyright (c) Microsoft Corporation, MIT License
+(https://github.com/microsoft/onnxruntime).
+
+d1.js runs LiquidAI's d1 models; the models and their tokenizers are LiquidAI's, under the LFM Open
+License v1.0 (shipped as LICENSE next to every exported model). d1.js does not include them.
+
+Native d3 research probe modifications (2026-10-31): the inference structure,
+packed-weight decoding, normalization and recurrent/attention operations were
+transliterated into Rust CPU operations in tools/d3-probe/model.rs. This is a
+modified reference implementation, not the original decision.js runtime. The
+probe does not contain the upstream matrix-unit shader noted above.
+
+The separately downloaded d3-lite model/tokenizer are Apache-2.0:
+d3-lite (Decision 3.0), Copyright 2026 vLLM Semantic Router Team.
+Built on Qwen/Qwen3.5-0.8B (Apache-2.0).

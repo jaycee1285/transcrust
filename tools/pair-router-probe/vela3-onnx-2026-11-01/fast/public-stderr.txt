@@ -1,0 +1,3 @@
+Vela fast loaded in 1.79s
+public "published-billing-example": [0.9958124266603268, 0.0006358561467162234, 0.0035517171929571136], delta 0.000448
+public "published-urgent-example": [0.15721039524714153, 0.8427896047528585], delta 0.000210

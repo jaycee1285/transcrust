@@ -1,0 +1,4 @@
+ultra parakeet/single: 7 decisions 3.21s
+ultra parakeet/two: 7 decisions 4.58s
+ultra phonon/single: 9 decisions 4.62s
+ultra phonon/two: 9 decisions 5.41s

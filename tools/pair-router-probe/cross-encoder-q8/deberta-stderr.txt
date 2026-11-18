@@ -1,0 +1,19 @@
+inputs: ["input_ids", "attention_mask"]
+NLI neutral diagnostic missed: [[-4.1329856, 3.7311308, 0.33747175], [5.924601, -3.157739, -2.699331], [3.453712, -3.0594995, -0.2864846]]; retained in results
+deberta: 7 occurrences / 14 paired rows, 1293ms, batch 1
+deberta: 7 occurrences / 14 paired rows, 1279ms, batch 2
+deberta: 9 occurrences / 18 paired rows, 1693ms, batch 3
+deberta: 9 occurrences / 18 paired rows, 1967ms, batch 4
+deberta: 8 occurrences / 16 paired rows, 1012ms, batch 5
+deberta: 8 occurrences / 16 paired rows, 979ms, batch 6
+deberta: 8 occurrences / 16 paired rows, 1001ms, batch 7
+deberta: 8 occurrences / 16 paired rows, 1119ms, batch 8
+deberta: 8 occurrences / 16 paired rows, 949ms, batch 9
+deberta: 8 occurrences / 16 paired rows, 1030ms, batch 10
+deberta: 8 occurrences / 16 paired rows, 944ms, batch 11
+deberta: 8 occurrences / 16 paired rows, 975ms, batch 12
+deberta: 8 occurrences / 16 paired rows, 968ms, batch 13
+deberta: 8 occurrences / 16 paired rows, 1025ms, batch 14
+deberta: 8 occurrences / 16 paired rows, 1046ms, batch 15
+deberta: 8 occurrences / 16 paired rows, 1042ms, batch 16
+deberta: 4 occurrences / 8 paired rows, 476ms, batch 17

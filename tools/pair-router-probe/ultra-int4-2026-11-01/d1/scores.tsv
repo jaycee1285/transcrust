@@ -1,0 +1,5 @@
+file	errors	reference_words	wer_percent
+tools/pair-router-probe/ultra-int4-2026-11-01/d1/parakeet-single.txt	2	79	2.53
+tools/pair-router-probe/ultra-int4-2026-11-01/d1/parakeet-two.txt	3	79	3.80
+tools/pair-router-probe/ultra-int4-2026-11-01/d1/phonon-single.txt	4	79	5.06
+tools/pair-router-probe/ultra-int4-2026-11-01/d1/phonon-two.txt	4	79	5.06

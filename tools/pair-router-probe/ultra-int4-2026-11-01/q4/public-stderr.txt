@@ -1,0 +1,9 @@
+Ultra "<urn:uuid:be9a46df-e007-4d16-b8c6-34cd0ad3e37c>-topic": Food & Dining 0.99984, delta 0.00004, 8.26s
+Ultra "<urn:uuid:be9a46df-e007-4d16-b8c6-34cd0ad3e37c>-edu": minimal educational value 0.90830, delta 0.00063, 7.93s
+Ultra "<urn:uuid:be9a46df-e007-4d16-b8c6-34cd0ad3e37c>-reasoning": Basic Reasoning 0.46669, delta 0.00367, 7.36s
+Ultra "<urn:uuid:aba1752a-59cc-4429-91b4-30d2fd79a049>-topic": Education & Jobs 0.99839, delta 0.00123, 3.04s
+Ultra "<urn:uuid:aba1752a-59cc-4429-91b4-30d2fd79a049>-edu": minimal educational value 0.50625, delta 0.03848, 2.21s
+Ultra "<urn:uuid:aba1752a-59cc-4429-91b4-30d2fd79a049>-reasoning": No Reasoning 0.44037, delta 0.03246, 2.32s
+Ultra "<urn:uuid:c372adfc-f5ba-469b-ad0f-7d013c04f270>-topic": Literature 0.97299, delta 0.02063, 7.76s
+Ultra "<urn:uuid:c372adfc-f5ba-469b-ad0f-7d013c04f270>-edu": minimal educational value 0.85551, delta 0.00394, 7.30s
+Ultra "<urn:uuid:c372adfc-f5ba-469b-ad0f-7d013c04f270>-reasoning": No Reasoning 0.54820, delta 0.02670, 6.50s

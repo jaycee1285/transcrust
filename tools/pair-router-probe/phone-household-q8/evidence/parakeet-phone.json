@@ -1,0 +1,215 @@
+{
+  "engine": "parakeet",
+  "stamp": "2026-10-28T21-39-08.206338Z-parakeet-ae192609",
+  "audio_file": "/storage/emulated/0/syncthing/syncthing/mopvox/phonon-trial/audio/phonon-household.wav",
+  "audio_sha256": "3e7fdd89c054dfb7d41113cb19fd8347764662cbc554fd1b74ec62527f8bfe46",
+  "audio_seconds": 49.719875,
+  "passes": [
+    {
+      "pass": 1,
+      "raw": "My dog Gamble is an Australian shepherd. I like to gamble and play poker with cards. My son O and I watched cars. Lightning McQueen raced past Mater and Flo. Lightning lit the sky, and water began to flow. Bluey and Bingo played with Chilean Bandit. We ate chili and played bingo after the show. I said a bandit stole the cards. This Linux software project is called Transcrust. Nell and I talked about the next school day. ",
+      "decode_ms": 7497,
+      "score": {
+        "reference_words": 79,
+        "word_errors": 3,
+        "substitutions": 2,
+        "deletions": 1,
+        "insertions": 0,
+        "wer": 0.0379746835443038,
+        "lines": [
+          {
+            "number": 1,
+            "expected": "My dog Gambol is an Australian shepherd.",
+            "heard": "My dog Gamble is an Australian shepherd",
+            "reference_words": 7,
+            "word_errors": 1,
+            "case_differences": 0
+          },
+          {
+            "number": 2,
+            "expected": "I like to gamble and play poker with cards.",
+            "heard": "I like to gamble and play poker with cards",
+            "reference_words": 9,
+            "word_errors": 0,
+            "case_differences": 0
+          },
+          {
+            "number": 3,
+            "expected": "My son O and I watched Cars.",
+            "heard": "My son O and I watched cars",
+            "reference_words": 7,
+            "word_errors": 0,
+            "case_differences": 1
+          },
+          {
+            "number": 4,
+            "expected": "Lightning McQueen raced past Mater and Flo.",
+            "heard": "Lightning McQueen raced past Mater and Flo",
+            "reference_words": 7,
+            "word_errors": 0,
+            "case_differences": 0
+          },
+          {
+            "number": 5,
+            "expected": "Lightning lit the sky and water began to flow.",
+            "heard": "Lightning lit the sky and water began to flow",
+            "reference_words": 9,
+            "word_errors": 0,
+            "case_differences": 0
+          },
+          {
+            "number": 6,
+            "expected": "Bluey and Bingo played with Chili and Bandit.",
+            "heard": "Bluey and Bingo played with Chilean Bandit",
+            "reference_words": 8,
+            "word_errors": 2,
+            "case_differences": 0
+          },
+          {
+            "number": 7,
+            "expected": "We ate chili and played bingo after the show.",
+            "heard": "We ate chili and played bingo after the show",
+            "reference_words": 9,
+            "word_errors": 0,
+            "case_differences": 0
+          },
+          {
+            "number": 8,
+            "expected": "I said a bandit stole the cards.",
+            "heard": "I said a bandit stole the cards",
+            "reference_words": 7,
+            "word_errors": 0,
+            "case_differences": 0
+          },
+          {
+            "number": 9,
+            "expected": "This Linux software project is called transcrust.",
+            "heard": "This Linux software project is called Transcrust",
+            "reference_words": 7,
+            "word_errors": 0,
+            "case_differences": 1
+          },
+          {
+            "number": 10,
+            "expected": "Nell and I talked about the next school day.",
+            "heard": "Nell and I talked about the next school day",
+            "reference_words": 9,
+            "word_errors": 0,
+            "case_differences": 0
+          }
+        ],
+        "initials": [
+          {
+            "line": 3,
+            "expected": "O",
+            "heard": "O",
+            "preserved": true
+          }
+        ]
+      }
+    },
+    {
+      "pass": 2,
+      "raw": "My dog Gamble is an Australian shepherd. I like to gamble and play poker with cards. My son O and I watched cars. Lightning McQueen raced past Mater and Flo. Lightning lit the sky, and water began to flow. Bluey and Bingo played with Chilean Bandit. We ate chili and played bingo after the show. I said a bandit stole the cards. This Linux software project is called Transcrust. Nell and I talked about the next school day. ",
+      "decode_ms": 8003,
+      "score": {
+        "reference_words": 79,
+        "word_errors": 3,
+        "substitutions": 2,
+        "deletions": 1,
+        "insertions": 0,
+        "wer": 0.0379746835443038,
+        "lines": [
+          {
+            "number": 1,
+            "expected": "My dog Gambol is an Australian shepherd.",
+            "heard": "My dog Gamble is an Australian shepherd",
+            "reference_words": 7,
+            "word_errors": 1,
+            "case_differences": 0
+          },
+          {
+            "number": 2,
+            "expected": "I like to gamble and play poker with cards.",
+            "heard": "I like to gamble and play poker with cards",
+            "reference_words": 9,
+            "word_errors": 0,
+            "case_differences": 0
+          },
+          {
+            "number": 3,
+            "expected": "My son O and I watched Cars.",
+            "heard": "My son O and I watched cars",
+            "reference_words": 7,
+            "word_errors": 0,
+            "case_differences": 1
+          },
+          {
+            "number": 4,
+            "expected": "Lightning McQueen raced past Mater and Flo.",
+            "heard": "Lightning McQueen raced past Mater and Flo",
+            "reference_words": 7,
+            "word_errors": 0,
+            "case_differences": 0
+          },
+          {
+            "number": 5,
+            "expected": "Lightning lit the sky and water began to flow.",
+            "heard": "Lightning lit the sky and water began to flow",
+            "reference_words": 9,
+            "word_errors": 0,
+            "case_differences": 0
+          },
+          {
+            "number": 6,
+            "expected": "Bluey and Bingo played with Chili and Bandit.",
+            "heard": "Bluey and Bingo played with Chilean Bandit",
+            "reference_words": 8,
+            "word_errors": 2,
+            "case_differences": 0
+          },
+          {
+            "number": 7,
+            "expected": "We ate chili and played bingo after the show.",
+            "heard": "We ate chili and played bingo after the show",
+            "reference_words": 9,
+            "word_errors": 0,
+            "case_differences": 0
+          },
+          {
+            "number": 8,
+            "expected": "I said a bandit stole the cards.",
+            "heard": "I said a bandit stole the cards",
+            "reference_words": 7,
+            "word_errors": 0,
+            "case_differences": 0
+          },
+          {
+            "number": 9,
+            "expected": "This Linux software project is called transcrust.",
+            "heard": "This Linux software project is called Transcrust",
+            "reference_words": 7,
+            "word_errors": 0,
+            "case_differences": 1
+          },
+          {
+            "number": 10,
+            "expected": "Nell and I talked about the next school day.",
+            "heard": "Nell and I talked about the next school day",
+            "reference_words": 9,
+            "word_errors": 0,
+            "case_differences": 0
+          }
+        ],
+        "initials": [
+          {
+            "line": 3,
+            "expected": "O",
+            "heard": "O",
+            "preserved": true
+          }
+        ]
+      }
+    }
+  ]
+}

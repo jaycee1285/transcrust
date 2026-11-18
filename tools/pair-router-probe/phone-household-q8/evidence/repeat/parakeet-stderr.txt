@@ -1,0 +1,10 @@
+[1793299563] INFO dec: native text-only Q8 ready in 6.96s; batched decisions; decoder boosting off; shared vocabulary /home/john/syncthing/john-vocab.md
+[1793299569] INFO dec: 7 candidates, 3 replacements, 6124 ms
+[1793299569] INFO dec.choice: "Gamble" -> "Gambol": Name; P(name)=0.652; batch 6061ms
+[1793299569] INFO dec.choice: "gamble" -> "Gambol": Name; P(name)=0.756; batch 6061ms
+[1793299569] INFO dec.choice: "flow" -> "Flo": Keep; P(name)=0.106; batch 6061ms
+[1793299569] INFO dec.choice: "chili" -> "Chili": Keep; P(name)=0.056; batch 6061ms
+[1793299569] INFO dec.choice: "bingo" -> "Bingo": Keep; P(name)=0.114; batch 6061ms
+[1793299569] INFO dec.choice: "bandit" -> "Bandit": Keep; P(name)=0.112; batch 6061ms
+[1793299569] INFO dec.choice: "Transcrust" -> "transcrust": Name; P(name)=0.758; batch 6061ms
+[1793299569] INFO timing: ASR 0.00s; total wait to typing 6.12s

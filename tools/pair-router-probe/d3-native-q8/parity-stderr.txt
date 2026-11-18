@@ -1,0 +1,82 @@
+d3 formatter: 147 tokens match upstream exactly
+d3: 530595840 packed matrix bytes resident; embedding rows read on demand; loaded 0.47s
+d3 layer 0
+d3 layer 1
+d3 layer 2
+d3 layer 3
+d3 layer 4
+d3 layer 5
+d3 layer 6
+d3 layer 7
+d3 layer 8
+d3 layer 9
+d3 layer 10
+d3 layer 11
+d3 layer 12
+d3 layer 13
+d3 layer 14
+d3 layer 15
+d3 layer 16
+d3 layer 17
+d3 layer 18
+d3 layer 19
+d3 layer 20
+d3 layer 21
+d3 layer 22
+d3 layer 23
+d3 parity 1/56: same=true, max ΔP=0.000068, 4.61s
+d3 parity 2/56: same=true, max ΔP=0.000161, 3.95s
+d3 parity 3/56: same=true, max ΔP=0.000702, 3.57s
+d3 parity 4/56: same=true, max ΔP=0.000032, 3.96s
+d3 parity 5/56: same=true, max ΔP=0.000207, 4.08s
+d3 parity 6/56: same=true, max ΔP=0.000434, 3.68s
+d3 parity 7/56: same=true, max ΔP=0.000080, 8.68s
+d3 parity 8/56: same=true, max ΔP=0.000035, 3.91s
+d3 parity 9/56: same=true, max ΔP=0.000299, 4.57s
+d3 parity 10/56: same=true, max ΔP=0.000838, 4.64s
+d3 parity 11/56: same=true, max ΔP=0.000145, 4.28s
+d3 parity 12/56: same=true, max ΔP=0.000528, 4.37s
+d3 parity 13/56: same=true, max ΔP=0.000258, 4.85s
+d3 parity 14/56: same=true, max ΔP=0.000584, 4.35s
+d3 parity 15/56: same=true, max ΔP=0.000161, 9.04s
+d3 parity 16/56: same=true, max ΔP=0.000030, 5.66s
+d3 parity 17/56: same=true, max ΔP=0.000325, 4.75s
+d3 parity 18/56: same=true, max ΔP=0.000205, 3.56s
+d3 parity 19/56: same=true, max ΔP=0.000004, 4.46s
+d3 parity 20/56: same=true, max ΔP=0.000064, 3.54s
+d3 parity 21/56: same=true, max ΔP=0.000250, 4.69s
+d3 parity 22/56: same=true, max ΔP=0.000190, 3.78s
+d3 parity 23/56: same=true, max ΔP=0.000054, 8.74s
+d3 parity 24/56: same=true, max ΔP=0.000019, 3.90s
+d3 parity 25/56: same=true, max ΔP=0.000703, 4.53s
+d3 parity 26/56: same=true, max ΔP=0.000682, 3.58s
+d3 parity 27/56: same=true, max ΔP=0.000299, 3.32s
+d3 parity 28/56: same=true, max ΔP=0.000175, 3.60s
+d3 parity 29/56: same=true, max ΔP=0.000186, 4.18s
+d3 parity 30/56: same=true, max ΔP=0.000206, 3.23s
+d3 parity 31/56: same=true, max ΔP=0.000067, 10.54s
+d3 parity 32/56: same=true, max ΔP=0.000602, 3.94s
+d3 parity 33/56: same=true, max ΔP=0.000703, 3.89s
+d3 parity 34/56: same=true, max ΔP=0.000682, 3.39s
+d3 parity 35/56: same=true, max ΔP=0.000299, 3.90s
+d3 parity 36/56: same=true, max ΔP=0.000175, 3.30s
+d3 parity 37/56: same=true, max ΔP=0.000186, 4.00s
+d3 parity 38/56: same=true, max ΔP=0.000206, 3.58s
+d3 parity 39/56: same=true, max ΔP=0.000067, 7.91s
+d3 parity 40/56: same=true, max ΔP=0.000602, 4.02s
+d3 parity 41/56: same=true, max ΔP=0.000903, 3.88s
+d3 parity 42/56: same=true, max ΔP=0.000162, 4.08s
+d3 parity 43/56: same=true, max ΔP=0.000003, 3.38s
+d3 parity 44/56: same=true, max ΔP=0.000126, 4.08s
+d3 parity 45/56: same=true, max ΔP=0.000278, 4.98s
+d3 parity 46/56: same=true, max ΔP=0.000218, 3.43s
+d3 parity 47/56: same=true, max ΔP=0.000106, 8.42s
+d3 parity 48/56: same=true, max ΔP=0.000082, 3.76s
+d3 parity 49/56: same=true, max ΔP=0.000120, 8.86s
+d3 parity 50/56: same=true, max ΔP=0.000432, 8.67s
+d3 parity 51/56: same=true, max ΔP=0.000206, 8.74s
+d3 parity 52/56: same=true, max ΔP=0.000282, 9.56s
+d3 parity 53/56: same=true, max ΔP=0.001142, 8.86s
+d3 parity 54/56: same=true, max ΔP=0.000228, 8.22s
+d3 parity 55/56: same=true, max ΔP=0.000113, 13.13s
+d3 parity 56/56: same=true, max ΔP=0.000784, 8.42s

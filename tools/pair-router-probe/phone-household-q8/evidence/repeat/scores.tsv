@@ -1,0 +1,5 @@
+file	errors	reference_words	wer_percent
+/tmp/transcrust-phone-q8.POavkN/parakeet-raw.txt	3	79	3.80
+/tmp/transcrust-phone-q8.POavkN/parakeet-output.txt	3	79	3.80
+/tmp/transcrust-phone-q8.POavkN/phonon-raw.txt	5	79	6.33
+/tmp/transcrust-phone-q8.POavkN/phonon-output.txt	4	79	5.06

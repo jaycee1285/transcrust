@@ -1,17 +1,17 @@
 # Live contextual vocabulary dogfood — `--dec`
 
-Status updated 2026-10-29: native implementation and machine checks exist;
-John accepts the desktop native Q8 test as-is for now, with really good
-corrections and tolerable but slower-than-desired latency. Preserve that baseline;
-mobile latency/RAM must be measured separately. This is not blanket certification
-of the synthetic suite. See `Smoke-Human-transcrust.md` for the ledger
+Status updated 2026-11-01: at John's request, **UltraBERT INT4 is now the primary
+`--dec` backend** for desktop dogfood. D1 Q8 remains selectable with
+`--dec-backend d1`; its 2026-10-29 acceptance is retained as baseline evidence.
+UltraBERT's live human smoke is pending. Mobile latency/RAM must be measured
+separately. See `Smoke-Human-transcrust.md` for the ledger
 and `TASKBOARD.md` for the next steps; research history is `decision-experiments.md`.
 The Linux experiment leaves the Apple review-before-paste contract unchanged.
 
 Stop the existing daemon through its tray Exit, then run:
 
 ```sh
-nix develop -c cargo run -- --dec --smoke
+nix develop -c cargo run --release -- --dec --smoke
 ```
 
 Use the normal push-to-talk binding and an ordinary editor. The same daemon
@@ -21,26 +21,40 @@ Without `--dec`, the previous decoder weighting and phonetic path remain active.
 
 ## Runtime
 
-`src/decision.rs` owns candidate generation, two-sentence context, resident model
-lifetime, replacement and audit logging. `src/d1.rs` drives the Q8 graph directly
-through the existing Rust ORT/tokenizers stack. No interpreter, subprocess or
-JSON pipe is involved. No model is loaded in the correction UI.
+`crates/decision/src/lib.rs` owns candidate generation, two-sentence context,
+resident model lifetime, backend selection and replacement. Desktop
+`src/decision.rs` retains audit logging. Shared `ultra.rs` and
+`decision_tensor.rs` implement the native backend promoted from the research
+harness; shared `d1.rs` retains the original ORT backend. No interpreter,
+subprocess or JSON pipe is involved. No model is loaded in the correction UI.
 
-The model uses only d1's Q8 text graph and weight sidecar. Tokenizer, graph,
-weights and config are verified against the local download manifest before load.
-The pinned upstream formatter is transliterated in Rust. No network request or automatic
-download exists in the runtime. The bundle's Liquid licence stays with the model.
+UltraBERT uses the tested Q4_0 encoder/embeddings with FP32 norms/head. Matrices
+stay packed, one operator uses FP32 scratch, and only requested embedding rows
+are decoded. The tokenizer is pinned; packed source identity, size and checksum
+are verified at load. Native CPU work uses a dedicated pool of up to four
+threads. Model load and a warmup occur at daemon startup, before dictation.
+No network request or automatic download exists in the runtime.
 
-Resolution: `TRANSCRUST_DEC_MODEL`, then
-`~/.local/share/transcrust/models/d1-omni-600M-q8`, then the previous probe's
-`/tmp/transcrust-d1-omni-600M-q8` cache. The persistent model is installed on
-John's machine. Python is absent from the app's Nix shell/runtime dependencies;
-the separate optional research shell retains historical model-evaluation tools.
+Resolution: `TRANSCRUST_DEC_MODEL`, then the selected backend's local-share
+directory. UltraBERT uses `~/.local/share/transcrust/models/ultrabert-380m-curation-q4`,
+with the current checkout's `target/schema-probe/ultra-q4` as development fallback.
+D1 uses `~/.local/share/transcrust/models/d1-omni-600M-q8`, with its old `/tmp`
+cache as fallback. The environment override applies to whichever backend was
+selected; it does not auto-detect or silently switch backends. Only INT4 bundles
+are accepted by the live Ultra adapter. The original D1 graph/config/weights
+verification remains intact. Model licences remain with their respective bundles.
+
+`--dec-backend ultra|d1` also enables `--dec`. A missing/unknown backend value
+is rejected, and the selector is removed from `--fix` input text. For D1:
+
+```sh
+nix develop -c cargo run --release -- --dec-backend d1 --smoke
+```
 
 `--dec` sets decoder boosting to zero after config loading, regardless of its
 config/environment setting, and bypasses the entire legacy vocabulary pass.
 Punctuation, repetition/filler cleanup and deterministic sentence capitalization
-remain. In long mode the existing prose polisher precedes d1. Q8 is the final
+remain. In long mode the existing prose polisher precedes the decision backend. It is the final
 vocabulary stage, immediately before injection. Switching ASR modes keeps the
 same decision model resident.
 
@@ -80,31 +94,34 @@ aliases identify potential replacements, never unconditional substitutions.
 
 Each candidate sees its containing sentence and the preceding sentence, or the
 following sentence for the first sentence. There is no cross-dictation history.
-The shared glossary is supplied with one marked occurrence. The choice question
-is the existing referent question: KEEP/name/insufficient evidence. Short glossary
-descriptions also form the candidate's name option with its canonical spelling;
-the live starter prompt is not byte-identical to the earlier long-description
-benchmarks. All candidates use the immutable original cleaned text; replacements
+UltraBERT receives only the marked context and the candidate's three answer
+descriptions, including its canonical spelling and meaning. **The global glossary
+table is omitted**, matching the tested stripped formulation. D1 keeps its
+original global glossary. The referent question and option meanings are shared:
+keep/name/insufficient evidence. All candidates use the immutable original cleaned text; replacements
 are applied afterward in reverse UTF-8 byte-offset order.
 
 Native option order is explicitly keep/name/abstain even when Rust serializes
-JSON object keys alphabetically. The formatter uses per_option=64 and shipped
-three-choice calibration. Any state/option truncation is rejected, not silently
+JSON object keys alphabetically. Any state/option truncation is rejected, not silently
 accepted. No unvalidated probability floor was selected. A name choice applies
 that candidate; KEEP/abstention preserve it. All eligible occurrences become
-independent right-padded rows in one graph call. Each row keeps its original
-two-sentence context and three options. This follows LiquidAI's
+independent sequences in one batch. UltraBERT packs them on one token axis with
+separate attention ranges and reset positions; it rejects sequences over 4,096
+tokens or a total over 8,192. D1 uses right-padded rows, per_option=64 and its
+shipped three-choice calibration, following LiquidAI's
 [`probabilities_batch` implementation](https://huggingface.co/LiquidAI/d1-omni-600M/blob/02b55d7076f15129e59ab3f94783f32c4b088674/modeling_d1.py),
-rather than concatenating questions into an untrained sequence. Native ORT uses
+with independent question rows. Native ORT uses
 up to four CPU threads (bounded by available parallelism). The warmed model
-remains loaded between utterances. A batch exceeding upstream's 65,536 padded
+remains loaded between utterances. A D1 batch exceeding upstream's 65,536 padded
 token budget is rejected with text preserved.
 
 Startup has a 30s budget. All decisions for one utterance share a 15s budget.
 Missing model, invalid results and timeout preserve the
 cleaned transcript without falling back to forced vocabulary substitutions.
 A failed model is disabled until daemon restart. ORT runs on a blocking Rust task;
-a timeout sets its RunOptions termination flag. Results from an expired task
+a timeout sets its RunOptions termination flag. UltraBERT runs on the same
+blocking-task boundary and checks a cancellation flag before work, between
+encoder layers and before readout. Results from an expired task
 cannot reach injection. A request-level failure applies no partial edits.
 
 ## Observation and acceptance
@@ -112,14 +129,14 @@ cannot reach injection. A request-level failure applies no partial edits.
 `logs/latest.log` records raw, cleaned and final text samples, per-candidate
 choices/probabilities/shared batch time, ASR time and total wait to injection.
 `logs/decisions.jsonl` appends full raw/input/final text, marked candidate contexts,
-meanings, choices/probabilities, decision time, ASR time, total wait, mode and
+backend identity, meanings, choices/probabilities, decision time, ASR time, total wait, mode and
 delivery status. `--correct` stores the raw and actual delivered strings as before;
 its wait display now includes processing through the decision stage.
 
 An optional no-microphone/no-injection path uses the same code:
 
 ```sh
-nix develop -c cargo run -- --fix 'I love my dog Gamble. I like to gamble and play poker with cards. My son Rowan likes Flo from Cars.' --dec
+nix develop -c cargo run --release -- --fix 'I love my dog Gamble. I like to gamble and play poker with cards. My son Rowan likes Flo from Cars.' --dec
 ```
 
 Its phase log is `logs/dec-probe.log`, preserving the daemon's latest log.
@@ -130,6 +147,25 @@ path, not a new claim that the model solves those meanings. John evaluates actua
 ASR output, correction quality and tolerable delay in the live smoke.
 
 Machine verification:
+
+- UltraBERT promotion (2026-11-01): release suite **151 passed, three installed-model
+  tests ignored**. The new installed-model test was then run explicitly: all
+  32 frozen stripped-input distributions match the research results within
+  1e-5, and both pre-start and in-flight layer-boundary cancellation pass.
+  CLI tests verify primary selection, explicit D1 selection and selector removal
+  from `--fix` text. Candidate tests verify Ultra receives stripped context
+  with unchanged option descriptions, while D1 retains the global table.
+- Real release binary `--fix --dec` loaded UltraBERT INT4, then repaired
+  “My dog Gamble is an Australian shepherd.” in .47s decision time (2.22s
+  startup/warmup). Explicit `--dec-backend d1` kept ordinary gamble in .82s.
+  These are single text probes through the shared vocabulary, not microphone
+  latency measurements. A missing Ultra bundle preserved input, and an invalid
+  selector exited with status 2. No injection or running-daemon restart occurred.
+- The debug suite passed 150 functional tests but missed the unchanged
+  resampler timing assertion (199.8 ms). The optimized suite passes that timing
+  test. No resampler or timing-threshold changes belong to this slice.
+
+Historical D1 verification:
 
 - Native Rust port (2026-10-10): exact token IDs and marker positions match the
   saved Q8 formatter; padded batch probabilities match saved and single-row

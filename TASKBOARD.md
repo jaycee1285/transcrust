@@ -1,38 +1,391 @@
 # TASKBOARD
 
-Status reconciled **2026-10-28** against source, John's smoke reports and the
-synced phone summaries. This is the only live board. Older phase rationale and
+Model identities, source URLs, installed artifacts and recurring upstream
+checks are maintained in [Models.md](Models.md). Read that registry before
+selecting or downloading a model. GLiDE and Laya have explicit update watches.
+
+Linux pipeline updated **2026-11-14**. Phone/Apple observations retain their
+recorded measurement dates. This is the only live board. Older phase rationale and
 timing tables below retain their measurement dates; they are not fresh test runs.
 
 ## Current state
 
+**Zed AMD migration, November 13:** fresh app-only release matches November 11
+binary hash and inference outputs. Primary and alternate installed engines
+loaded; live tray/decision startup verified. Autostart and Super+/ now use the
+verified local launcher. Human microphone/injection/correction smoke pending.
+Optional FP32 research cache absent, live Q4 intact. A mixed two-sentence
+dog/casino probe reproduces an unwanted gamble→Gambol edit; keep this quality
+failure separate from migration parity. [Report and commands](migration-2026-11-13.md).
+
 | Surface | Built / tested | Remaining acceptance |
 |---|---|---|
-| Linux correct-last GUI | egui editor, tray/chord/`--correct`, Replace/Copy, Keep/Drop, GTK palette; John accepted the UI on 2026-10-06 | Preserve that behavior when the shared core is extracted |
+| Linux correct-last GUI | egui editor, tray/chord/`--correct`, Replace/Copy, Keep/Drop, GTK palette; John accepted the UI on 2026-10-06; shared core extracted on Linux | Preserve behavior through mobile adapters; target acceptance remains separate |
 | Learned vocabulary | shared `~/syncthing/john-vocab.md`, configurable path, reload; bounded Parakeet/Nemotron boosting implemented | Boosting failed the mixed Gambol/gamble quality gate; it is not an accepted accuracy improvement |
-| Local decisions | opt-in `--dec`, native Rust D1 Q8, one padded batch per utterance; John accepts the desktop test as-is for now on 2026-10-29 | Preserve Q8 quality; mobile latency/RAM still require device measurement, not desktop acceptance |
+| Local decisions | opt-in `--dec`, native UltraBERT INT4 primary at John's request (2026-11-01), one packed batch; `--dec-backend d1` retains the accepted D1 baseline | New UltraBERT live smoke pending; mobile latency/RAM still require device measurement |
 | Live decision evidence | John's 2026-10-10 Parakeet/Nemotron session reached injection, applied dog-name repairs and preserved a zero-candidate take | That session used the earlier serial adapter; do not call it native-batch acceptance |
-| Mobile ASR experiment | Phonon comparison APK in `~/repos/mopvox`; Pixel 9a paired results from 2026-10-27/28 | No Phonon backend in transcrust and no D1 correction stage in mopvox |
-| Apple product | Linux adapter and correction data exist; Swiftype PRD defines the macOS/iOS contract | Shared crates/FFI, Apple parity, Mac shell/bundle and iOS integration are unbuilt |
+| Mobile ASR | Mopvox live IME Phonon 2.5 replaces Whistle; John reports it works and is remarkably fast; comparison screen retained | Shared decision/review integration and combined device RAM/timing remain open |
+| Native Phonon desktop | Actual 2.5 packed weights, Rust frontend/encoder/TDT; saved Nov 6 take matches C on all seven windows. Capture dispatch fixed; paced replay retains exact text/audio and reduces ASR tail 9.52→1.49s | Human quality smoke failed; errors also occur in C. Larger windows did not improve names. Live acceptance of latency fix and phone/x86 quality comparison remain open. Standalone peak ~274 MiB |
+| Shared engine / Apple product | `crates/core`, `crates/decision`, `crates/ffi` extracted; Linux tests and real C client pass; optional `crates/phonon` | Android JNI and Apple target builds/parity, Mac shell/bundle and iOS integration remain unbuilt; Phonon is not yet exposed through FFI |
 
-Detailed contracts: [correct-last](design-correct-last.md), [D1 decisions](design-dec.md),
+Detailed contracts: [correct-last](design-correct-last.md), [contextual decisions](design-dec.md),
 [runtime architecture](traverse/runtime-stack.md). Human observations and runnable
 smoke: [Smoke-Human-transcrust.md](Smoke-Human-transcrust.md).
 
 ## Next, in order
 
-1. **Use the actual household errors for a bounded correction test.** The phone
-   summaries show Phonon's additional `meter`/`flow` errors for Mater/Flo. Use
-   those transcripts, their Cars context and the shared vocabulary; retain the
-   ordinary flow control and initial O. New aliases require reviewed learning,
-   not silent global substitutions. Gate: report repair/preservation choices,
-   total added latency and memory before considering mobile D1 integration.
-   This is a correction-stage test; it does not promote Phonon to a default ASR.
-2. **Extract the shared core/CLI/FFI boundary.** Follow `~/repos/swiftype/PRD.md`:
+### Retire the murmure-derived legs (decided 2026-11-18, not started)
+John's call: take murmure out and use our own design. It's better, and transcrust is now AGPL
+(`LICENSE`, `NOTICE.md`) because it carries murmure-derived code.
+- **Remove:**
+  - `crates/core/src/dictionary.rs` (the Beider-Morse whole-token swap);
+  - global boosting in `boost.rs` (the presence-triggered boost that failed the Gambol gate).
+- **Replace with:** the scorer, uncertainty trigger and homophone chain in
+  [design-vocab-gate.md](design-vocab-gate.md).
+- **Acceptance, in this order:**
+  1. **Parity on the distinct-word cases the old leg fixed** (tier 2: "tori → Tauri", "kubernetis →
+     Kubernetes", "weyland → Wayland", "svelt → Svelte"), with "Atari" still left alone.
+  2. **The Gambol/gamble probe from the 2026-11-13 migration report passes** (it currently fails).
+  3. **Every change logs its reason.**
+
+  Only then delete the old code.
+
+### Design: vocabulary gate and homophone chain (2026-11-17, not built)
+[design-vocab-gate.md](design-vocab-gate.md) covers:
+- a Dragon-derived command/dictation gate (phoneme n-grams plus pauses);
+- vocabulary applied only in open slots;
+- a scored tier for every entry (homophone / near / distinct);
+- a deterministic homophone chain (inflection, grammar slots, bare subject, animacy, fixed
+  phrases, speaker prior), with the decision model last.
+
+It replaces global boosting as the fix for the Gambol/gamble gate.
+
+### Reference: jarvis intent cascade (added 2026-11-17, not scheduled)
+`~/repos/dz/jarvis` (MIT, cgtarmenta/jarvis, shallow clone at `3638fa0`). Not a dependency, just a
+shape to read once:
+- `src/dispatcher/intent.rs`: the `IntentMatcher::recognize -> Option<resolved_prompt>` trait. It's
+  a clean form for the "what is this utterance for?" router, with deterministic matchers first
+  (`src/handlers/`) and an LLM fallback (`src/dispatcher/cascade.rs`).
+- The post-action verify in `spawn_linux` (a 150 ms `try_wait` so it never says "opened" when
+  nothing launched).
+
+No ASR, vocabulary or correction ideas there. John's verdict: "haven't seen it in two months".
+
+### Family correction pipeline — built November 14
+
+- [x] Show every change, including long edits, insertions/deletions, punctuation
+  and numbers. Explicit, editable, unchecked glossary learning is separate.
+- [x] Stable take IDs, per-take history and append-only correction events;
+  corrected text linked to corpus without overwriting raw/reference fields.
+  Take audio/state is saved before typing. Empty/error transcripts bank audio.
+- [x] Start Nemotron on microphone press with exact-audio tee; preserve streaming
+  caches. Paced same-audio ASR tail1.767→0.111s; raw text unchanged.
+- [x] Exclude legacy single function-word swaps and lowercase-term case-only
+  edits from dictionary decisions. Nine paired frozen replays retain the dog
+  repair and remove observed grammar/casing edits; weights unchanged.
+- [ ] **Human acceptance:** new take → Ctrl+Alt+C → full edit review → optional
+  Learn → Replace; then another take to check history and learned vocabulary.
+  Nemotron selected, Print toggles, installed build running. [Report](pipeline-2026-11-14.md).
+- [ ] Next quality checks can reuse the banked WAVs: proper-name candidate
+  coverage/context, Parakeet6/12-second window comparison and actual microphone
+  child/adult accuracy. Do not call replay/candidate counts measured WER.
+
+### Zed human smoke regressions — November 13
+
+- [ ] **Tray watcher timeout can abort the app (November 14).** Restart hit
+  ksni0.2.2 service.rs:95 unwrap on D-Bus NoReply while the desktop watcher
+  was unavailable. Relaunch after watcher recovery worked. Keep tray lifecycle
+  failures from taking down dictation; preserve the library panic evidence in
+  the user journal around 2026-11-14 11:57. No dependency change made here.
+
+- [ ] **Replace leaves original prefix.** User supplied `We'rWe're gonna...`;
+  full saved correction starts correctly. Initial focus-settle patch failed
+  human smoke (`MMy son...`). New patch in `src/inject.rs` reads selection back
+  against persisted `buffer_text`, extends verified short suffixes, and requires
+  exact match including punctuation before typing. Human check pending. Never
+  compensate by blindly deleting extra characters.
+- [x] **Nemotron dispatch loses live overlap — fixed November 14.** First Zed take35.67s:
+  ASR11.44s, DEC2.24s,13.68s to typing. That call started on release and the
+  worker wording overstated overlap. The existing exact-audio tee now starts
+  Nemotron on press. Paced replay preserves raw text with0.111s post-stop ASR;
+  microphone acceptance remains the human gate above.
+- [ ] **Decision coverage/quality on real takes.** Parakeet missed terms outside
+  supplied aliases; Nemotron abstained on the movie-character flow. Preserve
+  raw, delivered and human corrected text as separate evidence. Ordinary-word
+  learned pairs from manual edits need review before treating them as vocabulary.
+
+### Build/model cleanup — approved and executed, 2026-11-11
+
+- [x] **Install decision assets independently of Cargo artifacts.** Q4 now lives
+  in `~/.local/share/transcrust/models/ultrabert-380m-curation-q4`; FP32 reference
+  in the revision-named `~/.cache/transcrust/model-references/ultrabert-380m-curation/`
+  directory. Hashes verified; runtime and research callers updated. No live
+  weights remain in target. See [cleanup ledger](decision-model-cleanup.md).
+- [x] **Preserve, clear and rebuild only the app.** Original executable retained
+  outside target; debug/release/schema outputs cleared. Fresh app-only offline
+  release build passed, installed outside target, and matched pre-cleanup ASR
+  and correction outputs. Repo 13.14→1.31 GiB; relocated weights retained.
+  `release.sh` now selects only the app but still publishes when invoked.
+- [ ] **Human smoke of the rebuilt installed executable.** Running via
+  `transcrust-cleanup-smoke.service`; default Parakeet, `--dec --smoke`.
+  Hold Print, speak, release; check injection and tray correct-last. Stable
+  launcher: `~/.local/libexec/transcrust/launch-smoke` after stopping the unit.
+- [ ] **Validate the Nix/release artifact after the workspace extraction.**
+  Local Cargo builds and Linux FFI tests passed, not a fresh Nix package test.
+  New crates and research sources remain untracked; ensure the intended files
+  enter the Git-backed flake source before judging the packaged build. Check
+  ORT provisioning and runtime libraries in the actual staged artifact.
+
+Already authorized product gates, not new scope needing reapproval: Android
+JNI/shared decision integration, native Apple target linkage/parity, Mac shell
+and iOS review flow. Those remain unbuilt/unaccepted as described below. The
+new Nemotron packing target still needs the checkpoint URL/path. Desktop Phonon
+retirement is decided; removing its desktop wiring is not yet implemented.
+
+### New dictionary-decision candidates — 2026-11-10
+
+November 8 card review triage accepted by John's November 10 “Okay”; these are
+unmeasured candidates, not replacement backends. [Review and pinned Git cards](decision-model-review-2026-11-08.md).
+
+1. [ ] **MNN-Pocket-0.3B-Dec:** native Qwen3/LoRA/pointer-head correctness probe,
+   then frozen phone/synthetic correction cases. Keep trained adapter and head;
+   the separate 173 MB INT4 base is not the complete decision model.
+2. [ ] **GLiDE-0.4B:** first-tier probe alongside Pocket for the private offline
+   family app. John clarified this non-commercial scope on November 10;
+   licensing is not a reason to park this trial. Adapt the existing ModernBERT
+   research path with exact two-tokenizer rendering, last-token pooling and
+   trained readout; validate native parity, ordinary-word preservation and
+   packed CPU RAM/latency. [Review](decision-model-review-2026-11-10-glide.md).
+3. [ ] **hs-decide-1-flash:** typed-choice probe after Pocket/GLiDE. Requires hybrid
+   Qwen3.5 backbone and native formatter/slot-readout parity; no Python runtime.
+4. [ ] **joey-1:** later larger quality baseline. Published 5.44 GB payload includes
+   vision; text-only packed CPU RAM and latency remain unmeasured. Preserve
+   trained block-bidirectional attention and shared-prefix branch boundaries.
+5. [ ] **Minico-M1-1105:** separate research-only bounded-scoring formulation,
+   thinking explicitly off. Generative model, not a supplied typed head;
+   revenue-restricted LFM license and claimed loop reduction recorded in review.
+6. [x] **EmbeddingGemma duplicate checked:** current revision changes only an
+   evaluation YAML; weights/inference code match the previously tested model.
+   Retain its ordinary-word preservation failure; no new run or weight download.
+
+All new probes retain current candidate/glossary/context/edit policy. Gate on
+native-reference agreement, repairs versus unwanted edits, repeated mixed-role
+occurrences, option/batch-order sensitivity, cold/warm CPU timing and measured
+RSS with ASR resident. Quantized file size is not RAM evidence. UltraBERT INT4
+and D1 remain the comparison baselines.
+
+**Desktop Phonon disposition, November 8:** stop further desktop tuning; retain
+the Rust crate and evidence for Android/Apple evaluation. Desktop source and
+weights remain present; this decision is not a claim that removal is done.
+The November 6 window experiment below is historical evidence, not the current
+next desktop task.
+
+**Phonon 12-second trial, 2026-11-06:** 500-word phoneme stress script delivered
+as `~/syncthing/phonon-12s-phoneme-smoke.md`. Run the live trial with
+`TRANSCRUST_PHONON_WINDOW_SECS=12` (default stays 6); retain pause/cut policy.
+Next human recording is one complete banked WAV; replay identical audio at 6/12
+and compare raw/delivered separately. Old take's four 12s-cap windows match C,
+but spellings change; this does not establish better quality.
+
+**Partial read completed:** John stopped after four paragraphs (122.24s);
+same-audio6/12 gives28/12 windows, all Rust/C texts match. Script disagreements
+22→14, not verified WER; live12 ASR tail1.605s, zero decisions. Keep12 for
+ordinary dogfood and do not require the rest of this script. Supersedes the
+pending-recording wording above. [Comparison](tools/phonon-probe/script-2026-11-06.md).
+
+**Active slice, 2026-11-04:** native Rust Phonon 2.5 is built and running on
+NixOS. Human gate: tap Print to start/stop and inspect delivered text, delay and
+correction behavior. Follow the C reference's packed encoder panels and buffer
+lifetimes; retain its FP32 decoder tables. Evidence and rerun:
+[`crates/phonon/README.md`](crates/phonon/README.md). Then investigate packing the
+new Nemotron checkpoint; its URL/path has been requested and is still needed.
+Shared crate extraction below is implemented on Linux; mobile/Apple integration
+and target acceptance remain pending. These updates supersede older phase prose.
+
+### Decision-model comparison (authorized 2026-10-29)
+
+Consolidated inventory, results and resource comparisons:
+[decision-model-results.md](decision-model-results.md) (compiled 2026-11-02).
+
+**Cache cleanup, approved/applied 2026-11-02:** removed 3.10 GiB of THX,
+DeBERTa/BGE (including FP32 reference), d3-lite, EmbeddingGemma and parked Vela
+download caches. Live UltraBERT INT4, its FP32 source, D1, results, fixtures and
+runners remain. Rejected-model reruns will download their pinned artifacts again.
+[Exact removed paths and verification](decision-model-cleanup.md).
+
+- [x] **Native D1 context ablation (2026-10-31).** Production model/formatter,
+      132 frozen decisions. Sentence-only fixes “to gamble” and preserves the
+      dog repair: Parakeet 2 vs 3 errors; Phonon 4 vs 4, losing the Flo repair.
+      On 23 synthetic scenarios with the same desired label in both arms,
+      neighbors improve repairs 2→5/8 but increase unwanted edits 5→7/15.
+      [Evidence and rerun](tools/pair-router-probe/d1-native-context/README.md).
+      No global context-policy change; accepted live setup stays as-is.
+
+Use the existing household transcripts and labeled synthetic fixtures with
+unchanged occurrence candidates, glossary, context and edit application.
+Adapt each model's native encoding/scoring; do not compare raw confidence
+numbers as if they shared calibration. Report repairs, unwanted edits and
+abstentions separately, plus warm batch latency, loading and measured peak RAM.
+Keep initial/quoted-spelling diagnostics separate from ordinary-use cases.
+
+- [x] **THX-01 — initial native probe (2026-10-29).** Pinned Safetensors loaded
+      with optional Rust Candle CPU F32; 16 household decisions plus 100 synthetic
+      rows completed without truncation. Household errors stayed 3/5 versus
+      D1's 3/4; THX repeats the infinitive gamble error and misses Flo. More
+      synthetic repairs also brought more unwanted edits. Household batches
+      9.229/12.342s; full-run peak RSS 2.25 GiB (F32, not mobile/quantized).
+      [Results and runnable probe](tools/pair-router-probe/thx-01-native/README.md).
+      **Open before promotion:** independent upstream token/logit parity, then
+      quantized viability if justified. Initial results are provisional; no
+      Python runtime, production backend switch or phone integration.
+- [x] **DeBERTa v3 Small NLI — initial paired test (2026-10-30).** Native ORT
+      published AVX2 Q8 export; 132 decisions across single/two context arms.
+      Two-sentence held-out forced ranking: 13/16 repairs, 12/17 unwanted edits;
+      conservative dev-fit policy selected all-abstain. Phone forced ranking
+      edits ordinary words; no improvement. Full-run peak 1.15 GiB; household
+      batches 1.279–1.967s. Neutral canary error also occurs in the publisher's
+      FP32 graph. [Method, evidence and rerun](tools/pair-router-probe/cross-encoder-q8/README.md).
+      **Open:** a justified occurrence-disambiguation formulation and fresh
+      evaluation; these results do not validate a mobile correction stage.
+- [ ] **Clef-text-0.6b.** Compare its typed decision head; separately evaluate
+      existing Core ML/Swift deployment for Apple. Include head/embedding memory;
+      M5 timings do not establish iPhone latency or RAM.
+- [x] **BGE Reranker Base — initial paired test (2026-10-30).** Native ORT
+      Xenova Q8 export; same 132 decisions. Two-sentence held-out forced ranking:
+      16/16 repairs, 15/17 unwanted edits; dev-fit policy selected all-abstain.
+      Sentence-only preserves “to gamble”; neighboring-context batches change
+      it to Gambol. Identical dog inputs also flip rank across batch composition.
+      Full-run peak 1.03 GiB; household batches 2.475–3.485s. Same
+      [comparison report](tools/pair-router-probe/cross-encoder-q8/README.md).
+      **Open:** FP32/quantization batch parity and a justified input formulation;
+      relevance scores are not correction probabilities. D1 remains unchanged.
+- [x] **d3-lite — native reference and household test (2026-10-31).** Optional
+      Rust CPU port of pinned decision.js packed Q8 runtime. All 56 public top
+      answers match; maximum probability drift .001142. Same 32 household
+      decisions across context arms: sentence/context word errors 3/4 Parakeet,
+      4/5 Phonon, versus D1's 2/3 and 4/4. D3 edits 4/5 ordinary controls alone
+      and 5/5 with context; water-flow mistakes reproduce with identical scores
+      in isolated calls. [Report and command](tools/pair-router-probe/d3-native-q8/README.md).
+      Peak household RSS 1.07 GiB; CPU batches 33.7–44.1s, with packed persistent
+      matrices and per-operator scratch. No app backend/mobile promotion.
+      **Stopped escalation:** broader synthetic corrections deferred after real
+      preservation failure. Any new prompt/formulation needs fresh evaluation;
+      optimized GPU/device work is not justified by these correction results.
+
+- [x] **UltraBERT-380M-curation / EmbeddingGemma 2 typed decisions (2026-10-31).**
+      Optional native Rust CPU probes; UltraBERT matches all 9 published page
+      answers (partial top-output check); EG2 matches 54/54 public decisions and
+      four encoder vectors. Same 32 household decisions per model, plus 32 each
+      without the glossary. Full glossary: UltraBERT changes 3/5 ordinary controls
+      alone and 4/5 with context; EG2 changes all 5/5 in both scopes. Removing
+      the glossary brings UltraBERT to 0/5 and 1/5, but misses Flo and character
+      Bandit; EG2 still changes 2/5 and 4/5. Neither beats D1 here.
+      UltraBERT FP32 peak 1.80/1.59 GiB, full/stripped CPU batches 18.4–25.2 /
+      3.75–7.15s; EG2 Q8 peak 475/357 MiB with cached texts. This is not an
+      equal-precision or mobile comparison. [Report and rerun](tools/pair-router-probe/schema-native-2026-10-31/README.md).
+      **Open research:** broader/fresh stripped-input cases; initial quantized
+      UltraBERT measurements are recorded below. Synthetic/mobile escalation is
+      deferred; EG2 preservation fails both formulations. No live prompt change.
+
+- [x] **UltraBERT weight-only INT4 (2026-11-01).** Native Rust streaming Q4_0
+      exporter; packed encoder/embeddings, FP32 head/norms and per-operator
+      scratch. Weights 232 MB. Same-day FP32/public checks and 64 paired phone
+      decisions: public tops 9/9; stripped input preserves all 32/32 FP32
+      choices, full glossary only 27/32 (loses context dog repairs). Probability
+      drift is recorded; quantized scores do not pass the old .02 probability
+      tolerance. Fresh D1 peak 701 MiB versus Q4 299 MiB stripped / 517 MiB full:
+      57.3% / 26.2% less RSS. Stripped Q4 batches 3.21–5.41s; quantization itself
+      does not improve speed over FP32. [Report and one-command replay](tools/pair-router-probe/ultra-int4-2026-11-01/README.md).
+      **Next research:** broader/fresh stripped cases, especially Flo and context
+      gamble, alongside John's explicitly requested desktop dogfood below.
+      These existing UltraBERT limitations remain; no mobile backend change.
+
+- [x] **Vela3-fast decisions-only — native ONNX trial (2026-11-01).** Cards,
+      configuration and source reviewed; both ONNX memory modes tested in Rust.
+      Same 24-layer/1024-hidden/8-head UltraBERT encoder geometry as our
+      current curation model, but different trained formatter/markers and
+      cosine-plus-MLP decision head. General decision distillation is promising;
+      published public index 50.36 is not our correction accuracy.
+      [Upstream](https://huggingface.co/vllm-sr/vela3-fast), revision
+      `fa60e3aa41132c60bf05a84cabfdced39cb6d4f7`: decision-only backbone needs no
+      task/router adapters. [ONNX INT8 export](https://huggingface.co/altertable/vela3-fast-onnx-int8),
+      revision `9afe1776af402e34ade77a62d05105d0ffe50e26`: 452 MB file expands
+      to FP32 by default; publisher reports ~2.2 GB peak RAM, ~1.3 GB in packed
+      low-memory mode, on Apple M4 Pro. Neither beats our measured 299 MiB RSS.
+      The author reports 94.6% FP32 answer agreement for an attempted 4-bit
+      conversion; our successful curation Q4 result does not establish Vela Q4
+      fidelity. Native runner respects the graph's <=129-token packing limit;
+      two rounded published examples and distinct packed/single prompts pass
+      (partial validation, not full upstream parity). Both modes agree on all
+      64 phone decisions: stripped Vela preserves all five ordinary controls in
+      both context arms and fixes the context gambling mistake; Flo is still
+      missed. Broader same-input replay: on 92 non-diagnostic synthetic cases,
+      Vela repairs 25/28 versus current INT4's 28/28, but makes 8/64 unwanted
+      edits versus 12/64. Held-out context rows alone: 13/16 versus 16/16 repairs,
+      both 3/17 unwanted edits; Lightning/Flo/Chili context repairs are lost.
+      Measured x86 phone RSS: fast 2.06 GiB, low-memory ~862 MiB; stripped batches
+      1.83–2.89s / 3.11–3.90s. Current native baseline over all 132 rows peaks
+      at 304 MiB; its phone outputs exactly match the previous 32-case study.
+      [Report and one-command replay](tools/pair-router-probe/vela3-onnx-2026-11-01/README.md).
+      **Disposition:** credible preservation/repair tradeoff, no clear upgrade.
+      Keep UltraBERT INT4 primary; any future native Vela INT4 needs fresh
+      quantization validation. No live backend/default or mobile change.
+
+**2026-11-01 explicit promotion:** John requested UltraBERT INT4 as primary for
+current desktop testing. `--dec` now uses its tested stripped input; D1 remains
+selectable with `--dec-backend d1`. The shared candidate/edit/reload/audit path
+is retained, with model load/warmup at startup and cancellation at layer
+boundaries under the existing 15s budget. Release launch and the pending human
+smoke are in [Smoke-Human](Smoke-Human-transcrust.md). This is a dogfood default
+change, not acceptance of family/mobile behavior or integration into mopvox.
+Machine checks: release suite 151 pass / three ignored; the explicit installed
+UltraBERT test matches all 32 frozen Q4 distributions and cancels both before
+work and in flight. Debug resampler timing alone fails; release timing passes.
+Release `--fix` confirms default Ultra dog repair, explicit D1 preservation,
+missing-model preservation and invalid-selector rejection. Live human smoke
+remains pending; the existing tray daemon was not replaced by these text probes.
+The ordered product work below remains tracked here.
+
+1. **Household correction replay measured (2026-10-29).** Actual phone text ran
+   through unchanged native Q8: Parakeet 3→3 errors, Phonon 5→4 out of 79 words.
+   Gambol/Flo repairs succeeded, but ordinary gamble wrongly became Gambol;
+   ordinary flow/chili/bingo/bandit and initial O survived. `meter` and `Chilean`
+   lack aliases and never reach D1. Added desktop decision time 5.405/8.904s;
+   standalone peak RSS 648.9/699.8 MiB, excluding ASR. [Replay and full evidence](tools/pair-router-probe/phone-household-q8/README.md).
+   Retain the regression; any new aliases require reviewed learning. Before
+   mobile D1, resolve preservation and measure candidate-rich latency/RAM on
+   device. This desktop test neither integrates D1 into mopvox nor promotes
+   Phonon to default ASR. Existing desktop acceptance remains as-is.
+2. **Shared core/CLI/FFI extracted on Linux; finish platform adapters.** Follow `~/repos/swiftype/PRD.md`:
    PCM/transcript/correction data independent of evdev, tray, Wayland and egui.
    Gate: Linux behavior and regression fixtures survive the split. The PRD keeps
-   `tokenizers`/`onig` outside its minimal ASR core; explicitly settle the D1
-   boundary before pulling those dependencies into the iOS static library.
+   `tokenizers`/`onig` outside its minimal ASR core. The 2026-11-02 PRD revision
+   places UltraBERT/D1 inference in an optional decision component, shared by
+   Android JNI and Apple FFI; preserve one glossary/candidate/context/edit and
+   proposal-learning implementation. Native target builds remain required.
+   **Android dogfood belongs to this product slice:** use mopvox as the first
+   mobile surface for the intended Swiftype review-before-delivery and shared
+   glossary behavior. Start with complete takes, editable review, accept/discard
+   and Keep/Drop; existing incremental commits must not dictate requirements.
+   Gate: frozen desktop text decisions/edits match, then John tests a delivered
+   APK with combined ASR+decision RAM, cold/warm/end-to-end timing and field-change
+   cancellation measured internally and synced back. The PRD owns this plan;
+   mopvox's board links it. Android success does not waive Apple acceptance.
+   *Placement: alongside extraction, before family delivery, to exercise mobile
+   behavior on the device John can dogfood now.*
+   **Phonon continues in parallel for Android and Apple.** Compare Parakeet and
+   Phonon on identical phone audio, raw and through the shared decision stage;
+   retain packed-weight/cache-off measurement, investigate cold stalls and
+   verify native Apple builds/runs. Desktop x86 timing is not its mobile/macOS
+   kill criterion. No Linux backend or ASR default change is implied.
+   **2026-11-02 Phonon 2.5 English follow-up:** mopvox's comparison now has a
+   separate 2.5 English arm, preserving Phonon 2/Parakeet and fresh processes.
+   Native Rust format conversion reproduces the original 2 weights/tokens and
+   tensor layouts exactly; new weights load/decode with the existing C engine.
+   ARM64 APK builds, Kotlin recompiled, 20 core tests pass. Synced delivery is
+   `mopvox/mopvox-phonon25-trial.apk` plus `models/phonon-2.5-english-c/`.
+   Phone quality/timing/RAM acceptance remains pending on the existing takes;
+   this does not implement decisions in mopvox or establish Apple compatibility.
 3. **Establish Apple parity before the Mac shell.** Linux goldens from approved
    public/recorded-for-CI fixtures, Apple Silicon CI, and the bundled ORT runtime
    must produce the same transcripts. Record-2 audio remains local. Gate: text
@@ -559,9 +912,9 @@ channel eats your dictation. Ship push-to-talk-with-a-modifier instead.
   asset is now seven behind: `./release.sh`, then
   `git push -u origin engines-and-corpus`, then check the `tauri.nix` entry in
   the config repo against the new asset.
-- **Turn on `observe.corpus`.** It is `false`, so nothing is banked and the
-  corpus is empty. C.2, C.4, the A.2 re-run against real microphone audio, and
-  Dragon mechanism 1 all wait behind one boolean.
+- **Corpus enabled (completed November4).** Config now enables WAV/JSON banking;
+  --smoke also enables it automatically. November6 captures and same-audio
+  replays verify it works. Reference labeling/scoring remain separate tasks.
 - **Bump yt-dlp.** The system binary is `2025.12.08` against nixpkgs
   `2026.08.19`, and the stale one 403s on every download — so anything shelling
   out to it is broken, not just the new skills.

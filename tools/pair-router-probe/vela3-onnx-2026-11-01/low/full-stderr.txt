@@ -1,0 +1,4 @@
+Vela low/full "parakeet" "single": 7 candidates, 7 graph calls, 11.363s
+Vela low/full "parakeet" "two": 7 candidates, 7 graph calls, 10.556s
+Vela low/full "phonon" "single": 9 candidates, 9 graph calls, 13.630s
+Vela low/full "phonon" "two": 9 candidates, 9 graph calls, 13.535s

@@ -1,0 +1,62 @@
+{
+  "repos": {
+    "onnx-community/d1-omni-600M-ONNX": "4ebc1b97bf1477485371c79d1cf8d5e4e8eebfa0",
+    "LiquidAI/d1-omni-600M": "02b55d7076f15129e59ab3f94783f32c4b088674"
+  },
+  "files": {
+    "onnx/model_quantized.onnx": {
+      "repo": "onnx-community/d1-omni-600M-ONNX",
+      "path": "onnx/model_quantized.onnx",
+      "bytes": 445782,
+      "sha256": "e7b2d045b2efcdc38b9595aa5f00ec2c08098f997f136837c97ecad129834d74"
+    },
+    "onnx/model_quantized.onnx_data": {
+      "repo": "onnx-community/d1-omni-600M-ONNX",
+      "path": "onnx/model_quantized.onnx_data",
+      "bytes": 405883392,
+      "sha256": "9b84acb248daac2299df481240f5e6d2cd2f763aa1b8ccf73e7200848fab60da"
+    },
+    "tokenizer.json": {
+      "repo": "onnx-community/d1-omni-600M-ONNX",
+      "path": "tokenizer.json",
+      "bytes": 4733371,
+      "sha256": "1efc3a6609abf6b63b1f47188d139f3b59973a6a434dffe970a7261a51ed2711"
+    },
+    "tokenizer_config.json": {
+      "repo": "onnx-community/d1-omni-600M-ONNX",
+      "path": "tokenizer_config.json",
+      "bytes": 259,
+      "sha256": "03efc74b752b899b6292ff7e607738be59e6f206fec9aca32bbc05e9184090fc"
+    },
+    "config.json": {
+      "repo": "onnx-community/d1-omni-600M-ONNX",
+      "path": "config.json",
+      "bytes": 2433,
+      "sha256": "6402e50bd64e2d51c5f8dead2067d7873f30ec850f0cf1e732e4264b1576d313"
+    },
+    "LICENSE": {
+      "repo": "onnx-community/d1-omni-600M-ONNX",
+      "path": "LICENSE",
+      "bytes": 10572,
+      "sha256": "9953509cbd8c1c6ce7b06ddf74fcc204a892692316201dd8f7400a84790d4120"
+    },
+    "README.md": {
+      "repo": "onnx-community/d1-omni-600M-ONNX",
+      "path": "README.md",
+      "bytes": 5245,
+      "sha256": "4ecaa798f4f706eb62accf391ad062b7d96a6884ee0992c007a53b556f3c6e62"
+    },
+    "prompt.py": {
+      "repo": "LiquidAI/d1-omni-600M",
+      "path": "prompt.py",
+      "bytes": 6309,
+      "sha256": "a6b29a55ec8345f1fc1fdbfcc4b64d80d473dc4316f095a62c51cb6cce1194cf"
+    },
+    "original-README.md": {
+      "repo": "LiquidAI/d1-omni-600M",
+      "path": "README.md",
+      "bytes": 10384,
+      "sha256": "6577bee7b8cb23b595a90e99aa82007f57214d447f0ebcdfb2e812a7123d57bf"
+    }
+  }
+}

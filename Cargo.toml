@@ -1,10 +1,22 @@
 [package]
 name = "transcrust"
+default-run = "transcrust"
 version = "0.1.0"
 edition = "2021"
 description = "Observable Parakeet-only push-to-talk voice input agent"
 
+[workspace]
+members = [".", "crates/core", "crates/decision", "crates/ffi", "crates/phonon"]
+default-members = ["."]
+resolver = "2"
+
 [dependencies]
+transcrust-core = { path = "crates/core", features = ["asr"] }
+transcrust-decision = { path = "crates/decision" }
+transcrust-phonon = { path = "crates/phonon" }
+candle-core = "0.9.2"
+half = "2"
+rayon = "1"
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync", "process", "time", "signal", "io-util"] }
 cpal = "0.15"
 evdev = { version = "0.12", features = ["tokio"] }
@@ -38,3 +50,39 @@ lto = "fat"
 codegen-units = 1
 strip = true
 panic = "abort"
+
+[features]
+thx-probe = []
+d3-probe = []
+schema-probe = []
+
+[[bin]]
+name = "thx-probe"
+path = "tools/thx-probe/main.rs"
+required-features = ["thx-probe"]
+
+[[bin]]
+name = "pair-probe"
+path = "tools/cross-encoder-probe/main.rs"
+
+[[bin]]
+name = "d1-context-probe"
+path = "tools/d1-context-probe/main.rs"
+
+[[bin]]
+name = "d3-probe"
+path = "tools/d3-probe/main.rs"
+required-features = ["d3-probe"]
+
+[[bin]]
+name = "schema-probe"
+path = "tools/schema-probe/main.rs"
+required-features = ["schema-probe"]
+
+[[bin]]
+name = "vela-probe"
+path = "tools/vela-probe/main.rs"
+
+[[bin]]
+name = "ultra-text-baseline"
+path = "tools/vela-probe/ultra-baseline.rs"

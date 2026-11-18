@@ -1,0 +1,13 @@
+Native Rust research runner, 2026-11-01.
+
+Input formatting, graph input construction, readout and packing policy translated
+from altertable/vela3-fast-onnx-int8, revision
+9afe1776af402e34ade77a62d05105d0ffe50e26: vela_onnx.py and ub_d3_common.py.
+Apache License 2.0 (LICENSE). Original attribution remains with altertable,
+KR Labs and vLLM Semantic Router; upstream model vllm-sr/vela3-fast is a
+fine-tuned UltraBERT-380M decision backbone. Weights are separately downloaded.
+
+The two public example probability checks derive from the pinned model's
+README.md and example.py. They are rounded public canaries, not a complete
+independent logit/tokenization parity suite. This runner never executes the
+upstream Python files and does not include task/router adapters.

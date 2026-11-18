@@ -1,0 +1,1323 @@
+{
+  "batches": [
+    {
+      "arm": "single",
+      "cached_texts": 0,
+      "candidates": 7,
+      "seconds": 3.207211541,
+      "source": "parakeet"
+    },
+    {
+      "arm": "two",
+      "cached_texts": 0,
+      "candidates": 7,
+      "seconds": 4.583534437,
+      "source": "parakeet"
+    },
+    {
+      "arm": "single",
+      "cached_texts": 0,
+      "candidates": 9,
+      "seconds": 4.619242248,
+      "source": "phonon"
+    },
+    {
+      "arm": "two",
+      "cached_texts": 0,
+      "candidates": 9,
+      "seconds": 5.412317216,
+      "source": "phonon"
+    }
+  ],
+  "load_seconds": 0.352423548,
+  "model": "ultra",
+  "rows": [
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Gambol",
+          "end": 13,
+          "heard": "Gamble",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary English about gambling or betting money",
+              "name": "It is Gambol, pet dog"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 7,
+          "state": "My dog «Gamble» is an Australian shepherd."
+        },
+        "category": "household",
+        "heard": "Gamble",
+        "hypotheses": [
+          "The occurrence of \"Gamble\" in \"My dog Gamble is an Australian shepherd.\" refers to ordinary English about gambling or betting money.",
+          "The occurrence of \"Gamble\" in \"My dog Gamble is an Australian shepherd.\" refers to Gambol, pet dog."
+        ],
+        "id": "parakeet-0",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "My dog «Gamble» is an Australian shepherd.",
+        "target": "My dog «Gamble» is an Australian shepherd.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.0002484325596151794,
+        0.9987720280339839,
+        0.0009795394064006971
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Gambol",
+          "end": 57,
+          "heard": "gamble",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary English about gambling or betting money",
+              "name": "It is Gambol, pet dog"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 51,
+          "state": "I like to «gamble» and play poker with cards."
+        },
+        "category": "household",
+        "heard": "gamble",
+        "hypotheses": [
+          "The occurrence of \"gamble\" in \"I like to gamble and play poker with cards.\" refers to ordinary English about gambling or betting money.",
+          "The occurrence of \"gamble\" in \"I like to gamble and play poker with cards.\" refers to Gambol, pet dog."
+        ],
+        "id": "parakeet-1",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "I like to «gamble» and play poker with cards.",
+        "target": "I like to «gamble» and play poker with cards.",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.9901422478183786,
+        0.0007426416834967457,
+        0.00911511049812473
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Flo",
+          "end": 204,
+          "heard": "flow",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary flow, the movement of water, traffic or another substance",
+              "name": "It is Flo, Cars movie character, runs the V8 Cafe"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 200,
+          "state": "Lightning lit the sky, and water began to «flow»."
+        },
+        "category": "household",
+        "heard": "flow",
+        "hypotheses": [
+          "The occurrence of \"flow\" in \"Lightning lit the sky, and water began to flow.\" refers to ordinary flow, the movement of water, traffic or another substance.",
+          "The occurrence of \"flow\" in \"Lightning lit the sky, and water began to flow.\" refers to Flo, Cars movie character, runs the V8 Cafe."
+        ],
+        "id": "parakeet-2",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Lightning lit the sky, and water began to «flow».",
+        "target": "Lightning lit the sky, and water began to «flow».",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.9787319903157133,
+        0.00006618199355936143,
+        0.021201827690727326
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Chili",
+          "end": 262,
+          "heard": "chili",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary chili, the food or pepper, or chilly meaning cold",
+              "name": "It is Chili, Bluey and Bingo's mom"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 257,
+          "state": "We ate «chili» and played bingo after the show."
+        },
+        "category": "household",
+        "heard": "chili",
+        "hypotheses": [
+          "The occurrence of \"chili\" in \"We ate chili and played bingo after the show.\" refers to ordinary chili, the food or pepper, or chilly meaning cold.",
+          "The occurrence of \"chili\" in \"We ate chili and played bingo after the show.\" refers to Chili, Bluey and Bingo's mom."
+        ],
+        "id": "parakeet-3",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "We ate «chili» and played bingo after the show.",
+        "target": "We ate «chili» and played bingo after the show.",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.9550452930180939,
+        0.005046417711146164,
+        0.039908289270760074
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Bingo",
+          "end": 279,
+          "heard": "bingo",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is the ordinary game bingo or its name",
+              "name": "It is Bingo, Bluey's 4-year-old sister"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 274,
+          "state": "We ate chili and played «bingo» after the show."
+        },
+        "category": "household",
+        "heard": "bingo",
+        "hypotheses": [
+          "The occurrence of \"bingo\" in \"We ate chili and played bingo after the show.\" refers to the ordinary game bingo or its name.",
+          "The occurrence of \"bingo\" in \"We ate chili and played bingo after the show.\" refers to Bingo, Bluey's 4-year-old sister."
+        ],
+        "id": "parakeet-4",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "We ate chili and played «bingo» after the show.",
+        "target": "We ate chili and played «bingo» after the show.",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.956658450840165,
+        0.014544049154709054,
+        0.02879750000512603
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Bandit",
+          "end": 311,
+          "heard": "bandit",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+              "name": "It is Bandit, Bluey and Bingo's dad"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 305,
+          "state": "I said a «bandit» stole the cards."
+        },
+        "category": "household",
+        "heard": "bandit",
+        "hypotheses": [
+          "The occurrence of \"bandit\" in \"I said a bandit stole the cards.\" refers to an ordinary bandit, a robber or outlaw, or ordinary separate words band it.",
+          "The occurrence of \"bandit\" in \"I said a bandit stole the cards.\" refers to Bandit, Bluey and Bingo's dad."
+        ],
+        "id": "parakeet-5",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "I said a «bandit» stole the cards.",
+        "target": "I said a «bandit» stole the cards.",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.616825825607931,
+        0.05792850417697788,
+        0.32524567021509104
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "transcrust",
+          "end": 377,
+          "heard": "Transcrust",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary prose about material passing through a crust, not an application name",
+              "name": "It is transcrust, software project"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 367,
+          "state": "This Linux software project is called «Transcrust»."
+        },
+        "category": "household",
+        "heard": "Transcrust",
+        "hypotheses": [
+          "The occurrence of \"Transcrust\" in \"This Linux software project is called Transcrust.\" refers to ordinary prose about material passing through a crust, not an application name.",
+          "The occurrence of \"Transcrust\" in \"This Linux software project is called Transcrust.\" refers to transcrust, software project."
+        ],
+        "id": "parakeet-6",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "This Linux software project is called «Transcrust».",
+        "target": "This Linux software project is called «Transcrust».",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.00012559642123149696,
+        0.999132153985843,
+        0.0007422495929254516
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Gambol",
+          "end": 13,
+          "heard": "Gamble",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary English about gambling or betting money",
+              "name": "It is Gambol, pet dog"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 7,
+          "state": "My dog «Gamble» is an Australian shepherd. I like to gamble and play poker with cards."
+        },
+        "category": "household",
+        "heard": "Gamble",
+        "hypotheses": [
+          "The occurrence of \"Gamble\" in \"My dog Gamble is an Australian shepherd.\" refers to ordinary English about gambling or betting money.",
+          "The occurrence of \"Gamble\" in \"My dog Gamble is an Australian shepherd.\" refers to Gambol, pet dog."
+        ],
+        "id": "parakeet-0",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "My dog «Gamble» is an Australian shepherd. I like to gamble and play poker with cards.",
+        "target": "My dog «Gamble» is an Australian shepherd.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.006533630748232503,
+        0.988792392760739,
+        0.004673976491028592
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Gambol",
+          "end": 57,
+          "heard": "gamble",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary English about gambling or betting money",
+              "name": "It is Gambol, pet dog"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 51,
+          "state": "My dog Gamble is an Australian shepherd. I like to «gamble» and play poker with cards."
+        },
+        "category": "household",
+        "heard": "gamble",
+        "hypotheses": [
+          "The occurrence of \"gamble\" in \"I like to gamble and play poker with cards.\" refers to ordinary English about gambling or betting money.",
+          "The occurrence of \"gamble\" in \"I like to gamble and play poker with cards.\" refers to Gambol, pet dog."
+        ],
+        "id": "parakeet-1",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "My dog Gamble is an Australian shepherd. I like to «gamble» and play poker with cards.",
+        "target": "I like to «gamble» and play poker with cards.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.01412459785374367,
+        0.977774312988926,
+        0.008101089157330184
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Flo",
+          "end": 204,
+          "heard": "flow",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary flow, the movement of water, traffic or another substance",
+              "name": "It is Flo, Cars movie character, runs the V8 Cafe"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 200,
+          "state": "Lightning McQueen raced past Mater and Flo. Lightning lit the sky, and water began to «flow»."
+        },
+        "category": "household",
+        "heard": "flow",
+        "hypotheses": [
+          "The occurrence of \"flow\" in \"Lightning lit the sky, and water began to flow.\" refers to ordinary flow, the movement of water, traffic or another substance.",
+          "The occurrence of \"flow\" in \"Lightning lit the sky, and water began to flow.\" refers to Flo, Cars movie character, runs the V8 Cafe."
+        ],
+        "id": "parakeet-2",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Lightning McQueen raced past Mater and Flo. Lightning lit the sky, and water began to «flow».",
+        "target": "Lightning lit the sky, and water began to «flow».",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.9368283397966124,
+        0.00604426728312828,
+        0.05712739292025938
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Chili",
+          "end": 262,
+          "heard": "chili",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary chili, the food or pepper, or chilly meaning cold",
+              "name": "It is Chili, Bluey and Bingo's mom"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 257,
+          "state": "Bluey and Bingo played with Chilean Bandit. We ate «chili» and played bingo after the show."
+        },
+        "category": "household",
+        "heard": "chili",
+        "hypotheses": [
+          "The occurrence of \"chili\" in \"We ate chili and played bingo after the show.\" refers to ordinary chili, the food or pepper, or chilly meaning cold.",
+          "The occurrence of \"chili\" in \"We ate chili and played bingo after the show.\" refers to Chili, Bluey and Bingo's mom."
+        ],
+        "id": "parakeet-3",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Bluey and Bingo played with Chilean Bandit. We ate «chili» and played bingo after the show.",
+        "target": "We ate «chili» and played bingo after the show.",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.883494181431938,
+        0.007334228479526881,
+        0.10917159008853496
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Bingo",
+          "end": 279,
+          "heard": "bingo",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is the ordinary game bingo or its name",
+              "name": "It is Bingo, Bluey's 4-year-old sister"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 274,
+          "state": "Bluey and Bingo played with Chilean Bandit. We ate chili and played «bingo» after the show."
+        },
+        "category": "household",
+        "heard": "bingo",
+        "hypotheses": [
+          "The occurrence of \"bingo\" in \"We ate chili and played bingo after the show.\" refers to the ordinary game bingo or its name.",
+          "The occurrence of \"bingo\" in \"We ate chili and played bingo after the show.\" refers to Bingo, Bluey's 4-year-old sister."
+        ],
+        "id": "parakeet-4",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "Bluey and Bingo played with Chilean Bandit. We ate chili and played «bingo» after the show.",
+        "target": "We ate chili and played «bingo» after the show.",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.7469831406645498,
+        0.15778564834912615,
+        0.09523121098632398
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Bandit",
+          "end": 311,
+          "heard": "bandit",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+              "name": "It is Bandit, Bluey and Bingo's dad"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 305,
+          "state": "We ate chili and played bingo after the show. I said a «bandit» stole the cards."
+        },
+        "category": "household",
+        "heard": "bandit",
+        "hypotheses": [
+          "The occurrence of \"bandit\" in \"I said a bandit stole the cards.\" refers to an ordinary bandit, a robber or outlaw, or ordinary separate words band it.",
+          "The occurrence of \"bandit\" in \"I said a bandit stole the cards.\" refers to Bandit, Bluey and Bingo's dad."
+        ],
+        "id": "parakeet-5",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "We ate chili and played bingo after the show. I said a «bandit» stole the cards.",
+        "target": "I said a «bandit» stole the cards.",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.5830904334389004,
+        0.03311239105746583,
+        0.3837971755036337
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "transcrust",
+          "end": 377,
+          "heard": "Transcrust",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary prose about material passing through a crust, not an application name",
+              "name": "It is transcrust, software project"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 367,
+          "state": "I said a bandit stole the cards. This Linux software project is called «Transcrust»."
+        },
+        "category": "household",
+        "heard": "Transcrust",
+        "hypotheses": [
+          "The occurrence of \"Transcrust\" in \"This Linux software project is called Transcrust.\" refers to ordinary prose about material passing through a crust, not an application name.",
+          "The occurrence of \"Transcrust\" in \"This Linux software project is called Transcrust.\" refers to transcrust, software project."
+        ],
+        "id": "parakeet-6",
+        "source": "parakeet",
+        "split": "phone",
+        "state": "I said a bandit stole the cards. This Linux software project is called «Transcrust».",
+        "target": "This Linux software project is called «Transcrust».",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.0013034325648075141,
+        0.993046036136348,
+        0.005650531298844443
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Gambol",
+          "end": 13,
+          "heard": "Gamble",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary English about gambling or betting money",
+              "name": "It is Gambol, pet dog"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 7,
+          "state": "My dog «Gamble» is an Australian shepherd."
+        },
+        "category": "household",
+        "heard": "Gamble",
+        "hypotheses": [
+          "The occurrence of \"Gamble\" in \"My dog Gamble is an Australian shepherd.\" refers to ordinary English about gambling or betting money.",
+          "The occurrence of \"Gamble\" in \"My dog Gamble is an Australian shepherd.\" refers to Gambol, pet dog."
+        ],
+        "id": "phonon-0",
+        "source": "phonon",
+        "split": "phone",
+        "state": "My dog «Gamble» is an Australian shepherd.",
+        "target": "My dog «Gamble» is an Australian shepherd.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.0002484325596151794,
+        0.9987720280339839,
+        0.0009795394064006971
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Gambol",
+          "end": 57,
+          "heard": "gamble",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary English about gambling or betting money",
+              "name": "It is Gambol, pet dog"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 51,
+          "state": "I like to «gamble» and play poker with cards."
+        },
+        "category": "household",
+        "heard": "gamble",
+        "hypotheses": [
+          "The occurrence of \"gamble\" in \"I like to gamble and play poker with cards.\" refers to ordinary English about gambling or betting money.",
+          "The occurrence of \"gamble\" in \"I like to gamble and play poker with cards.\" refers to Gambol, pet dog."
+        ],
+        "id": "phonon-1",
+        "source": "phonon",
+        "split": "phone",
+        "state": "I like to «gamble» and play poker with cards.",
+        "target": "I like to «gamble» and play poker with cards.",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.9901422478183786,
+        0.0007426416834967457,
+        0.00911511049812473
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Flo",
+          "end": 157,
+          "heard": "flow",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary flow, the movement of water, traffic or another substance",
+              "name": "It is Flo, Cars movie character, runs the V8 Cafe"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 153,
+          "state": "Lightning McQueen raced past meter and «flow»."
+        },
+        "category": "household",
+        "heard": "flow",
+        "hypotheses": [
+          "The occurrence of \"flow\" in \"Lightning McQueen raced past meter and flow.\" refers to ordinary flow, the movement of water, traffic or another substance.",
+          "The occurrence of \"flow\" in \"Lightning McQueen raced past meter and flow.\" refers to Flo, Cars movie character, runs the V8 Cafe."
+        ],
+        "id": "phonon-2",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Lightning McQueen raced past meter and «flow».",
+        "target": "Lightning McQueen raced past meter and «flow».",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.8819398271453348,
+        0.005927661199219791,
+        0.11213251165544545
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Flo",
+          "end": 205,
+          "heard": "flow",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary flow, the movement of water, traffic or another substance",
+              "name": "It is Flo, Cars movie character, runs the V8 Cafe"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 201,
+          "state": "Lightning lit the sky, and water began to «flow»."
+        },
+        "category": "household",
+        "heard": "flow",
+        "hypotheses": [
+          "The occurrence of \"flow\" in \"Lightning lit the sky, and water began to flow.\" refers to ordinary flow, the movement of water, traffic or another substance.",
+          "The occurrence of \"flow\" in \"Lightning lit the sky, and water began to flow.\" refers to Flo, Cars movie character, runs the V8 Cafe."
+        ],
+        "id": "phonon-3",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Lightning lit the sky, and water began to «flow».",
+        "target": "Lightning lit the sky, and water began to «flow».",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.9787319903157133,
+        0.00006618199355936143,
+        0.021201827690727326
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Bandit",
+          "end": 249,
+          "heard": "bandit",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+              "name": "It is Bandit, Bluey and Bingo's dad"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 243,
+          "state": "Bluey and Bingo played with Chilean «bandit»."
+        },
+        "category": "household",
+        "heard": "bandit",
+        "hypotheses": [
+          "The occurrence of \"bandit\" in \"Bluey and Bingo played with Chilean bandit.\" refers to an ordinary bandit, a robber or outlaw, or ordinary separate words band it.",
+          "The occurrence of \"bandit\" in \"Bluey and Bingo played with Chilean bandit.\" refers to Bandit, Bluey and Bingo's dad."
+        ],
+        "id": "phonon-4",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Bluey and Bingo played with Chilean «bandit».",
+        "target": "Bluey and Bingo played with Chilean «bandit».",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.843199434812903,
+        0.0074500168232934086,
+        0.14935054836380357
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Chili",
+          "end": 263,
+          "heard": "chili",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary chili, the food or pepper, or chilly meaning cold",
+              "name": "It is Chili, Bluey and Bingo's mom"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 258,
+          "state": "We ate «chili» and played bingo after the show."
+        },
+        "category": "household",
+        "heard": "chili",
+        "hypotheses": [
+          "The occurrence of \"chili\" in \"We ate chili and played bingo after the show.\" refers to ordinary chili, the food or pepper, or chilly meaning cold.",
+          "The occurrence of \"chili\" in \"We ate chili and played bingo after the show.\" refers to Chili, Bluey and Bingo's mom."
+        ],
+        "id": "phonon-5",
+        "source": "phonon",
+        "split": "phone",
+        "state": "We ate «chili» and played bingo after the show.",
+        "target": "We ate «chili» and played bingo after the show.",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.9550452930180939,
+        0.005046417711146164,
+        0.039908289270760074
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Bingo",
+          "end": 280,
+          "heard": "bingo",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is the ordinary game bingo or its name",
+              "name": "It is Bingo, Bluey's 4-year-old sister"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 275,
+          "state": "We ate chili and played «bingo» after the show."
+        },
+        "category": "household",
+        "heard": "bingo",
+        "hypotheses": [
+          "The occurrence of \"bingo\" in \"We ate chili and played bingo after the show.\" refers to the ordinary game bingo or its name.",
+          "The occurrence of \"bingo\" in \"We ate chili and played bingo after the show.\" refers to Bingo, Bluey's 4-year-old sister."
+        ],
+        "id": "phonon-6",
+        "source": "phonon",
+        "split": "phone",
+        "state": "We ate chili and played «bingo» after the show.",
+        "target": "We ate chili and played «bingo» after the show.",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.956658450840165,
+        0.014544049154709054,
+        0.02879750000512603
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "Bandit",
+          "end": 312,
+          "heard": "bandit",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+              "name": "It is Bandit, Bluey and Bingo's dad"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 306,
+          "state": "I said a «bandit» stole the cards."
+        },
+        "category": "household",
+        "heard": "bandit",
+        "hypotheses": [
+          "The occurrence of \"bandit\" in \"I said a bandit stole the cards.\" refers to an ordinary bandit, a robber or outlaw, or ordinary separate words band it.",
+          "The occurrence of \"bandit\" in \"I said a bandit stole the cards.\" refers to Bandit, Bluey and Bingo's dad."
+        ],
+        "id": "phonon-7",
+        "source": "phonon",
+        "split": "phone",
+        "state": "I said a «bandit» stole the cards.",
+        "target": "I said a «bandit» stole the cards.",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.616825825607931,
+        0.05792850417697788,
+        0.32524567021509104
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "single",
+        "candidate": {
+          "canonical": "transcrust",
+          "end": 378,
+          "heard": "Transcrust",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary prose about material passing through a crust, not an application name",
+              "name": "It is transcrust, software project"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 368,
+          "state": "This Linux software project is called «Transcrust»."
+        },
+        "category": "household",
+        "heard": "Transcrust",
+        "hypotheses": [
+          "The occurrence of \"Transcrust\" in \"This Linux software project is called Transcrust.\" refers to ordinary prose about material passing through a crust, not an application name.",
+          "The occurrence of \"Transcrust\" in \"This Linux software project is called Transcrust.\" refers to transcrust, software project."
+        ],
+        "id": "phonon-8",
+        "source": "phonon",
+        "split": "phone",
+        "state": "This Linux software project is called «Transcrust».",
+        "target": "This Linux software project is called «Transcrust».",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.00012559642123149696,
+        0.999132153985843,
+        0.0007422495929254516
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Gambol",
+          "end": 13,
+          "heard": "Gamble",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary English about gambling or betting money",
+              "name": "It is Gambol, pet dog"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 7,
+          "state": "My dog «Gamble» is an Australian shepherd. I like to gamble and play poker with cards."
+        },
+        "category": "household",
+        "heard": "Gamble",
+        "hypotheses": [
+          "The occurrence of \"Gamble\" in \"My dog Gamble is an Australian shepherd.\" refers to ordinary English about gambling or betting money.",
+          "The occurrence of \"Gamble\" in \"My dog Gamble is an Australian shepherd.\" refers to Gambol, pet dog."
+        ],
+        "id": "phonon-0",
+        "source": "phonon",
+        "split": "phone",
+        "state": "My dog «Gamble» is an Australian shepherd. I like to gamble and play poker with cards.",
+        "target": "My dog «Gamble» is an Australian shepherd.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.006533630748232503,
+        0.988792392760739,
+        0.004673976491028592
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Gambol",
+          "end": 57,
+          "heard": "gamble",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary English about gambling or betting money",
+              "name": "It is Gambol, pet dog"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 51,
+          "state": "My dog Gamble is an Australian shepherd. I like to «gamble» and play poker with cards."
+        },
+        "category": "household",
+        "heard": "gamble",
+        "hypotheses": [
+          "The occurrence of \"gamble\" in \"I like to gamble and play poker with cards.\" refers to ordinary English about gambling or betting money.",
+          "The occurrence of \"gamble\" in \"I like to gamble and play poker with cards.\" refers to Gambol, pet dog."
+        ],
+        "id": "phonon-1",
+        "source": "phonon",
+        "split": "phone",
+        "state": "My dog Gamble is an Australian shepherd. I like to «gamble» and play poker with cards.",
+        "target": "I like to «gamble» and play poker with cards.",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.01412459785374367,
+        0.977774312988926,
+        0.008101089157330184
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Flo",
+          "end": 157,
+          "heard": "flow",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary flow, the movement of water, traffic or another substance",
+              "name": "It is Flo, Cars movie character, runs the V8 Cafe"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 153,
+          "state": "My son O and I watched Cars. Lightning McQueen raced past meter and «flow»."
+        },
+        "category": "household",
+        "heard": "flow",
+        "hypotheses": [
+          "The occurrence of \"flow\" in \"Lightning McQueen raced past meter and flow.\" refers to ordinary flow, the movement of water, traffic or another substance.",
+          "The occurrence of \"flow\" in \"Lightning McQueen raced past meter and flow.\" refers to Flo, Cars movie character, runs the V8 Cafe."
+        ],
+        "id": "phonon-2",
+        "source": "phonon",
+        "split": "phone",
+        "state": "My son O and I watched Cars. Lightning McQueen raced past meter and «flow».",
+        "target": "Lightning McQueen raced past meter and «flow».",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.7285488614060067,
+        0.013341991172456952,
+        0.2581091474215363
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Flo",
+          "end": 205,
+          "heard": "flow",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary flow, the movement of water, traffic or another substance",
+              "name": "It is Flo, Cars movie character, runs the V8 Cafe"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 201,
+          "state": "Lightning McQueen raced past meter and flow. Lightning lit the sky, and water began to «flow»."
+        },
+        "category": "household",
+        "heard": "flow",
+        "hypotheses": [
+          "The occurrence of \"flow\" in \"Lightning lit the sky, and water began to flow.\" refers to ordinary flow, the movement of water, traffic or another substance.",
+          "The occurrence of \"flow\" in \"Lightning lit the sky, and water began to flow.\" refers to Flo, Cars movie character, runs the V8 Cafe."
+        ],
+        "id": "phonon-3",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Lightning McQueen raced past meter and flow. Lightning lit the sky, and water began to «flow».",
+        "target": "Lightning lit the sky, and water began to «flow».",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.9631970808614492,
+        0.0010709869199337502,
+        0.03573193221861712
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Bandit",
+          "end": 249,
+          "heard": "bandit",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+              "name": "It is Bandit, Bluey and Bingo's dad"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 243,
+          "state": "Lightning lit the sky, and water began to flow. Bluey and Bingo played with Chilean «bandit»."
+        },
+        "category": "household",
+        "heard": "bandit",
+        "hypotheses": [
+          "The occurrence of \"bandit\" in \"Bluey and Bingo played with Chilean bandit.\" refers to an ordinary bandit, a robber or outlaw, or ordinary separate words band it.",
+          "The occurrence of \"bandit\" in \"Bluey and Bingo played with Chilean bandit.\" refers to Bandit, Bluey and Bingo's dad."
+        ],
+        "id": "phonon-4",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Lightning lit the sky, and water began to flow. Bluey and Bingo played with Chilean «bandit».",
+        "target": "Bluey and Bingo played with Chilean «bandit».",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.8371770954386663,
+        0.012238111255305781,
+        0.15058479330602798
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Chili",
+          "end": 263,
+          "heard": "chili",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary chili, the food or pepper, or chilly meaning cold",
+              "name": "It is Chili, Bluey and Bingo's mom"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 258,
+          "state": "Bluey and Bingo played with Chilean bandit. We ate «chili» and played bingo after the show."
+        },
+        "category": "household",
+        "heard": "chili",
+        "hypotheses": [
+          "The occurrence of \"chili\" in \"We ate chili and played bingo after the show.\" refers to ordinary chili, the food or pepper, or chilly meaning cold.",
+          "The occurrence of \"chili\" in \"We ate chili and played bingo after the show.\" refers to Chili, Bluey and Bingo's mom."
+        ],
+        "id": "phonon-5",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Bluey and Bingo played with Chilean bandit. We ate «chili» and played bingo after the show.",
+        "target": "We ate «chili» and played bingo after the show.",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.8894150443496024,
+        0.007326379578098906,
+        0.10325857607229866
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Bingo",
+          "end": 280,
+          "heard": "bingo",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is the ordinary game bingo or its name",
+              "name": "It is Bingo, Bluey's 4-year-old sister"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 275,
+          "state": "Bluey and Bingo played with Chilean bandit. We ate chili and played «bingo» after the show."
+        },
+        "category": "household",
+        "heard": "bingo",
+        "hypotheses": [
+          "The occurrence of \"bingo\" in \"We ate chili and played bingo after the show.\" refers to the ordinary game bingo or its name.",
+          "The occurrence of \"bingo\" in \"We ate chili and played bingo after the show.\" refers to Bingo, Bluey's 4-year-old sister."
+        ],
+        "id": "phonon-6",
+        "source": "phonon",
+        "split": "phone",
+        "state": "Bluey and Bingo played with Chilean bandit. We ate chili and played «bingo» after the show.",
+        "target": "We ate chili and played «bingo» after the show.",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.7074150984504147,
+        0.17105289687537795,
+        0.12153200467420748
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "Bandit",
+          "end": 312,
+          "heard": "bandit",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is an ordinary bandit, a robber or outlaw, or ordinary separate words band it",
+              "name": "It is Bandit, Bluey and Bingo's dad"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 306,
+          "state": "We ate chili and played bingo after the show. I said a «bandit» stole the cards."
+        },
+        "category": "household",
+        "heard": "bandit",
+        "hypotheses": [
+          "The occurrence of \"bandit\" in \"I said a bandit stole the cards.\" refers to an ordinary bandit, a robber or outlaw, or ordinary separate words band it.",
+          "The occurrence of \"bandit\" in \"I said a bandit stole the cards.\" refers to Bandit, Bluey and Bingo's dad."
+        ],
+        "id": "phonon-7",
+        "source": "phonon",
+        "split": "phone",
+        "state": "We ate chili and played bingo after the show. I said a «bandit» stole the cards.",
+        "target": "I said a «bandit» stole the cards.",
+        "want": null
+      },
+      "choice": "keep",
+      "probabilities": [
+        0.5830904334389004,
+        0.03311239105746583,
+        0.3837971755036337
+      ],
+      "rendered_eg2": null
+    },
+    {
+      "case": {
+        "arm": "two",
+        "candidate": {
+          "canonical": "transcrust",
+          "end": 378,
+          "heard": "Transcrust",
+          "question": {
+            "criteria": {
+              "abstain": "insufficient evidence",
+              "keep": "It is ordinary prose about material passing through a crust, not an application name",
+              "name": "It is transcrust, software project"
+            },
+            "instructions": "What does the marked span refer to in this spoken sentence?",
+            "type": "choice"
+          },
+          "start": 368,
+          "state": "I said a bandit stole the cards. This Linux software project is called «Transcrust»."
+        },
+        "category": "household",
+        "heard": "Transcrust",
+        "hypotheses": [
+          "The occurrence of \"Transcrust\" in \"This Linux software project is called Transcrust.\" refers to ordinary prose about material passing through a crust, not an application name.",
+          "The occurrence of \"Transcrust\" in \"This Linux software project is called Transcrust.\" refers to transcrust, software project."
+        ],
+        "id": "phonon-8",
+        "source": "phonon",
+        "split": "phone",
+        "state": "I said a bandit stole the cards. This Linux software project is called «Transcrust».",
+        "target": "This Linux software project is called «Transcrust».",
+        "want": null
+      },
+      "choice": "name",
+      "probabilities": [
+        0.0013034325648075141,
+        0.993046036136348,
+        0.005650531298844443
+      ],
+      "rendered_eg2": null
+    }
+  ],
+  "signature": {
+    "native_source": "ceda5cffdc1ac46471661c86eb27a33be7cf93c041219ef6a5c12e884423cb77",
+    "tokenizer.json": "0bf32c50efb4e2307f75c357231c4cfa3802e484da742621b7eab4be60ee568a",
+    "ultra-q4.json": "5f505f431f83a062f3b5009775c8511cced7115647910843afb2c1b9588033f6",
+    "weights.q4": "75ffd6cdf6c147ecaceab1878e388701d4feadcf69bfc8bd88a59cbd69ab8869"
+  },
+  "wall_seconds": 18.176093509
+}

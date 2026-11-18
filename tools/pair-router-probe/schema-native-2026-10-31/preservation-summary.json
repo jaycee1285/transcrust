@@ -1,0 +1,158 @@
+[
+  {
+    "model": "ultra",
+    "glossary": true,
+    "choices": [
+      {
+        "choice": "keep",
+        "count": 8
+      },
+      {
+        "choice": "name",
+        "count": 24
+      }
+    ],
+    "ordinary": [
+      {
+        "source": "parakeet",
+        "arm": "single",
+        "total": 5,
+        "wrong": 3
+      },
+      {
+        "source": "parakeet",
+        "arm": "two",
+        "total": 5,
+        "wrong": 4
+      },
+      {
+        "source": "phonon",
+        "arm": "single",
+        "total": 5,
+        "wrong": 3
+      },
+      {
+        "source": "phonon",
+        "arm": "two",
+        "total": 5,
+        "wrong": 4
+      }
+    ]
+  },
+  {
+    "model": "eg2",
+    "glossary": true,
+    "choices": [
+      {
+        "choice": "name",
+        "count": 32
+      }
+    ],
+    "ordinary": [
+      {
+        "source": "parakeet",
+        "arm": "single",
+        "total": 5,
+        "wrong": 5
+      },
+      {
+        "source": "parakeet",
+        "arm": "two",
+        "total": 5,
+        "wrong": 5
+      },
+      {
+        "source": "phonon",
+        "arm": "single",
+        "total": 5,
+        "wrong": 5
+      },
+      {
+        "source": "phonon",
+        "arm": "two",
+        "total": 5,
+        "wrong": 5
+      }
+    ]
+  },
+  {
+    "model": "ultra",
+    "glossary": false,
+    "choices": [
+      {
+        "choice": "keep",
+        "count": 22
+      },
+      {
+        "choice": "name",
+        "count": 10
+      }
+    ],
+    "ordinary": [
+      {
+        "source": "parakeet",
+        "arm": "single",
+        "total": 5,
+        "wrong": 0
+      },
+      {
+        "source": "parakeet",
+        "arm": "two",
+        "total": 5,
+        "wrong": 1
+      },
+      {
+        "source": "phonon",
+        "arm": "single",
+        "total": 5,
+        "wrong": 0
+      },
+      {
+        "source": "phonon",
+        "arm": "two",
+        "total": 5,
+        "wrong": 1
+      }
+    ]
+  },
+  {
+    "model": "eg2",
+    "glossary": false,
+    "choices": [
+      {
+        "choice": "keep",
+        "count": 10
+      },
+      {
+        "choice": "name",
+        "count": 22
+      }
+    ],
+    "ordinary": [
+      {
+        "source": "parakeet",
+        "arm": "single",
+        "total": 5,
+        "wrong": 2
+      },
+      {
+        "source": "parakeet",
+        "arm": "two",
+        "total": 5,
+        "wrong": 4
+      },
+      {
+        "source": "phonon",
+        "arm": "single",
+        "total": 5,
+        "wrong": 2
+      },
+      {
+        "source": "phonon",
+        "arm": "two",
+        "total": 5,
+        "wrong": 4
+      }
+    ]
+  }
+]

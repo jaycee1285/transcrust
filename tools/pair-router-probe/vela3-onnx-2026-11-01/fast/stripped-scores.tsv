@@ -1,0 +1,5 @@
+file	errors	reference_words	wer_percent
+/home/john/repos/transcrust/tools/pair-router-probe/vela3-onnx-2026-11-01/fast/stripped.json.parakeet-single.txt	2	79	2.53
+/home/john/repos/transcrust/tools/pair-router-probe/vela3-onnx-2026-11-01/fast/stripped.json.parakeet-two.txt	2	79	2.53
+/home/john/repos/transcrust/tools/pair-router-probe/vela3-onnx-2026-11-01/fast/stripped.json.phonon-single.txt	4	79	5.06
+/home/john/repos/transcrust/tools/pair-router-probe/vela3-onnx-2026-11-01/fast/stripped.json.phonon-two.txt	4	79	5.06

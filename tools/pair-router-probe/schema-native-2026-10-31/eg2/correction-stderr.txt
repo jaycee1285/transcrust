@@ -1,0 +1,10 @@
+EG2: 8 texts in 6.66s
+EG2: 8 texts in 6.39s
+EG2: 5 texts in 2.98s
+eg2 parakeet/single: 7 decisions 16.04s
+EG2: 7 texts in 14.21s
+eg2 parakeet/two: 7 decisions 14.22s
+EG2: 2 texts in 3.70s
+eg2 phonon/single: 9 decisions 3.70s
+EG2: 5 texts in 10.99s
+eg2 phonon/two: 9 decisions 11.00s

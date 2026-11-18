@@ -6769,11 +6769,13 @@ dependencies = [
 name = "transcrust"
 version = "0.1.0"
 dependencies = [
+ "candle-core",
  "cpal",
  "dirs",
  "eframe",
  "evdev",
  "fancy-regex",
+ "half",
  "harper-core",
  "hound",
  "ksni",
@@ -6782,6 +6784,7 @@ dependencies = [
  "ndarray 0.17.2",
  "ort",
  "parakeet-rs",
+ "rayon",
  "realfft",
  "regex",
  "rphonetic",
@@ -6792,8 +6795,70 @@ dependencies = [
  "tokio",
  "tokio-stream",
  "toml 0.8.23",
+ "transcrust-core",
+ "transcrust-decision",
+ "transcrust-phonon",
  "unicode-segmentation",
  "wl-clipboard-rs",
+]
+
+[[package]]
+name = "transcrust-core"
+version = "0.1.0"
+dependencies = [
+ "dirs",
+ "fancy-regex",
+ "hound",
+ "ndarray 0.17.2",
+ "ort",
+ "realfft",
+ "regex",
+ "rphonetic",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "transcrust-decision"
+version = "0.1.0"
+dependencies = [
+ "candle-core",
+ "dirs",
+ "half",
+ "ort",
+ "rayon",
+ "regex",
+ "serde",
+ "serde_json",
+ "sha2",
+ "tokenizers",
+ "tokio",
+ "transcrust-core",
+]
+
+[[package]]
+name = "transcrust-ffi"
+version = "0.1.0"
+dependencies = [
+ "serde_json",
+ "tokio",
+ "transcrust-core",
+ "transcrust-decision",
+]
+
+[[package]]
+name = "transcrust-phonon"
+version = "0.1.0"
+dependencies = [
+ "candle-core",
+ "half",
+ "hound",
+ "memmap2",
+ "rayon",
+ "realfft",
+ "serde_json",
+ "sha2",
+ "transcrust-core",
 ]
 
 [[package]]

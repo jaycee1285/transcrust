@@ -1,0 +1,3 @@
+Vela low loaded in 0.83s
+public "published-billing-example": [0.995812421991182, 0.0006358565985347519, 0.0035517214102832317], delta 0.000448
+public "published-urgent-example": [0.15721112180328206, 0.8427888781967179], delta 0.000211

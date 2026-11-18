@@ -28,6 +28,17 @@ use std::time::Duration;
 
 use serde::Serialize;
 
+pub fn take_id() -> String {
+    format!(
+        "{}-{:09}",
+        stamp(),
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap_or_default()
+            .subsec_nanos()
+    )
+}
+
 /// Written next to each clip. `reference` stays `null` until a human fills it;
 /// `--bench` treats a filled reference as ground truth and ignores the rest.
 #[derive(Debug, Serialize)]
@@ -109,6 +120,29 @@ pub fn save(samples: &[f32], sample_rate: u32, entry: &Entry) -> Result<PathBuf,
         .map_err(|e| format!("failed to write {}: {e}", json_path.display()))?;
 
     Ok(wav_path)
+}
+
+/// Keep human edits with their original audio without treating a prose rewrite
+/// as a verified verbatim reference. Raw/injected/reference stay distinct.
+pub fn save_correction(id: &str, corrected: &str) -> Result<(), String> {
+    if id.is_empty() {
+        return Ok(());
+    }
+    let path = dir().join(format!("{id}.json"));
+    if !path.exists() {
+        return Ok(());
+    } // Audio banking is optional.
+    let mut value: serde_json::Value =
+        serde_json::from_slice(&std::fs::read(&path).map_err(|e| e.to_string())?)
+            .map_err(|e| e.to_string())?;
+    value["corrected"] = serde_json::json!(corrected);
+    let tmp = path.with_extension("tmp");
+    std::fs::write(
+        &tmp,
+        serde_json::to_vec_pretty(&value).map_err(|e| e.to_string())?,
+    )
+    .map_err(|e| e.to_string())?;
+    std::fs::rename(tmp, path).map_err(|e| e.to_string())
 }
 
 pub fn write_wav(path: &Path, samples: &[f32], sample_rate: u32) -> Result<(), String> {

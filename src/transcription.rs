@@ -8,6 +8,7 @@ pub enum TranscriptionService {
     Parakeet(crate::parakeet::ParakeetService),
     Granite(crate::granite::GraniteService),
     Nemotron(crate::nemotron::NemotronService),
+    Phonon(crate::phonon::PhononService),
 }
 
 impl TranscriptionService {
@@ -22,6 +23,10 @@ impl TranscriptionService {
                 idle_timeout_secs,
             )?)),
             ModelKind::Nemotron => Ok(Self::Nemotron(crate::nemotron::NemotronService::new(
+                model_dir,
+                idle_timeout_secs,
+            )?)),
+            ModelKind::Phonon => Ok(Self::Phonon(crate::phonon::PhononService::new(
                 model_dir,
                 idle_timeout_secs,
             )?)),
@@ -50,6 +55,11 @@ impl TranscriptionService {
                     .transcribe(observer, audio_rx, source_sample_rate)
                     .await
             }
+            Self::Phonon(service) => {
+                service
+                    .transcribe(observer, audio_rx, source_sample_rate)
+                    .await
+            }
         }
     }
 
@@ -71,6 +81,7 @@ impl TranscriptionService {
             Self::Parakeet(service) => service.shutdown(),
             Self::Granite(service) => service.shutdown(),
             Self::Nemotron(service) => service.shutdown(),
+            Self::Phonon(service) => service.shutdown(),
         }
     }
 
@@ -92,7 +103,7 @@ impl TranscriptionService {
     pub fn windows_long_captures(&self) -> bool {
         match self {
             Self::Parakeet(_) | Self::Granite(_) => true,
-            Self::Nemotron(_) => false,
+            Self::Nemotron(_) | Self::Phonon(_) => false,
         }
     }
 
@@ -109,7 +120,7 @@ impl TranscriptionService {
             // joint step, so a long toggled capture is slower per second than
             // Parakeet even though its RTF is comfortable. Measured 16 s for
             // 2:23 at 1120 ms chunks, so 45 s would clip a five-minute capture.
-            Self::Nemotron(_) => std::time::Duration::from_secs(180),
+            Self::Nemotron(_) | Self::Phonon(_) => std::time::Duration::from_secs(180),
         }
     }
 
@@ -122,6 +133,7 @@ impl TranscriptionService {
             Self::Parakeet(_) => ModelKind::Parakeet,
             Self::Granite(_) => ModelKind::Granite,
             Self::Nemotron(_) => ModelKind::Nemotron,
+            Self::Phonon(_) => ModelKind::Phonon,
         }
     }
 }

@@ -1,0 +1,41 @@
+{
+  "max_probability_drift": 0.07315943211089992,
+  "rows": [
+    {
+      "id": "<urn:uuid:be9a46df-e007-4d16-b8c6-34cd0ad3e37c>-topic",
+      "max_probability_drift": 4.053427869998849e-05
+    },
+    {
+      "id": "<urn:uuid:be9a46df-e007-4d16-b8c6-34cd0ad3e37c>-edu",
+      "max_probability_drift": 0.0004707110841140061
+    },
+    {
+      "id": "<urn:uuid:be9a46df-e007-4d16-b8c6-34cd0ad3e37c>-reasoning",
+      "max_probability_drift": 0.012718562346653889
+    },
+    {
+      "id": "<urn:uuid:aba1752a-59cc-4429-91b4-30d2fd79a049>-topic",
+      "max_probability_drift": 0.001170166542284079
+    },
+    {
+      "id": "<urn:uuid:aba1752a-59cc-4429-91b4-30d2fd79a049>-edu",
+      "max_probability_drift": 0.03929420258267313
+    },
+    {
+      "id": "<urn:uuid:aba1752a-59cc-4429-91b4-30d2fd79a049>-reasoning",
+      "max_probability_drift": 0.03299768783296342
+    },
+    {
+      "id": "<urn:uuid:c372adfc-f5ba-469b-ad0f-7d013c04f270>-topic",
+      "max_probability_drift": 0.02093245277680611
+    },
+    {
+      "id": "<urn:uuid:c372adfc-f5ba-469b-ad0f-7d013c04f270>-edu",
+      "max_probability_drift": 0.0030226528852811962
+    },
+    {
+      "id": "<urn:uuid:c372adfc-f5ba-469b-ad0f-7d013c04f270>-reasoning",
+      "max_probability_drift": 0.07315943211089992
+    }
+  ]
+}

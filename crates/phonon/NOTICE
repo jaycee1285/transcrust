@@ -1,0 +1,20 @@
+Native Rust Phonon 2.5 English driver, 2026-11-03.
+
+Loads FermionResearch/Phonon-2.5-English release
+da200358d638886bc96c758c672ad5568828b119. Model weights are CC-BY-4.0,
+derived from NVIDIA parakeet-tdt-0.6b-v3. Weights are not included here.
+The synced bundle carries Fermion's model NOTICE and weight licence.
+
+Architecture/frontend/TDT arithmetic was checked against and transliterated
+from eschmidbauer/phonon-2-c at
+c4b860f6ad745369d6f21599d6e23d381c1fcc7a (MIT; LICENSE-REFERENCE-MIT).
+Its int8w rounding and bounded code-cache policy inform the optional probe.
+Fermion's fermion_container.py (Apache-2.0) specifies the original packed
+five-value/int6/fp16 artifact. No Python/C model runtime is executed or linked
+by this crate. Candle CPU operations, handwritten Rust SIMD and ordinary
+Rust code implement inference; source weights remain mapped/packed, with
+one operator's expanded float or integer scratch.
+
+The six-second segmentation policy is transliterated from John's mopvox
+core/src/main/kotlin/mopvox/Segmenter.kt. It is pause-aligned windowing, not
+Nemotron's trained encoder caches. Keep these engine contracts distinct.

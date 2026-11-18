@@ -1,5 +1,9 @@
 # Decision model experiments — recorded evidence
 
+For the full model inventory and cross-model results through 2026-11-01, see
+[decision-model-results.md](decision-model-results.md). This file retains the
+earlier experiment chronology.
+
 These are completed measurements from 2026-10-07 through 2026-10-08, retained
 from the taskboard without changing their numbers. Each “no live changes” claim
 describes that experiment at that time. Native opt-in integration was added

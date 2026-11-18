@@ -1,0 +1,18 @@
+inputs: ["input_ids", "attention_mask"]
+bge: 7 occurrences / 14 paired rows, 2475ms, batch 1
+bge: 7 occurrences / 14 paired rows, 2774ms, batch 2
+bge: 9 occurrences / 18 paired rows, 3337ms, batch 3
+bge: 9 occurrences / 18 paired rows, 3485ms, batch 4
+bge: 8 occurrences / 16 paired rows, 1607ms, batch 5
+bge: 8 occurrences / 16 paired rows, 1566ms, batch 6
+bge: 8 occurrences / 16 paired rows, 1578ms, batch 7
+bge: 8 occurrences / 16 paired rows, 1763ms, batch 8
+bge: 8 occurrences / 16 paired rows, 1736ms, batch 9
+bge: 8 occurrences / 16 paired rows, 1673ms, batch 10
+bge: 8 occurrences / 16 paired rows, 1602ms, batch 11
+bge: 8 occurrences / 16 paired rows, 1821ms, batch 12
+bge: 8 occurrences / 16 paired rows, 1837ms, batch 13
+bge: 8 occurrences / 16 paired rows, 2851ms, batch 14
+bge: 8 occurrences / 16 paired rows, 6238ms, batch 15
+bge: 8 occurrences / 16 paired rows, 5787ms, batch 16
+bge: 4 occurrences / 8 paired rows, 3028ms, batch 17

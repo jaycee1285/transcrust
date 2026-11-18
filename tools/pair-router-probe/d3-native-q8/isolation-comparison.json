@@ -1,0 +1,30 @@
+[
+  {
+    "id": "parakeet-2",
+    "arm": "single",
+    "full_choice": "name",
+    "isolated_choice": "name",
+    "max_delta": 0
+  },
+  {
+    "id": "parakeet-2",
+    "arm": "two",
+    "full_choice": "name",
+    "isolated_choice": "name",
+    "max_delta": 0
+  },
+  {
+    "id": "phonon-3",
+    "arm": "single",
+    "full_choice": "name",
+    "isolated_choice": "name",
+    "max_delta": 0
+  },
+  {
+    "id": "phonon-3",
+    "arm": "two",
+    "full_choice": "name",
+    "isolated_choice": "name",
+    "max_delta": 0
+  }
+]

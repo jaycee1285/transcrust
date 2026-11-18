@@ -1,22 +1,48 @@
 # Transcrust Runtime Stack
 
-Reconciled 2026-10-28 against the current source. `TASKBOARD.md` owns the ordered
+Reconciled 2026-11-04 against the current source. `TASKBOARD.md` owns the ordered
 work; `Smoke-Human-transcrust.md` owns dated human observations. Sections explicitly
 marked historical describe their measurement date, not unfinished implementation.
 Linux correction UI is accepted; decision quality and Apple portability have
-separate gates. Phonon currently lives only in the mopvox Android experiment.
+separate gates. Native Phonon 2.5 runs on Linux; its first human smoke failed
+quality. The saved November 6 take matches C on all seven live windows; larger
+windows are not a demonstrated quality fix. See the Phonon probe smoke report.
+
+Shared implementation now lives in `crates/core` (pure text/audio helpers and
+optional direct ASR), `crates/decision` (UltraBERT/D1 and decision policy), and
+`crates/ffi` (explicit-path C sessions, cancellation and optional ASR/decisions).
+Root `src/` retains capture, tray, review, delivery and resident worker lifecycles.
+Linux tests/linkage pass; Android JNI and Apple builds remain separate gates.
+
+`crates/phonon` is the optional native Rust Phonon 2.5 implementation. It maps
+the original packed container, unpacks encoder weights into reusable <=256KiB
+panels per worker, and retains FP32 decoder tables as the C reference does.
+`src/phonon.rs` consumes bounded six-second windows and retains the model. The
+root now starts it on microphone press and tees audio directly to the worker,
+retaining an exact original-rate corpus copy; decisions/delivery wait for
+release. Earlier dispatch incorrectly waited until release. These are audio
+segmentation windows, not trained streaming caches. Other engines retain their
+existing dispatch. See its crate README for measurements.
 
 ## Opt-in contextual vocabulary (`--dec`, 2026-10-08)
 
 - `decision.rs` owns reloadable vocabulary, alias/casing candidates, immutable
   two-sentence context, validated bounded replies, reverse UTF-8 edits and audits.
-- `d1.rs` keeps text Q8 loaded natively through the existing Rust `ort` and
+- **Primary as of 2026-11-01, at John's request:** `--dec` loads UltraBERT INT4
+  through `ultra.rs` / `decision_tensor.rs`, shared with the research harness.
+  Marked two-sentence context plus candidate descriptions, without the global
+  glossary; independent sequences packed into one native batch. Q4 matrices
+  remain packed with per-operator FP32 scratch and on-demand embedding rows.
+  A dedicated Rayon pool uses up to four CPU threads. Load/warmup is at startup;
+  missing/corrupt bundles preserve text. Live human smoke is pending.
+- Selectable baseline `--dec-backend d1`: `d1.rs` keeps text Q8 loaded natively through the existing Rust `ort` and
   `tokenizers` stack across utterances and ASR switches. No interpreter or child
   process. Each occurrence is an independent padded row; all candidates run in
   one ONNX call, matching upstream `probabilities_batch`. The local bundle is
   manifest-verified, with no runtime network or media heads.
-- Only `--dec` disables decoder boosting and bypasses legacy vocabulary correction.
-  Shared deterministic cleanup/profile remains; long-form polish precedes Q8.
+- `--dec` (also enabled by `--dec-backend ultra|d1`) disables decoder boosting
+  and bypasses legacy vocabulary correction.
+  Shared deterministic cleanup/profile remains; long-form polish precedes adjudication.
   The adjudicator runs immediately before injection. Default behavior is unchanged.
 - Meanings/aliases live in the sole shared `~/syncthing/john-vocab.md`, reloaded
   per utterance. Existing `[vocabulary].path` overrides it; habit/task entries
@@ -34,16 +60,54 @@ separate gates. Phonon currently lives only in the mopvox Android experiment.
   tolerable but noticeable delay. Mobile latency/RAM remain unverified. The earlier serial
   observation and the later native feedback are separate evidence.
   Detailed contract and checks: `design-dec.md`.
+- Offline context experiments (2026-10-31): `tools/d1-context-probe` imports
+  the production D1 model directly for frozen single/two-sentence comparisons.
+  Optional `tools/d3-probe` is a separate native packed-Q8 CPU reference with
+  upstream agreement gating. Its household preservation test failed; it is not
+  an app engine or daemon backend. Results and resource limits are linked from
+  `TASKBOARD.md`. Neither experiment changes the accepted live `--dec` path.
+- Optional `tools/schema-probe` (2026-10-31) implements UltraBERT/GLiClass and
+  EmbeddingGemma 2 typed heads in native Rust CPU code, with independent public
+  checks before frozen phone replays. Full-glossary and glossary-removal runs
+  stay separate; the latter improves UltraBERT preservation but loses character
+  repairs. Neither is an app backend. EG2 keeps Q8 persistent matrices with FP32
+  per-operator scratch; initial UltraBERT tests use original FP32 weights. Research
+  binaries remain behind the `schema-probe` feature. Candle/half/Rayon are now
+  runtime dependencies for the promoted UltraBERT backend.
+- UltraBERT INT4 research (2026-11-01): `tools/schema-probe/quant.rs` streams the
+  pinned source into a checksummed Q4_0 file plus tensor manifest; head/norms
+  stay FP32. Promoted `decision_tensor.rs` keeps encoder matrices packed and reads only requested
+  embedding rows; a single operator uses FP32 scratch. `int4.sh` compares current
+  FP32/Q4 on full/stripped phone inputs plus a fresh production D1 measurement.
+  Stripped Q4 matches all 32 FP32 choices at 299 MiB peak, versus D1's 701 MiB;
+  full-glossary Q4 loses context dog repairs. The later explicit desktop promotion
+  is described above; this initial experiment was not a mobile deployment.
+
+Research note, 2026-11-01: `tools/vela-probe` is a separate checksum-gated native
+Rust/ORT runner for the decisions-only Vela3-fast export. Its fast mode expands
+stored INT8 to FP32; low-memory mode retains INT8 with float activations. It
+preserves the graph's <=129-token per-prompt packing restriction. A paired
+helper imports the actual current UltraBERT code for identical stripped test
+states. The measured repair/preservation tradeoff and larger RAM are recorded
+on `TASKBOARD.md`; Vela is not a selectable live backend.
 
 ## Correct-last desktop adapter (2026-10-06)
 
-- `correction.rs` owns plain dictation data and short replacement proposals;
+- `correction.rs` owns plain dictation data, complete changed spans and optional
+  bounded glossary pairs; all edits are retained independently of learning.
   no UI, filesystem or platform APIs. Raw, delivered, corrected and the current
   destination span are distinct so Copy/repeated replacement cannot corrupt the
   length calculation.
-- `review.rs` owns the egui child process, JSON request/response, Keep/Drop UI
-  and latest-record persistence. The daemon owns the last dictation and refuses
+- `review.rs` owns the egui child process, JSON request/response, full edit review
+  and explicit Learn controls. Stable take IDs link latest/per-take JSON,
+  append-only correction events and corpus audio/sidecars. The daemon refuses
   recording/model switches while Reviewing. The child loads no model.
+
+November14: Nemotron joins Phonon in capture-time dispatch, using the same
+exact-audio tee. Corpus retention no longer defers Nemotron work until release.
+`--wav --dec --output-dir` records the production decision path without desktop
+injection; `--paced` feeds microphone-speed chunks and measures post-stop ASR.
+The full pipeline changes and replay limits are in `pipeline-2026-11-14.md`.
 - `review_theme.rs` reads GTK 4's `gtk.css` from the XDG config directory each
   time the window opens: window/view foreground and background plus the accent
   and its selection foreground. It resolves named aliases, hex and RGB(A)
@@ -57,8 +121,13 @@ separate gates. Phonon currently lives only in the mopvox Android experiment.
 - `--correct` uses SIGURG; tray and optional evdev correction chord send on the
   same daemon channel. No chord is claimed by default. `--correct-chord C-A-c`
   enables one for smoke without changing user config.
-- `inject.rs::replace_last` selects backward by grapheme count, then types the
-  corrected text. Linux requires the original editor to regain focus with its
+- `inject.rs::replace_last` uses the saved destination `buffer_text`, selects
+  backward by grapheme count, and copies the editor selection back for an exact
+  text comparison including punctuation. Verified short suffixes can extend
+  selection; mismatches/empty selections stop delivery. Literal replacement
+  typing runs only after verification, and the edited clipboard is restored
+  after read-back. State advances after successful typing. Linux requires the
+  original editor to regain focus with its
   caret at the end; this is a human acceptance gate, not a generic Wayland
   text-range API. Failures retain the edit and reopen the window for recovery.
 - `dictionary.rs` keeps `heard:` records for learning, excludes habit/task
@@ -74,8 +143,8 @@ separate gates. Phonon currently lives only in the mopvox Android experiment.
   snapshot is read at each capture, so learning takes effect on the next one.
   Other engines have no weighting yet; learned aliases never force replacement.
   `[vocabulary].path` overrides the shared Markdown file.
-- Apple still reviews before pasting per Swiftype PRD. The crate split and
-  platform transcript parity have not been implemented by this Linux slice.
+- Apple still reviews before pasting per Swiftype PRD. Shared crates are
+  extracted and checked on Linux; platform transcript parity remains pending.
 
 ## Scope
 - Root Rust CLI app in `src/`
@@ -175,7 +244,7 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
   bitmap is actually on the wire. **Rebuild with `cargo build` first** —
   `cargo test` does not refresh `target/debug/transcrust`, and a stale binary
   reports an empty `IconPixmap`.
-- Direct Parakeet inference uses `src/parakeet_ort.rs`; crates.io `parakeet-rs`
+- Direct Parakeet inference uses `crates/core/src/parakeet_ort.rs`; crates.io `parakeet-rs`
   0.3.5 is the fallback, consumed as shipped rather than vendored.
 - User model root at `~/.local/share/transcrust/models/` (int8 preferred, int4 supported)
 
@@ -183,16 +252,16 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
 - `src/main.rs`: CLI entrypoints, smoke mode, tray startup, quit flow
 - `src/model.rs`: model resolution and expected on-disk layout (int8/int4)
 - `src/parakeet.rs`: service boundary, worker startup, direct ORT preflight
-- `src/parakeet_ort.rs`: direct-drive Parakeet — three graphs, TDT greedy decode, per-token confidence
+- `crates/core/src/parakeet_ort.rs`: direct-drive Parakeet — three graphs, TDT greedy decode, per-token confidence
 - `src/mode.rs`: modes as (model, profile); the `— Long` repair profile
 - `src/wav.rs`: `--wav` — offline files through the live seam, plus the windowing
 - `src/audio.rs`: capture, and the polyphase resampler every engine feeds through
-- `src/dictionary.rs` + `src/postprocess.rs`: post-transcription pipeline (see contract below)
-- `src/correction.rs`: UI-independent dictation records and diff proposals.
+- `crates/core/src/dictionary.rs` + `crates/core/src/postprocess.rs`: post-transcription pipeline (see contract below)
+- `crates/core/src/correction.rs`: UI-independent dictation records and diff proposals.
 - `src/review.rs` + `src/review_theme.rs`: Linux review subprocess, persistence,
   GTK palette and interaction with the daemon; not an extracted Apple adapter.
-- `src/decision.rs` + `src/d1.rs`: opt-in candidate generation and native batched
-  D1 execution. No shared library/crate/FFI boundary has been extracted yet.
+- `crates/decision/src/`: candidate generation, context, native UltraBERT/D1
+  batching and edit policy. `src/decision.rs` retains desktop audit persistence.
 - TDT greedy decode with duration skipping is implemented in the direct driver;
   the crate has its separate fallback decoder. The direct joint logits produce
   token/word confidence. The crate's string boundary discards it; the model does
@@ -230,10 +299,10 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
   Any future rewrite has to clear the same bar.
 
 ## Post-Processing Contract
-- The post-transcription pipeline lives in `src/postprocess.rs::fix_transcription`,
+- The post-transcription pipeline lives in `crates/core/src/postprocess.rs::fix_transcription`,
   called once from `main.rs::run_transcription_pipeline` after the worker returns text.
 - Order: course-correction → repetition cleaning → filler removal → spoken
-  punctuation → **phonetic dictionary** (`src/dictionary.rs`) → deterministic
+  punctuation → **phonetic dictionary** (`crates/core/src/dictionary.rs`) → deterministic
   capitalization (`capitalize_sentences`, last).
 - **Engine-agnostic by construction.** `TranscriptionService` (`src/transcription.rs`)
   is the only seam between the engines; every arm returns raw trimmed text and

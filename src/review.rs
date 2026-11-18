@@ -1,6 +1,6 @@
 //! Desktop adapter. The daemon launches the window in a child so the GUI owns
 //! its main thread. Only JSON crosses stdin/stdout; no extra model is loaded.
-use crate::correction::{Dictation, Pair};
+use crate::correction::{Change, Dictation, Pair};
 use eframe::egui;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
@@ -26,6 +26,8 @@ pub enum Action {
 pub struct Response {
     pub text: String,
     pub action: Action,
+    #[serde(default)]
+    pub kept: Vec<Pair>,
 }
 
 pub async fn open(request: Request) -> Result<Option<Response>, String> {
@@ -117,16 +119,19 @@ struct Editor {
     first_frame: bool,
     caret_confirmed: bool,
     pending: Option<Action>,
-    pairs: Vec<(Pair, bool)>,
+    pairs: Vec<(Change, Pair, bool)>,
     error: Option<String>,
     result: Arc<Mutex<Option<Response>>>,
 }
 
 impl Editor {
     fn begin(&mut self, action: Action, ctx: &egui::Context) {
-        self.pairs = crate::correction::proposals(&self.request.dictation.delivered, &self.text)
+        self.pairs = crate::correction::changes(&self.request.dictation.delivered, &self.text)
             .into_iter()
-            .map(|p| (p, false))
+            .map(|change| {
+                let pair = change.pair();
+                (change, pair, false)
+            })
             .collect();
         self.pending = Some(action);
         if self.pairs.is_empty() {
@@ -137,14 +142,15 @@ impl Editor {
         let kept: Vec<Pair> = self
             .pairs
             .iter()
-            .filter(|(_, keep)| *keep)
-            .map(|(p, _)| p.clone())
+            .filter(|(_, _, keep)| *keep)
+            .map(|(_, p, _)| p.clone())
             .collect();
         match crate::dictionary::save_pairs(&self.request.vocabulary_path, &kept) {
             Ok(()) => {
                 *self.result.lock().unwrap() = Some(Response {
                     text: self.text.clone(),
                     action: self.pending.unwrap(),
+                    kept,
                 });
                 ctx.send_viewport_cmd(egui::ViewportCommand::Close);
             }
@@ -165,7 +171,7 @@ impl eframe::App for Editor {
         }
         let submit = ctx.input_mut(|i| i.consume_key(egui::Modifiers::CTRL, egui::Key::Enter));
         egui::CentralPanel::default().frame(egui::Frame::central_panel(&ctx.style()).inner_margin(24.0)).show(ctx, |ui| {
-            ui.heading(if self.pending.is_some() { "Remember these corrections?" } else { "Correct last dictation" });
+            ui.heading(if self.pending.is_some() { "Review your changes" } else { "Correct last dictation" });
             ui.label(format!("{} · {:.1}s audio · {:.1}s wait", self.request.dictation.mode,
                 self.request.dictation.audio_secs, self.request.dictation.wait_secs));
             ui.add_space(8.0);
@@ -173,20 +179,33 @@ impl eframe::App for Editor {
                 ui.colored_label(ui.visuals().error_fg_color, notice);
             }
             if self.pending.is_some() {
-                ui.label("Keep a name or phrase to prefer its spelling next time. Drop an ordinary rewrite.");
+                ui.label(format!("{} changes. All edits will be applied and saved.", self.pairs.len()));
+                ui.label("Only check Learn for a name or phrase you want the glossary to remember.");
                 egui::ScrollArea::vertical().max_height((ui.available_height() - 150.0).max(80.0)).show(ui, |ui| {
-                    for (pair, keep) in &mut self.pairs {
-                        ui.group(|ui| {
-                            ui.label(format!("{} → {}", pair.heard, pair.canonical));
-                            ui.horizontal(|ui| { ui.radio_value(keep, true, "Keep"); ui.radio_value(keep, false, "Drop"); });
+                    for (index, (change, pair, keep)) in self.pairs.iter_mut().enumerate() {
+                        ui.push_id(index, |ui| {
+                            ui.separator();
+                            ui.label(if change.before.is_empty() { "Added" } else if change.after.is_empty() { "Removed" } else { "Changed" });
+                            if !change.before.is_empty() { ui.label(egui::RichText::new(&change.before).strikethrough()); }
+                            if !change.after.is_empty() { ui.label(egui::RichText::new(&change.after).strong()); }
+                            ui.checkbox(keep, "Learn a name or phrase from this change");
+                            if *keep {
+                                ui.label("Heard"); ui.text_edit_singleline(&mut pair.heard);
+                                ui.label("Prefer"); ui.text_edit_singleline(&mut pair.canonical);
+                                if !crate::correction::valid_pair(pair) {
+                                    let reason = if crate::correction::grammar_rewrite(pair) { "This is a sentence edit, not a vocabulary name. Uncheck Learn; your text correction will still be saved." } else { "Choose a phrase on each side: up to 12 words, without commas or sentence punctuation. Uncheck Learn to apply only the text edit." };
+                                    ui.colored_label(ui.visuals().error_fg_color, reason);
+                                }
+                            }
                         });
                     }
                 });
                 if let Some(error) = &self.error { ui.colored_label(ui.visuals().error_fg_color, error); }
                 ui.add_space(8.0);
                 ui.horizontal(|ui| {
-                    let label = match self.pending.unwrap() { Action::Replace => "Apply & replace", Action::Copy => "Apply & copy" };
-                    if ui.button(label).clicked() || submit { self.finish(ctx); }
+                    let label = match self.pending.unwrap() { Action::Replace => "Apply changes & replace", Action::Copy => "Apply changes & copy" };
+                    let valid = self.pairs.iter().all(|(_, pair, keep)| !*keep || crate::correction::valid_pair(pair));
+                    if ui.add_enabled(valid, egui::Button::new(label)).clicked() || (submit && valid) { self.finish(ctx); }
                     if ui.button("Back").clicked() { self.pending = None; self.error = None; }
                     if ui.button("Cancel").clicked() { ctx.send_viewport_cmd(egui::ViewportCommand::Close); }
                 });
@@ -213,8 +232,8 @@ impl eframe::App for Editor {
                     ui.label("No confirmed typed span to replace. Copy the correction and paste it yourself.");
                 }
                 ui.horizontal(|ui| {
-                    let replace = self.request.dictation.replaceable && self.caret_confirmed && !self.text.is_empty();
-                    if ui.add_enabled(replace, egui::Button::new("Replace")).clicked() || (submit && replace) {
+                    let replace = self.request.dictation.replaceable && self.caret_confirmed;
+                    if ui.add_enabled(replace, egui::Button::new("Review & replace")).clicked() || (submit && replace) {
                         self.begin(Action::Replace, ctx);
                     }
                     if ui.add_enabled(!self.text.is_empty(), egui::Button::new("Copy corrected text")).clicked() {
@@ -244,10 +263,35 @@ pub fn load_last() -> Option<Dictation> {
 }
 
 pub fn save_last(record: &Dictation) -> Result<(), String> {
+    save_last_at(&last_path(), record)
+}
+
+fn save_last_at(path: &std::path::Path, record: &Dictation) -> Result<(), String> {
     use std::io::Write;
     use std::os::unix::fs::OpenOptionsExt;
-    let path = last_path();
     std::fs::create_dir_all(path.parent().unwrap()).map_err(|e| e.to_string())?;
+    let history = path.parent().unwrap().join("history");
+    std::fs::create_dir_all(&history).map_err(|e| e.to_string())?;
+    // Archive legacy latest-only state before the next take can overwrite it.
+    if let Ok(previous) = std::fs::read(&path) {
+        if let Ok(old) = serde_json::from_slice::<Dictation>(&previous) {
+            if old.id.is_empty() {
+                let legacy = history.join(format!("legacy-{}.json", crate::corpus::stamp()));
+                if !legacy.exists() {
+                    write_private(&legacy, &previous)?;
+                }
+            }
+        }
+    }
+    if !record.id.is_empty() {
+        let archived = history.join(format!("{}.json", record.id));
+        let tmp = archived.with_extension("tmp");
+        write_private(
+            &tmp,
+            &serde_json::to_vec_pretty(record).map_err(|e| e.to_string())?,
+        )?;
+        std::fs::rename(tmp, archived).map_err(|e| e.to_string())?;
+    }
     let tmp = path.with_extension("tmp");
     let mut file = std::fs::OpenOptions::new()
         .write(true)
@@ -260,6 +304,107 @@ pub fn save_last(record: &Dictation) -> Result<(), String> {
         .map_err(|e| e.to_string())?;
     file.sync_all().map_err(|e| e.to_string())?;
     std::fs::rename(tmp, path).map_err(|e| e.to_string())
+}
+
+fn write_private(path: &std::path::Path, bytes: &[u8]) -> Result<(), String> {
+    use std::io::Write;
+    use std::os::unix::fs::OpenOptionsExt;
+    let mut file = std::fs::OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .mode(0o600)
+        .open(path)
+        .map_err(|e| e.to_string())?;
+    file.write_all(bytes).map_err(|e| e.to_string())?;
+    file.sync_all().map_err(|e| e.to_string())
+}
+
+fn save_correction(record: &Dictation, response: &Response) -> Result<(), String> {
+    append_correction(
+        &last_path().parent().unwrap().join("corrections.jsonl"),
+        record,
+        response,
+    )?;
+    crate::corpus::save_correction(&record.id, &response.text)
+}
+
+fn append_correction(
+    path: &std::path::Path,
+    record: &Dictation,
+    response: &Response,
+) -> Result<(), String> {
+    use std::io::Write;
+    use std::os::unix::fs::OpenOptionsExt;
+    let event = serde_json::json!({
+        "recorded": crate::corpus::stamp(), "dictation": record,
+        "changes": crate::correction::changes(&record.delivered, &response.text),
+        "kept": response.kept, "action": response.action,
+    });
+    let mut file = std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .mode(0o600)
+        .open(path)
+        .map_err(|e| e.to_string())?;
+    writeln!(file, "{event}").map_err(|e| e.to_string())?;
+    file.sync_data().map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+#[cfg(test)]
+mod history_tests {
+    use super::*;
+    #[test]
+    fn new_takes_retain_previous_text_and_every_correction() {
+        let dir =
+            std::env::temp_dir().join(format!("transcrust-history-{}", crate::corpus::take_id()));
+        let last = dir.join("last-dictation.json");
+        let mut take = Dictation {
+            id: "take-one".into(),
+            raw: "flower".into(),
+            delivered: "flower".into(),
+            corrected: None,
+            buffer_text: "flower".into(),
+            mode: "test".into(),
+            audio_secs: 1.0,
+            wait_secs: 0.1,
+            replaceable: true,
+        };
+        save_last_at(&last, &take).unwrap();
+        for text in ["Flo", "Flo and Mater."] {
+            let response = Response {
+                text: text.into(),
+                action: Action::Copy,
+                kept: vec![],
+            };
+            take.corrected = Some(text.into());
+            append_correction(&dir.join("corrections.jsonl"), &take, &response).unwrap();
+            save_last_at(&last, &take).unwrap();
+        }
+        take.id = "take-two".into();
+        take.raw = "next recording".into();
+        take.corrected = None;
+        save_last_at(&last, &take).unwrap();
+        let old: Dictation =
+            serde_json::from_slice(&std::fs::read(dir.join("history/take-one.json")).unwrap())
+                .unwrap();
+        assert_eq!(old.raw, "flower");
+        assert_eq!(old.corrected.as_deref(), Some("Flo and Mater."));
+        assert_eq!(old.buffer_text, "flower"); // Copy must not change destination state.
+        let events = std::fs::read_to_string(dir.join("corrections.jsonl"))
+            .unwrap()
+            .lines()
+            .map(|line| serde_json::from_str::<serde_json::Value>(line).unwrap())
+            .collect::<Vec<_>>();
+        assert_eq!(events.len(), 2);
+        assert_eq!(events[0]["dictation"]["corrected"], "Flo");
+        assert_eq!(events[1]["dictation"]["corrected"], "Flo and Mater.");
+        assert!(events
+            .iter()
+            .all(|event| event["kept"].as_array().unwrap().is_empty()));
+        std::fs::remove_dir_all(dir).unwrap();
+    }
 }
 
 /// Desktop orchestration; engine/correction data stays independent of it.
@@ -283,6 +428,19 @@ pub async fn correct_last(
         match open(request).await {
             Ok(Some(response)) => {
                 dictation.corrected = Some(response.text.clone());
+                if let Err(error) = save_correction(&dictation, &response) {
+                    observer.error("correct.history", &error);
+                    notice = Some(format!("Your correction could not be archived: {error}. It has not been typed. Try again or copy the text."));
+                    continue;
+                }
+                observer.phase(
+                    "correct.history",
+                    &format!(
+                        "saved {} edits for take {}",
+                        crate::correction::changes(&dictation.delivered, &response.text).len(),
+                        dictation.id
+                    ),
+                );
                 if matches!(response.action, Action::Replace) {
                     dictation.replaceable = false;
                 }
@@ -295,14 +453,19 @@ pub async fn correct_last(
                     Action::Copy => crate::inject::copy_correction(&response.text),
                     Action::Replace => {
                         state.transition(crate::state::AppState::Injecting);
-                        crate::inject::replace_last(&dictation.buffer_text, &response.text).await
+                        crate::inject::replace_last(
+                            &dictation.buffer_text,
+                            &response.text,
+                            &observer,
+                        )
+                        .await
                     }
                 };
                 match result {
                     Ok(()) => {
                         if matches!(response.action, Action::Replace) {
                             dictation.buffer_text = response.text;
-                            dictation.replaceable = true;
+                            dictation.replaceable = !dictation.buffer_text.is_empty();
                             observer.phase("correct", "corrected text replaced");
                         } else {
                             observer.phase("correct", "corrected text copied");

@@ -1,0 +1,9 @@
+47993e5bb658cef6b339e6aa4615c6988beb398179d0c81a61b918e5953592e9  /home/john/repos/transcrust/target/d3-lite/weights.bin
+b0dcd9f6e0cd42f7e84d2c66a21b932335da17a3ee8132be5345c2f9cd183f56  /home/john/repos/transcrust/target/d3-lite/manifest.json
+5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42  /home/john/repos/transcrust/target/d3-lite/tokenizer.json
+3fc55cf7ee9fdd7644699e089beaeef762ea7db8a2c1f85ab67aa2977cea0dd1  /home/john/repos/transcrust/target/d3-lite/reference.json
+0b4b7e488c9bd04d3ad31415ff67afaf28e0446e2b229c9d1fc57679715a3201  /home/john/repos/transcrust/target/d3-lite/fixtures/test-fixtures-d3-prompts.json
+a697cefaca545a25a633e2ad1a52e7a3787002b490b30f48655d64d34caafa8f  /home/john/repos/transcrust/target/d3-lite/fixtures/requests.json
+af146cf2ee03ecbee0f97e9c88a0f309163e2a64cfb25897fc918e9cb19f3c9a  tools/d3-probe/main.rs
+5e8f05f87edbc9b21363e9387037aa34644bf31e369b6781fd764ee8621a09c9  tools/d3-probe/model.rs
+9e9043bc36fb8d2c2f13ba88d9def475aade8c1a9e7cc253b370abd8aed678fb  Cargo.lock

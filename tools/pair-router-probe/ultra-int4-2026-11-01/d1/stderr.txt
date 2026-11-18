@@ -1,0 +1,4 @@
+D1: 7 rows, 10207ms, batch 1
+D1: 7 rows, 10753ms, batch 2
+D1: 9 rows, 12600ms, batch 3
+D1: 9 rows, 14488ms, batch 4

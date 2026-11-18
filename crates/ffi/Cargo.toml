@@ -1,0 +1,18 @@
+[package]
+name = "transcrust-ffi"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[features]
+default = []
+asr = ["transcrust-core/asr"]
+decision = ["dep:transcrust-decision", "dep:tokio"]
+
+[dependencies]
+transcrust-core = { path = "../core" }
+transcrust-decision = { path = "../decision", optional = true }
+tokio = { version = "1", features = ["rt-multi-thread", "time"], optional = true }
+serde_json = "1"

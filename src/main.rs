@@ -1,13 +1,13 @@
 mod audio;
-mod boost;
 mod config;
 mod control;
 mod corpus;
-mod correction;
-mod d1;
+use transcrust_core::correction;
 mod decision;
-mod dictionary;
+use transcrust_core::dictionary;
 mod granite;
+#[allow(dead_code)]
+mod harper_reference;
 mod hotkey;
 mod inject;
 mod mode;
@@ -17,9 +17,10 @@ mod nemotron;
 mod normalise;
 mod observe;
 mod parakeet;
-mod parakeet_ort;
+use transcrust_core::parakeet_ort;
+mod phonon;
 mod picker;
-mod postprocess;
+use transcrust_core::postprocess;
 mod review;
 mod state;
 mod transcription;
@@ -57,6 +58,7 @@ where
 struct RunMode {
     smoke: bool,
     dec: bool,
+    backend: decision::Backend,
     /// Toggle-driven dictation for long-form: `--toggle` starts and stops
     /// instead of a key being held down. Off by default; the hold-to-talk path
     /// is untouched by this flag.
@@ -64,10 +66,15 @@ struct RunMode {
 }
 
 fn main() {
-    let args: Vec<String> = std::env::args().collect();
+    let (args, backend, selected) = decision::Backend::arguments(std::env::args().collect())
+        .unwrap_or_else(|e| {
+            eprintln!("{e}");
+            std::process::exit(2)
+        });
     let run_mode = RunMode {
         smoke: args.iter().any(|arg| arg == "--smoke"),
-        dec: args.iter().any(|arg| arg == "--dec"),
+        dec: selected || args.iter().any(|arg| arg == "--dec"),
+        backend,
         long: args.iter().any(|arg| arg == "--long"),
     };
 
@@ -196,6 +203,8 @@ fn main() {
             // post-processing, no injection. Writes `<name>.md` beside each WAV.
             let mut paths: Vec<std::path::PathBuf> = Vec::new();
             let mut mode_filter: Option<String> = None;
+            let mut output_dir: Option<std::path::PathBuf> = None;
+            let mut paced = false;
             let mut rest = args.iter().skip(2);
             while let Some(arg) = rest.next() {
                 if arg == "--mode" {
@@ -204,6 +213,14 @@ fn main() {
                         std::process::exit(1);
                     };
                     mode_filter = Some(value.clone());
+                } else if arg == "--output-dir" {
+                    output_dir = Some(std::path::PathBuf::from(
+                        rest.next().expect("--output-dir needs a directory"),
+                    ));
+                } else if arg == "--paced" {
+                    paced = true;
+                } else if arg == "--dec" {
+                    // RunMode owns the backend flag; it is not a WAV path.
                 } else {
                     paths.push(std::path::PathBuf::from(arg));
                 }
@@ -217,7 +234,14 @@ fn main() {
             init_ort_default();
             let _ = runtime();
             let config = config::load();
-            runtime().block_on(wav::run(&paths, mode_filter.as_deref(), &config));
+            runtime().block_on(wav::run(
+                &paths,
+                mode_filter.as_deref(),
+                &config,
+                run_mode.dec.then_some(run_mode.backend),
+                output_dir.as_deref(),
+                paced,
+            ));
             return;
         }
         Some("--normalise") => {
@@ -424,7 +448,7 @@ fn main() {
                 runtime().block_on(async {
                     let observer =
                         observe::Observer::dec_probe().expect("initialize decision probe log");
-                    let dec = decision::Decision::start(&observer).await;
+                    let dec = decision::Decision::start(&observer, run_mode.backend).await;
                     let shaped = if long {
                         mode::apply_profile(mode::Profile::Long, &input)
                     } else {
@@ -492,7 +516,9 @@ fn main() {
                 "  --granite-smoke <DIR>       Run Granite frontend, ONNX, CTC, and tokenizer"
             );
             println!("  --parakeet-direct <DIR> [WAV]  Drive Parakeet's graphs directly; print confidences");
-            println!("  --smoke                     Run with terminal phase logging enabled");
+            println!(
+                "  --smoke                     Log phases and bank dictation WAV/JSON for replay"
+            );
             println!(
                 "  --long                      Run the daemon in toggle mode for long dictation"
             );
@@ -500,7 +526,8 @@ fn main() {
                 "  --toggle                    Tell a --long daemon to start or stop recording"
             );
             println!("  --correct-chord <C-A-c>      Optional daemon correction chord (also configurable)");
-            println!("  --dec                       Contextual vocabulary decisions with local d1 Q8 (boosting off)");
+            println!("  --dec                       Contextual vocabulary decisions with UltraBERT INT4 (boosting off)");
+            println!("  --dec-backend ultra|d1      Choose decision backend; default ultra; enables --dec");
             println!("  --correct                   Edit and replace the last dictation on a running daemon");
             println!(
                 "  --pick                      Open the fuzzel mode picker on a running daemon"
@@ -613,7 +640,9 @@ fn init_ort_for_probe(observer: &observe::Observer) {
         .commit();
 }
 
-async fn run(config: config::Config, run_mode: RunMode) {
+async fn run(mut config: config::Config, run_mode: RunMode) {
+    // Human smoke failures need the exact microphone input for replay.
+    config.observe.corpus |= run_mode.smoke;
     let observer = observe::Observer::new(
         config.observe.sample_chars,
         config.observe.desktop_notifications,
@@ -627,6 +656,14 @@ async fn run(config: config::Config, run_mode: RunMode) {
     if run_mode.smoke {
         observer.phase("startup", "smoke mode enabled");
     }
+    observer.phase(
+        "startup.corpus",
+        &if config.observe.corpus {
+            format!("audio banking enabled: {}", corpus::dir().display())
+        } else {
+            "audio banking disabled".to_string()
+        },
+    );
     let _pid_guard = match control::write_pid_file() {
         Ok(guard) => Some(guard),
         Err(e) => {
@@ -637,7 +674,9 @@ async fn run(config: config::Config, run_mode: RunMode) {
 
     let decision = if run_mode.dec {
         dictionary::set_boost_strength(0.0);
-        Some(Arc::new(decision::Decision::start(&observer).await))
+        Some(Arc::new(
+            decision::Decision::start(&observer, run_mode.backend).await,
+        ))
     } else {
         None
     };
@@ -705,6 +744,7 @@ async fn run(config: config::Config, run_mode: RunMode) {
         }
     };
     let mut active_audio_rx: Option<std::sync::mpsc::Receiver<Vec<f32>>> = None;
+    let mut active_capture = None;
 
     // Only a --long daemon listens for SIGUSR1. Registered before the loop so a
     // toggle that arrives during model load is queued rather than killing the
@@ -920,7 +960,25 @@ async fn run(config: config::Config, run_mode: RunMode) {
                             observer.phase("recording", "hotkey pressed; starting capture");
                             observer.notify("Transcrust", "Recording started");
                             state.transition(state::AppState::Recording);
-                            active_audio_rx = Some(audio.start_recording());
+                            let audio_rx = audio.start_recording();
+                            if let transcription::TranscriptionService::Phonon(service) = &transcription {
+                                let (pending, banked) = service.start_capture(
+                                    observer.clone(), audio_rx, audio.sample_rate(), config.observe.corpus,
+                                );
+                                active_capture = Some(pending);
+                                active_audio_rx = Some(banked);
+                            } else if let transcription::TranscriptionService::Nemotron(service) = &transcription {
+                                let (engine_audio, banked) = phonon::tee_capture(audio_rx, config.observe.corpus);
+                                let service = service.clone();
+                                let observer = observer.clone();
+                                let rate = audio.sample_rate();
+                                active_capture = Some(tokio::spawn(async move {
+                                    service.transcribe(observer, engine_audio, rate).await
+                                }));
+                                active_audio_rx = Some(banked);
+                            } else {
+                                active_audio_rx = Some(audio_rx);
+                            }
                         }
                     }
                     hotkey::HotkeyEvent::CorrectLast => { let _ = correct_tx.send(()); }
@@ -990,6 +1048,7 @@ async fn run(config: config::Config, run_mode: RunMode) {
                             let decision = decision.clone();
                             let transcription = transcription.clone();
                             let observer = observer.clone();
+                            let pending_capture = active_capture.take();
 
                             spawn(async move {
                                 run_transcription_pipeline(
@@ -1007,6 +1066,7 @@ async fn run(config: config::Config, run_mode: RunMode) {
                                     decision,
                                     last_dictation,
                                     state,
+                                    pending_capture,
                                 ).await;
                             });
                         }
@@ -1141,16 +1201,15 @@ async fn run_transcription_pipeline(
     decision: Option<Arc<decision::Decision>>,
     last_dictation: Arc<std::sync::Mutex<Option<correction::Dictation>>>,
     state: Arc<state::StateMachine>,
+    pending_capture: Option<tokio::task::JoinHandle<Result<String, String>>>,
 ) {
     observer.phase(
         "transcription",
         &format!("starting {} transcription", transcription.name()),
     );
 
-    // Tee the audio before the engine drains it. Recording has already been
-    // stopped by the caller, so the channel is fully buffered and this does not
-    // block; the engines collect the whole utterance anyway, so nothing about
-    // their behaviour changes.
+    // Streaming engines already received their live chunks; this receiver
+    // holds the corpus copy. Batch engines retain their release-time path.
     let (audio_rx, banked) = if corpus_enabled {
         let mut samples: Vec<f32> = Vec::new();
         while let Ok(chunk) = audio_rx.recv() {
@@ -1233,12 +1292,18 @@ async fn run_transcription_pipeline(
         } else {
             transcription.timeout()
         };
-        match tokio::time::timeout(
-            budget,
-            transcription.transcribe(observer.clone(), audio_rx, sample_rate),
-        )
-        .await
-        {
+        let infer = async {
+            if let Some(pending) = pending_capture {
+                pending
+                    .await
+                    .map_err(|e| format!("Streaming capture task: {e}"))?
+            } else {
+                transcription
+                    .transcribe(observer.clone(), audio_rx, sample_rate)
+                    .await
+            }
+        };
+        match tokio::time::timeout(budget, infer).await {
             Ok(result) => result,
             Err(_) => {
                 observer.error(
@@ -1300,6 +1365,7 @@ async fn run_transcription_pipeline(
             observer.phase("inject", "injecting transcript");
 
             let mut record = correction::Dictation {
+                id: corpus::take_id(),
                 raw: text.clone(),
                 delivered: fixed.clone(),
                 corrected: None,
@@ -1309,6 +1375,25 @@ async fn run_transcription_pipeline(
                 wait_secs,
                 replaceable: false,
             };
+            // Retain the take before desktop automation. A typing failure or
+            // interrupted injection must not discard replay audio/state.
+            if let Some(samples) = banked.as_ref() {
+                bank(
+                    &observer,
+                    samples,
+                    sample_rate,
+                    &mode_label,
+                    &engine_name,
+                    &text,
+                    &fixed,
+                    transcribe_secs,
+                    &record.id,
+                );
+            }
+            if let Err(error) = review::save_last(&record) {
+                observer.error("correct.save", &error);
+            }
+            *last_dictation.lock().unwrap() = Some(record.clone());
             let mut typed = output_cfg.wtype;
             match inject::inject_text(&fixed, &output_cfg).await {
                 // A method that was asked for and failed is reported even when
@@ -1362,18 +1447,6 @@ async fn run_transcription_pipeline(
                 observer.error("correct.save", &e);
             }
             *last_dictation.lock().unwrap() = Some(record);
-            if let Some(samples) = banked {
-                bank(
-                    &observer,
-                    &samples,
-                    sample_rate,
-                    &mode_label,
-                    &engine_name,
-                    &text,
-                    &fixed,
-                    transcribe_secs,
-                );
-            }
             observer.notify(
                 "Transcrust",
                 &format!("Injected: {}", fixed.chars().take(60).collect::<String>()),
@@ -1384,11 +1457,37 @@ async fn run_transcription_pipeline(
             state.transition(state::AppState::Idle);
         }
         Ok(_) => {
+            if let Some(samples) = banked {
+                bank(
+                    &observer,
+                    &samples,
+                    sample_rate,
+                    &mode_label,
+                    &engine_name,
+                    "",
+                    "",
+                    transcribe_secs,
+                    &corpus::take_id(),
+                );
+            }
             observer.phase("transcription", "empty transcript");
             observer.notify("Transcrust", "Empty transcript");
             state.transition(state::AppState::Idle);
         }
         Err(e) => {
+            if let Some(samples) = banked {
+                bank(
+                    &observer,
+                    &samples,
+                    sample_rate,
+                    &mode_label,
+                    &engine_name,
+                    "",
+                    "",
+                    transcribe_secs,
+                    &corpus::take_id(),
+                );
+            }
             observer.error("transcription", &e);
             state.transition(state::AppState::Error);
             tokio::time::sleep(std::time::Duration::from_secs(2)).await;
@@ -1596,9 +1695,10 @@ fn bank(
     raw: &str,
     injected: &str,
     transcribe_secs: f32,
+    id: &str,
 ) {
     let entry = corpus::Entry {
-        recorded: corpus::stamp(),
+        recorded: id.to_string(),
         mode: mode_label.to_string(),
         engine: engine_name.to_string(),
         device_sample_rate: sample_rate,
@@ -1700,6 +1800,7 @@ fn run_doctor() {
         Some(model::ModelKind::Parakeet) => println!("Engine: Parakeet TDT"),
         Some(model::ModelKind::Granite) => println!("Engine: Granite Speech 5 TurboCTC"),
         Some(model::ModelKind::Nemotron) => println!("Engine: Nemotron Speech Streaming EN"),
+        Some(model::ModelKind::Phonon) => println!("Engine: Phonon 2.5 English (native Rust)"),
         None => println!("Engine: <none>"),
     }
     println!("Search paths:");

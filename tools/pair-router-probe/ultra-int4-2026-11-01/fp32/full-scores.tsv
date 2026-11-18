@@ -1,0 +1,5 @@
+file	errors	reference_words	wer_percent
+/home/john/repos/transcrust/tools/pair-router-probe/ultra-int4-2026-11-01/fp32/full.json.parakeet-single.txt	2	79	2.53
+/home/john/repos/transcrust/tools/pair-router-probe/ultra-int4-2026-11-01/fp32/full.json.parakeet-two.txt	3	79	3.80
+/home/john/repos/transcrust/tools/pair-router-probe/ultra-int4-2026-11-01/fp32/full.json.phonon-single.txt	4	79	5.06
+/home/john/repos/transcrust/tools/pair-router-probe/ultra-int4-2026-11-01/fp32/full.json.phonon-two.txt	5	79	6.33

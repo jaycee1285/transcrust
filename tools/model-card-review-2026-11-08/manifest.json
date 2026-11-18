@@ -1,0 +1,85 @@
+{
+  "review_date": "2026-11-08",
+  "method": "git clone --depth 1 --filter=blob:none --no-checkout; git show README and small metadata/source blobs; Git LFS pointer inspection only",
+  "downloaded_weights": false,
+  "executed_upstream_setup_or_python": false,
+  "taskboard_update": "Triage accepted by John's Okay and recorded 2026-11-10; no new inference run",
+  "models": [
+    {
+      "name": "joey-1",
+      "repo": "baselabs/joey-1",
+      "revision": "9efbe485efbed9598dfca5294cbbe8da00e21908",
+      "weights": [
+        {
+          "path": "model.safetensors",
+          "bytes": 5443677680,
+          "sha256": "4c503aded23bae311dff80a63326503fb720572c178f07a2142332d55f5f3afc"
+        }
+      ],
+      "url": "https://huggingface.co/baselabs/joey-1",
+      "readme": "cards/joey-1.md"
+    },
+    {
+      "name": "MNN-Pocket-0.3B-Dec",
+      "repo": "taobao-mnn/MNN-Pocket-0.3B-Dec",
+      "revision": "dfbe0aed3abd4caed175b883a4b462ed35184fad",
+      "weights": [
+        {
+          "path": "base/model.safetensors",
+          "bytes": 723137248,
+          "sha256": "24e182cebe433e9354dc35567d66c655888e7577ca7f6f71cea196a5b7da6276"
+        },
+        {
+          "path": "adapter/adapter_model.safetensors",
+          "bytes": 28723600,
+          "sha256": "7a3b432e65ef79a9fd0600e8d711e2e4bb4d9c6ce949935c97c725ae9d253696"
+        },
+        {
+          "path": "decision_head.safetensors",
+          "bytes": 1837352,
+          "sha256": "653cc9f7695bc142f933f19df6bf3fcdeeee875558438c3e95eeb6db065ad0a2"
+        }
+      ],
+      "url": "https://huggingface.co/taobao-mnn/MNN-Pocket-0.3B-Dec",
+      "readme": "cards/MNN-Pocket-0.3B-Dec.md"
+    },
+    {
+      "name": "embeddinggemma-2-ft-typed-decision",
+      "repo": "mrm8488/embeddinggemma-2-ft-typed-decision",
+      "revision": "3d0069b4c56d7a7f505feb53bee90694b2c07845",
+      "duplicate_of_tested_revision": "8403ff7fddc75b6994130e581a832f875fb5bd0e",
+      "weights_git_blob_both_revisions": "d9a0daa6a4a08b725805d87b41441057c021e7f2",
+      "only_changed_path": ".eval_results/mrm8488__embeddinggemma-2-ft-typed-decision.yaml",
+      "url": "https://huggingface.co/mrm8488/embeddinggemma-2-ft-typed-decision",
+      "readme": "cards/embeddinggemma-2-ft-typed-decision.md"
+    },
+    {
+      "name": "hs-decide-1-flash",
+      "repo": "hindsight-ai/hs-decide-1-flash",
+      "revision": "b9a782058dbc81ad59d9397bf2a9fed946778cb3",
+      "weights": [
+        {
+          "path": "model.safetensors",
+          "bytes": 1504827608,
+          "sha256": "4b5a86f884f759aa96767a15ced4b379cb00f19aab9e9d7f28bb0ffa6e96d1ea"
+        }
+      ],
+      "url": "https://huggingface.co/hindsight-ai/hs-decide-1-flash",
+      "readme": "cards/hs-decide-1-flash.md"
+    },
+    {
+      "name": "Minico-M1-1105",
+      "repo": "Mincofficial/Minico-M1-1105",
+      "revision": "822419b44aed2111dabdbf685a21769449127107",
+      "weights": [
+        {
+          "path": "model.safetensors",
+          "bytes": 708984403,
+          "sha256": "f692922559fee902d60e3f0c0e18177937bb6763da39a5cbcadc01123a946f23"
+        }
+      ],
+      "url": "https://huggingface.co/Mincofficial/Minico-M1-1105",
+      "readme": "cards/Minico-M1-1105.md"
+    }
+  ]
+}

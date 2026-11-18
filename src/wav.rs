@@ -57,7 +57,11 @@ pub struct Window {
 ///
 /// The last window is allowed to run up to `TARGET + SEARCH` so a file never
 /// ends with a two-second orphan.
-pub fn plan_windows(sample_count: usize, rate: u32, energy: impl Fn(usize, usize) -> f32) -> Vec<Window> {
+pub fn plan_windows(
+    sample_count: usize,
+    rate: u32,
+    energy: impl Fn(usize, usize) -> f32,
+) -> Vec<Window> {
     let frame = (rate as usize * FRAME_MS) / 1000;
     let target = (TARGET_SECS * rate as f32) as usize;
     let search = (SEARCH_SECS * rate as f32) as usize;
@@ -66,7 +70,10 @@ pub fn plan_windows(sample_count: usize, rate: u32, energy: impl Fn(usize, usize
 
     while start < sample_count {
         if sample_count - start <= target + search || frame == 0 {
-            windows.push(Window { start, end: sample_count });
+            windows.push(Window {
+                start,
+                end: sample_count,
+            });
             break;
         }
         let lo = start + target - search;
@@ -96,7 +103,14 @@ fn rms_energy(samples: &[f32]) -> impl Fn(usize, usize) -> f32 + '_ {
 }
 
 /// Transcribe each path and write `<stem>.md` beside it.
-pub async fn run(paths: &[PathBuf], mode_filter: Option<&str>, config: &Config) {
+pub async fn run(
+    paths: &[PathBuf],
+    mode_filter: Option<&str>,
+    config: &Config,
+    backend: Option<crate::decision::Backend>,
+    output_dir: Option<&Path>,
+    paced: bool,
+) {
     let observer = match Observer::new(config.observe.sample_chars, false, false) {
         Ok(observer) => observer,
         Err(error) => {
@@ -105,6 +119,12 @@ pub async fn run(paths: &[PathBuf], mode_filter: Option<&str>, config: &Config) 
         }
     };
 
+    let decision = if let Some(backend) = backend {
+        crate::dictionary::set_boost_strength(0.0);
+        Some(crate::decision::Decision::start(&observer, backend).await)
+    } else {
+        None
+    };
     let modes = mode::discover_modes(config.model.path.as_deref());
     if modes.is_empty() {
         eprintln!("No supported ASR model found. Run --doctor to see the search path.");
@@ -117,7 +137,10 @@ pub async fn run(paths: &[PathBuf], mode_filter: Option<&str>, config: &Config) 
         None => modes.first(),
     };
     let Some(chosen) = chosen else {
-        eprintln!("No installed mode matches {:?}. Installed:", mode_filter.unwrap_or(""));
+        eprintln!(
+            "No installed mode matches {:?}. Installed:",
+            mode_filter.unwrap_or("")
+        );
         for m in &modes {
             eprintln!("  {}", m.label);
         }
@@ -140,7 +163,17 @@ pub async fn run(paths: &[PathBuf], mode_filter: Option<&str>, config: &Config) 
 
     let mut failed = false;
     for path in paths {
-        match transcribe_file(&service, &observer, chosen, path).await {
+        match transcribe_file(
+            &service,
+            &observer,
+            chosen,
+            path,
+            decision.as_ref(),
+            output_dir,
+            paced,
+        )
+        .await
+        {
             Ok(out) => println!("{}", out.display()),
             Err(error) => {
                 eprintln!("{}: {error}", path.display());
@@ -158,6 +191,9 @@ async fn transcribe_file(
     observer: &Observer,
     chosen: &mode::Mode,
     path: &Path,
+    decision: Option<&crate::decision::Decision>,
+    output_dir: Option<&Path>,
+    paced: bool,
 ) -> Result<PathBuf, String> {
     let (samples, rate) = audio::read_wav_mono(path)?;
     let audio_secs = samples.len() as f64 / rate as f64;
@@ -169,8 +205,14 @@ async fn transcribe_file(
     // cache and the decoder LSTM. Measured on Record-2.wav: windowed gives
     // "Tarakeate one P" and "paint Dominion" where one continuous pass gives
     // "parakeet one P" and "paid Dominion".
-    let windows = if chosen.model.kind == model::ModelKind::Nemotron {
-        vec![Window { start: 0, end: samples.len() }]
+    let windows = if matches!(
+        chosen.model.kind,
+        model::ModelKind::Nemotron | model::ModelKind::Phonon
+    ) {
+        vec![Window {
+            start: 0,
+            end: samples.len(),
+        }]
     } else {
         plan_windows(samples.len(), rate, rms_energy(&samples))
     };
@@ -185,6 +227,8 @@ async fn transcribe_file(
 
     let started = std::time::Instant::now();
     let mut paragraphs: Vec<String> = Vec::new();
+    let mut raw_paragraphs = Vec::new();
+    let mut post_release_secs = 0.0;
 
     for (index, window) in windows.iter().enumerate() {
         let slice = &samples[window.start..window.end];
@@ -192,14 +236,42 @@ async fn transcribe_file(
         // The live path streams chunks and the worker drains until the sender
         // drops. One chunk then drop is the same contract, and is what --bench
         // already does.
-        tx.send(slice.to_vec())
-            .map_err(|_| "engine receiver closed".to_string())?;
-        drop(tx);
+        let audio = slice.to_vec();
+        let feed = tokio::spawn(async move {
+            let start = tokio::time::Instant::now();
+            let chunk_size = if paced {
+                (rate as usize / 50).max(1)
+            } else {
+                audio.len().max(1)
+            };
+            let mut sent = 0;
+            for chunk in audio.chunks(chunk_size) {
+                tx.send(chunk.to_vec())
+                    .map_err(|_| "engine receiver closed".to_string())?;
+                sent += chunk.len();
+                if paced {
+                    tokio::time::sleep_until(
+                        start + std::time::Duration::from_secs_f64(sent as f64 / rate as f64),
+                    )
+                    .await;
+                }
+            }
+            drop(tx);
+            Ok::<_, String>(std::time::Instant::now())
+        });
 
         let raw = service.transcribe(observer.clone(), rx, rate).await?;
+        let finished = std::time::Instant::now();
+        let stopped = feed.await.map_err(|e| e.to_string())??;
+        post_release_secs += finished.saturating_duration_since(stopped).as_secs_f64();
+        raw_paragraphs.push(raw.clone());
         // Profile first, shared pipeline second — the post-processing contract.
         let shaped = mode::apply_profile(chosen.profile, &raw);
-        let fixed = postprocess::fix_transcription(&shaped);
+        let fixed = if decision.is_some() {
+            postprocess::fix_without_vocabulary(&shaped)
+        } else {
+            postprocess::fix_transcription(&shaped)
+        };
         if !fixed.trim().is_empty() {
             paragraphs.push(fixed.trim().to_string());
         }
@@ -221,7 +293,32 @@ async fn transcribe_file(
     eprintln!();
 
     let wall = started.elapsed().as_secs_f64();
-    let out = path.with_extension("md");
+    let out = if let Some(dir) = output_dir {
+        std::fs::create_dir_all(dir).map_err(|e| e.to_string())?;
+        dir.join(path.file_name().ok_or("WAV has no filename")?)
+            .with_extension("md")
+    } else {
+        path.with_extension("md")
+    };
+    let input = paragraphs.join("\n\n");
+    let (delivered, audit) = if let Some(decision) = decision {
+        let outcome = decision.adjudicate(&input, observer).await;
+        (outcome.text, Some(outcome.audit))
+    } else {
+        (input.clone(), None)
+    };
+    let recorded: Option<serde_json::Value> = std::fs::read(path.with_extension("json"))
+        .ok()
+        .and_then(|bytes| serde_json::from_slice(&bytes).ok());
+    let replay = serde_json::json!({"source": path, "mode": chosen.label,
+        "audio_secs": audio_secs, "asr_secs": wall, "paced": paced, "post_release_asr_secs": post_release_secs,
+        "raw": raw_paragraphs.join("\n\n"), "input": input, "delivered": delivered,
+        "decision": audit, "recorded": recorded});
+    std::fs::write(
+        out.with_extension("replay.json"),
+        serde_json::to_vec_pretty(&replay).map_err(|e| e.to_string())?,
+    )
+    .map_err(|e| e.to_string())?;
     let title = path
         .file_stem()
         .map(|s| s.to_string_lossy().into_owned())
@@ -238,7 +335,7 @@ async fn transcribe_file(
     md.push_str(&format!("generated: {}\n", corpus::stamp()));
     md.push_str("---\n\n");
     md.push_str(&format!("# {title}\n\n"));
-    md.push_str(&paragraphs.join("\n\n"));
+    md.push_str(&delivered);
     md.push('\n');
 
     std::fs::write(&out, md).map_err(|e| format!("failed to write {}: {e}", out.display()))?;
@@ -261,7 +358,13 @@ mod tests {
         let rate = 16_000;
         let samples = vec![0.5f32; rate * 10];
         let windows = plan_windows(samples.len(), rate as u32, rms_energy(&samples));
-        assert_eq!(windows, vec![Window { start: 0, end: samples.len() }]);
+        assert_eq!(
+            windows,
+            vec![Window {
+                start: 0,
+                end: samples.len()
+            }]
+        );
     }
 
     /// The cut lands in the silence, not on the target boundary.
@@ -284,7 +387,13 @@ mod tests {
             cut >= hole && cut <= hole + rate as usize / 2,
             "cut at {cut} is outside the silence at {hole}"
         );
-        assert_eq!(windows[1], Window { start: cut, end: samples.len() });
+        assert_eq!(
+            windows[1],
+            Window {
+                start: cut,
+                end: samples.len()
+            }
+        );
     }
 
     /// Windows tile the clip exactly: no sample is dropped or heard twice.

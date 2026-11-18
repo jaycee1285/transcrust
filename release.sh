@@ -19,7 +19,7 @@ trap 'rm -rf "$STAGING"' EXIT
 
 echo "==> Building ${APP_NAME} ${TAG} (${PLATFORM}/${ARCH})"
 cd "$REPO_ROOT"
-cargo build --release --offline
+cargo build --release --offline -p transcrust --bin transcrust
 
 install -d "$STAGING/bin"
 cp "$REPO_ROOT/target/release/${APP_NAME}" "$STAGING/bin/${APP_NAME}"

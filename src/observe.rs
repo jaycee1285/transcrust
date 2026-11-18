@@ -9,6 +9,15 @@ pub struct Observer {
     inner: Arc<Inner>,
 }
 
+impl transcrust_core::Events for Observer {
+    fn phase(&self, phase: &str, message: &str) {
+        Observer::phase(self, phase, message);
+    }
+    fn error(&self, phase: &str, message: &str) {
+        Observer::error(self, phase, message);
+    }
+}
+
 struct Inner {
     file: Mutex<File>,
     latest_path: PathBuf,

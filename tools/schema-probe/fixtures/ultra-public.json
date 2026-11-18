@@ -1,0 +1,188 @@
+[
+  {
+    "id": "<urn:uuid:be9a46df-e007-4d16-b8c6-34cd0ad3e37c>-topic",
+    "state": "Always in a class of its own |\nAlain Graillot, Crozes-Hermitage, 2017\nThe onset of my personal wine bug in mid 2002 coincided with two events that had fed my habit for years: an article on Rhone wines in a local wine magazine and a Rhone tasting at Wine Route, which happened to be the first tasting of imported wines I had ever attended. The article contained a tasting note of the Graillot, Crozes-Hermitage, 2000, which was one of the wines we drank at the tasting. Basically, Graillot was there at the start for me.\nWhat I remember most about the Northern Rhones from the tasting, which included, besides the Graillot, an Yves Cuilleron Saint Joseph, was the sensuality of the fruit and its silky texture. Of course, I had no context at the time for comparing the wines to other producers and other appellations. I knew from that article that Crozes was a lesser terroir, but I had no idea how much less so.\nWine Route had been Graillot's importer for years, but the selection was always haphazard. After the 2000, they skipped the excellent 2001 and brought in the 2002, a much maligned vintage. With various discounts and a surprisingly high score from a local critic, they managed to sell off their stocks. The next vintages were 2006, 2007 and 2011. And things stopped there, until Daniel Lifshitz and Bourgogne Crown has brought in the latest available vintages, 2017 (the red Crozes) and 2018 (the white).\nGraillot is a benchmark for Syrah's capacity for sensuality and sheer beauty. No Crozes I have drunk over the last 18 years was ever quite as good as Graillot's, including the ones made by his son Maxime at Domaine des Lises - well made, but a softer style, less sexy, less impressive. Maxime and his brother Antoine have been in charge since 2008, although Alain still works alongside them. There has been no drop in quality or a stylistic shift, judging by the 2011 Crozes and Saint-Joseph.\nThe 2017 marches on to the house style: a plush, yet firm style, sensual and almost Bourgogne-like in texture. Cote-Rotie would also be an apt reference. The fruit is ripe without losing form and structured. The 2017 is still so young as to be somewhat one-dimensional, but it hints at depth and potential. The nose is full of tell-tale black pepper and violets, the fruit supported in mid-palate by acidity until the tannins assert towards the end. It's sappy in a youthful way and already a joy. If you're anything like me, you'll succumb to a curiosity too great to battle, but this'll be even better in 5-7 years (I've had a 14 year old Graillot Crozes that was still vigorous with no sign of slowing down). (Sept. 11, 2020)",
+    "instructions": "Classify the topic of this web page.",
+    "labels": [
+      "Adult Content",
+      "Art & Design",
+      "Crime & Law",
+      "Education & Jobs",
+      "Electronics & Hardare",
+      "Entertainment",
+      "Fashion & Beauty",
+      "Finance & Business",
+      "Food & Dining",
+      "Games",
+      "Health",
+      "History & Geography",
+      "Home & Hobbies",
+      "Industrial",
+      "Literature",
+      "Politics",
+      "Religion",
+      "Science, Math & Technology",
+      "Social Life",
+      "Software",
+      "Software Development",
+      "Sports & Fitness",
+      "Transportation",
+      "Travel & Tourism"
+    ],
+    "expected_label": "Food & Dining",
+    "expected_p": 0.9997933506965637
+  },
+  {
+    "id": "<urn:uuid:be9a46df-e007-4d16-b8c6-34cd0ad3e37c>-edu",
+    "state": "Always in a class of its own |\nAlain Graillot, Crozes-Hermitage, 2017\nThe onset of my personal wine bug in mid 2002 coincided with two events that had fed my habit for years: an article on Rhone wines in a local wine magazine and a Rhone tasting at Wine Route, which happened to be the first tasting of imported wines I had ever attended. The article contained a tasting note of the Graillot, Crozes-Hermitage, 2000, which was one of the wines we drank at the tasting. Basically, Graillot was there at the start for me.\nWhat I remember most about the Northern Rhones from the tasting, which included, besides the Graillot, an Yves Cuilleron Saint Joseph, was the sensuality of the fruit and its silky texture. Of course, I had no context at the time for comparing the wines to other producers and other appellations. I knew from that article that Crozes was a lesser terroir, but I had no idea how much less so.\nWine Route had been Graillot's importer for years, but the selection was always haphazard. After the 2000, they skipped the excellent 2001 and brought in the 2002, a much maligned vintage. With various discounts and a surprisingly high score from a local critic, they managed to sell off their stocks. The next vintages were 2006, 2007 and 2011. And things stopped there, until Daniel Lifshitz and Bourgogne Crown has brought in the latest available vintages, 2017 (the red Crozes) and 2018 (the white).\nGraillot is a benchmark for Syrah's capacity for sensuality and sheer beauty. No Crozes I have drunk over the last 18 years was ever quite as good as Graillot's, including the ones made by his son Maxime at Domaine des Lises - well made, but a softer style, less sexy, less impressive. Maxime and his brother Antoine have been in charge since 2008, although Alain still works alongside them. There has been no drop in quality or a stylistic shift, judging by the 2011 Crozes and Saint-Joseph.\nThe 2017 marches on to the house style: a plush, yet firm style, sensual and almost Bourgogne-like in texture. Cote-Rotie would also be an apt reference. The fruit is ripe without losing form and structured. The 2017 is still so young as to be somewhat one-dimensional, but it hints at depth and potential. The nose is full of tell-tale black pepper and violets, the fruit supported in mid-palate by acidity until the tannins assert towards the end. It's sappy in a youthful way and already a joy. If you're anything like me, you'll succumb to a curiosity too great to battle, but this'll be even better in 5-7 years (I've had a 14 year old Graillot Crozes that was still vigorous with no sign of slowing down). (Sept. 11, 2020)",
+    "instructions": "Classify the educational value of this web page.",
+    "labels": [
+      "not educational",
+      "minimal educational value",
+      "some educational value",
+      "useful for education",
+      "highly educational",
+      "outstanding educational value"
+    ],
+    "expected_label": "minimal educational value",
+    "expected_p": 0.90767502784729
+  },
+  {
+    "id": "<urn:uuid:be9a46df-e007-4d16-b8c6-34cd0ad3e37c>-reasoning",
+    "state": "Always in a class of its own |\nAlain Graillot, Crozes-Hermitage, 2017\nThe onset of my personal wine bug in mid 2002 coincided with two events that had fed my habit for years: an article on Rhone wines in a local wine magazine and a Rhone tasting at Wine Route, which happened to be the first tasting of imported wines I had ever attended. The article contained a tasting note of the Graillot, Crozes-Hermitage, 2000, which was one of the wines we drank at the tasting. Basically, Graillot was there at the start for me.\nWhat I remember most about the Northern Rhones from the tasting, which included, besides the Graillot, an Yves Cuilleron Saint Joseph, was the sensuality of the fruit and its silky texture. Of course, I had no context at the time for comparing the wines to other producers and other appellations. I knew from that article that Crozes was a lesser terroir, but I had no idea how much less so.\nWine Route had been Graillot's importer for years, but the selection was always haphazard. After the 2000, they skipped the excellent 2001 and brought in the 2002, a much maligned vintage. With various discounts and a surprisingly high score from a local critic, they managed to sell off their stocks. The next vintages were 2006, 2007 and 2011. And things stopped there, until Daniel Lifshitz and Bourgogne Crown has brought in the latest available vintages, 2017 (the red Crozes) and 2018 (the white).\nGraillot is a benchmark for Syrah's capacity for sensuality and sheer beauty. No Crozes I have drunk over the last 18 years was ever quite as good as Graillot's, including the ones made by his son Maxime at Domaine des Lises - well made, but a softer style, less sexy, less impressive. Maxime and his brother Antoine have been in charge since 2008, although Alain still works alongside them. There has been no drop in quality or a stylistic shift, judging by the 2011 Crozes and Saint-Joseph.\nThe 2017 marches on to the house style: a plush, yet firm style, sensual and almost Bourgogne-like in texture. Cote-Rotie would also be an apt reference. The fruit is ripe without losing form and structured. The 2017 is still so young as to be somewhat one-dimensional, but it hints at depth and potential. The nose is full of tell-tale black pepper and violets, the fruit supported in mid-palate by acidity until the tannins assert towards the end. It's sappy in a youthful way and already a joy. If you're anything like me, you'll succumb to a curiosity too great to battle, but this'll be even better in 5-7 years (I've had a 14 year old Graillot Crozes that was still vigorous with no sign of slowing down). (Sept. 11, 2020)",
+    "instructions": "Classify the depth of reasoning of this web page.",
+    "labels": [
+      "No Reasoning",
+      "Basic Reasoning",
+      "Intermediate Reasoning",
+      "Advanced Reasoning",
+      "Indeterminate"
+    ],
+    "expected_label": "Basic Reasoning",
+    "expected_p": 0.4630185067653656
+  },
+  {
+    "id": "<urn:uuid:aba1752a-59cc-4429-91b4-30d2fd79a049>-topic",
+    "state": "HOW ECF FUNDING WORKED TO CLOSE THE EQUITY GAP PREK-12 .It’s the Emergency Connectivity Fund ECF and we’ll be highlighting Princeton City Schools in Cincinnati, Ohio., We welcome Chris Lockhart, their Director of Technology and we thank Funds For Learning for helping us with this show\nACE-ED.org where our award-winning, official online journal “Equity & Access PreK12” lives and where our Education Talk Radio podcasts are archived..\nSELtoday.org : where you can enjoy our Virtual Resource Center on Social-Emotional Learning PreK-12\nTeacher-Retention.com: Professional Learning to keep great teachers teaching\nThe American Consortium for Equity in Education, publisher of the \"Equity & Access\" journal, celebrates and connects the educators, associations, community partners and industry leaders who are working to solve problems and create a more equitable environment for historically underserved pre K-12 students throughout the United States.\n- American Consortium for Equity in Educationhttps://ace-ed.org/author/admin/",
+    "instructions": "Classify the topic of this web page.",
+    "labels": [
+      "Adult Content",
+      "Art & Design",
+      "Crime & Law",
+      "Education & Jobs",
+      "Electronics & Hardare",
+      "Entertainment",
+      "Fashion & Beauty",
+      "Finance & Business",
+      "Food & Dining",
+      "Games",
+      "Health",
+      "History & Geography",
+      "Home & Hobbies",
+      "Industrial",
+      "Literature",
+      "Politics",
+      "Religion",
+      "Science, Math & Technology",
+      "Social Life",
+      "Software",
+      "Software Development",
+      "Sports & Fitness",
+      "Transportation",
+      "Travel & Tourism"
+    ],
+    "expected_label": "Education & Jobs",
+    "expected_p": 0.9971631169319153
+  },
+  {
+    "id": "<urn:uuid:aba1752a-59cc-4429-91b4-30d2fd79a049>-edu",
+    "state": "HOW ECF FUNDING WORKED TO CLOSE THE EQUITY GAP PREK-12 .It’s the Emergency Connectivity Fund ECF and we’ll be highlighting Princeton City Schools in Cincinnati, Ohio., We welcome Chris Lockhart, their Director of Technology and we thank Funds For Learning for helping us with this show\nACE-ED.org where our award-winning, official online journal “Equity & Access PreK12” lives and where our Education Talk Radio podcasts are archived..\nSELtoday.org : where you can enjoy our Virtual Resource Center on Social-Emotional Learning PreK-12\nTeacher-Retention.com: Professional Learning to keep great teachers teaching\nThe American Consortium for Equity in Education, publisher of the \"Equity & Access\" journal, celebrates and connects the educators, associations, community partners and industry leaders who are working to solve problems and create a more equitable environment for historically underserved pre K-12 students throughout the United States.\n- American Consortium for Equity in Educationhttps://ace-ed.org/author/admin/",
+    "instructions": "Classify the educational value of this web page.",
+    "labels": [
+      "not educational",
+      "minimal educational value",
+      "some educational value",
+      "useful for education",
+      "highly educational",
+      "outstanding educational value"
+    ],
+    "expected_label": "minimal educational value",
+    "expected_p": 0.5447272658348083
+  },
+  {
+    "id": "<urn:uuid:aba1752a-59cc-4429-91b4-30d2fd79a049>-reasoning",
+    "state": "HOW ECF FUNDING WORKED TO CLOSE THE EQUITY GAP PREK-12 .It’s the Emergency Connectivity Fund ECF and we’ll be highlighting Princeton City Schools in Cincinnati, Ohio., We welcome Chris Lockhart, their Director of Technology and we thank Funds For Learning for helping us with this show\nACE-ED.org where our award-winning, official online journal “Equity & Access PreK12” lives and where our Education Talk Radio podcasts are archived..\nSELtoday.org : where you can enjoy our Virtual Resource Center on Social-Emotional Learning PreK-12\nTeacher-Retention.com: Professional Learning to keep great teachers teaching\nThe American Consortium for Equity in Education, publisher of the \"Equity & Access\" journal, celebrates and connects the educators, associations, community partners and industry leaders who are working to solve problems and create a more equitable environment for historically underserved pre K-12 students throughout the United States.\n- American Consortium for Equity in Educationhttps://ace-ed.org/author/admin/",
+    "instructions": "Classify the depth of reasoning of this web page.",
+    "labels": [
+      "No Reasoning",
+      "Basic Reasoning",
+      "Intermediate Reasoning",
+      "Advanced Reasoning",
+      "Indeterminate"
+    ],
+    "expected_label": "No Reasoning",
+    "expected_p": 0.4728255569934845
+  },
+  {
+    "id": "<urn:uuid:c372adfc-f5ba-469b-ad0f-7d013c04f270>-topic",
+    "state": "In the new Hellbent series by New York Times, USA Today, and Wall Street Journal bestselling author Penelope Douglas, discover six love stories–races, chases, adventure, and adrenaline. Get ready for the first book in the series, FALLS BOYS: You’ve met his father. Now meet Hawke. A standalone New Adult romance suitable for ages 18+.\n(Hellbent, Book 1)\nby Penelope Douglas\nDigital Originals, March 2022\n(via Dystel, Goderich & Bourret)\n“The kids are growing up—different from their parents but the same in so many ways…”\nHawken Trent. So polite. So sweet. Such an upstanding young man. A virgin, too, I hear. He never gets naughty with a girl. Probably because Jesus told him not to. And now here he is, trying to be the hero by protecting another girl from me. He calls me a bully. Irrational. Unreasonable. A criminal. He can call me anything he wants, I’ve heard worse. And he can try to stand between me and my money, but he’s never had to fight for food. That rich, clean, school boy doesn’t have what it takes.\nI surprised her. You should’ve seen her face. Just because I don’t have a record, honey, doesn’t mean I’m clean. It just means I’m better at not getting caught. That is until I realize I might’ve actually gone too far this time. She’s there. I’m there. The scene of the crime. It’s dark. The police show up. We have no choice. We run. Down High Street, into Quinn’s bake shop, and I pull her through the entrance to the old speakeasy that everyone forgot was here decades ago. The door locks, the cops circle the building, never knowing we’re right here, and I’m hidden in plain sight, indefinitely, with someone’s who’s awful. Mean. Rough. Dirty. A thief. A delinquent. Until one night, lost in all of these rooms together, I don’t see any of those things anymore. She’s smart. Daring. Soft. Hot…\nEverything’s changing. It’s this place. It does something to people. We have a silly urban legend in Shelburne Falls about mirrors. They’re a gateway. Don’t lean back into them. But we came through front first. I don’t care what the county records say. This was never a speakeasy. It’s Carnival Tower.\nPenelope Douglas is a New York Times, USA Today, and Wall Street Journal bestselling author. Their books have been translated into nineteen languages and include The Fall Away Series, The Devil’s Night Series, and the stand-alones, Misconduct, Punk 57, Birthday Girl, Credence, and Tryst Six Venom. They live in New England with their husband and daughter.",
+    "instructions": "Classify the topic of this web page.",
+    "labels": [
+      "Adult Content",
+      "Art & Design",
+      "Crime & Law",
+      "Education & Jobs",
+      "Electronics & Hardare",
+      "Entertainment",
+      "Fashion & Beauty",
+      "Finance & Business",
+      "Food & Dining",
+      "Games",
+      "Health",
+      "History & Geography",
+      "Home & Hobbies",
+      "Industrial",
+      "Literature",
+      "Politics",
+      "Religion",
+      "Science, Math & Technology",
+      "Social Life",
+      "Software",
+      "Software Development",
+      "Sports & Fitness",
+      "Transportation",
+      "Travel & Tourism"
+    ],
+    "expected_label": "Literature",
+    "expected_p": 0.9936254024505615
+  },
+  {
+    "id": "<urn:uuid:c372adfc-f5ba-469b-ad0f-7d013c04f270>-edu",
+    "state": "In the new Hellbent series by New York Times, USA Today, and Wall Street Journal bestselling author Penelope Douglas, discover six love stories–races, chases, adventure, and adrenaline. Get ready for the first book in the series, FALLS BOYS: You’ve met his father. Now meet Hawke. A standalone New Adult romance suitable for ages 18+.\n(Hellbent, Book 1)\nby Penelope Douglas\nDigital Originals, March 2022\n(via Dystel, Goderich & Bourret)\n“The kids are growing up—different from their parents but the same in so many ways…”\nHawken Trent. So polite. So sweet. Such an upstanding young man. A virgin, too, I hear. He never gets naughty with a girl. Probably because Jesus told him not to. And now here he is, trying to be the hero by protecting another girl from me. He calls me a bully. Irrational. Unreasonable. A criminal. He can call me anything he wants, I’ve heard worse. And he can try to stand between me and my money, but he’s never had to fight for food. That rich, clean, school boy doesn’t have what it takes.\nI surprised her. You should’ve seen her face. Just because I don’t have a record, honey, doesn’t mean I’m clean. It just means I’m better at not getting caught. That is until I realize I might’ve actually gone too far this time. She’s there. I’m there. The scene of the crime. It’s dark. The police show up. We have no choice. We run. Down High Street, into Quinn’s bake shop, and I pull her through the entrance to the old speakeasy that everyone forgot was here decades ago. The door locks, the cops circle the building, never knowing we’re right here, and I’m hidden in plain sight, indefinitely, with someone’s who’s awful. Mean. Rough. Dirty. A thief. A delinquent. Until one night, lost in all of these rooms together, I don’t see any of those things anymore. She’s smart. Daring. Soft. Hot…\nEverything’s changing. It’s this place. It does something to people. We have a silly urban legend in Shelburne Falls about mirrors. They’re a gateway. Don’t lean back into them. But we came through front first. I don’t care what the county records say. This was never a speakeasy. It’s Carnival Tower.\nPenelope Douglas is a New York Times, USA Today, and Wall Street Journal bestselling author. Their books have been translated into nineteen languages and include The Fall Away Series, The Devil’s Night Series, and the stand-alones, Misconduct, Punk 57, Birthday Girl, Credence, and Tryst Six Venom. They live in New England with their husband and daughter.",
+    "instructions": "Classify the educational value of this web page.",
+    "labels": [
+      "not educational",
+      "minimal educational value",
+      "some educational value",
+      "useful for education",
+      "highly educational",
+      "outstanding educational value"
+    ],
+    "expected_label": "minimal educational value",
+    "expected_p": 0.8594520688056946
+  },
+  {
+    "id": "<urn:uuid:c372adfc-f5ba-469b-ad0f-7d013c04f270>-reasoning",
+    "state": "In the new Hellbent series by New York Times, USA Today, and Wall Street Journal bestselling author Penelope Douglas, discover six love stories–races, chases, adventure, and adrenaline. Get ready for the first book in the series, FALLS BOYS: You’ve met his father. Now meet Hawke. A standalone New Adult romance suitable for ages 18+.\n(Hellbent, Book 1)\nby Penelope Douglas\nDigital Originals, March 2022\n(via Dystel, Goderich & Bourret)\n“The kids are growing up—different from their parents but the same in so many ways…”\nHawken Trent. So polite. So sweet. Such an upstanding young man. A virgin, too, I hear. He never gets naughty with a girl. Probably because Jesus told him not to. And now here he is, trying to be the hero by protecting another girl from me. He calls me a bully. Irrational. Unreasonable. A criminal. He can call me anything he wants, I’ve heard worse. And he can try to stand between me and my money, but he’s never had to fight for food. That rich, clean, school boy doesn’t have what it takes.\nI surprised her. You should’ve seen her face. Just because I don’t have a record, honey, doesn’t mean I’m clean. It just means I’m better at not getting caught. That is until I realize I might’ve actually gone too far this time. She’s there. I’m there. The scene of the crime. It’s dark. The police show up. We have no choice. We run. Down High Street, into Quinn’s bake shop, and I pull her through the entrance to the old speakeasy that everyone forgot was here decades ago. The door locks, the cops circle the building, never knowing we’re right here, and I’m hidden in plain sight, indefinitely, with someone’s who’s awful. Mean. Rough. Dirty. A thief. A delinquent. Until one night, lost in all of these rooms together, I don’t see any of those things anymore. She’s smart. Daring. Soft. Hot…\nEverything’s changing. It’s this place. It does something to people. We have a silly urban legend in Shelburne Falls about mirrors. They’re a gateway. Don’t lean back into them. But we came through front first. I don’t care what the county records say. This was never a speakeasy. It’s Carnival Tower.\nPenelope Douglas is a New York Times, USA Today, and Wall Street Journal bestselling author. Their books have been translated into nineteen languages and include The Fall Away Series, The Devil’s Night Series, and the stand-alones, Misconduct, Punk 57, Birthday Girl, Credence, and Tryst Six Venom. They live in New England with their husband and daughter.",
+    "instructions": "Classify the depth of reasoning of this web page.",
+    "labels": [
+      "No Reasoning",
+      "Basic Reasoning",
+      "Intermediate Reasoning",
+      "Advanced Reasoning",
+      "Indeterminate"
+    ],
+    "expected_label": "No Reasoning",
+    "expected_p": 0.5748990774154663
+  }
+]

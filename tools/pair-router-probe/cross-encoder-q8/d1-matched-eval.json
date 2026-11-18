@@ -1,0 +1,18 @@
+[
+  {
+    "arm": "single",
+    "n": 33,
+    "repair_total": 6,
+    "repairs": 2,
+    "preserve_total": 27,
+    "unwanted_edits": 8
+  },
+  {
+    "arm": "two",
+    "n": 33,
+    "repair_total": 16,
+    "repairs": 10,
+    "preserve_total": 17,
+    "unwanted_edits": 3
+  }
+]

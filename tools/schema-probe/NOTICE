@@ -1,0 +1,21 @@
+Native schema research probes, 2026-10-31.
+
+2026-11-01: the shared UltraBERT inference and tensor operations were promoted
+to src/ultra.rs and src/decision_tensor.rs for the app's primary INT4 backend.
+Research runners import those same files. Reference attribution below applies
+to both the app and research use of this modified Rust implementation.
+
+EmbeddingGemma encoder, typed-head and packed-weight implementation translated
+from Jacqkues/decision.js commit 4782abfd297fe067d965ab7f587a449b7b0cad0a:
+src/eg2-engine.ts, src/eg2-kernels.ts, src/eg2-head.ts, src/eg2-prompt.ts.
+Copyright 2026 the d1.js contributors. Apache License 2.0 (LICENSE).
+This is a modified Rust CPU implementation; it contains no WebGPU shaders.
+
+UltraBERT input/head behavior follows davanstrien/ultrabert-380m-curation
+revision c6a1fa055d36aeb3349b9a54537a5bc3f585d77d (Apache-2.0), GLiClass
+(Apache-2.0), and dmis-lab/UltraBERT-380M (MIT). Public question/output fixtures
+derive from the author's fineweb-curated-1m dataset and curate.py.
+
+Model/tokenizer files are separately downloaded; none are included here.
+The EmbeddingGemma derivative's upstream model/base-model terms apply to its
+weights separately from the runtime code. This probe does not redistribute them.

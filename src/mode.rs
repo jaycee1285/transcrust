@@ -88,6 +88,7 @@ fn menu_label(model: &InstalledModel, capture: Capture) -> String {
     match (model.kind, capture) {
         (ModelKind::Parakeet, Capture::Hold) => "Parakeet PTT".to_string(),
         (ModelKind::Nemotron, Capture::Toggle) => "Nemotron Toggle".to_string(),
+        (ModelKind::Phonon, Capture::Toggle) => "Phonon 2.5 Toggle".to_string(),
         (ModelKind::Granite, Capture::Toggle) => "Granite 5 Toggle".to_string(),
         _ => model.label.clone(),
     }
@@ -99,7 +100,7 @@ fn menu_label(model: &InstalledModel, capture: Capture) -> String {
 fn profile_for(kind: ModelKind) -> Profile {
     match kind {
         ModelKind::Granite => Profile::Long,
-        ModelKind::Parakeet | ModelKind::Nemotron => Profile::Raw,
+        ModelKind::Parakeet | ModelKind::Nemotron | ModelKind::Phonon => Profile::Raw,
     }
 }
 
@@ -111,7 +112,7 @@ fn profile_for(kind: ModelKind) -> Profile {
 /// long-form (route 3). `--long` still forces Toggle on Parakeet too.
 pub fn default_capture(kind: ModelKind) -> Capture {
     match kind {
-        ModelKind::Nemotron | ModelKind::Granite => Capture::Toggle,
+        ModelKind::Nemotron | ModelKind::Granite | ModelKind::Phonon => Capture::Toggle,
         ModelKind::Parakeet => Capture::Hold,
     }
 }
@@ -233,7 +234,8 @@ mod tests {
     /// The exact shape Granite produced on the bench clip.
     #[test]
     fn long_profile_repairs_granite_shaped_output() {
-        let granite = "it is awesome I can not wait I know I am freaking out you are a very good actor";
+        let granite =
+            "it is awesome I can not wait I know I am freaking out you are a very good actor";
         assert_eq!(
             apply_profile(Profile::Long, granite),
             "it's awesome I can't wait I know I'm freaking out you're a very good actor"
@@ -266,10 +268,7 @@ mod tests {
 
     #[test]
     fn repeated_phrases_are_all_replaced() {
-        assert_eq!(
-            restore_contractions("it is what it is"),
-            "it's what it's"
-        );
+        assert_eq!(restore_contractions("it is what it is"), "it's what it's");
     }
 
     /// Parakeet already emits contractions; running the pass on its output must
@@ -319,7 +318,10 @@ mod capture_tests {
     #[test]
     fn menu_labels_name_the_capture() {
         let label = |kind, raw| menu_label(&installed(kind, raw), default_capture(kind));
-        assert_eq!(label(ModelKind::Parakeet, "Parakeet TDT (int4)"), "Parakeet PTT");
+        assert_eq!(
+            label(ModelKind::Parakeet, "Parakeet TDT (int4)"),
+            "Parakeet PTT"
+        );
         assert_eq!(
             label(ModelKind::Nemotron, "Nemotron Speech Streaming EN (int4)"),
             "Nemotron Toggle"

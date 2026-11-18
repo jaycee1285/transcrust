@@ -1,0 +1,12 @@
+encoder checks: [Object {"cosine": Number(0.999999463558197), "max_abs": Number(0.000050984323024749756)}, Object {"cosine": Number(0.999998152256012), "max_abs": Number(0.000044673681259155273)}, Object {"cosine": Number(0.9999998807907104), "max_abs": Number(0.000035511329770088196)}, Object {"cosine": Number(1.0000005960464478), "max_abs": Number(0.00003571435809135437)}]
+EG2: 8 texts in 3.12s
+EG2: 8 texts in 1.01s
+EG2: 8 texts in 1.06s
+EG2: 8 texts in 1.44s
+EG2: 8 texts in 1.46s
+EG2: 8 texts in 1.31s
+EG2: 8 texts in 1.32s
+EG2: 8 texts in 1.26s
+EG2: 8 texts in 1.16s
+EG2: 4 texts in 0.58s
+EG2: 54/54; max delta 0.0003716518112878431

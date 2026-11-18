@@ -1,0 +1,23 @@
+{
+  "review_date": "2026-11-10",
+  "model": "fastino/GLiDE-0.4B",
+  "url": "https://huggingface.co/fastino/GLiDE-0.4B",
+  "git_revision": "6bda7ab91aeb36dcad6d27828a8871e548c7fc71",
+  "readme": "cards/GLiDE-0.4B.md",
+  "weight_payloads": [
+    {
+      "path": "model-00001-of-00001.safetensors",
+      "bytes": 789581344,
+      "sha256": "4540aa6d168fd15b06f7d6a61c34dd45523b5a0a1a72f98f1b2a81cf60774f34"
+    },
+    {
+      "path": "readout.safetensors",
+      "bytes": 522320,
+      "sha256": "0cb6da049081b05dc60dcf0c9f95dc4309c8849ab921f61f67f4658172b57f2a"
+    }
+  ],
+  "weights_downloaded": false,
+  "inference_run": false,
+  "upstream_python_executed": false,
+  "taskboard": "Queued alongside Pocket on 2026-11-10 after John confirmed private offline family use is non-commercial; no inference run"
+}

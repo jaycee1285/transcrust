@@ -1,0 +1,4 @@
+d3 correction batch 1: 7 occurrences / 2488 tokens, 35.49s
+d3 correction batch 2: 7 occurrences / 2557 tokens, 33.71s
+d3 correction batch 3: 9 occurrences / 3209 tokens, 43.17s
+d3 correction batch 4: 9 occurrences / 3297 tokens, 44.06s

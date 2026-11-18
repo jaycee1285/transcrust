@@ -18,14 +18,28 @@ editor. Enter makes a newline; Ctrl+Enter submits; Escape cancels.
 
 Linux replacement assumes the original editor regains focus when the review
 window closes and the caret is still immediately after the delivered text.
-Select backward by grapheme count, then replace. Copy is an explicit alternative.
+Select backward by grapheme count, copy the selection back and compare it with
+the saved destination text (including punctuation). If it is an exact shorter
+suffix, extend by the verified missing prefix and check again. Replace only on
+an exact match; otherwise retain the correction and offer Copy. Restore the
+corrected clipboard text after verification. Copy is an explicit alternative.
 No automatic primary-selection capture: it can contain an old selection.
 Do not claim Wayland can recover an editable text range from clipboard contents.
 
-Diff delivered → corrected text into short replacement spans. Keep/Drop each
-proposal; pure insertions, deletions, punctuation edits and long rewrites do not
-become vocabulary. Save kept `heard:` learning records in the configured Markdown file;
-reload before the next dictation. Preserve habit/task exclusions.
+Diff delivered → corrected text into complete changed spans. Show every edit,
+including insertions, deletions, punctuation and long rewrites. Review and save
+the full correction independently of glossary eligibility. Optional, unchecked
+Learn controls let the user choose/edit a phrase (up to12 words/256 characters)
+from a change. Single English function-word swaps stay sentence edits; comma
+punctuation cannot become part of comma-separated `heard:` aliases. Save only
+explicitly kept pairs in the configured Markdown file and reload next take.
+Preserve habit/task exclusions.
+
+Each new take has a stable corpus/state ID. The latest-record JSON remains the
+current UI state; per-take history and append-only correction events retain
+previous takes and every submitted revision. Corpus `corrected` is distinct
+from raw/injected and manually verified `reference`. See
+[November14 pipeline/replay report](pipeline-2026-11-14.md).
 
 ### Learning semantics — corrected by human smoke (2026-10-06)
 

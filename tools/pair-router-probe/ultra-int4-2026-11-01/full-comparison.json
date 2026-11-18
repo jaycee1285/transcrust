@@ -1,0 +1,327 @@
+{
+  "count": 32,
+  "agrees": 27,
+  "max_probability_drift": 0.4304124880230902,
+  "rows": [
+    {
+      "id": "parakeet-0",
+      "source": "parakeet",
+      "arm": "single",
+      "heard": "Gamble",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.005351024810242633
+    },
+    {
+      "id": "parakeet-1",
+      "source": "parakeet",
+      "arm": "single",
+      "heard": "gamble",
+      "fp32": "keep",
+      "q4": "keep",
+      "same": true,
+      "probability_drift": 0.007050315325151213
+    },
+    {
+      "id": "parakeet-2",
+      "source": "parakeet",
+      "arm": "single",
+      "heard": "flow",
+      "fp32": "keep",
+      "q4": "keep",
+      "same": true,
+      "probability_drift": 0.01963332416470867
+    },
+    {
+      "id": "parakeet-3",
+      "source": "parakeet",
+      "arm": "single",
+      "heard": "chili",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.00731193939033159
+    },
+    {
+      "id": "parakeet-4",
+      "source": "parakeet",
+      "arm": "single",
+      "heard": "bingo",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.15865638634369655
+    },
+    {
+      "id": "parakeet-5",
+      "source": "parakeet",
+      "arm": "single",
+      "heard": "bandit",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.21123078782743931
+    },
+    {
+      "id": "parakeet-6",
+      "source": "parakeet",
+      "arm": "single",
+      "heard": "Transcrust",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.0004596485618234558
+    },
+    {
+      "id": "parakeet-0",
+      "source": "parakeet",
+      "arm": "two",
+      "heard": "Gamble",
+      "fp32": "name",
+      "q4": "keep",
+      "same": false,
+      "probability_drift": 0.4304124880230902
+    },
+    {
+      "id": "parakeet-1",
+      "source": "parakeet",
+      "arm": "two",
+      "heard": "gamble",
+      "fp32": "name",
+      "q4": "keep",
+      "same": false,
+      "probability_drift": 0.3137488735362626
+    },
+    {
+      "id": "parakeet-2",
+      "source": "parakeet",
+      "arm": "two",
+      "heard": "flow",
+      "fp32": "keep",
+      "q4": "keep",
+      "same": true,
+      "probability_drift": 0.007801168419606874
+    },
+    {
+      "id": "parakeet-3",
+      "source": "parakeet",
+      "arm": "two",
+      "heard": "chili",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.006533124785137567
+    },
+    {
+      "id": "parakeet-4",
+      "source": "parakeet",
+      "arm": "two",
+      "heard": "bingo",
+      "fp32": "name",
+      "q4": "keep",
+      "same": false,
+      "probability_drift": 0.1163274433860203
+    },
+    {
+      "id": "parakeet-5",
+      "source": "parakeet",
+      "arm": "two",
+      "heard": "bandit",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.10949647479909275
+    },
+    {
+      "id": "parakeet-6",
+      "source": "parakeet",
+      "arm": "two",
+      "heard": "Transcrust",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.0026678953074805722
+    },
+    {
+      "id": "phonon-0",
+      "source": "phonon",
+      "arm": "single",
+      "heard": "Gamble",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.005351024810242633
+    },
+    {
+      "id": "phonon-1",
+      "source": "phonon",
+      "arm": "single",
+      "heard": "gamble",
+      "fp32": "keep",
+      "q4": "keep",
+      "same": true,
+      "probability_drift": 0.007050315325151213
+    },
+    {
+      "id": "phonon-2",
+      "source": "phonon",
+      "arm": "single",
+      "heard": "flow",
+      "fp32": "keep",
+      "q4": "keep",
+      "same": true,
+      "probability_drift": 0.12329387845230338
+    },
+    {
+      "id": "phonon-3",
+      "source": "phonon",
+      "arm": "single",
+      "heard": "flow",
+      "fp32": "keep",
+      "q4": "keep",
+      "same": true,
+      "probability_drift": 0.01963332416470867
+    },
+    {
+      "id": "phonon-4",
+      "source": "phonon",
+      "arm": "single",
+      "heard": "bandit",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.12662368348429842
+    },
+    {
+      "id": "phonon-5",
+      "source": "phonon",
+      "arm": "single",
+      "heard": "chili",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.00731193939033159
+    },
+    {
+      "id": "phonon-6",
+      "source": "phonon",
+      "arm": "single",
+      "heard": "bingo",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.15865638634369655
+    },
+    {
+      "id": "phonon-7",
+      "source": "phonon",
+      "arm": "single",
+      "heard": "bandit",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.21123078782743931
+    },
+    {
+      "id": "phonon-8",
+      "source": "phonon",
+      "arm": "single",
+      "heard": "Transcrust",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.0004596485618234558
+    },
+    {
+      "id": "phonon-0",
+      "source": "phonon",
+      "arm": "two",
+      "heard": "Gamble",
+      "fp32": "name",
+      "q4": "keep",
+      "same": false,
+      "probability_drift": 0.4304124880230902
+    },
+    {
+      "id": "phonon-1",
+      "source": "phonon",
+      "arm": "two",
+      "heard": "gamble",
+      "fp32": "name",
+      "q4": "keep",
+      "same": false,
+      "probability_drift": 0.3137488735362626
+    },
+    {
+      "id": "phonon-2",
+      "source": "phonon",
+      "arm": "two",
+      "heard": "flow",
+      "fp32": "keep",
+      "q4": "keep",
+      "same": true,
+      "probability_drift": 0.10445113401191591
+    },
+    {
+      "id": "phonon-3",
+      "source": "phonon",
+      "arm": "two",
+      "heard": "flow",
+      "fp32": "keep",
+      "q4": "keep",
+      "same": true,
+      "probability_drift": 0.00534548327952622
+    },
+    {
+      "id": "phonon-4",
+      "source": "phonon",
+      "arm": "two",
+      "heard": "bandit",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.11414609201358439
+    },
+    {
+      "id": "phonon-5",
+      "source": "phonon",
+      "arm": "two",
+      "heard": "chili",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.005332409805478271
+    },
+    {
+      "id": "phonon-6",
+      "source": "phonon",
+      "arm": "two",
+      "heard": "bingo",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.10809227853003206
+    },
+    {
+      "id": "phonon-7",
+      "source": "phonon",
+      "arm": "two",
+      "heard": "bandit",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.10949647479909275
+    },
+    {
+      "id": "phonon-8",
+      "source": "phonon",
+      "arm": "two",
+      "heard": "Transcrust",
+      "fp32": "name",
+      "q4": "name",
+      "same": true,
+      "probability_drift": 0.0026678953074805722
+    }
+  ]
+}

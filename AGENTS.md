@@ -5,36 +5,68 @@ machine, no network. Written by John (content strategist, not a career
 engineer); assume the architecture notes are load-bearing and the constraints
 are deliberate.
 
+**Read [Models.md](Models.md) before handling models.** It is the canonical
+inventory of model sources, installed identities, revisions, local paths,
+experiment status and upstream update watches. Add new model references there
+before downloading weights. Refresh the GLiDE and Laya watch entries during
+model reviews and the session's model sweep.
+
 ## Read in this order
 
 | | |
 |---|---|
 | `traverse/runtime-stack.md` | how the thing is built and why. The authority on architecture. |
 | `TASKBOARD.md` | what to do next, in order, with kill criteria |
+| `Models.md` | every known Hugging Face model reference, lineage, status, storage and update watchlist |
 | `Dragon-Mechanisms.md` | the research north star — what pre-neural dictation solved and which of it is still load-bearing |
 | `Parakeet-v3.md` | why the default engine is the right one for on-device control. Reference doc, not a task list. |
 | `murmure-reference.md` | notes from an AGPL reference app that was read and removed — calibrated constants, and the licence caveat before copying any of it |
 | `design-dictation-as-control.md` | the unbuilt half: dictation as a command channel |
 | `design-long-form-routes.md` | the four long-form dictation routes, their acceptance gates, and the fuzzel picker |
 
-## State reconciled 2026-10-28
+## State reconciled 2026-11-11
 
-Three engine families: **Parakeet TDT** (default, int4; Ultra supported),
-**Granite Speech 5 470m TurboCTC** (int8), and **Nemotron Speech Streaming EN**
+**2026-11-03 crate extraction:** root package is still the CLI (existing launch
+commands preserved). Shared Rust source is now in `crates/core/src/` (including
+direct Parakeet/Nemotron, resampler and correction/glossary) and
+`crates/decision/src/` (UltraBERT/D1). `crates/ffi` has the C ownership boundary;
+Android JNI and Apple target builds remain pending. Do not recreate deleted
+`src/ultra.rs`, `src/d1.rs`, etc. Native Rust Phonon 2.5 was implemented and
+compared with C. Desktop evaluation is retired; retain the crate/evidence for
+Android/Apple work. Pocket and GLiDE are queued dictionary-decision trials.
+New Nemotron packing still needs the checkpoint link. `Models.md` records
+model identities; `TASKBOARD.md` owns the current work order.
+
+The installed default **Parakeet TDT** is our local **moondream/parakeet-ultra
+INT4 export**, housed in the legacy `parakeet-tdt-0.6b-v3-int4` directory.
+November 11 ONNX stack-trace inspection confirms the local Ultra exporter and
+Kestrel implementation. The downloader still points at community v3 weights.
+Keep those identities separate. See `Models.md` for hashes and evidence.
+
+Other retained desktop engines are **Granite Speech 5 470m TurboCTC** (int8)
+and **Nemotron Speech Streaming EN**
 (int4, toggle capture). Modes carry model, profile and capture policy.
 `Granite — Long` uses the same directory with a repair profile.
 
-VibeVoice was evaluated and removed the same night. Postmortem, with weights
-inventory and timing tables, at **`~/syncthing/vibevoice-asr-15/`** — outside
-the repo, so it will not be found by grep.
+VibeVoice was evaluated and removed. Export research remains under
+`tools/vibevoice-export/`. The previously recorded external postmortem path
+`~/syncthing/vibevoice-asr-15/` was absent at the November 11 inventory. Its
+location needs recovery if that evidence is required.
 
 Recently built and worth knowing about:
+
+- November14 family pipeline: complete change review, separate explicit Learn
+  controls, stable take IDs and retained correction history, capture-time
+  Nemotron dispatch, and `--wav --dec --paced --output-dir` replay. Read
+  [pipeline-2026-11-14.md](pipeline-2026-11-14.md) for measured results and pending
+  human acceptance. Legacy ordinary-word rules are excluded from name decisions;
+  model weights and the shared glossary file were not replaced.
 
 - `--bench <WAV...>` — times every mode over the same clips, through the live
   path. Fixtures in `tools/bench-clips/`.
 - `observe.corpus = true` — banks every dictation as WAV + JSON under
   `~/.local/share/transcrust/corpus/`. That directory has its own README.
-- `src/parakeet_ort.rs` — Parakeet driven directly through `ort`, recovering the
+- `crates/core/src/parakeet_ort.rs` — Parakeet driven directly through `ort`, recovering the
   per-token confidence `parakeet-rs` discards. **Wired into the live path**,
   with a crate fallback if the direct graph set is absent or broken.
 - `--pick` opens fuzzel on a running daemon; startup does not open the picker.
@@ -43,14 +75,21 @@ Recently built and worth knowing about:
   are wired; **the GUI and GTK palette passed John's 2026-10-06 smoke**.
   Learned vocabulary accuracy is a separate, still-open gate. See `design-correct-last.md` and
   `Smoke-Human-transcrust.md`. Apple's review-before-paste contract remains in
-  `~/repos/swiftype/PRD.md`; the crate split and parity gates are still pending.
-- `--dec` is implemented in native Rust (`src/decision.rs`, `src/d1.rs`), using
-  resident D1 Q8 and one padded batch for all candidate occurrences. No runtime
-  Python. John accepted desktop native Q8 as-is for now on 2026-10-29;
-  mobile latency/RAM remain separate gates. Both descriptions and learned aliases
+  `~/repos/swiftype/PRD.md`; Linux crate extraction is built, native mobile/Apple
+  linkage and parity gates remain pending.
+- `--dec` is implemented in native Rust. **UltraBERT INT4 is primary as of
+  2026-11-01 at John's request**, with marked sentence context and candidate
+  descriptions, no global glossary table. `crates/decision/src/ultra.rs` / `decision_tensor.rs`
+  share the tested packed inference with the research harness. D1 Q8 remains
+  selectable via `--dec-backend d1`, retaining its full-glossary padded ORT batch.
+  Run optimized: `nix develop -c cargo run --release -- --dec --smoke`.
+  No runtime Python. John accepted desktop D1 Q8 as-is on 2026-10-29; UltraBERT's
+  new live human smoke is pending. Mobile latency/RAM remain separate gates.
+  Both descriptions and learned aliases
   belong in `~/syncthing/john-vocab.md` (or `[vocabulary].path`).
-- Phonon is a **mopvox Android trial**, not a transcrust engine. Phone findings
-  and remaining correction/Apple work are summarized at the top of `TASKBOARD.md`.
+- Phonon 2.5 is live in mopvox's Android IME. Its native Rust crate and desktop
+  adapter remain present after the decision to retire desktop evaluation.
+  Phone findings and remaining correction/Apple work are at the top of `TASKBOARD.md`.
   Its current-state table and ordered next steps outrank historical phase prose.
 
 ## Three facts that are easy to get wrong
@@ -73,3 +112,17 @@ FOSS, minimal abstraction, local files plus Syncthing, no SQLite unless asked.
 Touch only what the seam requires. Do not pin the app to a reference's
 dependencies just because the reference used them. Hand work back as one
 copy-pasteable `nix develop -c ...` command and wait for the human.
+
+## Sweep up after a model trial
+
+Give each download a home before fetching it. Use the model directory the app
+already discovers for installed weights, and a named temporary or cache
+directory for trial weights. Keep model payloads out of Cargo's build tree.
+
+At the end of a trial, check which paths the app and rerun commands still use.
+Keep the revision, checksums, license, rerun command, fixtures, and result in
+the repo. Record the exact paths and sizes of leftover weights and build
+outputs in `decision-model-cleanup.md`, with what each removal would cost to
+recreate. Decide with John what to keep, relocate, or delete while the paths
+and results are still known. Verify any relocated live bundle through the
+normal loader before clearing its old location, then hand back the live smoke.

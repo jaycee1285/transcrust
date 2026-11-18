@@ -1,0 +1,5 @@
+52ce834b2a4d265fbc351338655977023ddb61b0363f5f6a4fd096e6c70154b0  /tmp/transcrust-thx-model/model.safetensors
+609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f  /tmp/transcrust-thx-model/tokenizer/tokenizer.json
+6c6b2d8e3c84ce0e671c129cd6b374b235d6f9863042a5836358d00a89bbb5a1  /tmp/transcrust-thx-model/tokenizer/tokenizer_config.json
+83f6916d13ef0f556ac461f28308dc2bffa7ebeadee8ec9e2db5812020ea5bb4  /tmp/transcrust-thx-model/encoder-config.json
+1bb5c62b14c0029fea4891fd6f82ae882f81dae2ba5786a813a8d8de2c02f930  /tmp/transcrust-thx-model/rl_agent_config.json

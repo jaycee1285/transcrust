@@ -1,0 +1,16 @@
+[
+  {
+    "id": "published-billing-example",
+    "state": "{\"ticket\":\"My card was charged twice for the same coffee this morning.\",\"customer_tier\":\"gold\"}",
+    "instructions": "Which team should handle this support ticket?",
+    "options": [["billing", "Payments, refunds, double charges and invoices"], ["tech", "Bugs, login problems and app crashes"], ["sales", "New purchases, pricing questions and upgrades"]],
+    "expected": [0.996, 0.001, 0.004]
+  },
+  {
+    "id": "published-urgent-example",
+    "state": "{\"ticket\":\"My card was charged twice for the same coffee this morning.\",\"customer_tier\":\"gold\"}",
+    "instructions": "Does the customer report being charged incorrectly or ask for money back?",
+    "options": [["no", ""], ["yes", ""]],
+    "expected": [0.157, 0.843]
+  }
+]
