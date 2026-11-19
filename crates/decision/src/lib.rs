@@ -1,5 +1,6 @@
 //! Opt-in local vocabulary adjudication. Candidate offsets belong to the original
 //! cleaned transcript; the resident native model returns bounded choices in one batch.
+pub mod chain;
 pub mod d1;
 #[allow(dead_code)]
 pub mod decision_tensor;

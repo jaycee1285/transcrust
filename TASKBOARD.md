@@ -55,8 +55,19 @@ to the rules; the model judges grammar only.
       gamble/flow/matter at 0.99–1.00, including "Gamble" meaning Gambol, so an uncertainty
       trigger misses them. No tiers at runtime; the scorer becomes an authoring-time check, and
       confidence is a logged reason only. [design-vocab-gate.md §4](design-vocab-gate.md).
-- [ ] **No context, no model:** when the sentence holds nothing but the span ("Bingo!"), skip the
-      model and let the per-speaker prior (chain step 6) decide, with a logged reason.
+- [x] **Rules ported to Rust (2026-11-18):** `crates/decision/src/chain.rs`, matching Python v3
+      on 150/150 cases (`tools/rules-probe/chain-v3-golden.json`; rerun
+      `export_chain_golden.py` whenever the Python rules change). Not wired into the app yet.
+- [x] **No context, no model (in `chain::decide`):** a span that is the whole sentence
+      ("Bingo!") goes to the prior before the rules; one context word goes to the prior after
+      them. **Until a per-speaker prior exists, leave a Prior span as heard** (John,
+      2026-11-18: a miss is acceptable, a wrong name isn't).
+- [ ] **Next slice: wire the chain in front of the model** in `candidates_for`. Build the
+      «»-marked current sentence, pass the glossary description directly, send only `Pass`
+      to the model, and leave `Prior` as heard. Then remove `dictionary.rs` and the global boost
+      and run the murmure-retirement acceptance below.
+- [ ] **Showing the reason (UI open):** every decision logs a reason; how the correct-last
+      surface shows it to him is undesigned. John: "no idea how we'd write the UI for it."
 - [x] **Rule 3 stays** for gamble/bandit (John, 2026-11-18). Its only failure found was an
       invented phrase ("bandit gang").
 - **Not yet: a confidence floor.** John, 2026-11-18: one exception (Lightning at 0.97) already
