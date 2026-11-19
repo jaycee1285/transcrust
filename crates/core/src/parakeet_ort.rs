@@ -239,18 +239,9 @@ impl LoadedParakeet {
 
     /// `audio` must already be 16 kHz mono.
     pub fn transcribe(&mut self, audio: &[f32]) -> Result<Decoded, String> {
-        self.transcribe_inner(audio, true)
-    }
-
-    /// Mobile/review decision paths must not pre-bias the vocabulary.
-    pub fn transcribe_unweighted(&mut self, audio: &[f32]) -> Result<Decoded, String> {
-        self.transcribe_inner(audio, false)
-    }
-
-    fn transcribe_inner(&mut self, audio: &[f32], weighted: bool) -> Result<Decoded, String> {
         let features = self.preprocess(audio)?;
         let (encodings, frames) = self.encode(&features)?;
-        let tokens = self.decode_greedy(&encodings, frames, weighted)?;
+        let tokens = self.decode_greedy(&encodings, frames)?;
         Ok(Decoded {
             text: self.vocab.decode(&tokens),
             tokens,
@@ -380,7 +371,6 @@ impl LoadedParakeet {
         &mut self,
         encodings: &Array2<f32>,
         frames: usize,
-        weighted: bool,
     ) -> Result<Vec<TimedToken>, String> {
         let blank = self.vocab.blank_id();
         let mut state = self.zero_state();
@@ -388,11 +378,6 @@ impl LoadedParakeet {
         let mut previous: Option<u32> = None;
         let mut step = 0usize;
         let mut emitted_here = 0usize;
-        let mut boost = if weighted {
-            crate::boost::Boost::vocabulary(&self.vocab.pieces, blank)
-        } else {
-            crate::boost::Boost::disabled()
-        };
 
         while step < frames {
             // The joint wants [1, 1024, 1]: one batch, 1024 channels, one frame.
@@ -407,7 +392,7 @@ impl LoadedParakeet {
                 .ok_or_else(|| "Parakeet joint logits were not contiguous".to_string())?;
             let (vocab_logits, duration_logits) = slice.split_at(self.vocab_width);
 
-            let token = boost.select(vocab_logits, blank);
+            let token = argmax(vocab_logits) as u32;
             if token != blank {
                 tokens.push(TimedToken {
                     id: token,
@@ -432,10 +417,6 @@ impl LoadedParakeet {
                 emitted_here = 0;
             }
         }
-        eprintln!(
-            "vocabulary: Parakeet weighted {} token paths; changed {} near-miss tokens",
-            boost.phrases, boost.changes
-        );
         Ok(tokens)
     }
 }

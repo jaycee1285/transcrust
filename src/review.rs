@@ -145,7 +145,7 @@ impl Editor {
             .filter(|(_, _, keep)| *keep)
             .map(|(_, p, _)| p.clone())
             .collect();
-        match crate::dictionary::save_pairs(&self.request.vocabulary_path, &kept) {
+        match transcrust_core::vocabulary::save_pairs(&self.request.vocabulary_path, &kept) {
             Ok(()) => {
                 *self.result.lock().unwrap() = Some(Response {
                     text: self.text.clone(),
@@ -422,7 +422,7 @@ pub async fn correct_last(
         state.transition(crate::state::AppState::Reviewing);
         let request = Request {
             dictation: dictation.clone(),
-            vocabulary_path: crate::dictionary::dictionary_path(),
+            vocabulary_path: transcrust_core::vocabulary::path(),
             notice: notice.take(),
         };
         match open(request).await {

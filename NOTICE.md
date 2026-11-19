@@ -5,30 +5,19 @@
 
 ## Why AGPL
 
-Two parts of transcrust follow **murmure** (© Kieirra and contributors, AGPL-3.0-or-later,
-https://github.com/Kieirra/murmure, read at `8c7a07c`; notes in `murmure-reference.md`):
-- `crates/core/src/dictionary.rs`: the Beider-Morse phonetic vocabulary correction (murmure's
-  "leg 3"), ported with documented differences;
-- `crates/core/src/boost.rs`: near-miss gates and alpha calibration, documented against murmure.
+Earlier transcrust revisions carried two parts derived from **murmure**
+(© Kieirra and contributors, AGPL-3.0-or-later,
+https://github.com/Kieirra/murmure, read at `8c7a07c`).
+The old `crates/core/src/dictionary.rs` used Beider-Morse phonetic vocabulary
+correction. The old `crates/core/src/boost.rs` used near-miss gates and alpha
+calibration documented against murmure.
 
-transcrust is public and contains that derived code, so it is AGPL for fairness to murmure's
-authors.
-
-## Planned replacement
-
-Both legs are scheduled to be replaced by John's own design, `design-vocab-gate.md`:
-- the command gate;
-- vocabulary applied only in open slots;
-- tiered entries;
-- an uncertainty trigger;
-- an explainable homophone chain.
-
-See the TASKBOARD item "Retire the murmure-derived legs". The licence stays AGPL afterwards,
-because earlier history contains the derived code.
+The contextual implementation in [design-vocab-gate.md](design-vocab-gate.md)
+replaced those two runtime mechanisms in November 2026. The project remains
+AGPL and the earlier implementation remains in its history.
 
 ## Libraries
 
-- `rphonetic` (Beider-Morse rules, Apache-2.0).
 - `parakeet-rs`.
 - ONNX Runtime via `ort`.
 

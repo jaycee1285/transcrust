@@ -37,7 +37,6 @@ realfft = "3"
 tokenizers = { version = "0.22", default-features = false, features = ["onig"] }
 regex = "1"
 fancy-regex = "0.14"
-rphonetic = { version = "3.0.6", default-features = false, features = ["embedded_bm"] }
 # Only for the offline paths (`--bench`, `--parakeet-direct <DIR> <WAV>`):
 # through the engine off the hotkey. Already in the tree as a transitive dep.
 hound = "3"

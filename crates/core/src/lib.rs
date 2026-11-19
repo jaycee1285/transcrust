@@ -1,14 +1,13 @@
 //! Shared dictation mechanics. No capture device, UI, tray, paste or downloads.
 pub mod audio;
-pub mod boost;
 pub mod correction;
-pub mod dictionary;
 pub mod model;
 #[cfg(feature = "asr")]
 pub mod nemotron;
 #[cfg(feature = "asr")]
 pub mod parakeet_ort;
 pub mod postprocess;
+pub mod vocabulary;
 
 /// The embedding application owns logging and any platform notifications.
 pub trait Events: Send + Sync {

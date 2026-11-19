@@ -21,8 +21,8 @@ failure separate from migration parity. [Report and commands](migration-2026-11-
 | Surface | Built / tested | Remaining acceptance |
 |---|---|---|
 | Linux correct-last GUI | egui editor, tray/chord/`--correct`, Replace/Copy, Keep/Drop, GTK palette; John accepted the UI on 2026-10-06; shared core extracted on Linux | Preserve behavior through mobile adapters; target acceptance remains separate |
-| Learned vocabulary | shared `~/syncthing/john-vocab.md`, configurable path, reload; bounded Parakeet/Nemotron boosting implemented | Boosting failed the mixed Gambol/gamble quality gate; it is not an accepted accuracy improvement |
-| Local decisions | opt-in `--dec`, native UltraBERT INT4 primary at John's request (2026-11-01), one packed batch; `--dec-backend d1` retains the accepted D1 baseline | New UltraBERT live smoke pending; mobile latency/RAM still require device measurement |
+| Learned vocabulary | shared `~/syncthing/john-vocab.md` reloads per take. `--dec` uses canonical spellings, heard aliases and declared homophones. Reviewed distinct aliases have a direct rule | New aliases still need contextual or distinct-spelling review |
+| Local decisions | opt-in `--dec`, rules first and a native UltraBERT INT4 batch for unresolved candidates. `--dec-backend d1` retains the D1 backend | Retirement build passed live smoke November 19. Mobile latency/RAM remain open |
 | Live decision evidence | John's 2026-10-10 Parakeet/Nemotron session reached injection, applied dog-name repairs and preserved a zero-candidate take | That session used the earlier serial adapter; do not call it native-batch acceptance |
 | Mobile ASR | Mopvox live IME Phonon 2.5 replaces Whistle; John reports it works and is remarkably fast; comparison screen retained | Shared decision/review integration and combined device RAM/timing remain open |
 | Native Phonon desktop | Actual 2.5 packed weights, Rust frontend/encoder/TDT; saved Nov 6 take matches C on all seven windows. Capture dispatch fixed; paced replay retains exact text/audio and reduces ASR tail 9.52→1.49s | Human quality smoke failed; errors also occur in C. Larger windows did not improve names. Live acceptance of latency fix and phone/x86 quality comparison remain open. Standalone peak ~274 MiB |
@@ -34,7 +34,7 @@ smoke: [Smoke-Human-transcrust.md](Smoke-Human-transcrust.md).
 
 ## Next, in order
 
-### Decision model sees one sentence, no glossary (decided 2026-11-18, not built)
+### Rules-first contextual decisions (decided 2026-11-18)
 John's call, after the real-audio rules-then-model run
 ([results](decision-model-results.md#rules-first-on-real-audio-2026-11-18)). The glossary belongs
 to the rules; the model judges grammar only.
@@ -65,8 +65,8 @@ to the rules; the model judges grammar only.
 - [x] **Rules run before the model.** The chain gets the «»-marked current sentence and
       the glossary description. Only `Pass` reaches the model, and `Prior` stays as heard.
       John's [November 19 live smoke](Smoke-Human-transcrust.md) passed the Gambol/gamble pair.
-- [ ] **Complete candidate coverage and model fallback.** Check canonical spellings and
-      ordinary homophones, and keep rule edits if the model fails or is cancelled.
+- [x] **Canonical spellings, homophones and model fallback.** Check known ordinary spellings
+      alongside canonical hits. Rule edits survive model failure or cancellation.
 - [ ] **Showing the reason (UI open):** every decision logs a reason; how the correct-last
       surface shows it to him is undesigned. John: "no idea how we'd write the UI for it."
 - [x] **Rule 3 stays** for gamble/bandit (John, 2026-11-18). Its only failure found was an
@@ -74,21 +74,20 @@ to the rules; the model judges grammar only.
 - **Not yet: a confidence floor.** John, 2026-11-18: one exception (Lightning at 0.97) already
   beats it.
 
-### Retire the murmure-derived legs (decided 2026-11-18, not started)
-John's call: take murmure out and use our own design. It's better, and transcrust is now AGPL
-(`LICENSE`, `NOTICE.md`) because it carries murmure-derived code.
-- **Remove:**
-  - `crates/core/src/dictionary.rs` (the Beider-Morse whole-token swap);
-  - global boosting in `boost.rs` (the presence-triggered boost that failed the Gambol gate).
-- **Replace with:** the presence trigger and homophone chain (scorer at authoring time) in
-  [design-vocab-gate.md](design-vocab-gate.md).
-- **Acceptance, in this order:**
-  1. **Parity on the distinct-word cases the old leg fixed** (tier 2: "tori → Tauri", "kubernetis →
-     Kubernetes", "weyland → Wayland", "svelt → Svelte"), with "Atari" still left alone.
-  2. **The Gambol/gamble probe from the 2026-11-13 migration report passes** (it currently fails).
-  3. **Every change logs its reason.**
+### Murmure-derived vocabulary mechanisms retired (2026-11-19)
 
-  Only then delete the old code.
+The Beider-Morse swap and global decoder boost were removed after checking the
+[contextual replacement](design-vocab-gate.md) with the installed UltraBERT
+model. Text probes repaired `tori → Tauri`, `kubernetis → Kubernetes`,
+`weyland → Wayland` and `svelt → Svelte`. Atari and a person named Tori stayed
+as heard. The November 13 Gambol/gamble probe passed and each edit logged a
+reason. `crates/core/src/vocabulary.rs` handles the shared glossary path and
+persists kept proposals. Vocabulary correction now runs under `--dec`.
+
+- [x] Replay the November 19 microphone take through the retirement build. Raw
+      and delivered text matched the live run, with only the dog's name edited.
+- [x] John passed the live Gambol/gamble smoke on the retirement build.
+      [Human smoke record](Smoke-Human-transcrust.md).
 
 ### Design: vocabulary gate and homophone chain (2026-11-17, not built)
 [design-vocab-gate.md](design-vocab-gate.md) covers:

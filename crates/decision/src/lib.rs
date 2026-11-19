@@ -18,7 +18,7 @@ use std::{
     },
     time::{Duration, Instant},
 };
-use transcrust_core::{dictionary, Events};
+use transcrust_core::{vocabulary, Events};
 
 #[derive(Clone, Copy, Debug, Default, PartialEq)]
 pub enum Backend {
@@ -132,6 +132,8 @@ struct Term {
     description: String,
     ordinary: String,
     heard: Vec<String>,
+    homophones: Vec<String>,
+    distinct: Vec<String>,
     kind: String,
 }
 
@@ -157,8 +159,19 @@ fn parse(text: &str) -> Vec<Term> {
                 term.description = value.trim().into();
             } else if let Some(value) = line.strip_prefix("ordinary:") {
                 term.ordinary = value.trim().into();
-            } else if let Some(value) = line.strip_prefix("heard:") {
-                term.heard.extend(
+            } else if let Some((value, spellings)) = line
+                .strip_prefix("heard:")
+                .map(|value| (value, &mut term.heard))
+                .or_else(|| {
+                    line.strip_prefix("homophones:")
+                        .map(|value| (value, &mut term.homophones))
+                })
+                .or_else(|| {
+                    line.strip_prefix("distinct:")
+                        .map(|value| (value, &mut term.distinct))
+                })
+            {
+                spellings.extend(
                     value
                         .split(',')
                         .map(str::trim)
@@ -174,7 +187,7 @@ fn parse(text: &str) -> Vec<Term> {
 }
 
 pub fn vocab_path() -> PathBuf {
-    dictionary::dictionary_path()
+    vocabulary::path()
 }
 
 fn vocabulary_at(path: &std::path::Path) -> Result<Vec<Term>, String> {
@@ -187,8 +200,9 @@ fn vocabulary_at(path: &std::path::Path) -> Result<Vec<Term>, String> {
         if term.ordinary.is_empty() {
             term.ordinary = "ordinary English or a different referent, rather than the supplied vocabulary name".into();
         }
-        term.heard
-            .retain(|s| s.chars().filter(|c| c.is_alphanumeric()).count() >= 2);
+        for spellings in [&mut term.heard, &mut term.homophones, &mut term.distinct] {
+            spellings.retain(|s| s.chars().filter(|c| c.is_alphanumeric()).count() >= 2);
+        }
     }
     Ok(terms)
 }
@@ -206,6 +220,10 @@ struct Candidate {
     marked: String,
     #[serde(skip)]
     description: String,
+    #[serde(skip)]
+    ordinary_spelling: Option<String>,
+    #[serde(skip)]
+    distinct: bool,
 }
 
 // The current sentence only (John, 2026-11-18). A neighbouring sentence made every
@@ -270,8 +288,13 @@ fn candidates_for(text: &str, terms: &[Term], backend: Backend) -> Result<Vec<Ca
     }
     let mut found = Vec::new();
     for term in terms {
-        let mut spellings = term.heard.clone();
-        spellings.push(term.canonical.clone());
+        let mut spellings: Vec<_> = term
+            .heard
+            .iter()
+            .chain(&term.homophones)
+            .chain(&term.distinct)
+            .collect();
+        spellings.push(&term.canonical);
         spellings.sort_by_key(|s| std::cmp::Reverse(s.len()));
         spellings.dedup();
         let pattern = spellings
@@ -289,9 +312,6 @@ fn candidates_for(text: &str, terms: &[Term], backend: Backend) -> Result<Vec<Ca
             .build()
             .map_err(|e| e.to_string())?;
         for hit in matcher.find_iter(text) {
-            if hit.as_str() == term.canonical {
-                continue;
-            }
             // Preserve ordinary sentence capitalization, and reject legacy
             // grammar aliases such as and→in without mutating the glossary.
             if (term
@@ -320,14 +340,68 @@ fn candidates_for(text: &str, terms: &[Term], backend: Backend) -> Result<Vec<Ca
                 Backend::Ultra => marked.trim().to_string(),
                 Backend::D1 => format!("{glossary}\nDictation:\n{}", marked.trim()),
             };
-            found.push(Candidate { start: hit.start(), end: hit.end(), heard: hit.as_str().into(), canonical: term.canonical.clone(), state,
-                marked: marked.trim().to_string(), description: term.description.clone(),
-                question: json!({"type":"choice", "instructions":"What does the marked span refer to in this spoken sentence?",
-                    "criteria":{"keep":format!("It is {}", term.ordinary), "name":format!("It is {}, {}",term.canonical,term.description), "abstain":"insufficient evidence"}}) });
+            // Only restore a declared ordinary spelling for a single canonical word.
+            // Preserve sentence-initial capitalization when the name appeared there.
+            let ordinary_spelling = match term.homophones.as_slice() {
+                [word]
+                    if hit.as_str() == term.canonical
+                        && !term.canonical.contains(char::is_whitespace)
+                        && !word.contains(char::is_whitespace) =>
+                {
+                    Some(
+                        if !text[a..hit.start()].chars().any(char::is_alphanumeric) {
+                            let mut chars = word.chars();
+                            chars.next().unwrap().to_uppercase().chain(chars).collect()
+                        } else {
+                            word.clone()
+                        },
+                    )
+                }
+                _ => None,
+            };
+            let distinct = term.distinct.iter().any(|spelling| {
+                spelling
+                    .split_whitespace()
+                    .map(str::to_lowercase)
+                    .eq(hit.as_str().split_whitespace().map(str::to_lowercase))
+            });
+            found.push(Candidate {
+                start: hit.start(),
+                end: hit.end(),
+                heard: hit.as_str().into(),
+                canonical: term.canonical.clone(),
+                state,
+                ordinary_spelling,
+                distinct,
+                marked: marked.trim().to_string(),
+                description: term.description.clone(),
+                question: json!({
+                    "type": "choice",
+                    "instructions": "What does the marked span refer to in this spoken sentence?",
+                    "criteria": {
+                        "keep": format!("It is {}", term.ordinary),
+                        "name": format!("It is {}, {}", term.canonical, term.description),
+                        "abstain": "insufficient evidence"
+                    }
+                }),
+            });
         }
     }
-    // Overlapping alternatives are ambiguous candidate generation, not a model decision.
-    let mut unique: Vec<_> = found
+    // A spelled-out canonical phrase takes precedence over a word inside it,
+    // such as "McQueen" inside "Lightning McQueen".
+    let found: Vec<_> = found
+        .iter()
+        .filter(|shorter| {
+            !found.iter().any(|phrase| {
+                phrase.start <= shorter.start
+                    && phrase.end >= shorter.end
+                    && (phrase.start != shorter.start || phrase.end != shorter.end)
+                    && phrase.heard.eq_ignore_ascii_case(&phrase.canonical)
+            })
+        })
+        .collect();
+    // Other overlapping alternatives are ambiguous.
+    let mut unique: Vec<Candidate> = found
         .iter()
         .enumerate()
         .filter(|(i, a)| {
@@ -336,7 +410,7 @@ fn candidates_for(text: &str, terms: &[Term], backend: Backend) -> Result<Vec<Ca
                 .enumerate()
                 .any(|(j, b)| i != &j && a.start < b.end && b.start < a.end)
         })
-        .map(|(_, c)| c.clone())
+        .map(|(_, c)| (*c).clone())
         .collect();
     unique.sort_by_key(|c| c.start);
     Ok(unique)
@@ -379,6 +453,16 @@ fn route(candidates: &[Candidate]) -> Vec<Routed> {
     candidates
         .iter()
         .map(|c| {
+            if c.distinct {
+                return Routed {
+                    choice: Some(Choice::Name),
+                    source: "distinct alias".into(),
+                    reason: format!(
+                        "the glossary lists {:?} as a distinct spelling of {:?}",
+                        c.heard, c.canonical
+                    ),
+                };
+            }
             let d = chain::decide(&c.marked, &c.canonical, &c.description);
             let (choice, source) = match d.label {
                 chain::Label::Name => (Some(Choice::Name), d.rule.unwrap_or("rule").to_string()),
@@ -386,13 +470,22 @@ fn route(candidates: &[Candidate]) -> Vec<Routed> {
                 chain::Label::Prior => (Some(Choice::Keep), "prior".to_string()),
                 chain::Label::Pass => (None, "model".to_string()),
             };
-            Routed { choice, source, reason: d.reason }
+            Routed {
+                choice,
+                source,
+                reason: d.reason,
+            }
         })
         .collect()
 }
 /// Indices of the occurrences the model must see.
 fn model_bound(routes: &[Routed]) -> Vec<usize> {
-    routes.iter().enumerate().filter(|(_, r)| r.choice.is_none()).map(|(i, _)| i).collect()
+    routes
+        .iter()
+        .enumerate()
+        .filter(|(_, r)| r.choice.is_none())
+        .map(|(i, _)| i)
+        .collect()
 }
 /// Fold the model's answers (one per model-bound occurrence, in order) into the routes.
 fn merge(routes: &mut [Routed], answers: &[Verdict]) -> Result<(), String> {
@@ -400,35 +493,7 @@ fn merge(routes: &mut [Routed], answers: &[Verdict]) -> Result<(), String> {
     if bound.len() != answers.len() {
         return Err("decision count mismatch".into());
     }
-    for (i, v) in bound.into_iter().zip(answers) {
-        routes[i].choice = Some(match v.choice {
-            Choice::Keep => Choice::Keep,
-            Choice::Name => Choice::Name,
-            Choice::Abstain => Choice::Abstain,
-        });
-        routes[i].reason = format!(
-            "model: {:?}, P(name)={:.3}",
-            v.choice.label(),
-            v.probabilities[1]
-        );
-    }
-    Ok(())
-}
-fn apply_routes(text: &str, candidates: &[Candidate], routes: &[Routed]) -> String {
-    let mut out = text.to_string();
-    for (c, r) in candidates.iter().zip(routes).rev() {
-        if r.choice == Some(Choice::Name) {
-            out.replace_range(c.start..c.end, &c.canonical);
-        }
-    }
-    out
-}
-
-fn apply(text: &str, candidates: &[Candidate], results: &[Verdict]) -> Result<String, String> {
-    if candidates.len() != results.len() {
-        return Err("decision count mismatch".into());
-    }
-    for result in results {
+    for result in answers {
         if result
             .probabilities
             .iter()
@@ -438,13 +503,34 @@ fn apply(text: &str, candidates: &[Candidate], results: &[Verdict]) -> Result<St
             return Err("invalid decision probabilities".into());
         }
     }
+    for (i, verdict) in bound.into_iter().zip(answers) {
+        routes[i].choice = Some(verdict.choice);
+        routes[i].reason = format!(
+            "model: {}, P(name)={:.3}",
+            verdict.choice.label(),
+            verdict.probabilities[1]
+        );
+    }
+    Ok(())
+}
+
+fn replacement<'a>(candidate: &'a Candidate, route: &Routed) -> Option<&'a str> {
+    let spelling = match route.choice {
+        Some(Choice::Name) => Some(candidate.canonical.as_str()),
+        Some(Choice::Keep) if route.source != "prior" => candidate.ordinary_spelling.as_deref(),
+        _ => None,
+    };
+    spelling.filter(|spelling| *spelling != candidate.heard)
+}
+
+fn apply_routes(text: &str, candidates: &[Candidate], routes: &[Routed]) -> String {
     let mut out = text.to_string();
-    for (candidate, result) in candidates.iter().zip(results).rev() {
-        if result.choice == Choice::Name {
-            out.replace_range(candidate.start..candidate.end, &candidate.canonical);
+    for (candidate, route) in candidates.iter().zip(routes).rev() {
+        if let Some(spelling) = replacement(candidate, route) {
+            out.replace_range(candidate.start..candidate.end, spelling);
         }
     }
-    Ok(out)
+    out
 }
 
 pub fn model_path(backend: Backend) -> PathBuf {
@@ -528,7 +614,7 @@ impl Decision {
                 observer.phase(
                     "dec",
                     &format!(
-                        "{} ready in {:.2}s; batched decisions; decoder boosting off; shared vocabulary {}",
+                        "{} ready in {:.2}s; batched decisions; shared vocabulary {}",
                         backend.label(),
                         started.elapsed().as_secs_f64(),
                         vocabulary_path.display()
@@ -537,10 +623,7 @@ impl Decision {
                 Some(worker)
             }
             Err(e) => {
-                observer.error(
-                    "dec",
-                    &format!("{e}; delivering without vocabulary changes until restart"),
-                );
+                observer.error("dec", &format!("{e}; using vocabulary rules until restart"));
                 None
             }
         };
@@ -633,8 +716,8 @@ impl Decision {
         self.adjudicate_with_cancel(text, observer, Arc::new(AtomicBool::new(false)))
             .await
     }
-    /// A native adapter can discard in-flight work; Ultra checks at layer boundaries.
-    /// D1 may finish its current graph run; cancelled output is never applied.
+    /// Ultra checks at layer boundaries. D1 may finish its current graph run.
+    /// Cancellation discards model answers. Native adapters can discard the entire take.
     pub async fn adjudicate_with_cancel(
         &self,
         text: &str,
@@ -645,7 +728,6 @@ impl Decision {
         let mut jobs = Vec::new();
         let mut results = Vec::new();
         let mut routes: Vec<Routed> = Vec::new();
-        let mut delivered = text.to_string();
         let mut error: Option<String> = None;
         let work = if cancel.load(Ordering::Relaxed) {
             Err("decision cancelled".into())
@@ -658,8 +740,8 @@ impl Decision {
             Ok(found) if found.is_empty() => {}
             Ok(found) => {
                 jobs = found;
-                let mut planned = route(&jobs);
-                let bound: Vec<Candidate> = model_bound(&planned)
+                routes = route(&jobs);
+                let bound: Vec<Candidate> = model_bound(&routes)
                     .into_iter()
                     .map(|i| jobs[i].clone())
                     .collect();
@@ -673,50 +755,56 @@ impl Decision {
                     Ok(_) if cancel.load(Ordering::Relaxed) => {
                         error = Some("decision cancelled".into())
                     }
-                    Ok(answers) => match merge(&mut planned, &answers) {
-                        Ok(()) => {
-                            delivered = apply_routes(text, &jobs, &planned);
-                            results = answers;
-                            routes = planned;
-                        }
+                    Ok(answers) => match merge(&mut routes, &answers) {
+                        Ok(()) => results = answers,
                         Err(e) => error = Some(e),
                     },
-                    Err(e) => {
-                        error = Some(e);
-                    }
+                    Err(e) => error = Some(e),
                 }
             }
         }
+        let delivered = apply_routes(text, &jobs, &routes);
         let elapsed = started.elapsed().as_secs_f64();
         if let Some(e) = &error {
-            observer.error("dec", &format!("{e}; transcript preserved"));
+            for route in routes.iter_mut().filter(|route| route.choice.is_none()) {
+                route.reason = format!("{e}; left as heard");
+            }
+            observer.error("dec", &format!("{e}; retained rule decisions"));
         }
         observer.phase(
             "dec",
             &format!(
                 "{} candidates, {} replacements, {:.0} ms",
                 jobs.len(),
-                routes.iter().filter(|r| r.choice == Some(Choice::Name)).count(),
+                jobs.iter()
+                    .zip(&routes)
+                    .filter(|(c, r)| replacement(c, r).is_some())
+                    .count(),
                 elapsed * 1000.0
             ),
         );
         let mut verdicts = results.iter();
         let mut decisions = Vec::new();
         for (candidate, route) in jobs.iter().zip(&routes) {
-            let model = if route.source == "model" { verdicts.next() } else { None };
+            let model = if route.source == "model" {
+                verdicts.next()
+            } else {
+                None
+            };
+            let edit = replacement(candidate, route);
             observer.phase(
                 "dec.choice",
                 &format!(
                     "{:?} -> {:?}: {}; source {}; {}{}",
                     candidate.heard,
-                    candidate.canonical,
+                    edit.unwrap_or(&candidate.heard),
                     route.choice.map_or("none", Choice::label),
                     route.source,
                     route.reason,
                     model.map_or(String::new(), |v| format!("; batch {:.0}ms", v.latency_ms))
                 ),
             );
-            decisions.push(json!({"heard":candidate.heard,"canonical":candidate.canonical,"choice":route.choice,"source":route.source,"reason":route.reason}));
+            decisions.push(json!({"heard":candidate.heard,"canonical":candidate.canonical,"choice":route.choice,"source":route.source,"reason":route.reason,"replacement":edit}));
         }
         let audit = json!({"backend":self.backend.label(),"input":text,"delivered":delivered,"decision_secs":elapsed,"candidates":jobs,"decisions":decisions,"results":results,"error":error});
         Outcome {
@@ -872,7 +960,7 @@ mod tests {
             std::env::temp_dir().join(format!("transcrust-cancel-{}.md", std::process::id()));
         std::fs::write(
             &path,
-            "## Gambol\ndescription: pet dog\nheard: gamble\nordinary: a gambling verb\n",
+            "## Gambol\ndescription: pet dog\nheard: gamble\nordinary: a gambling verb\n## Chili\nheard: chili\n",
         )
         .unwrap();
         let rt = tokio::runtime::Builder::new_multi_thread()
@@ -892,11 +980,14 @@ mod tests {
             std::thread::sleep(Duration::from_millis(10));
             signal.store(true, Ordering::Relaxed);
         });
-        let input = "My dog Gamble is an Australian shepherd. Gamble loves her frisbee.";
+        let input = "My dog Gamble is an Australian shepherd. We made chili for dinner.";
         let cancelled =
             rt.block_on(model.adjudicate_with_cancel(input, &transcrust_core::SilentEvents, flag));
         cancel.join().unwrap();
-        assert_eq!(cancelled.text, input);
+        assert_eq!(
+            cancelled.text,
+            "My dog Gambol is an Australian shepherd. We made chili for dinner."
+        );
         assert!(cancelled.audit["error"]
             .as_str()
             .unwrap()
@@ -910,12 +1001,12 @@ mod tests {
         std::fs::remove_file(path).unwrap();
     }
     #[test]
-    fn targets_occurrences_without_substrings_or_existing_canonical_names() {
+    fn targets_canonical_occurrences_without_substrings() {
         let text = "Gambol gambled. I gamble; water flows. The flow is slow.";
         let found = candidates(text, &terms()).unwrap();
         assert_eq!(
             found.iter().map(|c| c.heard.as_str()).collect::<Vec<_>>(),
-            vec!["gamble", "flow"]
+            vec!["Gambol", "gamble", "flow"]
         );
         assert!(!found[0].state.contains("The flow is slow"));
     }
@@ -934,17 +1025,25 @@ mod tests {
             token_count: 80,
             latency_ms: 1.0,
         };
+        let mut routes = vec![
+            Routed {
+                choice: None,
+                source: "model".into(),
+                reason: String::new(),
+            };
+            found.len()
+        ];
+        merge(
+            &mut routes,
+            &[
+                result(Choice::Name),
+                result(Choice::Keep),
+                result(Choice::Abstain),
+            ],
+        )
+        .unwrap();
         assert_eq!(
-            apply(
-                text,
-                &found,
-                &[
-                    result(Choice::Name),
-                    result(Choice::Keep),
-                    result(Choice::Abstain)
-                ]
-            )
-            .unwrap(),
+            apply_routes(text, &found, &routes),
             "Éloïse likes my dog Gambol.I gamble with cards. Water has flow."
         );
     }
@@ -997,7 +1096,9 @@ mod tests {
     fn abbreviations_and_decimals_stay_in_the_sentence() {
         let text = "Dr. Smith saw 2.5 dogs and I gamble. Then we leave.";
         let found = candidates(text, &terms()).unwrap();
-        assert!(found[0].state.contains("Dr. Smith saw 2.5 dogs and I «gamble»."));
+        assert!(found[0]
+            .state
+            .contains("Dr. Smith saw 2.5 dogs and I «gamble»."));
         assert!(!found[0].state.contains("Then we leave"));
     }
     #[test]
@@ -1009,15 +1110,23 @@ mod tests {
 
     #[test]
     fn incomplete_or_invalid_reply_cannot_partially_edit_text() {
-        let found = candidates("I gamble.", &terms()).unwrap();
-        assert!(apply("I gamble.", &found, &[]).is_err());
+        let text = "My dog Gamble barked. We made chili for dinner.";
+        let mut terms = terms();
+        terms.extend(parse("## Chili\nheard: chili"));
+        let (jobs, mut routes) = routed(text, &terms);
+        assert_eq!(model_bound(&routes), vec![1]);
+        assert!(merge(&mut routes, &[]).is_err());
         let bad = Verdict {
             choice: Choice::Name,
             probabilities: [f64::NAN, 1.0, 0.0],
             token_count: 1,
             latency_ms: 0.0,
         };
-        assert!(apply("I gamble.", &found, &[bad]).is_err());
+        assert!(merge(&mut routes, &[bad]).is_err());
+        assert_eq!(
+            apply_routes(text, &jobs, &routes),
+            "My dog Gambol barked. We made chili for dinner."
+        );
     }
 
     fn routed(text: &str, terms: &[Term]) -> (Vec<Candidate>, Vec<Routed>) {
@@ -1045,17 +1154,48 @@ mod tests {
     #[test]
     fn lone_word_is_left_as_heard_with_prior_reason() {
         let terms = parse("## Bingo\ndescription: Bluey's 4 year old sister\nheard: bingo\n");
-        let text = "Bingo!";
+        for text in ["Bingo!", "bingo!"] {
+            let (jobs, routes) = routed(text, &terms);
+            assert_eq!(jobs.len(), 1);
+            assert!(model_bound(&routes).is_empty());
+            assert_eq!(routes[0].source, "prior");
+            assert_eq!(routes[0].choice, Some(Choice::Keep));
+            assert!(routes[0].reason.contains("speaker prior"));
+            assert_eq!(apply_routes(text, &jobs, &routes), text);
+        }
+    }
+
+    #[test]
+    fn ordinary_homophones_are_candidates_and_can_restore_case() {
+        let terms = parse("## Lightning McQueen\ndescription: Cars movie character\nhomophones: lightning\n## McQueen\n## Chili\nhomophones: chili");
+        let text = "Lightning McQueen won. The lightning was loud. We made Chili for dinner.";
+        let (jobs, mut routes) = routed(text, &terms);
+        assert_eq!(
+            jobs.iter().map(|c| c.heard.as_str()).collect::<Vec<_>>(),
+            ["Lightning McQueen", "lightning", "Chili"]
+        );
+        assert_eq!(routes[1].choice, Some(Choice::Keep));
+        for route in &mut routes {
+            route.choice.get_or_insert(Choice::Keep);
+        }
+        assert_eq!(
+            apply_routes(text, &jobs, &routes),
+            "Lightning McQueen won. The lightning was loud. We made chili for dinner."
+        );
+    }
+
+    #[test]
+    fn distinct_alias_repairs_each_occurrence_and_ignores_unlisted_words() {
+        let terms = parse("## Svelte\nkind: term\ndistinct: svelt\nhomophones: svelte");
+        let text = "I used svelt for the UI. The svelt compiler worked. I played Atari.";
         let (jobs, routes) = routed(text, &terms);
-        assert!(jobs.is_empty(), "canonical-cased hit is skipped: {jobs:?}");
-        let (jobs, routes2) = routed("bingo!", &terms);
-        assert_eq!(jobs.len(), 1);
-        assert!(model_bound(&routes2).is_empty());
-        assert_eq!(routes2[0].source, "prior");
-        assert_eq!(routes2[0].choice, Some(Choice::Keep));
-        assert!(routes2[0].reason.contains("speaker prior"));
-        assert_eq!(apply_routes("bingo!", &jobs, &routes2), "bingo!");
-        let _ = routes;
+        assert_eq!(jobs.len(), 2);
+        assert!(model_bound(&routes).is_empty());
+        assert!(routes.iter().all(|route| route.source == "distinct alias"));
+        assert_eq!(
+            apply_routes(text, &jobs, &routes),
+            "I used Svelte for the UI. The Svelte compiler worked. I played Atari."
+        );
     }
     #[test]
     fn pass_goes_to_the_model_batch_with_the_unchanged_state() {
@@ -1066,7 +1206,12 @@ mod tests {
         assert_eq!(model_bound(&routes), vec![0]);
         assert_eq!(routes[1].choice, Some(Choice::Keep));
         assert_eq!(jobs[0].state, "We saw «bingo» at the park.");
-        let verdict = Verdict { choice: Choice::Keep, probabilities: [0.9, 0.05, 0.05], token_count: 5, latency_ms: 1.0 };
+        let verdict = Verdict {
+            choice: Choice::Keep,
+            probabilities: [0.9, 0.05, 0.05],
+            token_count: 5,
+            latency_ms: 1.0,
+        };
         assert!(merge(&mut routes.clone(), &[]).is_err());
         merge(&mut routes, &[verdict]).unwrap();
         assert!(routes[0].reason.starts_with("model:"));

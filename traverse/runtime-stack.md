@@ -26,31 +26,31 @@ existing dispatch. See its crate README for measurements.
 
 ## Opt-in contextual vocabulary (`--dec`, 2026-10-08)
 
-- `decision.rs` owns reloadable vocabulary, alias/casing candidates, immutable
-  two-sentence context, validated bounded replies, reverse UTF-8 edits and audits.
+- `crates/decision` reloads the glossary, finds candidates, runs deterministic
+  rules and applies edits against UTF-8 offsets. It audits the result of every candidate.
 - **Primary as of 2026-11-01, at John's request:** `--dec` loads UltraBERT INT4
   through `ultra.rs` / `decision_tensor.rs`, shared with the research harness.
-  Marked two-sentence context plus candidate descriptions, without the global
+  Marked current sentence plus candidate descriptions, without the global
   glossary; independent sequences packed into one native batch. Q4 matrices
   remain packed with per-operator FP32 scratch and on-demand embedding rows.
   A dedicated Rayon pool uses up to four CPU threads. Load/warmup is at startup;
-  missing/corrupt bundles preserve text. Live human smoke is pending.
+  the rules still run if the model is unavailable.
 - Selectable baseline `--dec-backend d1`: `d1.rs` keeps text Q8 loaded natively through the existing Rust `ort` and
   `tokenizers` stack across utterances and ASR switches. No interpreter or child
   process. Each occurrence is an independent padded row; all candidates run in
-  one ONNX call, matching upstream `probabilities_batch`. The local bundle is
+  one ONNX call for candidates passed to the model. The local bundle is
   manifest-verified, with no runtime network or media heads.
-- `--dec` (also enabled by `--dec-backend ultra|d1`) disables decoder boosting
-  and bypasses legacy vocabulary correction.
-  Shared deterministic cleanup/profile remains; long-form polish precedes adjudication.
-  The adjudicator runs immediately before injection. Default behavior is unchanged.
-- Meanings/aliases live in the sole shared `~/syncthing/john-vocab.md`, reloaded
-  per utterance. Existing `[vocabulary].path` overrides it; habit/task entries
-  stay excluded. Optional `description:` / `ordinary:` accompany `heard:`.
-  No sidecar or bundled vocabulary fallback. `TRANSCRUST_DEC_MODEL` overrides
-  the model path; model lives under local-share models.
-- Startup budget 30s, per-utterance budget 15s. Failure preserves cleaned text;
-  failed models require daemon restart; ORT RunOptions terminates timed-out runs.
+- `--dec` (also enabled by `--dec-backend ultra|d1`) runs after mode shaping,
+  deterministic cleanup and optional long-form polish, just before injection.
+  Both direct decoders use raw logits. Vocabulary repair is opt-in.
+- The shared `~/syncthing/john-vocab.md` is reloaded per utterance.
+  `[vocabulary].path` overrides it. Habit and task entries stay excluded.
+  Canonical spellings, `heard:` aliases and `homophones:` go through context.
+  Reviewed `distinct:` aliases are repaired directly and logged. `TRANSCRUST_DEC_MODEL`
+  overrides the decision model path.
+- Startup budget is 30s, per-utterance budget is 15s. On model failure or
+  cancellation, rule edits survive and unresolved candidates are left as heard.
+  ORT RunOptions terminates timed-out runs. Model failures require a restart to retry.
 - `logs/decisions.jsonl` records full raw/input/output, contexts, choices and timing.
   Last-dictation raw/delivered fields remain distinct; wait includes adjudication.
 - `--fix TEXT --dec` exercises the same text path without injection and writes
@@ -130,19 +130,8 @@ The full pipeline changes and replay limits are in `pipeline-2026-11-14.md`.
   original editor to regain focus with its
   caret at the end; this is a human acceptance gate, not a generic Wayland
   text-range API. Failures retain the edit and reopen the window for recovery.
-- `dictionary.rs` keeps `heard:` records for learning, excludes habit/task
-  entries, merges kept proposals atomically and reloads on content changes.
-  Learned targets skip fuzzy post-correction; exact canonical casing remains.
-  Other original dictionary entries retain the legacy phonetic pass.
-- `boost.rs` scores canonical token paths before argmax in direct Parakeet and
-  Nemotron. Raw rank and logit-gap gates protect strong model choices. Blank
-  emissions preserve the prefix; failure links refund abandoned prefixes.
-  Nemotron's scorer belongs to `StreamState` and survives chunk boundaries.
-  No separate ONNX decode is added. `[vocabulary].boost` (0..1, default 1)
-  scales the calibration; `TRANSCRUST_VOCAB_BOOST` overrides it. A vocabulary
-  snapshot is read at each capture, so learning takes effect on the next one.
-  Other engines have no weighting yet; learned aliases never force replacement.
-  `[vocabulary].path` overrides the shared Markdown file.
+- `vocabulary.rs` merges accepted `heard:` proposals atomically while preserving
+  other glossary entries. The decision crate reloads the shared file on the next take.
 - Apple still reviews before pasting per Swiftype PRD. Shared crates are
   extracted and checked on Linux; platform transcript parity remains pending.
 
@@ -256,7 +245,7 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
 - `src/mode.rs`: modes as (model, profile); the `— Long` repair profile
 - `src/wav.rs`: `--wav` — offline files through the live seam, plus the windowing
 - `src/audio.rs`: capture, and the polyphase resampler every engine feeds through
-- `crates/core/src/dictionary.rs` + `crates/core/src/postprocess.rs`: post-transcription pipeline (see contract below)
+- `crates/core/src/postprocess.rs`: deterministic transcript cleanup
 - `crates/core/src/correction.rs`: UI-independent dictation records and diff proposals.
 - `src/review.rs` + `src/review_theme.rs`: Linux review subprocess, persistence,
   GTK palette and interaction with the daemon; not an extracted Apple adapter.
@@ -302,17 +291,11 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
 - The post-transcription pipeline lives in `crates/core/src/postprocess.rs::fix_transcription`,
   called once from `main.rs::run_transcription_pipeline` after the worker returns text.
 - Order: course-correction → repetition cleaning → filler removal → spoken
-  punctuation → **phonetic dictionary** (`crates/core/src/dictionary.rs`) → deterministic
-  capitalization (`capitalize_sentences`, last).
+  punctuation → deterministic capitalization (`capitalize_sentences`, last).
 - **Engine-agnostic by construction.** `TranscriptionService` (`src/transcription.rs`)
   is the only seam between the engines; every arm returns raw trimmed text and
-  all return text through the same deterministic cleanup seam. Direct Parakeet
-  and Nemotron additionally apply vocabulary preferences inside their decoders.
-  The live path chooses `fix_transcription` normally or
-  `fix_without_vocabulary` under `--dec`; it does not run both.
-  Anything engine-specific belongs *before* that seam, not inside postprocess.
-  The `— Long` profile (`mode::apply_profile`) is exactly that: it runs before
-  the seam and hands the shared pipeline ordinary prose.
+  all return text through the same deterministic cleanup seam. The `— Long`
+  profile (`mode::apply_profile`) shapes engine output before that shared cleanup.
 - The engines hand it differently shaped raw text — Parakeet TDT emits its
   own casing and punctuation, Granite's CTC head emits bare lowercase with none,
   which the `— Long` mode profile partly repairs before the shared seam.
@@ -324,29 +307,9 @@ else { set_icon_name("application-x-executable-symbolic") }   // silent
   normally spaced words that the `\b`-based passes can chew. Blank is id 0
   (`<|blank|>`, flagged special); `greedy_ctc_ids` drops it explicitly *and*
   `decode` skips specials. Verified end-to-end via `--granite-smoke`.
-- User vocabulary is `~/syncthing/john-vocab.md`, overridden by
-  `[vocabulary].path`. It feeds decoder boosting, learned correction proposals
-  and D1 descriptions/aliases. Habit/task entries are excluded from dictation.
-  Parakeet's `vocab.txt` and engine `tokenizer.json` files describe model token
-  inventories, not a second user dictionary. Under `--dec`, decoder boost is
-  zero and legacy vocabulary post-correction is bypassed.
-- The dictionary is the ported murmure leg: `rphonetic` with the `embedded_bm`
-  feature (Beider-Morse rules compiled into the binary, no resource dir). It runs
-  English-only via plain `encode()` — no language set, no French. It does a
-  whole-token phonetic pass over the shared vocabulary. Learned alias records
-  never force replacements and their canonical terms bypass fuzzy correction;
-  canonical casing is retained. See the correct-last section above.
-- **Harper is intentionally not in this pipeline.** `harper-core` is still a
-  dependency and its known-good config survives as dead code in `postprocess.rs`,
-  but it is not called. Reason: Harper is a probabilistic grammar layer that
-  re-ranks tokens toward general English *before* the dictionary can claim them —
-  it was splitting `tori` into `tor i`, starving the phonetic corrector. The app's
-  job is exact non-standard vocabulary; a general-English re-ranker is the wrong
-  shape at this stage, and murmure (the source pipeline) never put grammar here
-  either. Removing Harper unblocked `tori -> Tauri`.
-- Deterministic spoken punctuation and sentence capitalization do run; Harper's
-  probabilistic grammar does not. After mode shaping and deterministic cleanup,
-  optional long-form polish runs, then optional D1 adjudication, then injection.
+- After mode shaping and cleanup, optional long-form polish runs, then optional
+  vocabulary decisions and injection. The shared glossary also receives learned
+  corrections from the review window.
   Raw, delivered and corrected text remain distinct in last-dictation state.
 
 ## Offline Files (`--wav`)

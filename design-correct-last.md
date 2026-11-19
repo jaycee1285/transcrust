@@ -41,7 +41,14 @@ previous takes and every submitted revision. Corpus `corrected` is distinct
 from raw/injected and manually verified `reference`. See
 [November14 pipeline/replay report](pipeline-2026-11-14.md).
 
-### Learning semantics — corrected by human smoke (2026-10-06)
+### Learning semantics
+
+Accepted `heard:` pairs go into the shared glossary and become candidates on the
+next `--dec` take. Context decides whether to apply them. The November 19 live
+smoke confirmed both spellings in the same take, and the fixed phonetic pass
+and global decoder boost were retired. [Decision contract](design-dec.md)
+
+### Earlier decoder-boost experiment — October 6
 
 The interface and GTK palette passed John's smoke. Learning is a vocabulary
 preference, not an unconditional substitution. The first `heard:` application

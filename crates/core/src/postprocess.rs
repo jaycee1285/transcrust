@@ -275,7 +275,7 @@ static LOWERCASE_I: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\bi\b").unwr
 
 /// Capitalize the first letter of the transcript and the first letter after a
 /// sentence terminator or newline. Existing casing is preserved everywhere
-/// else; this pass never lowercases acronyms or dictionary replacements.
+/// else; this pass never lowercases acronyms.
 fn capitalize_sentences(text: &str) -> String {
     let mut result = String::with_capacity(text.len());
     let mut capitalize_next = true;
@@ -313,27 +313,9 @@ fn capitalize_sentences(text: &str) -> String {
 // Public pipeline
 // ---------------------------------------------------------------------------
 
-/// Full post-processing pipeline for transcription output.
-///
-/// Order: course correction → repetition cleaning → filler removal →
-/// spoken punctuation → phonetic dictionary → deterministic capitalization.
-///
-/// **Harper is intentionally out of the loop.** It is a probabilistic grammar
-/// black box that re-ranks tokens toward general English *before* the dictionary
-/// can claim them — directly working against this app's whole purpose (exact
-/// non-standard vocabulary). murmure, the pipeline this is ported from, never
-/// ran a grammar pass at this stage either. Capitalization is therefore a small
-/// purpose-built pass rather than a 20 MB linter. The CLI retains the unused Harper configuration for reference.
+/// Course correction, repetition and filler cleanup, spoken punctuation,
+/// then deterministic capitalization. Vocabulary decisions run on the result.
 pub fn fix_transcription(text: &str) -> String {
-    fix_inner(text, true)
-}
-
-/// The contextual decision pass owns vocabulary replacement in --dec mode.
-pub fn fix_without_vocabulary(text: &str) -> String {
-    fix_inner(text, false)
-}
-
-fn fix_inner(text: &str, vocabulary: bool) -> String {
     if text.is_empty() {
         return String::new();
     }
@@ -342,11 +324,6 @@ fn fix_inner(text: &str, vocabulary: bool) -> String {
     let text = clean_repetitions(&text);
     let text = remove_fillers(&text);
     let text = replace_spoken_punctuation(&text);
-    let text = if vocabulary {
-        crate::dictionary::correct(&text)
-    } else {
-        text
-    };
     capitalize_sentences(&text)
 }
 

@@ -21,8 +21,6 @@ pub struct Config {
 pub struct VocabularyConfig {
     /// Shared Markdown vocabulary. Defaults to ~/syncthing/john-vocab.md.
     pub path: Option<PathBuf>,
-    /// Decoder vocabulary preference, 0 disables it; clamped to 0..=1.
-    pub boost: Option<f32>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -182,13 +180,7 @@ pub fn load() -> Config {
     if let Ok(model_path) = std::env::var("TRANSCRUST_MODEL_PATH") {
         config.model.path = Some(model_path);
     }
-    crate::dictionary::configure(config.vocabulary.path.clone());
-    let boost = std::env::var("TRANSCRUST_VOCAB_BOOST")
-        .ok()
-        .and_then(|v| v.parse::<f32>().ok())
-        .or(config.vocabulary.boost)
-        .unwrap_or(1.0);
-    crate::dictionary::set_boost_strength(boost);
+    transcrust_core::vocabulary::configure(config.vocabulary.path.clone());
     config
 }
 

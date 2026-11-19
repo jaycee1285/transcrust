@@ -120,7 +120,6 @@ pub async fn run(
     };
 
     let decision = if let Some(backend) = backend {
-        crate::dictionary::set_boost_strength(0.0);
         Some(crate::decision::Decision::start(&observer, backend).await)
     } else {
         None
@@ -267,11 +266,7 @@ async fn transcribe_file(
         raw_paragraphs.push(raw.clone());
         // Profile first, shared pipeline second — the post-processing contract.
         let shaped = mode::apply_profile(chosen.profile, &raw);
-        let fixed = if decision.is_some() {
-            postprocess::fix_without_vocabulary(&shaped)
-        } else {
-            postprocess::fix_transcription(&shaped)
-        };
+        let fixed = postprocess::fix_transcription(&shaped);
         if !fixed.trim().is_empty() {
             paragraphs.push(fixed.trim().to_string());
         }

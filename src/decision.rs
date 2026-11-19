@@ -1,7 +1,7 @@
 //! Desktop delivery audit; inference lives in the shared decision crate.
 use crate::observe::Observer;
 use serde_json::{json, Value};
-pub use transcrust_decision::{Backend, Decision};
+pub use transcrust_decision::{vocab_path, Backend, Decision};
 
 pub fn log_delivery(
     observer: &Observer,

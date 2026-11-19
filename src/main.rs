@@ -4,7 +4,6 @@ mod control;
 mod corpus;
 use transcrust_core::correction;
 mod decision;
-use transcrust_core::dictionary;
 mod granite;
 #[allow(dead_code)]
 mod harper_reference;
@@ -444,7 +443,6 @@ fn main() {
             }
             let long = args[1] == "--fix-long";
             if run_mode.dec {
-                dictionary::set_boost_strength(0.0);
                 runtime().block_on(async {
                     let observer =
                         observe::Observer::dec_probe().expect("initialize decision probe log");
@@ -454,7 +452,7 @@ fn main() {
                     } else {
                         input.clone()
                     };
-                    let cleaned = postprocess::fix_without_vocabulary(&shaped);
+                    let cleaned = postprocess::fix_transcription(&shaped);
                     let started = std::time::Instant::now();
                     let mut outcome = dec.adjudicate(&cleaned, &observer).await;
                     outcome.audit["source"] = serde_json::json!("--fix");
@@ -526,7 +524,7 @@ fn main() {
                 "  --toggle                    Tell a --long daemon to start or stop recording"
             );
             println!("  --correct-chord <C-A-c>      Optional daemon correction chord (also configurable)");
-            println!("  --dec                       Contextual vocabulary decisions with UltraBERT INT4 (boosting off)");
+            println!("  --dec                       Contextual vocabulary decisions with rules and UltraBERT INT4");
             println!("  --dec-backend ultra|d1      Choose decision backend; default ultra; enables --dec");
             println!("  --correct                   Edit and replace the last dictation on a running daemon");
             println!(
@@ -673,7 +671,6 @@ async fn run(mut config: config::Config, run_mode: RunMode) {
     };
 
     let decision = if run_mode.dec {
-        dictionary::set_boost_strength(0.0);
         Some(Arc::new(
             decision::Decision::start(&observer, run_mode.backend).await,
         ))
@@ -1330,11 +1327,7 @@ async fn run_transcription_pipeline(
             if shaped != text {
                 observer.sample("transcription.profile", &shaped);
             }
-            let fixed = if decision.is_some() {
-                postprocess::fix_without_vocabulary(&shaped)
-            } else {
-                postprocess::fix_transcription(&shaped)
-            };
+            let fixed = postprocess::fix_transcription(&shaped);
             observer.sample("transcription.postprocess", &fixed);
 
             // Long mode only, and last in the chain.
@@ -1918,18 +1911,12 @@ fn run_doctor() {
     // The correction/vocabulary leg is engine-agnostic: both engines return raw
     // text and main.rs runs postprocess::fix_transcription on it exactly once.
     println!("Post-processing: shared by all engines (postprocess::fix_transcription)");
+    let vocab_path = decision::vocab_path();
     println!(
-        "Vocabulary weighting: {:.2} (direct Parakeet and Nemotron; 0 disables)",
-        dictionary::boost_strength()
+        "Shared vocabulary for --dec: {}{}",
+        vocab_path.display(),
+        if vocab_path.is_file() { "" } else { " (absent)" }
     );
-    let dict_path = dictionary::dictionary_path();
-    match dictionary::term_count() {
-        Some(n) => println!("Phonetic dictionary: {} ({n} entries)", dict_path.display()),
-        None => println!(
-            "Phonetic dictionary: {} (absent — pass-through)",
-            dict_path.display()
-        ),
-    }
     // Dragon mechanism 7: fail loudly on bad input instead of quietly
     // transcribing mush. The resampler defect A.1 fixed went unnoticed for
     // months because nothing was watching this path, so the response is

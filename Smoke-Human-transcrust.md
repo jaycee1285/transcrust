@@ -1,5 +1,11 @@
 # Human Smoke
 
+## Vocabulary retirement build — November 19, passed
+
+John confirmed the live `--dec --smoke` passed after removal of the phonetic
+dictionary and global decoder boost. The smoke checks Gambol for the dog and
+gamble for the ordinary verb in one take.
+
 ## Rules-first vocabulary decisions — November 19, passed
 
 John dictated the Gambol/gamble pair through live Parakeet and Wayland. The

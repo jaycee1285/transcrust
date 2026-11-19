@@ -76,6 +76,14 @@ the reason for the uncertainty trigger.
 a vocabulary term, a `heard:` alias or a word that sounds identical to one goes through the chain
 in section 5. The chain defaults to leaving the word alone.
 
+The glossary's `homophones:` field supplies known ordinary forms, including
+partial forms such as `lightning` for `Lightning McQueen`. The matcher checks
+canonical spellings too. A keep decision can restore one declared ordinary
+spelling for a single-word canonical hit. `distinct:` is reserved for reviewed
+misspellings without a competing reading, such as `kubernetis` or `svelt`.
+These exact aliases take the glossary spelling and log the reason. Ambiguous
+aliases such as `tori` use `heard:` and require context.
+
 **Why the trigger changed (evidence, 2026-11-18):**
 - Parakeet wrote the homophones at 0.99–1.00 confidence, including "Gamble" meaning Gambol
   (11-18 read-aloud, and 2 of 3 Gambol mentions in the dayshade pad). An uncertainty trigger

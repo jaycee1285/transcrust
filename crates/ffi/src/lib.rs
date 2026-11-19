@@ -121,7 +121,7 @@ pub unsafe extern "C" fn tc_create(
 
 impl State {
     fn process(&mut self, raw: &str, cancel: Arc<AtomicBool>) -> Value {
-        let cleaned = transcrust_core::postprocess::fix_without_vocabulary(raw);
+        let cleaned = transcrust_core::postprocess::fix_transcription(raw);
         let mut out = json!({"raw":raw,"cleaned":cleaned,"text":cleaned});
         #[cfg(feature = "decision")]
         if let Some(model) = &self.decision {
@@ -153,7 +153,7 @@ pub unsafe extern "C" fn tc_process(engine: *mut TcEngine, request: *const c_cha
             Some("learn") => {
                 let pairs: Vec<transcrust_core::correction::Pair> =
                     serde_json::from_value(value["pairs"].clone()).map_err(|e| e.to_string())?;
-                transcrust_core::dictionary::save_pairs(&state.vocabulary, &pairs)?;
+                transcrust_core::vocabulary::save_pairs(&state.vocabulary, &pairs)?;
                 Ok(json!({"saved":pairs.len()}))
             }
             Some("process") => Ok(state.process(required(&value, "text")?, engine.cancel.clone())),
@@ -196,10 +196,10 @@ pub unsafe extern "C" fn tc_transcribe(
             }
             let audio = transcrust_core::audio::resample_to_16k(audio, rate);
             let raw = match state.asr.as_mut().ok_or("no ASR configured")? {
-                Asr::Parakeet(model) => model.transcribe_unweighted(&audio)?.text,
+                Asr::Parakeet(model) => model.transcribe(&audio)?.text,
                 Asr::Nemotron(model) => {
                     let mut front = model.streaming_frontend()?;
-                    let mut stream = model.stream_begin_unweighted();
+                    let mut stream = model.stream_begin();
                     if let Some(mel) = front.push(&audio)? {
                         model.stream_push(&mut stream, &mel)?;
                     }
@@ -259,7 +259,7 @@ pub unsafe extern "C" fn tc_text(request: *const c_char) -> *mut c_char {
         let value: Value = serde_json::from_str(text(request)?).map_err(|e| e.to_string())?;
         match value["op"].as_str() {
             Some("clean") => Ok(
-                json!({"text": transcrust_core::postprocess::fix_without_vocabulary(value["text"].as_str().ok_or("text required")?)}),
+                json!({"text": transcrust_core::postprocess::fix_transcription(value["text"].as_str().ok_or("text required")?)}),
             ),
             Some("proposals") => Ok(
                 json!({"pairs": transcrust_core::correction::proposals(value["before"].as_str().ok_or("before required")?, value["after"].as_str().ok_or("after required")?)}),

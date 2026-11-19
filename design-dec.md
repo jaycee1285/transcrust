@@ -51,12 +51,9 @@ is rejected, and the selector is removed from `--fix` input text. For D1:
 nix develop -c cargo run --release -- --dec-backend d1 --smoke
 ```
 
-`--dec` sets decoder boosting to zero after config loading, regardless of its
-config/environment setting, and bypasses the entire legacy vocabulary pass.
-Punctuation, repetition/filler cleanup and deterministic sentence capitalization
-remain. In long mode the existing prose polisher precedes the decision backend. It is the final
-vocabulary stage, immediately before injection. Switching ASR modes keeps the
-same decision model resident.
+Both direct ASR decoders use raw logits. With `--dec`, vocabulary decisions
+run after cleanup and any long-form polish, immediately before injection.
+Switching ASR modes keeps the decision model resident.
 
 ## Vocabulary
 
@@ -71,7 +68,7 @@ Missing/unreadable files preserve text and report the error.
 kind: person
 description: pet dog
 ordinary: ordinary English about gambling or betting money
-heard: gamble
+homophones: gamble
 ```
 
 `description:` and `ordinary:` are optional metadata alongside existing `kind:`
@@ -84,16 +81,16 @@ an example template only; older local decision-vocab files are no longer read.
 Other devices can share the metadata; their existing parsers keep their existing
 behavior until a contextual decision adapter is wired there.
 
-Only whole-word/phrase aliases and differently cased canonical spellings become
-candidates. Exact canonical spellings are already correct and incur no inference.
-Unknown misspellings require adding/keeping an alias. Overlapping alternatives
-are left unchanged rather than selecting one by file order. Descriptions and
-aliases identify potential replacements, never unconditional substitutions.
+Canonical spellings, whole-word and phrase aliases, and declared `homophones:`
+are candidates. A canonical phrase takes precedence over a word it contains.
+Other overlapping alternatives are left as heard. Reviewed misspellings with
+no competing reading can use `distinct:`. They take the glossary spelling and
+log the reason. See [the matching rules](design-vocab-gate.md#4-when-the-chain-runs-presence-settled-by-the-rules-2026-11-18).
 
 ## Decisions and latency
 
-Each candidate sees its containing sentence and the preceding sentence, or the
-following sentence for the first sentence. There is no cross-dictation history.
+Each candidate sees its containing sentence. The deterministic rules decide
+first, and unresolved candidates go to the decision model.
 UltraBERT receives only the marked context and the candidate's three answer
 descriptions, including its canonical spelling and meaning. **The global glossary
 table is omitted**, matching the tested stripped formulation. D1 keeps its
@@ -116,13 +113,12 @@ remains loaded between utterances. A D1 batch exceeding upstream's 65,536 padded
 token budget is rejected with text preserved.
 
 Startup has a 30s budget. All decisions for one utterance share a 15s budget.
-Missing model, invalid results and timeout preserve the
-cleaned transcript without falling back to forced vocabulary substitutions.
-A failed model is disabled until daemon restart. ORT runs on a blocking Rust task;
-a timeout sets its RunOptions termination flag. UltraBERT runs on the same
-blocking-task boundary and checks a cancellation flag before work, between
-encoder layers and before readout. Results from an expired task
-cannot reach injection. A request-level failure applies no partial edits.
+Rule edits survive missing models, invalid results, timeouts and inference
+cancellation. Unresolved spans stay as heard. A failed model is disabled until
+daemon restart. ORT runs on a blocking Rust task, and a timeout sets its
+RunOptions termination flag. UltraBERT checks cancellation before work,
+between encoder layers and before readout. Native hosts can discard a
+cancelled take at the adapter boundary.
 
 ## Observation and acceptance
 
