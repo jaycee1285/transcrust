@@ -57,15 +57,16 @@ to the rules; the model judges grammar only.
       confidence is a logged reason only. [design-vocab-gate.md §4](design-vocab-gate.md).
 - [x] **Rules ported to Rust (2026-11-18):** `crates/decision/src/chain.rs`, matching Python v3
       on 150/150 cases (`tools/rules-probe/chain-v3-golden.json`; rerun
-      `export_chain_golden.py` whenever the Python rules change). Not wired into the app yet.
+      `export_chain_golden.py` whenever the Python rules change).
 - [x] **No context, no model (in `chain::decide`):** a span that is the whole sentence
       ("Bingo!") goes to the prior before the rules; one context word goes to the prior after
       them. **Until a per-speaker prior exists, leave a Prior span as heard** (John,
       2026-11-18: a miss is acceptable, a wrong name isn't).
-- [ ] **Next slice: wire the chain in front of the model** in `candidates_for`. Build the
-      «»-marked current sentence, pass the glossary description directly, send only `Pass`
-      to the model, and leave `Prior` as heard. Then remove `dictionary.rs` and the global boost
-      and run the murmure-retirement acceptance below.
+- [x] **Rules run before the model.** The chain gets the «»-marked current sentence and
+      the glossary description. Only `Pass` reaches the model, and `Prior` stays as heard.
+      John's [November 19 live smoke](Smoke-Human-transcrust.md) passed the Gambol/gamble pair.
+- [ ] **Complete candidate coverage and model fallback.** Check canonical spellings and
+      ordinary homophones, and keep rule edits if the model fails or is cancelled.
 - [ ] **Showing the reason (UI open):** every decision logs a reason; how the correct-last
       surface shows it to him is undesigned. John: "no idea how we'd write the UI for it."
 - [x] **Rule 3 stays** for gamble/bandit (John, 2026-11-18). Its only failure found was an

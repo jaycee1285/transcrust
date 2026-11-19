@@ -201,6 +201,11 @@ struct Candidate {
     canonical: String,
     state: String,
     question: Value,
+    /// The «»-marked current sentence and the glossary description, for the rule chain.
+    #[serde(skip)]
+    marked: String,
+    #[serde(skip)]
+    description: String,
 }
 
 // The current sentence only (John, 2026-11-18). A neighbouring sentence made every
@@ -316,6 +321,7 @@ fn candidates_for(text: &str, terms: &[Term], backend: Backend) -> Result<Vec<Ca
                 Backend::D1 => format!("{glossary}\nDictation:\n{}", marked.trim()),
             };
             found.push(Candidate { start: hit.start(), end: hit.end(), heard: hit.as_str().into(), canonical: term.canonical.clone(), state,
+                marked: marked.trim().to_string(), description: term.description.clone(),
                 question: json!({"type":"choice", "instructions":"What does the marked span refer to in this spoken sentence?",
                     "criteria":{"keep":format!("It is {}", term.ordinary), "name":format!("It is {}, {}",term.canonical,term.description), "abstain":"insufficient evidence"}}) });
         }
@@ -336,12 +342,21 @@ fn candidates_for(text: &str, terms: &[Term], backend: Backend) -> Result<Vec<Ca
     Ok(unique)
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "lowercase")]
 enum Choice {
     Keep,
     Name,
     Abstain,
+}
+impl Choice {
+    fn label(self) -> &'static str {
+        match self {
+            Self::Keep => "keep",
+            Self::Name => "name",
+            Self::Abstain => "abstain",
+        }
+    }
 }
 #[derive(Debug, Deserialize, Serialize)]
 struct Verdict {
@@ -349,6 +364,64 @@ struct Verdict {
     probabilities: [f64; 3],
     token_count: usize,
     latency_ms: f64,
+}
+
+/// Who decided one occurrence, and why. `source` is the rule name, "prior" or "model".
+#[derive(Clone, Debug, Serialize)]
+struct Routed {
+    choice: Option<Choice>,
+    source: String,
+    reason: String,
+}
+/// Run the deterministic chain on every occurrence. `choice: None` means Pass: the model
+/// decides. Name/Keep are final; Prior is left as heard (Keep) until a per-speaker prior exists.
+fn route(candidates: &[Candidate]) -> Vec<Routed> {
+    candidates
+        .iter()
+        .map(|c| {
+            let d = chain::decide(&c.marked, &c.canonical, &c.description);
+            let (choice, source) = match d.label {
+                chain::Label::Name => (Some(Choice::Name), d.rule.unwrap_or("rule").to_string()),
+                chain::Label::Keep => (Some(Choice::Keep), d.rule.unwrap_or("rule").to_string()),
+                chain::Label::Prior => (Some(Choice::Keep), "prior".to_string()),
+                chain::Label::Pass => (None, "model".to_string()),
+            };
+            Routed { choice, source, reason: d.reason }
+        })
+        .collect()
+}
+/// Indices of the occurrences the model must see.
+fn model_bound(routes: &[Routed]) -> Vec<usize> {
+    routes.iter().enumerate().filter(|(_, r)| r.choice.is_none()).map(|(i, _)| i).collect()
+}
+/// Fold the model's answers (one per model-bound occurrence, in order) into the routes.
+fn merge(routes: &mut [Routed], answers: &[Verdict]) -> Result<(), String> {
+    let bound = model_bound(routes);
+    if bound.len() != answers.len() {
+        return Err("decision count mismatch".into());
+    }
+    for (i, v) in bound.into_iter().zip(answers) {
+        routes[i].choice = Some(match v.choice {
+            Choice::Keep => Choice::Keep,
+            Choice::Name => Choice::Name,
+            Choice::Abstain => Choice::Abstain,
+        });
+        routes[i].reason = format!(
+            "model: {:?}, P(name)={:.3}",
+            v.choice.label(),
+            v.probabilities[1]
+        );
+    }
+    Ok(())
+}
+fn apply_routes(text: &str, candidates: &[Candidate], routes: &[Routed]) -> String {
+    let mut out = text.to_string();
+    for (c, r) in candidates.iter().zip(routes).rev() {
+        if r.choice == Some(Choice::Name) {
+            out.replace_range(c.start..c.end, &c.canonical);
+        }
+    }
+    out
 }
 
 fn apply(text: &str, candidates: &[Candidate], results: &[Verdict]) -> Result<String, String> {
@@ -571,6 +644,7 @@ impl Decision {
         let started = Instant::now();
         let mut jobs = Vec::new();
         let mut results = Vec::new();
+        let mut routes: Vec<Routed> = Vec::new();
         let mut delivered = text.to_string();
         let mut error: Option<String> = None;
         let work = if cancel.load(Ordering::Relaxed) {
@@ -584,14 +658,26 @@ impl Decision {
             Ok(found) if found.is_empty() => {}
             Ok(found) => {
                 jobs = found;
-                match self.request(&jobs, cancel.clone()).await {
+                let mut planned = route(&jobs);
+                let bound: Vec<Candidate> = model_bound(&planned)
+                    .into_iter()
+                    .map(|i| jobs[i].clone())
+                    .collect();
+                // The model is only invoked when at least one occurrence is Pass.
+                let answered = if bound.is_empty() {
+                    Ok(Vec::new())
+                } else {
+                    self.request(&bound, cancel.clone()).await
+                };
+                match answered {
                     Ok(_) if cancel.load(Ordering::Relaxed) => {
                         error = Some("decision cancelled".into())
                     }
-                    Ok(answers) => match apply(text, &jobs, &answers) {
-                        Ok(out) => {
-                            delivered = out;
+                    Ok(answers) => match merge(&mut planned, &answers) {
+                        Ok(()) => {
+                            delivered = apply_routes(text, &jobs, &planned);
                             results = answers;
+                            routes = planned;
                         }
                         Err(e) => error = Some(e),
                     },
@@ -610,24 +696,29 @@ impl Decision {
             &format!(
                 "{} candidates, {} replacements, {:.0} ms",
                 jobs.len(),
-                results.iter().filter(|r| r.choice == Choice::Name).count(),
+                routes.iter().filter(|r| r.choice == Some(Choice::Name)).count(),
                 elapsed * 1000.0
             ),
         );
-        for (candidate, verdict) in jobs.iter().zip(&results) {
+        let mut verdicts = results.iter();
+        let mut decisions = Vec::new();
+        for (candidate, route) in jobs.iter().zip(&routes) {
+            let model = if route.source == "model" { verdicts.next() } else { None };
             observer.phase(
                 "dec.choice",
                 &format!(
-                    "{:?} -> {:?}: {:?}; P(name)={:.3}; batch {:.0}ms",
+                    "{:?} -> {:?}: {}; source {}; {}{}",
                     candidate.heard,
                     candidate.canonical,
-                    verdict.choice,
-                    verdict.probabilities[1],
-                    verdict.latency_ms
+                    route.choice.map_or("none", Choice::label),
+                    route.source,
+                    route.reason,
+                    model.map_or(String::new(), |v| format!("; batch {:.0}ms", v.latency_ms))
                 ),
             );
+            decisions.push(json!({"heard":candidate.heard,"canonical":candidate.canonical,"choice":route.choice,"source":route.source,"reason":route.reason}));
         }
-        let audit = json!({"backend":self.backend.label(),"input":text,"delivered":delivered,"decision_secs":elapsed,"candidates":jobs,"results":results,"error":error});
+        let audit = json!({"backend":self.backend.label(),"input":text,"delivered":delivered,"decision_secs":elapsed,"candidates":jobs,"decisions":decisions,"results":results,"error":error});
         Outcome {
             text: delivered,
             audit,
@@ -927,5 +1018,57 @@ mod tests {
             latency_ms: 0.0,
         };
         assert!(apply("I gamble.", &found, &[bad]).is_err());
+    }
+
+    fn routed(text: &str, terms: &[Term]) -> (Vec<Candidate>, Vec<Routed>) {
+        let jobs = candidates(text, terms).unwrap();
+        let routes = route(&jobs);
+        (jobs, routes)
+    }
+    #[test]
+    fn rules_decide_everything_so_no_model_call_is_needed() {
+        let terms = terms();
+        let (jobs, routes) = routed("I like to gamble. My dog Gamble barked.", &terms);
+        assert_eq!(jobs.len(), 2);
+        assert!(model_bound(&routes).is_empty());
+        assert_eq!(routes[0].choice, Some(Choice::Keep));
+        assert!(routes[0].source.starts_with('2'), "{:?}", routes[0]);
+        assert_eq!(routes[1].choice, Some(Choice::Name));
+        assert!(!routes[1].reason.is_empty());
+        let mut done = routes.clone();
+        merge(&mut done, &[]).unwrap();
+        assert_eq!(
+            apply_routes("I like to gamble. My dog Gamble barked.", &jobs, &done),
+            "I like to gamble. My dog Gambol barked."
+        );
+    }
+    #[test]
+    fn lone_word_is_left_as_heard_with_prior_reason() {
+        let terms = parse("## Bingo\ndescription: Bluey's 4 year old sister\nheard: bingo\n");
+        let text = "Bingo!";
+        let (jobs, routes) = routed(text, &terms);
+        assert!(jobs.is_empty(), "canonical-cased hit is skipped: {jobs:?}");
+        let (jobs, routes2) = routed("bingo!", &terms);
+        assert_eq!(jobs.len(), 1);
+        assert!(model_bound(&routes2).is_empty());
+        assert_eq!(routes2[0].source, "prior");
+        assert_eq!(routes2[0].choice, Some(Choice::Keep));
+        assert!(routes2[0].reason.contains("speaker prior"));
+        assert_eq!(apply_routes("bingo!", &jobs, &routes2), "bingo!");
+        let _ = routes;
+    }
+    #[test]
+    fn pass_goes_to_the_model_batch_with_the_unchanged_state() {
+        let terms = parse("## Bingo\ndescription: Bluey's 4 year old sister\nheard: bingo\n## Gambol\ndescription: pet dog\nheard: gamble\n");
+        let text = "We saw bingo at the park. I like to gamble.";
+        let (jobs, mut routes) = routed(text, &terms);
+        assert_eq!(jobs.len(), 2);
+        assert_eq!(model_bound(&routes), vec![0]);
+        assert_eq!(routes[1].choice, Some(Choice::Keep));
+        assert_eq!(jobs[0].state, "We saw «bingo» at the park.");
+        let verdict = Verdict { choice: Choice::Keep, probabilities: [0.9, 0.05, 0.05], token_count: 5, latency_ms: 1.0 };
+        assert!(merge(&mut routes.clone(), &[]).is_err());
+        merge(&mut routes, &[verdict]).unwrap();
+        assert!(routes[0].reason.starts_with("model:"));
     }
 }

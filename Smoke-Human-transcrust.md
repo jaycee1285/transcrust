@@ -1,5 +1,13 @@
 # Human Smoke
 
+## Rules-first vocabulary decisions — November 19, passed
+
+John dictated the Gambol/gamble pair through live Parakeet and Wayland. The
+grammar rules named the dog and kept the ordinary verb. Two candidates, one
+replacement, 3 ms in decisions and 1.51 s to start typing. Injection completed.
+John confirmed that “chase” reflected his pronunciation. The audit shows one
+text change, `gamble` to `Gambol`, in the first sentence.
+
 ## Family pipeline — November14, new human check pending
 
 Installed f14e3a110e8afb41cacc3cb767af069e1a80f234ab4853aa66f0be79246a4ae2.
