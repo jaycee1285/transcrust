@@ -56,6 +56,43 @@ pub fn skeleton(word: &str) -> String {
     out
 }
 
+/// Research, opt-in (2026-11-21): polyg2p with English data built locally from CMUdict,
+/// directory named by `TRANSCRUST_IPA_DATA`. Off when unset.
+fn g2p() -> Option<&'static polyg2p::G2p> {
+    static G2P: OnceLock<Option<polyg2p::G2p>> = OnceLock::new();
+    G2P.get_or_init(|| {
+        std::env::var_os("TRANSCRUST_IPA_DATA").map(|d| polyg2p::G2p::new(Some(std::path::Path::new(&d))))
+    })
+    .as_ref()
+}
+
+/// Phones of one word, stress and length marks removed. Lowercased first: polyg2p
+/// spells out an unknown capitalized word letter by letter.
+fn phones(word: &str) -> Option<Vec<char>> {
+    let ipa = g2p()?.phonemize(&word.to_lowercase(), polyg2p::Lang::En);
+    Some(ipa.chars().filter(|c| !matches!(c, 'ˈ' | 'ˌ' | 'ː') && !c.is_whitespace()).collect())
+}
+
+fn phone_distance(a: &[char], b: &[char]) -> usize {
+    let mut row: Vec<usize> = (0..=b.len()).collect();
+    for (i, ca) in a.iter().enumerate() {
+        let mut prev = row[0];
+        row[0] = i + 1;
+        for (j, cb) in b.iter().enumerate() {
+            let cur = row[j + 1];
+            row[j + 1] = (prev + (ca != cb) as usize).min(row[j] + 1).min(cur + 1);
+            prev = cur;
+        }
+    }
+    row[b.len()]
+}
+
+/// IPA-similars guard 2: a word Harper knows as a proper noun (Billy, Milly) is someone
+/// else's name, never a mishearing of this one.
+fn is_known_proper_noun(word: &str) -> bool {
+    readings(word).or_else(|| readings(&word.to_lowercase())).is_some_and(|m| m.is_proper_noun())
+}
+
 fn readings(word: &str) -> Option<harper_core::DictWordMetadata> {
     dictionary().get_word_metadata_str(word).map(|m| m.into_owned())
 }
@@ -130,14 +167,26 @@ pub fn sounds_like_spans(text: &str, names: &[String]) -> Vec<(usize, usize, Str
         .map(|n| (n.clone(), skeleton(n)))
         .filter(|(_, s)| s.len() >= 2)
         .collect();
+    // IPA proposer (opt-in): names with 4+ phones, by phone distance ≤1.
+    let spoken: Vec<(String, Vec<char>)> = if g2p().is_some() {
+        keyed.iter().filter_map(|(n, _)| phones(n).filter(|p| p.len() >= 4).map(|p| (n.clone(), p))).collect()
+    } else {
+        Vec::new()
+    };
     let mut out = Vec::new();
     for (i, &(a, b)) in tokens.iter().enumerate() {
         let word = &text[a..b];
+        // Measurement switch: TRANSCRUST_IPA_NO_GUARD lets known proper nouns through.
+        let guarded = std::env::var_os("TRANSCRUST_IPA_NO_GUARD").is_none() && is_known_proper_noun(word);
+        let word_phones = if spoken.is_empty() || guarded { None } else { phones(word) };
         for (name, key) in &keyed {
             if word.eq_ignore_ascii_case(name) {
                 continue;
             }
-            if key.len() >= 3 && skeleton(word) == *key {
+            let ipa_hit = word_phones.as_ref().is_some_and(|wp| {
+                spoken.iter().any(|(n, np)| n == name && phone_distance(wp, np) <= 1)
+            });
+            if (key.len() >= 3 && skeleton(word) == *key) || ipa_hit {
                 out.push((a, b, name.clone()));
             }
             if let Some(&(c, d)) = tokens.get(i + 1) {
@@ -166,7 +215,7 @@ mod tests {
     #[test]
     #[ignore = "diagnostic: prints Harper's readings"]
     fn print_readings() {
-        for w in ["meter", "water", "for", "to", "the", "gamble", "matter"] {
+        for w in ["meter", "water", "for", "to", "the", "gamble", "matter", "Louie", "Louis", "Billy", "Milly", "silly", "Jilly", "really", "blue"] {
             let m = readings(w);
             eprintln!(
                 "{w}: present={} noun={} singular={} countable={} mass_only={} plural={} proper={} verb={} prep={}",

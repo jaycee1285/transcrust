@@ -17,5 +17,7 @@ regex = "1"
 # Word readings (noun number/countability, determiners, prepositions) for the
 # sounds-like gate. Apache-2.0; already a dependency of the root crate.
 harper-core = { version = "1", default-features = false }
+# IPA-similars proposer, research (opt-in via TRANSCRUST_IPA_DATA). Apache-2.0, pure Rust.
+polyg2p = { git = "https://github.com/maxmelichov/polyg2p", rev = "692edd13e1106803f6e4f4349780994f1bf1d0e4" }
 ort = { version = "2.0.0-rc.10", default-features = false, features = ["std", "ndarray"] }
 tokenizers = { version = "0.22", default-features = false, features = ["onig"] }
