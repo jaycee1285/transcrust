@@ -36,6 +36,7 @@ with an Android Rust target installed. Set `ANDROID_NDK_HOME` and
   optionally `"decision_backend":"ultra"` (or `d1`) plus
   `"decision_model_path":"/synced/models/ultra-q4"`; optionally
   `"asr":"parakeet"` (or `nemotron`) plus `"asr_model_path":"..."`.
+  Optional `"ipa_data_path"` is a directory with `en.lex` and `en.g2p` for the IPA-similars proposer.
   Returns a handle or null plus allocated error JSON. Model load/warm is blocking.
   Model failure preserves rule edits and leaves unresolved spans as heard.
   Applications retain review on failure.

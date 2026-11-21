@@ -201,7 +201,9 @@ checkpoint URLs are unrecorded for those references. Keep these gaps explicit.
     `en.g2p` (out-of-vocabulary model, 1.8 MB, sha `5f3d3778…`) trained locally with
     the repo's `train_g2p.py` (CPU torch, throwaway venv), 64.6% held-out exact-word;
   - role: the IPA-similars proposer for names;
-  - not wired. On 45 bloey misses, IPA ≤1 caught 21 versus the skeleton's 17.
+  - installed at `~/.local/share/transcrust/models/polyg2p-en/` and `~/syncthing/models/polyg2p-en/`
+    (`en.lex`, `en.g2p`, `SOURCE.txt`); IPA is on by default when the files are present.
+    On 45 bloey misses, IPA ≤1 caught 21 versus the skeleton's 17.
 
 For every new model, add its exact repository URL and role here before fetching
 weights. Record source revision, artifact precision/format, license, local home,

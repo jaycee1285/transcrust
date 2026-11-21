@@ -56,12 +56,33 @@ pub fn skeleton(word: &str) -> String {
     out
 }
 
-/// Research, opt-in (2026-11-21): polyg2p with English data built locally from CMUdict,
-/// directory named by `TRANSCRUST_IPA_DATA`. Off when unset.
+static IPA_CONFIG: std::sync::RwLock<Option<std::path::PathBuf>> = std::sync::RwLock::new(None);
+
+/// Point the IPA-similars proposer at a directory holding `en.lex` and `en.g2p`
+/// (the FFI passes the phone's path). Call before first use; later calls do not
+/// reload an already-initialised table.
+pub fn configure_ipa(path: Option<std::path::PathBuf>) {
+    if let Ok(mut w) = IPA_CONFIG.write() {
+        *w = path;
+    }
+}
+
+/// IPA-similars proposer: polyg2p with English data built locally from CMUdict.
+/// Data directory, in order: `configure_ipa`, env `TRANSCRUST_IPA_DATA`, then
+/// `<data_local_dir>/transcrust/models/polyg2p-en` when it holds `en.lex`.
+/// Off silently when none exists.
 fn g2p() -> Option<&'static polyg2p::G2p> {
     static G2P: OnceLock<Option<polyg2p::G2p>> = OnceLock::new();
     G2P.get_or_init(|| {
-        std::env::var_os("TRANSCRUST_IPA_DATA").map(|d| polyg2p::G2p::new(Some(std::path::Path::new(&d))))
+        let configured = IPA_CONFIG.read().ok().and_then(|r| r.clone());
+        let dir = configured
+            .or_else(|| std::env::var_os("TRANSCRUST_IPA_DATA").map(std::path::PathBuf::from))
+            .or_else(|| {
+                dirs::data_local_dir()
+                    .map(|d| d.join("transcrust").join("models").join("polyg2p-en"))
+                    .filter(|d| d.join("en.lex").is_file())
+            })?;
+        Some(polyg2p::G2p::new(Some(dir.as_path())))
     })
     .as_ref()
 }
@@ -197,6 +218,9 @@ pub fn sounds_like_spans(text: &str, names: &[String]) -> Vec<(usize, usize, Str
             }
         }
     }
+    // A fused pair ("Blue Wee") beats an IPA hit on its first word alone ("Blue").
+    let all = out.clone();
+    out.retain(|(a, b, n)| !all.iter().any(|(c, d, m)| m == n && c <= a && b <= d && (d - c) > (b - a)));
     out
 }
 

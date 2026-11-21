@@ -49,6 +49,10 @@ pub unsafe extern "C" fn tc_create(
     let result = (|| -> Result<TcEngine, String> {
         let v: Value = serde_json::from_str(text(config)?).map_err(|e| e.to_string())?;
         let vocabulary = PathBuf::from(required(&v, "vocabulary_path")?);
+        #[cfg(feature = "decision")]
+        if let Some(p) = v["ipa_data_path"].as_str() {
+            transcrust_decision::grammar::configure_ipa(Some(PathBuf::from(p)));
+        }
         #[cfg(not(feature = "decision"))]
         if !v["decision_backend"].is_null() {
             return Err("library built without decision feature".into());
