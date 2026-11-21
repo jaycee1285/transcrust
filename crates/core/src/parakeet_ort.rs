@@ -181,6 +181,27 @@ pub struct LoadedParakeet {
     /// Width of the vocabulary slice of the joint output; the remainder is the
     /// duration head.
     vocab_width: usize,
+    /// Research, opt-in (2026-11-20): piece IDs that may never be emitted, read from the
+    /// file named by `TRANSCRUST_PIECE_MASK` (one ID per line). Built offline from English
+    /// word lists so foreign whole-word pieces such as `▁nella` cannot capture an English
+    /// take. Empty unless the variable is set.
+    masked: Vec<usize>,
+}
+
+fn piece_mask(vocab_width: usize) -> Result<Vec<usize>, String> {
+    let Some(path) = std::env::var_os("TRANSCRUST_PIECE_MASK") else {
+        return Ok(Vec::new());
+    };
+    let text = std::fs::read_to_string(&path)
+        .map_err(|e| format!("TRANSCRUST_PIECE_MASK {}: {e}", Path::new(&path).display()))?;
+    text.lines()
+        .map(str::trim)
+        .filter(|l| !l.is_empty())
+        .map(|l| match l.parse::<usize>() {
+            Ok(id) if id < vocab_width => Ok(id),
+            _ => Err(format!("piece mask: bad id {l:?}")),
+        })
+        .collect()
 }
 
 fn build_session(path: &Path) -> Result<Session, String> {
@@ -226,12 +247,17 @@ impl LoadedParakeet {
             ));
         }
 
+        let masked = piece_mask(vocab.len())?;
+        if masked.contains(&(vocab.blank_id() as usize)) {
+            return Err("piece mask must not contain the blank".into());
+        }
         Ok(Self {
             preprocessor,
             encoder,
             joint,
             vocab_width: vocab.len(),
             vocab,
+            masked,
         })
     }
 
@@ -393,8 +419,35 @@ impl LoadedParakeet {
                 .as_slice()
                 .ok_or_else(|| "Parakeet joint logits were not contiguous".to_string())?;
             let (vocab_logits, duration_logits) = slice.split_at(self.vocab_width);
+            let masked_logits;
+            let vocab_logits = if self.masked.is_empty() {
+                vocab_logits
+            } else {
+                masked_logits = {
+                    let mut v = vocab_logits.to_vec();
+                    for &id in &self.masked {
+                        v[id] = f32::NEG_INFINITY;
+                    }
+                    v
+                };
+                &masked_logits[..]
+            };
 
             let token = argmax(vocab_logits) as u32;
+            // Research, opt-in: the first pieces emitted with the step's top three choices.
+            if token != blank && tokens.len() < 12 && std::env::var_os("TRANSCRUST_DUMP_PIECES").is_some() {
+                let mut order: Vec<usize> = (0..vocab_logits.len()).collect();
+                order.sort_by(|&a, &b| vocab_logits[b].total_cmp(&vocab_logits[a]));
+                let top: Vec<String> = order[..3]
+                    .iter()
+                    .map(|&i| format!("{}={:.3}", self.vocab.piece(i as u32), softmax_at(vocab_logits, i)))
+                    .collect();
+                eprintln!("piece frame {step}: {}", top.join("  "));
+            }
+            if token != blank && std::env::var_os("TRANSCRUST_DUMP_TOKENS").is_some() {
+                // Research, opt-in: every emitted piece with its 80 ms frame.
+                eprintln!("tok {step} {}", self.vocab.piece(token));
+            }
             if token != blank {
                 tokens.push(TimedToken {
                     id: token,

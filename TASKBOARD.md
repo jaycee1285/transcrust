@@ -8,6 +8,40 @@ Linux pipeline updated **2026-11-14**. Phone/Apple observations retain their
 recorded measurement dates. This is the only live board. Older phase rationale and
 timing tables below retain their measurement dates; they are not fresh test runs.
 
+## Engine decision (John, 2026-11-20)
+
+**His engine is Parakeet Ultra INT4, and only Parakeet, for consistency.** Nemotron
+stays a secondary engine for John's own dictation. Keep the data separate: **his
+benchmark is Parakeet plus the dictionary**, and Nemotron and Phonon results never
+mix into it. Evidence: two boundary-bench takes (whole-take, scored per line). Parakeet
+had the lowest error and got "Shu Todoroki" exactly right cold, on the take's first
+line. Nemotron opened that take with "Shoot Hierarchy" and was the only engine helped
+by hard trochaic stress (he's still learning tone, so that cue is unreliable for him).
+Phonon is Parakeet v3's tokenizer with re-weighted English training. Report results
+leader first.
+
+## Next design: position-tiered checks (John, 2026-11-20, not built)
+
+Errors cluster where the decoder has the least context: the opening of a take (the
+Nelland 6 s cut, "Shoot Hierarchy", the 11-19 first-six-seconds study). Parakeet's
+prediction network starts every take blank; Nemotron's streaming cache warms over its
+1,120 ms chunks. Ideal cuts are 12 s. Each word's start time comes from the direct
+driver's 80 ms frames.
+
+| Word starts at | Checks |
+|---|---|
+| 0–6 s | dictionary · consonant array · IPA similars |
+| 6–12 s | dictionary · consonant array |
+| 12 s on | the normal pipeline (split, rules, model) |
+
+To build:
+- **Seam:** pass word timings across the ASR→decision boundary, desktop and FFI.
+  Decisions currently see text only.
+- **Consonant array:** voicing folded (t/d: Totoroki ↔ Todoroki), tolerant at word
+  edges ("and Rowan" heard as "an Drowan"; Bluey → Louie).
+- **IPA:** CMU pronunciations exist offline. Out-of-CMU names need a G2P or
+  hand-entered pronunciations.
+
 ## Current state
 
 **Zed AMD migration, November 13:** fresh app-only release matches November 11

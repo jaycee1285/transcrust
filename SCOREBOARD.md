@@ -3,6 +3,10 @@
 Does voice beat typing *for him*, per engine and build? Updated as evidence lands.
 In-chat calibration, not a product metric. Newest evidence first in each table.
 
+**His benchmark is Parakeet Ultra INT4 plus the dictionary, his only engine**
+(decided 2026-11-20). Other engines' rows are context and John's own dictation; never
+pool them into his numbers.
+
 ## The yardstick
 
 | Constant | Value | Source |

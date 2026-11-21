@@ -4,6 +4,7 @@ pub mod chain;
 pub mod d1;
 #[allow(dead_code)]
 pub mod decision_tensor;
+pub mod grammar;
 pub mod split;
 #[allow(dead_code)]
 pub mod ultra;
@@ -225,6 +226,10 @@ struct Candidate {
     ordinary_spelling: Option<String>,
     #[serde(skip)]
     distinct: bool,
+    /// A sounds-like candidate (`grammar.rs`): `Some(Some(reason))` the grammar licenses
+    /// the name, `Some(None)` it doesn't (M10: keep). Never sent to the model.
+    #[serde(skip)]
+    sounds_like: Option<Option<String>>,
 }
 
 // The current sentence only (John, 2026-11-18). A neighbouring sentence made every
@@ -374,6 +379,7 @@ fn candidates_for(text: &str, terms: &[Term], backend: Backend) -> Result<Vec<Ca
                 state,
                 ordinary_spelling,
                 distinct,
+                sounds_like: None,
                 marked: marked.trim().to_string(),
                 description: term.description.clone(),
                 question: json!({
@@ -387,6 +393,41 @@ fn candidates_for(text: &str, terms: &[Term], backend: Backend) -> Result<Vec<Ca
                 }),
             });
         }
+    }
+    // Sounds-like candidates where no listed spelling matched: grammar decides once.
+    let names: Vec<String> = terms.iter().map(|t| t.canonical.clone()).collect();
+    for (a, b, canonical) in grammar::sounds_like_spans(text, &names) {
+        if found.iter().any(|c| a < c.end && c.start < b) {
+            continue;
+        }
+        let Some(term) = terms.iter().find(|t| t.canonical == canonical) else { continue };
+        let (s, e) = context_range(text, a, b);
+        let lower_words = |t: &str| -> Vec<String> {
+            t.split(|c: char| !(c.is_alphanumeric() || c == '\'' || c == '’'))
+                .filter(|w| !w.is_empty())
+                .map(str::to_lowercase)
+                .collect()
+        };
+        let heard = &text[a..b];
+        let verdict = grammar::licenses_name(heard, &lower_words(&text[s..a]), &lower_words(&text[b..e]), &names, &canonical);
+        // M10: without a licence the transcript stays, so there is nothing to record.
+        if verdict.is_none() {
+            continue;
+        }
+        let marked = format!("{}«{}»{}", &text[s..a], heard, &text[b..e]);
+        found.push(Candidate {
+            start: a,
+            end: b,
+            heard: heard.into(),
+            canonical: canonical.clone(),
+            state: marked.trim().to_string(),
+            ordinary_spelling: None,
+            distinct: false,
+            sounds_like: Some(verdict),
+            marked: marked.trim().to_string(),
+            description: term.description.clone(),
+            question: Value::Null,
+        });
     }
     // A spelled-out canonical phrase takes precedence over a word inside it,
     // such as "McQueen" inside "Lightning McQueen".
@@ -454,6 +495,23 @@ fn route(candidates: &[Candidate]) -> Vec<Routed> {
     candidates
         .iter()
         .map(|c| {
+            if let Some(verdict) = &c.sounds_like {
+                return match verdict {
+                    Some(reason) => Routed {
+                        choice: Some(Choice::Name),
+                        source: "sounds-like + grammar".into(),
+                        reason: reason.clone(),
+                    },
+                    None => Routed {
+                        choice: Some(Choice::Keep),
+                        source: "sounds-like, undetermined".into(),
+                        reason: format!(
+                            "{:?} shares consonants with {:?}, but nothing in the grammar licenses the name; kept as heard",
+                            c.heard, c.canonical
+                        ),
+                    },
+                };
+            }
             if c.distinct {
                 return Routed {
                     choice: Some(Choice::Name),
@@ -1070,6 +1128,41 @@ mod tests {
         assert!(outcome.audit["error"].is_null(), "{}", outcome.audit["error"]);
         assert_nelland_split(&outcome);
         println!("delivered: {}", outcome.text);
+    }
+
+    /// 2026-11-20 benches: names missed as real words get a sounds-like candidate, and
+    /// only grammar can license the name. Everything else stays as heard (M10).
+    #[test]
+    fn sounds_like_candidates_need_grammar() {
+        let terms = parse(
+            "## Mater\ndescription: tow truck\n## Bluey\ndescription: blue heeler\n## Bingo\n\
+             description: Bluey's sister\n## Todoroki\ndescription: race car\n## Shu Todoroki\nheard: shoe to rookie\n",
+        );
+        let fixed = |text: &str| {
+            let (jobs, routes) = routed(text, &terms);
+            for (job, route) in jobs.iter().zip(&routes) {
+                assert!(job.sounds_like.is_none() || route.choice.is_some(), "{text}: sounds-like reached the model");
+            }
+            apply_routes(text, &jobs, &routes)
+        };
+        // M5: preposition + bare singular count noun.
+        assert_eq!(fixed("Rowan asked whether lunch was ready for meter."), "Rowan asked whether lunch was ready for Mater.");
+        // Coordination with a registered name (the joiner case).
+        assert_eq!(fixed("Bingo and Blue Wee played a game."), "Bingo and Bluey played a game.");
+        // Not an English word.
+        assert_eq!(fixed("Shu Totoroki raced past them."), "Shu Todoroki raced past them.");
+        // M10: grammar licenses the ordinary word, so nothing changes.
+        for text in [
+            "It does matter whether the door is closed.",
+            "The meter was broken.",
+            "We read the meter after lunch.",
+            "The water ran blue all day.",
+            // bench 1, 2026-11-20: "a ball" shares Bluey's skeleton and sits beside
+            // "and Rowan", but a determiner makes it a complete noun phrase.
+            "Gambol chased a ball and Bingo laughed.",
+        ] {
+            assert_eq!(fixed(text), text);
+        }
     }
 
     #[test]
