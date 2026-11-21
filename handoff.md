@@ -111,7 +111,7 @@ source `tools/phonon-probe/phoneme-script-500.md`; marked body is exactly 500
 whitespace words. New `TRANSCRUST_PHONON_WINDOW_SECS=12` selects cap; default 6
 retained. Same min-pause 6s/lookback 3s. Native lossless/bounded tests cover 6/12;
 root check passes. Old 35.84s take: four 12s-cap windows vs seven baseline, all
-four match C; name spellings change (Rowan→Rowan, Chloe→Clo). Replay example
+four match C; name spellings change (Rowan→Rowen, Chloe→Clo). Replay example
 has optional `live|twelve|twenty` plan. Root release build/restart for 12s trial
 must finish before human reads; check live unit env/logs. Next submitted WAV
 should be scored raw and delivered against script, and replayed at both 6/12
