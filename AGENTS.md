@@ -11,19 +11,19 @@ experiment status and upstream update watches. Add new model references there
 before downloading weights. Refresh the GLiDE and Laya watch entries during
 model reviews and the session's model sweep.
 
-## Known footgun — 15-second decision deadline
+## Known footgun — decision deadline (fixed 2026-11-21)
 
-`crates/decision/src/lib.rs`, `Decision::request`, imposes a fixed 15-second
-wall-clock deadline on the entire model-bound candidate batch for a take.
-Expiry stops inference and disables further model decisions until the decision
-instance is recreated. Rule edits and unresolved text survive with an audit
-warning. This implementation policy can sabotage healthy long dictation.
+`crates/decision/src/lib.rs`, `Decision::request`, used a fixed 15-second
+wall-clock deadline on the whole model-bound batch, and expiry disabled the
+instance. November 19 phone evidence: 64.4 s of Nemotron speech, 25 candidates,
+17 model-bound, killed decisions for the rest of the session.
 
-November 19 phone evidence confirms the failure on 64.4 s of Nemotron speech
-with 25 candidates, 17 model-bound. Treat this deadline as an open defect when
-working on long takes, in-flight chunk processing or mobile inference. Surface
-the warning and model availability in diagnosis. Preserve fallback text and
-explicit user cancellation independently. See
+Since 2026-11-21 the deadline is `decision_budget`: 10 s plus 1.5 s per
+model-bound occurrence, capped at 60 s. Expiry stops inference, clears the stop
+flag and returns the error (`decision budget of Ns exceeded; unresolved spans
+left as heard`); rule edits and as-heard text survive and the instance stays
+usable. Only genuine worker failures set `disabled`. Explicit cancellation is
+unchanged. Surface the warning and model availability in diagnosis. See
 [the decision worker boundary](traverse/decision-worker.md).
 
 ## Household data lives outside the repo (John, 2026-11-20)

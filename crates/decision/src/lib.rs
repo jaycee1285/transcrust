@@ -622,6 +622,8 @@ pub fn model_path(backend: Backend) -> PathBuf {
 pub struct Decision {
     model: Arc<Mutex<Option<Worker>>>,
     disabled: AtomicBool,
+    #[cfg(test)]
+    budget_override_ms: std::sync::atomic::AtomicU64,
     backend: Backend,
     vocabulary_path: PathBuf,
 }
@@ -689,6 +691,8 @@ impl Decision {
         Self {
             model: Arc::new(Mutex::new(model)),
             disabled: AtomicBool::new(false),
+            #[cfg(test)]
+            budget_override_ms: std::sync::atomic::AtomicU64::new(0),
             backend,
             vocabulary_path,
         }
@@ -729,19 +733,31 @@ impl Decision {
                 result
             }
         });
-        // Known footgun: one fixed deadline covers the entire take's batch.
-        // Expiry disables model decisions until reopen, even for healthy long
-        // speech. See traverse/decision-worker.md before changing this policy.
-        let answer = match tokio::time::timeout(Duration::from_secs(15), task).await {
+        // The deadline scales with the batch (see `decision_budget`). Expiry stops
+        // inference but never disables the instance; only worker failures do.
+        #[allow(unused_mut)]
+        let mut budget = decision_budget(candidates.len());
+        #[cfg(test)]
+        if let ms @ 1.. = self.budget_override_ms.load(Ordering::Relaxed) {
+            budget = Duration::from_millis(ms);
+        }
+        let mut task = task;
+        let mut timed_out = false;
+        let answer = match tokio::time::timeout(budget, &mut task).await {
             Ok(Ok(result)) => result,
             Ok(Err(e)) => Err(e.to_string()),
             Err(_) => {
+                timed_out = true;
                 let _ = options.terminate();
                 cancel.store(true, Ordering::Relaxed);
-                Err(
-                    "15s decision budget exceeded; native inference terminated until restart"
-                        .into(),
-                )
+                // Let the stopped worker release the model, then clear the stop flag
+                // so the next request on this instance actually runs.
+                let _ = tokio::time::timeout(STOP_GRACE, &mut task).await;
+                cancel.store(false, Ordering::Relaxed);
+                Err(format!(
+                    "decision budget of {}s exceeded; unresolved spans left as heard",
+                    budget.as_secs_f64()
+                ))
             }
         };
         match answer {
@@ -767,7 +783,7 @@ impl Decision {
                 })
                 .collect()),
             Err(e) => {
-                if e != "decision cancelled" {
+                if e != "decision cancelled" && !timed_out {
                     self.disabled.store(true, Ordering::Relaxed);
                 }
                 Err(e)
@@ -887,9 +903,29 @@ impl Decision {
     }
 }
 
+/// Phone take of 64.4 s (2026-11-19) had 17 model-bound occurrences and exceeded the old fixed 15 s.
+const BUDGET_BASE_MS: u64 = 10_000;
+/// Per model-bound occurrence allowance (same phone evidence).
+const BUDGET_PER_OCCURRENCE_MS: u64 = 1_500;
+/// Hard cap on the batch deadline (same phone evidence).
+const BUDGET_CAP_MS: u64 = 60_000;
+/// How long a timed-out inference gets to release the model after being told to stop.
+const STOP_GRACE: Duration = Duration::from_secs(5);
+
+fn decision_budget(model_bound: usize) -> Duration {
+    let ms = BUDGET_BASE_MS.saturating_add(BUDGET_PER_OCCURRENCE_MS.saturating_mul(model_bound as u64));
+    Duration::from_millis(ms.min(BUDGET_CAP_MS))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn decision_budget_scales_with_batch_and_caps() {
+        assert_eq!(decision_budget(1), Duration::from_millis(11_500));
+        assert_eq!(decision_budget(17), Duration::from_millis(35_500));
+        assert_eq!(decision_budget(100), Duration::from_secs(60));
+    }
     #[test]
     fn legacy_grammar_aliases_do_not_rewrite_sentence_words_or_capitalization() {
         let terms =
@@ -1065,6 +1101,48 @@ mod tests {
             .as_str()
             .unwrap()
             .contains("cancel"));
+        let next = rt.block_on(model.adjudicate(
+            "My dog Gamble is an Australian shepherd.",
+            &transcrust_core::SilentEvents,
+        ));
+        assert_eq!(next.text, "My dog Gambol is an Australian shepherd.");
+        assert!(next.audit["error"].is_null());
+        std::fs::remove_file(path).unwrap();
+    }
+    #[test]
+    #[ignore = "requires the installed INT4 bundle; exercises timeout without disabling"]
+    fn timeout_leaves_instance_usable_for_next_request() {
+        let path =
+            std::env::temp_dir().join(format!("transcrust-timeout-{}.md", std::process::id()));
+        std::fs::write(
+            &path,
+            "## Gambol\ndescription: pet dog\nheard: gamble\nordinary: a gambling verb\n## Chili\nheard: chili\n",
+        )
+        .unwrap();
+        let rt = tokio::runtime::Builder::new_multi_thread()
+            .worker_threads(2)
+            .enable_all()
+            .build()
+            .unwrap();
+        let model = rt.block_on(Decision::start_at(
+            &transcrust_core::SilentEvents,
+            Backend::Ultra,
+            model_path(Backend::Ultra),
+            path.clone(),
+        ));
+        let input = "My dog Gamble is an Australian shepherd. We made chili for dinner.";
+        model.budget_override_ms.store(1, Ordering::Relaxed);
+        let flag = Arc::new(AtomicBool::new(false));
+        let timed = rt.block_on(model.adjudicate_with_cancel(
+            input,
+            &transcrust_core::SilentEvents,
+            flag.clone(),
+        ));
+        let error = timed.audit["error"].as_str().unwrap_or("");
+        assert!(error.contains("decision budget of"), "{error}");
+        assert!(!model.disabled.load(Ordering::Relaxed));
+        assert!(!flag.load(Ordering::Relaxed));
+        model.budget_override_ms.store(0, Ordering::Relaxed);
         let next = rt.block_on(model.adjudicate(
             "My dog Gamble is an Australian shepherd.",
             &transcrust_core::SilentEvents,

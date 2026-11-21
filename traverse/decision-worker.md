@@ -19,7 +19,7 @@ depends_on:
   - crates/decision/src/d1.rs
 staleness_risks:
   - native-library-packaged-in-apk
-  - disabled-resident-decision-instance
+  - disabled-resident-decision-instance-after-worker-failure
   - conflated-asr-and-decision-status
 entrypoints:
   - crates/decision/src/lib.rs
@@ -29,35 +29,36 @@ entrypoints:
 
 # Decision worker
 
-## Known footgun — fixed 15-second deadline
+## Decision deadline (November 21)
 
-`Decision::request` wraps the entire batch of model-bound occurrences in
-`tokio::time::timeout(Duration::from_secs(15), task)`. The deadline includes
-waiting for the worker mutex and model inference. Its budget stays fixed as
-the number of occurrences and the length of the take grow.
+`Decision::request` bounds the batch of model-bound occurrences with
+`decision_budget`: 10 s base plus 1.5 s per occurrence, capped at 60 s. The
+deadline includes waiting for the worker mutex and inference. It replaced a
+fixed 15 s deadline that disabled the instance on expiry; the November 19 phone
+take (64.4 s, 17 model-bound occurrences) exceeded it and lost decisions for
+the session.
 
-On expiry, it terminates ORT work, sets the cooperative inference-stop flag,
-and marks the decision instance disabled. Later requests on that instance
-report model unavailability. Recreating the decision instance restores model
-startup. Preloading the weights moves startup earlier in capture; inference
-still has this deadline.
+On expiry it terminates ORT work, sets the cooperative stop flag, waits briefly
+for the worker to release the model, then clears the flag. The instance is not
+disabled and the next request runs. `disabled` is reserved for genuine worker
+failures that are neither a timeout nor a cancellation. The audit error reads
+`decision budget of Ns exceeded; unresolved spans left as heard`.
 
 `adjudicate_with_cancel` retains deterministic edits and leaves unresolved
-occurrences as heard. Its audit contains the deadline error. Hosts must keep
-that text available for review and expose the warning.
+occurrences as heard. Hosts must keep the audit text available for review and
+expose the warning. Explicit caller cancellation (`decision cancelled`) is
+unchanged. A cancel that arrives during the timeout wind-down can be cleared
+with the stop flag; the FFI keeps `cancel_requested` separately.
 
 November 19 phone evidence is retained at
 `~/syncthing/mopvox/decision-test/results/f8f081d3-8da7-4517-aef8-a6eaa50c811a-nemotron.json`.
 The 64.419876 s take streamed through 58 Nemotron chunks, 806 encoder frames
-and 342 ASR tokens. Route inspection with the selected Pixel glossary found
-25 vocabulary candidates, including 17 model-bound occurrences. The phone
-reported 18.7 s wait and the audit warning
-`15s decision budget exceeded; native inference terminated until restart`.
+and 342 ASR tokens, with 25 vocabulary candidates, 17 model-bound. The old
+warning was `15s decision budget exceeded; native inference terminated until restart`.
 
-Treat the deadline as an open implementation defect for sustained dictation.
-When implementing in-flight work, check how this policy affects each work
-item, the complete parent utterance and recovery after a failed item. Verify
-fallback text, model availability and explicit discard independently.
+When implementing in-flight work, check how the budget applies to each work
+item and the complete parent utterance. Verify fallback text, model
+availability and explicit discard independently.
 
 ## Fused-name split (November 20)
 
