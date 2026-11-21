@@ -159,6 +159,36 @@ pub fn grammar_rewrite(pair: &Pair) -> bool {
         && word(&pair.canonical)
 }
 
+/// The correction only adds capitals the heard text lacked ("shepherd" → "Shepherd").
+/// Casing is produced (John, 2026-11-20), so a deliberate capital can be learned: it
+/// creates the entry and never an alias, since matching is case-insensitive anyway.
+pub fn case_promotion(pair: &Pair) -> bool {
+    let shape = |s: &str| {
+        !s.is_empty()
+            && s.chars().count() <= 256
+            && s.split_whitespace().count() <= 12
+            && s.chars().all(|c| c.is_alphanumeric() || matches!(c, ' ' | '\'' | '’' | '-'))
+    };
+    shape(&pair.heard)
+        && pair.heard != pair.canonical
+        && pair.heard.to_lowercase() == pair.canonical.to_lowercase()
+        && pair
+            .heard
+            .chars()
+            .zip(pair.canonical.chars())
+            .any(|(h, c)| h.is_lowercase() && c.is_uppercase())
+        && !pair
+            .heard
+            .chars()
+            .zip(pair.canonical.chars())
+            .any(|(h, c)| h.is_uppercase() && c.is_lowercase())
+}
+
+/// What the Learn checkbox accepts: an alias pair, or a capitalization promotion.
+pub fn learnable(pair: &Pair) -> bool {
+    valid_pair(pair) || case_promotion(pair)
+}
+
 pub fn valid_pair(pair: &Pair) -> bool {
     let valid = |s: &str| {
         !s.is_empty()

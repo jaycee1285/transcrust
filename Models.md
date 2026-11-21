@@ -188,6 +188,21 @@ checkpoint URLs are unrecorded for those references. Keep these gaps explicit.
 
 ## Model sweep and future additions
 
+**Candidates recorded 2026-11-21:**
+- [KittenML/kitten-tts-2-pico](https://huggingface.co/KittenML/kitten-tts-2-pico):
+  - repo sha `a5632deac7`, Apache-2.0;
+  - TTS, 7.2M parameters per language, English int4 ONNX 4.0 MB;
+  - roles: dayshade "replay heard and corrected" (next step there), swiftype talkback,
+    transcrust command-test synthesis;
+  - not fetched.
+- [maxmelichov/polyg2p](https://github.com/maxmelichov/polyg2p):
+  - commit `692edd1`, Apache-2.0, pure-Rust G2P with eSpeak-style IPA;
+  - English data built locally from CMUdict (BSD) into `~/repos/dz/polyg2p/data-out/`;
+    `en.g2p` (out-of-vocabulary model, 1.8 MB, sha `5f3d3778…`) trained locally with
+    the repo's `train_g2p.py` (CPU torch, throwaway venv), 64.6% held-out exact-word;
+  - role: the IPA-similars proposer for names;
+  - not wired. On 45 bloey misses, IPA ≤1 caught 21 versus the skeleton's 17.
+
 For every new model, add its exact repository URL and role here before fetching
 weights. Record source revision, artifact precision/format, license, local home,
 trial result and next action. Give trial weights a named temporary/cache home

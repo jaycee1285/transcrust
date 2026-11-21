@@ -34,6 +34,18 @@ driver's 80 ms frames.
 | 6–12 s | dictionary · consonant array |
 | 12 s on | the normal pipeline (split, rules, model) |
 
+**Revised gate (2026-11-21):**
+- **Measurement weakened pure time tiers.** Errors pile up at window cuts more than at
+  window starts.
+- **Onset joins position.** On both benches, hard trochaic stress helped Parakeet on
+  non-plosive names (10→12) but not on plosive-onset names (10→9), with the same
+  direction on Nemotron. A stressed burst can read as a boundary ("Blue Wee").
+- **Proposed trigger:** a registered name with a plosive onset (p/b/t/d/k/g), early
+  in the take, gets the **IPA-similars** check.
+- **IPA from polyg2p:** pinned at `692edd1`, English model trained locally from
+  CMUdict (BSD); Blooie and Bluey come out identical (`blˈuːi`).
+- **Grammar still licenses every proposal.** IPA only proposes.
+
 To build:
 - **Seam:** pass word timings across the ASR→decision boundary, desktop and FFI.
   Decisions currently see text only.

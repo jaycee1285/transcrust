@@ -294,8 +294,12 @@ pub unsafe extern "C" fn tc_text(request: *const c_char) -> *mut c_char {
                             "after": change.after,
                             "heard": pair.heard,
                             "canonical": pair.canonical,
-                            "learnable": transcrust_core::correction::valid_pair(&pair),
-                            "field": transcrust_core::vocabulary::alias_field(&pair.heard),
+                            "learnable": transcrust_core::correction::learnable(&pair),
+                            "field": if transcrust_core::correction::case_promotion(&pair) {
+                                "capitalization"
+                            } else {
+                                transcrust_core::vocabulary::alias_field(&pair.heard)
+                            },
                             "entry": known.iter().any(|k| *k == pair.canonical),
                         })
                     })

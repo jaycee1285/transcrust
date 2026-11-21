@@ -107,7 +107,7 @@ pub fn save_pairs(path: &std::path::Path, pairs: &[Pair]) -> Result<(), String> 
     if pairs.is_empty() {
         return Ok(());
     }
-    if pairs.iter().any(|p| !crate::correction::valid_pair(p)) {
+    if pairs.iter().any(|p| !crate::correction::learnable(p)) {
         return Err("Invalid vocabulary proposal".into());
     }
     let mut contents = match std::fs::read_to_string(path) {
@@ -130,6 +130,17 @@ pub fn save_pairs(path: &std::path::Path, pairs: &[Pair]) -> Result<(), String> 
     }
     for pair in pairs {
         let mut lines: Vec<String> = contents.lines().map(str::to_string).collect();
+        // A capitalization promotion creates the entry, never an alias.
+        if crate::correction::case_promotion(pair) {
+            let exists = lines.iter().any(|l| {
+                l.strip_prefix("## ").is_some_and(|t| t.trim().eq_ignore_ascii_case(&pair.canonical))
+            });
+            if !exists {
+                lines.extend([String::new(), format!("## {}", pair.canonical), "kind: term".into()]);
+                contents = lines.join("\n") + "\n";
+            }
+            continue;
+        }
         if let Some(start) = lines.iter().position(|l| {
             l.strip_prefix("## ")
                 .is_some_and(|t| t.trim().eq_ignore_ascii_case(&pair.canonical))
@@ -266,6 +277,25 @@ mod tests {
         };
         assert!(save_pairs(&path, &[blocked]).is_err());
         assert_eq!(std::fs::read_to_string(&path).unwrap(), saved);
+        std::fs::remove_dir_all(dir).unwrap();
+    }
+
+    /// Pixel, 2026-11-21: "Australian shepherd" → "Shepherd" is case-only. It used to be
+    /// rejected, so Learn never appeared. Now it creates the entry once, with no alias.
+    #[test]
+    fn capitalization_promotion_creates_the_entry_once() {
+        let pair = |h: &str, c: &str| Pair { heard: h.into(), canonical: c.into() };
+        assert!(crate::correction::case_promotion(&pair("shepherd", "Shepherd")));
+        assert!(!crate::correction::case_promotion(&pair("Shepherd", "shepherd")));
+        assert!(!crate::correction::valid_pair(&pair("shepherd", "Shepherd")));
+        let dir = std::env::temp_dir().join(format!("transcrust-case-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("vocab.md");
+        std::fs::write(&path, "## Gambol\nkind: person\n").unwrap();
+        save_pairs(&path, &[pair("australian shepherd", "Australian Shepherd")]).unwrap();
+        save_pairs(&path, &[pair("australian shepherd", "Australian Shepherd")]).unwrap();
+        let saved = std::fs::read_to_string(&path).unwrap();
+        assert_eq!(saved, "## Gambol\nkind: person\n\n## Australian Shepherd\nkind: term\n");
         std::fs::remove_dir_all(dir).unwrap();
     }
 

@@ -219,7 +219,7 @@ impl eframe::App for Editor {
                             if *keep {
                                 ui.label("Heard"); ui.text_edit_singleline(&mut pair.heard);
                                 ui.label("Prefer"); ui.text_edit_singleline(&mut pair.canonical);
-                                if !crate::correction::valid_pair(pair) {
+                                if !crate::correction::learnable(pair) {
                                     let reason = if crate::correction::grammar_rewrite(pair) { "This is a sentence edit, not a vocabulary name. Uncheck Learn; your text correction will still be saved." } else { "Choose a phrase on each side: up to 12 words, without commas or sentence punctuation. Uncheck Learn to apply only the text edit." };
                                     ui.colored_label(ui.visuals().error_fg_color, reason);
                                 }
@@ -231,7 +231,7 @@ impl eframe::App for Editor {
                 ui.add_space(8.0);
                 ui.horizontal(|ui| {
                     let label = match self.pending.unwrap() { Action::Replace => "Apply changes & replace", Action::Copy => "Apply changes & copy" };
-                    let valid = self.pairs.iter().all(|(_, pair, keep)| !*keep || crate::correction::valid_pair(pair));
+                    let valid = self.pairs.iter().all(|(_, pair, keep)| !*keep || crate::correction::learnable(pair));
                     if ui.add_enabled(valid, egui::Button::new(label)).clicked() || (submit && valid) { self.finish(ctx); }
                     if ui.button("Back").clicked() { self.pending = None; self.error = None; }
                     if ui.button("Cancel").clicked() { ctx.send_viewport_cmd(egui::ViewportCommand::Close); }
