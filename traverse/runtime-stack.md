@@ -14,6 +14,17 @@ optional direct ASR), `crates/decision` (UltraBERT/D1 and decision policy), and
 Root `src/` retains capture, tray, review, delivery and resident worker lifecycles.
 Linux tests/linkage pass; Android JNI and Apple builds remain separate gates.
 
+**Known footgun, confirmed November 19.** `Decision::request` gives the entire
+model-bound candidate batch a fixed 15-second wall-clock deadline. Expiry
+stops inference, disables model decisions until the instance is recreated,
+and returns retained text/rule edits with an audit warning. A 64.4 s Nemotron
+phone take hit this deadline with 17 model-bound occurrences. This policy can
+defeat long dictation even when ASR streamed successfully. The FFI now reserves
+its response cancellation flag for explicit native cancellation, allowing the
+deadline fallback to reach review. Read the
+[decision worker boundary](decision-worker.md) before changing streaming,
+batching, deadlines or mobile adapters.
+
 `crates/phonon` is the optional native Rust Phonon 2.5 implementation. It maps
 the original packed container, unpacks encoder weights into reusable <=256KiB
 panels per worker, and retains FP32 decoder tables as the C reference does.

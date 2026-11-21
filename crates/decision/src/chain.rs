@@ -5,8 +5,8 @@
 //! and reason strings match Python exactly; `chain-v3-golden.json` pins that.
 //!
 //! Additions not in Python, in [`decide`] only: [`Label::Prior`] ("no context, no model") for a
-//! span that is the whole sentence (before the rules) or has one context word (after them), and
-//! user-facing pass wording.
+//! span that is the whole sentence (before the rules) or has one context word (after them),
+//! rule 0 (mid-sentence capitals as evidence, before rules 1-5), and user-facing pass wording.
 use regex::Regex;
 use std::collections::BTreeSet;
 use std::sync::OnceLock;
@@ -126,6 +126,7 @@ const R3: &str = "3 bare count noun*";
 const R4: &str = "4 animacy";
 const R5: &str = "5 fixed phrases*";
 const R6: &str = "6 speaker prior";
+const R0: &str = "0 capitalization";
 
 fn has(list: &[&str], w: &str) -> bool {
     list.contains(&w)
@@ -173,7 +174,10 @@ fn re_list_after() -> &'static Regex {
 }
 
 fn words(s: &str) -> Vec<String> {
-    re_word().find_iter(s).map(|m| m.as_str().to_lowercase()).collect()
+    re_word()
+        .find_iter(s)
+        .map(|m| m.as_str().to_lowercase().replace('’', "'"))
+        .collect()
 }
 
 /// Parsed view of one marked occurrence (Python `Ctx`).
@@ -186,6 +190,8 @@ struct Ctx {
     next: Vec<String>,
     after_raw: String,
     clause_start: bool,
+    /// The span opens its sentence (no words before it in the current sentence).
+    sentence_start: bool,
     /// Words of the current sentence other than the span.
     sentence_words: usize,
     /// Current sentence with the span replaced by NUL, lowercased (v2-local rule 5).
@@ -212,6 +218,7 @@ impl Ctx {
             canonical: canonical.to_string(),
             desc: description.to_lowercase(),
             clause_start: prev.is_empty(),
+            sentence_start: words(sent_before).is_empty(),
             prev,
             next,
             after_raw: after.to_string(),
@@ -397,6 +404,48 @@ fn rule5_local(c: &Ctx) -> Hit {
     None
 }
 
+fn edit_distance(a: &str, b: &str) -> usize {
+    let b: Vec<char> = b.chars().collect();
+    let mut row: Vec<usize> = (0..=b.len()).collect();
+    for (i, ca) in a.chars().enumerate() {
+        let mut prev = row[0];
+        row[0] = i + 1;
+        for (j, &cb) in b.iter().enumerate() {
+            let cur = row[j + 1];
+            row[j + 1] = (prev + (ca != cb) as usize).min(row[j] + 1).min(cur + 1);
+            prev = cur;
+        }
+    }
+    row[b.len()]
+}
+
+/// Rule 0, capitals as evidence (John, 2026-11-20; bloey corpus run): lean toward the word
+/// the user added to the dictionary, especially when heard and entry share case. Only away from the
+/// start of a sentence, where a capital is a choice the ASR made rather than grammar:
+/// - heard is exactly the dictionary spelling: a name, and the model never lowercases it
+///   ("Come on, Bingo." was lowercased 8 times on Nemotron);
+/// - heard is capitalized and one edit from a single-word dictionary name of 4+ letters:
+///   a name ("I'm sorry, Chili." for Chilli, kept at P(name)=0.084).
+fn rule0_capitals(c: &Ctx) -> Hit {
+    if c.sentence_start || c.heard.contains(' ') || !c.heard.chars().next().is_some_and(char::is_uppercase) {
+        return None;
+    }
+    if c.heard == c.canonical {
+        return Some((
+            Label::Name,
+            format!("{:?} is the dictionary's exact capitalized spelling mid-sentence; never lowercased", c.heard),
+        ));
+    }
+    let canonical = c.canonical.to_lowercase();
+    if !canonical.contains(' ') && canonical.chars().count() >= 4 && edit_distance(&c.hl, &canonical) == 1 {
+        return Some((
+            Label::Name,
+            format!("{:?} is capitalized mid-sentence and one letter from {:?}", c.heard, c.canonical),
+        ));
+    }
+    None
+}
+
 const PASSED: &str = "passed";
 
 fn pass() -> Decision {
@@ -443,6 +492,9 @@ pub fn decide(sentence: &str, canonical: &str, description: &str) -> Decision {
     };
     if c.sentence_words == 0 {
         return prior();
+    }
+    if let Some((label, reason)) = rule0_capitals(&c) {
+        return Decision { label, rule: Some(R0), reason };
     }
     if let Some(d) = run_rules(&c) {
         return d;
@@ -510,10 +562,10 @@ mod tests {
     #[test]
     fn prior_not_applied_with_context_or_when_rule_decides() {
         // two words besides the span: no prior, falls through to the model
-        let d = decide("we saw \u{ab}Bingo\u{bb}", "Bingo", "Bluey's 4 year old sister");
+        let d = decide("we saw \u{ab}bingo\u{bb}", "Bingo", "Bluey's 4 year old sister");
         assert_eq!(d.label, Label::Pass);
         // one word besides the span: prior
-        let d = decide("saw \u{ab}Bingo\u{bb}", "Bingo", "Bluey's 4 year old sister");
+        let d = decide("saw \u{ab}bingo\u{bb}", "Bingo", "Bluey's 4 year old sister");
         assert_eq!(d.label, Label::Prior);
         // a rule decides even with a single context word ("to" verb slot -> keep)
         let d = decide("to \u{ab}gamble\u{bb}", "Gambol", "pet dog");
@@ -522,8 +574,44 @@ mod tests {
         let d = decide("\u{ab}Flow\u{bb}, come here", "Flo", "Cars movie character");
         assert_eq!(d.label, Label::Name);
         // pass wording is user-facing in decide(), Python's in decide_rules()
-        let d = decide("we saw \u{ab}Bingo\u{bb}", "Bingo", "Bluey's 4 year old sister");
+        let d = decide("we saw \u{ab}bingo\u{bb}", "Bingo", "Bluey's 4 year old sister");
         assert_eq!(d.reason, "no rule was confident; the decision model decides");
+    }
+
+    /// bloey corpus, 2026-11-20: the model lowercased names the ASR had right, and kept a
+    /// capitalized near-miss as ordinary.
+    #[test]
+    fn rule0_capitals_mid_sentence() {
+        let name = |t: &str, canonical: &str| {
+            let d = decide(t, canonical, "a person");
+            assert_eq!((d.label, d.rule), (Label::Name, Some(R0)), "{t}: {}", d.reason);
+        };
+        name("Come on, \u{ab}Bingo\u{bb}.", "Bingo");
+        name("What is \u{ab}Bingo\u{bb} doing?", "Bingo");
+        name("It's all good, \u{ab}Brandy\u{bb}.", "Brandy");
+        name("Onesies make \u{ab}Bingo\u{bb} crazy.", "Bingo");
+        name("I'm sorry, \u{ab}Chili\u{bb}.", "Chilli");
+        // not rule 0: sentence-initial capitals are grammar, lowercase is no evidence,
+        // two edits away is not a near-miss, short names are too easy to hit
+        for (t, canonical) in [
+            ("\u{ab}Bingo\u{bb} was on television.", "Bingo"),
+            ("We played \u{ab}bingo\u{bb} at the table.", "Bingo"),
+            ("We should never \u{ab}Gamble\u{bb} with money.", "Gambol"),
+            ("I saw \u{ab}Fly\u{bb} over there today.", "Flo"),
+            ("then Rowan asked whether \u{ab}Flow\u{bb} would have lunch", "Flo"),
+        ] {
+            assert_ne!(decide(t, canonical, "a person").rule, Some(R0), "{t}");
+        }
+        // Python parity entry point is untouched
+        assert_ne!(decide_rules("Come on, \u{ab}Bingo\u{bb}.", "Bingo", "a person").rule, Some(R0));
+    }
+
+    #[test]
+    fn curly_apostrophe_preserves_the_same_verb_slot() {
+        let straight = decide("Don't «gamble» the grocery money.", "Gambol", "pet dog");
+        let curly = decide("Don’t «gamble» the grocery money.", "Gambol", "pet dog");
+        assert_eq!((straight.label, straight.rule), (Label::Keep, Some(R2)));
+        assert_eq!(curly, straight);
     }
 
     #[test]

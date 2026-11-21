@@ -11,12 +11,45 @@ experiment status and upstream update watches. Add new model references there
 before downloading weights. Refresh the GLiDE and Laya watch entries during
 model reviews and the session's model sweep.
 
+## Known footgun — 15-second decision deadline
+
+`crates/decision/src/lib.rs`, `Decision::request`, imposes a fixed 15-second
+wall-clock deadline on the entire model-bound candidate batch for a take.
+Expiry stops inference and disables further model decisions until the decision
+instance is recreated. Rule edits and unresolved text survive with an audit
+warning. This implementation policy can sabotage healthy long dictation.
+
+November 19 phone evidence confirms the failure on 64.4 s of Nemotron speech
+with 25 candidates, 17 model-bound. Treat this deadline as an open defect when
+working on long takes, in-flight chunk processing or mobile inference. Surface
+the warning and model availability in diagnosis. Preserve fallback text and
+explicit user cancellation independently. See
+[the decision worker boundary](traverse/decision-worker.md).
+
+## Household data lives outside the repo (John, 2026-11-20)
+
+Anything privacy-tipped never goes in the repo tree, not even gitignored: family
+names and their mishearings, recordings, transcripts of household speech, personal
+vocabularies, phone takes and the logs or fixtures derived from them.
+
+1. Stage new results in `/tmp/` for John's review.
+2. After review, write them to `~/syncthing/transcrust-work/<study>/`. Do this even if the
+   inputs started elsewhere, e.g. `~/syncthing/mopvox/decision-test/`.
+3. Tracked code and tests use the substitute name **Rowan** for the household
+   child, as the 2026-11-18 scrub did.
+
+The point is that a later agent asked to `git add`/commit cannot sweep household data
+in. Do not depend on remembering `.gitignore` entries. The 11-19 window study now lives at
+`~/syncthing/transcrust-work/window-study/` (logs in `logs-20261119/`). Older
+gitignored `logs/` and `private/` contents predate this rule.
+
 ## Read in this order
 
 | | |
 |---|---|
 | `traverse/runtime-stack.md` | how the thing is built and why. The authority on architecture. |
 | `TASKBOARD.md` | what to do next, in order, with kill criteria |
+| `SCOREBOARD.md` | does voice beat typing for him: needed-error rate × 7.8 s per correction vs 40 WPM, per engine/build, plus name accuracy |
 | `Models.md` | every known Hugging Face model reference, lineage, status, storage and update watchlist |
 | `Dragon-Mechanisms.md` | the research north star — what pre-neural dictation solved and which of it is still load-bearing |
 | `Parakeet-v3.md` | why the default engine is the right one for on-device control. Reference doc, not a task list. |

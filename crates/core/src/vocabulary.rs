@@ -76,6 +76,31 @@ fn parse_dictionary(contents: &str) -> Vec<String> {
     out
 }
 
+/// Entry names in the vocabulary file (dictation's view: habits/tasks excluded).
+/// A missing or unreadable file has none.
+pub fn canonicals(path: &std::path::Path) -> Vec<String> {
+    std::fs::read_to_string(path)
+        .map(|contents| parse_dictionary(&contents))
+        .unwrap_or_default()
+}
+
+const ALIAS_FIELDS: &[&str] = &["heard", "homophones", "distinct"];
+
+/// Where a learned alias is filed (John, 2026-11-20). A single word that is not
+/// English can only mean the name: `distinct`, replaced directly. A real word competes
+/// with the name and needs context: `homophones`, the known-issue list. Anything
+/// longer stays `heard`.
+pub fn alias_field(heard: &str) -> &'static str {
+    let heard = heard.trim();
+    if heard.contains(char::is_whitespace) || heard.contains('-') {
+        "heard"
+    } else if crate::lexicon::is_word(heard) {
+        "homophones"
+    } else {
+        "distinct"
+    }
+}
+
 /// Re-read and merge before writing, preserving unrelated entries and prose.
 /// Same-directory atomic rename prevents a reader seeing a half-written file.
 pub fn save_pairs(path: &std::path::Path, pairs: &[Pair]) -> Result<(), String> {
@@ -124,27 +149,38 @@ pub fn save_pairs(path: &std::path::Path, pairs: &[Pair]) -> Result<(), String> 
                     pair.canonical
                 ));
             }
-            if let Some(index) = (start + 1..end).find(|&i| lines[i].starts_with("heard:")) {
-                let existing = lines[index].strip_prefix("heard:").unwrap().trim();
-                if !existing
-                    .split(',')
-                    .any(|h| h.trim().eq_ignore_ascii_case(&pair.heard))
-                {
+            let known = lines[start + 1..end].iter().any(|l| {
+                ALIAS_FIELDS.iter().any(|f| {
+                    l.strip_prefix(f).and_then(|r| r.strip_prefix(':')).is_some_and(|list| {
+                        list.split(',').any(|h| h.trim().eq_ignore_ascii_case(&pair.heard))
+                    })
+                })
+            });
+            if !known {
+                let field = alias_field(&pair.heard);
+                let prefix = format!("{field}:");
+                if let Some(index) = (start + 1..end).find(|&i| lines[i].starts_with(&prefix)) {
+                    let existing = lines[index][prefix.len()..].trim();
                     lines[index] = if existing.is_empty() {
-                        format!("heard: {}", pair.heard)
+                        format!("{prefix} {}", pair.heard)
                     } else {
-                        format!("heard: {existing}, {}", pair.heard)
+                        format!("{prefix} {existing}, {}", pair.heard)
                     };
+                } else {
+                    // After the entry's last non-blank line, so a trailing blank stays a separator.
+                    let mut at = end;
+                    while at > start + 1 && lines[at - 1].trim().is_empty() {
+                        at -= 1;
+                    }
+                    lines.insert(at, format!("{prefix} {}", pair.heard));
                 }
-            } else {
-                lines.insert(end, format!("heard: {}", pair.heard));
             }
         } else {
             lines.extend([
                 String::new(),
                 format!("## {}", pair.canonical),
                 "kind: term".into(),
-                format!("heard: {}", pair.heard),
+                format!("{}: {}", alias_field(&pair.heard), pair.heard),
             ]);
         }
         contents = lines.join("\n") + "\n";
@@ -220,7 +256,8 @@ mod tests {
         save_pairs(&path, &[pair.clone()]).unwrap();
         let saved = std::fs::read_to_string(&path).unwrap();
         assert!(saved.contains("Keep this prose."));
-        assert!(saved.contains("heard: kubernetties, kubernetis"));
+        // not an English word: filed as distinct, beside the existing heard line
+        assert!(saved.contains("heard: kubernetties\ndistinct: kubernetis"), "{saved}");
         assert!(saved.contains("## Cigs\nkind: habit\nheard: six"));
         assert_eq!(saved.matches("kubernetis").count(), 1);
         let blocked = Pair {
@@ -229,6 +266,33 @@ mod tests {
         };
         assert!(save_pairs(&path, &[blocked]).is_err());
         assert_eq!(std::fs::read_to_string(&path).unwrap(), saved);
+        std::fs::remove_dir_all(dir).unwrap();
+    }
+
+    /// bloey corpus aliases (2026-11-20): non-words are distinct, real words are
+    /// homophones (the known-issue list), phrases stay heard; an alias already filed
+    /// under any field is not added again.
+    #[test]
+    fn learned_aliases_are_filed_by_kind() {
+        assert_eq!(alias_field("Blooie"), "distinct");
+        assert_eq!(alias_field("Louie"), "homophones");
+        assert_eq!(alias_field("unicorns"), "homophones");
+        assert_eq!(alias_field("blue e"), "heard");
+        let dir = std::env::temp_dir().join(format!("transcrust-alias-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("bluey-vocab.md");
+        std::fs::write(&path, "## Bluey\nkind: person\nheard: blue e\n\n## Bingo\nkind: person\nhomophones: bingo\n").unwrap();
+        let pair = |heard: &str, canonical: &str| Pair { heard: heard.into(), canonical: canonical.into() };
+        // a batch with an invalid pair writes nothing
+        assert!(save_pairs(&path, &[pair("Blooie", "Bluey"), pair("Bingo", "Bingo")]).is_err());
+        save_pairs(&path, &[pair("Blooie", "Bluey"), pair("Louie", "Bluey")]).unwrap();
+        save_pairs(&path, &[pair("blooie", "Bluey"), pair("Jilly", "Chilli")]).unwrap();
+        let saved = std::fs::read_to_string(&path).unwrap();
+        assert_eq!(
+            saved,
+            "## Bluey\nkind: person\nheard: blue e\ndistinct: Blooie\nhomophones: Louie\n\n\
+             ## Bingo\nkind: person\nhomophones: bingo\n\n## Chilli\nkind: term\ndistinct: Jilly\n"
+        );
         std::fs::remove_dir_all(dir).unwrap();
     }
 }

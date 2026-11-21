@@ -4,6 +4,7 @@ pub mod chain;
 pub mod d1;
 #[allow(dead_code)]
 pub mod decision_tensor;
+pub mod split;
 #[allow(dead_code)]
 pub mod ultra;
 use ort::session::RunOptions;
@@ -670,6 +671,9 @@ impl Decision {
                 result
             }
         });
+        // Known footgun: one fixed deadline covers the entire take's batch.
+        // Expiry disables model decisions until reopen, even for healthy long
+        // speech. See traverse/decision-worker.md before changing this policy.
         let answer = match tokio::time::timeout(Duration::from_secs(15), task).await {
             Ok(Ok(result)) => result,
             Ok(Err(e)) => Err(e.to_string()),
@@ -725,16 +729,27 @@ impl Decision {
         cancel: Arc<AtomicBool>,
     ) -> Outcome {
         let started = Instant::now();
+        let input = text;
         let mut jobs = Vec::new();
         let mut results = Vec::new();
         let mut routes: Vec<Routed> = Vec::new();
         let mut error: Option<String> = None;
-        let work = if cancel.load(Ordering::Relaxed) {
+        let vocabulary = if cancel.load(Ordering::Relaxed) {
             Err("decision cancelled".into())
         } else {
             vocabulary_at(&self.vocabulary_path)
-                .and_then(|terms| candidates_for(text, &terms, self.backend))
         };
+        // Fused registered names are split before matching; candidate offsets in the
+        // audit belong to `split_text`.
+        let (working, splits) = match &vocabulary {
+            Ok(terms) => split::Names::new(terms.iter().map(|t| t.canonical.as_str())).repair(text),
+            Err(_) => (text.to_string(), Vec::new()),
+        };
+        for s in &splits {
+            observer.phase("dec.split", &format!("{:?} -> {:?}: {}", s.heard, s.replacement, s.reason));
+        }
+        let text = working.as_str();
+        let work = vocabulary.and_then(|terms| candidates_for(text, &terms, self.backend));
         match work {
             Err(e) => error = Some(e),
             Ok(found) if found.is_empty() => {}
@@ -806,7 +821,7 @@ impl Decision {
             );
             decisions.push(json!({"heard":candidate.heard,"canonical":candidate.canonical,"choice":route.choice,"source":route.source,"reason":route.reason,"replacement":edit}));
         }
-        let audit = json!({"backend":self.backend.label(),"input":text,"delivered":delivered,"decision_secs":elapsed,"candidates":jobs,"decisions":decisions,"results":results,"error":error});
+        let audit = json!({"backend":self.backend.label(),"input":input,"split_text":text,"splits":splits,"delivered":delivered,"decision_secs":elapsed,"candidates":jobs,"decisions":decisions,"results":results,"error":error});
         Outcome {
             text: delivered,
             audit,
@@ -1000,6 +1015,63 @@ mod tests {
         assert!(next.audit["error"].is_null());
         std::fs::remove_file(path).unwrap();
     }
+    /// Phone take a137dfff-5c5e-4df3-a87e-9551e4aff16d, Parakeet Ultra whole-take raw
+    /// (2026-11-19), household child's name replaced with Rowan.
+    const NELLAND_TAKE: &str = "Nelland Rowan took gamble to the park this morning. Gamble chased a ball while Rowan talked about Lightning McQueen. Nell said we should never gamble with the grocery money. We watched the water flow under the bridge, then Rowan asked whether Flo would have lunch ready for meter new paragraph back at home Louis and Bingo were on television. Chili helped the children while Bandit looked for a toy. We made chili for dinner and Nell said the kitchen felt chilly. Later we played bingo at the table. The story had a bandit who stole a bag of coins. New paragraph Rowan chose cars again after dinner. Mader drove to see flow and lightning McQueen waited outside a flash of lightning hit the window. It does matter whether the door is closed when rain comes in a called gamble inside and Rowan put the little tow truck beside his race car.";
+    const NELLAND_VOCAB: &str = "## Gambol\ndescription: pet dog\nheard: gamble\nordinary: a gambling verb\n## Nell\n## Rowan\n## Flo\n## Mater\n## Bluey\n## Bingo\n## Chili\n## Bandit\n## Lightning McQueen\n## McQueen\n";
+
+    fn nelland_pipeline(model: PathBuf) -> Outcome {
+        let path =
+            std::env::temp_dir().join(format!("transcrust-nelland-{}.md", std::process::id()));
+        std::fs::write(&path, NELLAND_VOCAB).unwrap();
+        let rt = tokio::runtime::Builder::new_multi_thread()
+            .worker_threads(2)
+            .enable_all()
+            .build()
+            .unwrap();
+        let decision = rt.block_on(Decision::start_at(
+            &transcrust_core::SilentEvents,
+            Backend::Ultra,
+            model,
+            path.clone(),
+        ));
+        let outcome =
+            rt.block_on(decision.adjudicate(NELLAND_TAKE, &transcrust_core::SilentEvents));
+        std::fs::remove_file(path).unwrap();
+        outcome
+    }
+
+    fn assert_nelland_split(outcome: &Outcome) {
+        assert!(
+            outcome.text.starts_with("Nell and Rowan took "),
+            "{}",
+            outcome.text
+        );
+        assert!(!outcome.text.contains("Nelland"));
+        assert_eq!(outcome.audit["input"], NELLAND_TAKE);
+        let splits = outcome.audit["splits"].as_array().unwrap();
+        assert_eq!(splits.len(), 1, "{splits:?}");
+        assert_eq!(splits[0]["heard"], "Nelland");
+        assert_eq!(splits[0]["replacement"], "Nell and");
+    }
+
+    /// The whole adjudicate path (vocabulary, split, candidates, rules, apply) with no
+    /// model: model-bound occurrences stay as heard, the split still lands.
+    #[test]
+    fn nelland_take_is_split_through_the_pipeline_without_a_model() {
+        let outcome = nelland_pipeline(std::env::temp_dir().join("transcrust-no-model"));
+        assert_nelland_split(&outcome);
+    }
+
+    #[test]
+    #[ignore = "requires the installed INT4 bundle; the Nelland take through the live decision path"]
+    fn nelland_take_is_split_through_the_pipeline_with_ultra() {
+        let outcome = nelland_pipeline(model_path(Backend::Ultra));
+        assert!(outcome.audit["error"].is_null(), "{}", outcome.audit["error"]);
+        assert_nelland_split(&outcome);
+        println!("delivered: {}", outcome.text);
+    }
+
     #[test]
     fn targets_canonical_occurrences_without_substrings() {
         let text = "Gambol gambled. I gamble; water flows. The flow is slow.";
@@ -1175,12 +1247,15 @@ mod tests {
             ["Lightning McQueen", "lightning", "Chili"]
         );
         assert_eq!(routes[1].choice, Some(Choice::Keep));
+        // Rule 0 (2026-11-20): an exact capitalized dictionary spelling mid-sentence is never
+        // lowercased. On the bloey corpus the model's lowercasings were 13 wrong, 0 right.
+        assert_eq!(routes[2].source, "0 capitalization");
         for route in &mut routes {
             route.choice.get_or_insert(Choice::Keep);
         }
         assert_eq!(
             apply_routes(text, &jobs, &routes),
-            "Lightning McQueen won. The lightning was loud. We made chili for dinner."
+            "Lightning McQueen won. The lightning was loud. We made Chili for dinner."
         );
     }
 

@@ -1,5 +1,17 @@
 # Human Smoke
 
+## Split, rule 0, alias filing, review badge — November 20, passed
+
+John cleared the desktop smoke on Parakeet PTT. Live: a take, then Ctrl+Alt+C,
+the full review and Learn. `Louis → Bluey` was filed as `homophones: Louis`
+under `## Bluey` in `john-vocab.md`. That session ran without `--dec`, so its
+takes were undecided. The same six Gambol/gamble sentences replayed through
+`--fix … --dec` all came out right (model, rule 2, rule 3; rule 0 kept the son's name).
+Run live with `cargo run --release -- --dec`. Found during the smoke: the
+Review & replace button stays greyed until the caret box is ticked, so the
+flow can end in Copy unnoticed. John accepted it as is. The phone APK
+`mopvox-decision-11-20b.apk` still needs its own take.
+
 ## Vocabulary retirement build — November 19, passed
 
 John confirmed the live `--dec --smoke` passed after removal of the phonetic

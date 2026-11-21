@@ -1,6 +1,6 @@
 # Model registry
 
-Maintained 2026-11-11. Read this before model selection, downloads, update
+Maintained 2026-11-19. Read this before model selection, downloads, update
 checks, quantization or cleanup. `AGENTS.md` includes it in the agent read order.
 `TASKBOARD.md` owns scheduling and acceptance. The linked experiment reports
 contain measurements. Update this registry whenever a model is introduced,
@@ -28,9 +28,9 @@ checkpoints need the same frozen correction/ASR comparisons before promotion.
 
 | Repository | Last upstream check | Review baseline and next check |
 |---|---|---|
-| [fastino/GLiDE-0.4B](https://huggingface.co/fastino/GLiDE-0.4B) | 2026-11-11, HEAD `6bda7ab91aeb36dcad6d27828a8871e548c7fc71` | Same HEAD as November 10 review. Queued beside Pocket. Watch encoder/readout, prompt, batching and license changes. [Review](decision-model-review-2026-11-10-glide.md). |
-| [convaiinnovations/laya](https://huggingface.co/convaiinnovations/laya) | 2026-11-11, HEAD `85cc74ddae6109077ebe2853a9b3077fb6606a78` | Card reviewed, local correction inference still open. Current card says SDK 0.3.20 leaves checkpoints unchanged. Track English, multilingual and typed-decisions checkpoints separately. |
-| [moondream/parakeet-ultra](https://huggingface.co/moondream/parakeet-ultra) | 2026-11-11, HEAD `73175eb7aeb0d82f1e2a6b53b3aabc10a90bcd0b` | Source of the installed local INT4 export. Installed source revision was not pinned by the old exporter. Compare new weights with installed graph hashes and saved tests. |
+| [fastino/GLiDE-0.4B](https://huggingface.co/fastino/GLiDE-0.4B) | 2026-11-19, HEAD `6bda7ab91aeb36dcad6d27828a8871e548c7fc71` | Same HEAD as November 10 review. Next decision-model trial in the research queue. [Review](decision-model-review-2026-11-10-glide.md). |
+| [convaiinnovations/laya](https://huggingface.co/convaiinnovations/laya) | 2026-11-19, HEAD `fd4f9dbcf4fde222fd43174bdd4c3b08b789e4e1` | Compared with `85cc74ddae6109077ebe2853a9b3077fb6606a78`. Only README changed. English, multilingual and typed-decisions weight hashes, tokenizers, configs and code match. Local correction testing remains open. |
+| [moondream/parakeet-ultra](https://huggingface.co/moondream/parakeet-ultra) | 2026-11-19, HEAD `73175eb7aeb0d82f1e2a6b53b3aabc10a90bcd0b` | Same upstream HEAD. Source of the installed local INT4 export. The old exporter recorded no exact source revision. |
 
 For a quick upstream check, run `git ls-remote <repository URL> HEAD`. A changed
 HEAD is a prompt to inspect changes. Keep the installed/tested revision separate
@@ -43,7 +43,12 @@ November14 local pipeline replay: nine saved WAVs ran through both current
 Parakeet and Nemotron with primary UltraBERT Q4. Weights/revisions unchanged;
 candidate policy now excludes ordinary function-word swaps and lowercase-only
 case edits. Proper-name repair retained. [Results and limits](pipeline-2026-11-14.md).
-Upstream watch check dates above remain their actual November11 dates.
+The November 19 inventory and cleanup candidates are in [the cleanup ledger](decision-model-cleanup.md).
+
+November 19 same-WAV phone study used installed Nemotron INT4, Parakeet Ultra
+INT4, retained community Parakeet v3 INT4 and UltraBERT Q4. Whole/6/12 s and
+repeated-opening arms preserve those identities. Weights are unchanged.
+[Results and exact-input evidence](~/syncthing/transcrust-work/window-study/README.md).
 
 ### Parakeet Ultra is installed under the legacy v3 directory name
 
@@ -73,15 +78,16 @@ Installed artifact SHA256 values, checked 2026-11-11:
 
 | Asset | Actual role and location | Provenance / outstanding detail |
 |---|---|---|
-| UltraBERT curation Q4 | Primary `--dec`, installed at `~/.local/share/transcrust/models/ultrabert-380m-curation-q4`. | Relocated and verified November 11. Source revision `c6a1fa055d36aeb3349b9a54537a5bc3f585d77d`. Packed SHA256 `75ffd6cdf6c147ecaceab1878e388701d4feadcf69bfc8bd88a59cbd69ab8869`. Research callers use the installed path or `TRANSCRUST_DEC_MODEL`. |
-| UltraBERT FP32 reference | `~/.cache/transcrust/model-references/ultrabert-380m-curation/c6a1fa055d36aeb3349b9a54537a5bc3f585d77d`. | Retained outside the repo for comparisons/requantization. Source SHA256 `67ac518c172934138f5d0bb06aa34523c9d9dfb6261f5dac3c860ab3f3542e91`. Rerun with `nix develop -c bash tools/schema-probe/run.sh ultra` or `nix develop -c bash tools/schema-probe/int4.sh`. `TRANSCRUST_ULTRA_REFERENCE` overrides this cache path. |
+| UltraBERT curation Q4 | Primary `--dec`, installed at `~/.local/share/transcrust/models/ultrabert-380m-curation-q4`. A verified copy under `~/syncthing/models/ultrabert-380m-curation-q4` serves the Mopvox JNI test. | Source revision `c6a1fa055d36aeb3349b9a54537a5bc3f585d77d`. Packed SHA256 `75ffd6cdf6c147ecaceab1878e388701d4feadcf69bfc8bd88a59cbd69ab8869`. Research callers use the installed path or `TRANSCRUST_DEC_MODEL`. |
+| UltraBERT FP32 reference | Expected at `~/.cache/transcrust/model-references/ultrabert-380m-curation/c6a1fa055d36aeb3349b9a54537a5bc3f585d77d`. Absent on Zed, rechecked November 19. | Source SHA256 `67ac518c172934138f5d0bb06aa34523c9d9dfb6261f5dac3c860ab3f3542e91`. Recreate for comparisons with `nix develop -c bash tools/schema-probe/run.sh ultra`, or requantize with `nix develop -c bash tools/schema-probe/int4.sh`. `TRANSCRUST_ULTRA_REFERENCE` overrides the cache path. |
 | D1 text Q8 | Selectable `--dec-backend d1`, installed at `~/.local/share/transcrust/models/d1-omni-600M-q8`. | Local manifest pins LiquidAI `02b55d7076f15129e59ab3f94783f32c4b088674` and ONNX community export `4ebc1b97bf1477485371c79d1cf8d5e4e8eebfa0`, with file hashes. |
 | Nemotron INT4, 1120ms | Shared desktop/phone asset at `~/syncthing/models/nemotron-speech-en-0.6b-onnx-1120ms-int4`, symlinked into desktop models. | Installed README identifies the NVIDIA base and shameez FP16 export. Exact published INT4 repository/revision remains a provenance gap. Keep this separate from the retired local 560ms quantization. |
 | Granite TurboCTC INT8 | Installed at `~/.local/share/transcrust/models/granite-speech-5.0-470m-turboctc`. | Original export project was removed. Local config has vocab16384, but exact source revision is unrecorded. Preserve graph/tokenizer together. Current upstream and old local measurements need separate identities. |
 | Phonon 2.5 original packed | `~/syncthing/models/phonon-2.5-english-native`, with desktop symlink. | `SOURCE.json` pins revision `da200358d638886bc96c758c672ad5568828b119`, archive/container/config hashes. Desktop evaluation retired. Preserve for mobile/Apple work. |
 | Phonon 2.5 converted C layout | Android asset at `~/syncthing/models/phonon-2.5-english-c`. | Same pinned original checkpoint, Rust conversion and converted-weight hashes in `SOURCE.json`. Phone C runtime is distinct from the native Rust implementation. |
 | Whistle | Historical phone trial assets under `~/syncthing/models/whistle`. | Replaced by Phonon 2.5 in the live IME. Shared files may still support research. |
-| s1-mini | Optional long-form normalization model under `~/.local/share/transcrust/models/s1-mini-gguf`. | Historical route asset. Its public source is listed below. |
+| s1-mini | Optional text normalization model under `~/.local/share/transcrust/models/s1-mini-gguf`. | Used by `--normalise` and live long-form polish. [Actual GGUF source](https://huggingface.co/superwhisper/s1-mini-GGUF). |
+| Parakeet community v3 rollback | `~/syncthing/models/paraback/parakeet-tdt-0.6b-v3-int4`. | Encoder and decoder SHA256 match the [efederici community export](https://huggingface.co/efederici/parakeet-tdt-0.6b-v3-onnx-int4). The `nemo128.onnx` hash matches active Parakeet Ultra. No current loader path found. |
 
 ## ASR sources, exports and historical candidates
 
@@ -110,7 +116,7 @@ substitute a guessed checkpoint for that pending request.
 
 ## Decision models and correction experiments
 
-GLiDE and Pocket fill D1's bounded-decision role with different architectures.
+GLiDE and Pocket explore D1's bounded-decision role with different architectures.
 Keep model-specific rendering, tokenization, heads and calibration tied to the
 checkpoint. Frozen repair/preservation cases are shared across comparisons.
 
@@ -119,8 +125,8 @@ checkpoint. Frozen repair/preservation cases are shared across comparisons.
 | [davanstrien/ultrabert-380m-curation](https://huggingface.co/davanstrien/ultrabert-380m-curation) | Current primary, native Q4. [Quantization results](tools/pair-router-probe/ultra-int4-2026-11-01/README.md). |
 | [LiquidAI/d1-omni-600M](https://huggingface.co/LiquidAI/d1-omni-600M) | Accepted desktop Q8 baseline, text-only inference. [Results index](decision-model-results.md). |
 | [onnx-community/d1-omni-600M-ONNX](https://huggingface.co/onnx-community/d1-omni-600M-ONNX) | Actual Q8/Q4 graph source for D1 trials. Installed Q8 manifest above pins the export. |
-| [taobao-mnn/MNN-Pocket-0.3B-Dec](https://huggingface.co/taobao-mnn/MNN-Pocket-0.3B-Dec) | First-tier queued trial. Qwen3 + LoRA + pointer head. Weights have yet to be fetched for this trial. [Review](decision-model-review-2026-11-08.md). |
-| [hindsight-ai/hs-decide-1-flash](https://huggingface.co/hindsight-ai/hs-decide-1-flash) | Queued after Pocket/GLiDE. Hybrid Qwen3.5 typed model. Card/source review only. |
+| [taobao-mnn/MNN-Pocket-0.3B-Dec](https://huggingface.co/taobao-mnn/MNN-Pocket-0.3B-Dec) | Tested November 18 and parked. Native F32 produced fewer repairs and more unwanted edits than UltraBERT. Pinned weights at `~/.cache/transcrust/pocket-dec`. [Runner, revision and results](tools/pocket-probe/README.md). |
+| [hindsight-ai/hs-decide-1-flash](https://huggingface.co/hindsight-ai/hs-decide-1-flash) | Queued after GLiDE. Hybrid Qwen3.5 typed model. Card/source review only. |
 | [baselabs/joey-1](https://huggingface.co/baselabs/joey-1) | Later larger baseline. Card/source review only. |
 | [Mincofficial/Minico-M1-1105](https://huggingface.co/Mincofficial/Minico-M1-1105) | Queued separate bounded-scoring research formulation. Generative LFM2 model. |
 | [doofz/THX-01](https://huggingface.co/doofz/THX-01) | Native provisional test failed to improve household results. Reference parity remains open. Weights removed. [Probe](tools/thx-probe/README.md). |

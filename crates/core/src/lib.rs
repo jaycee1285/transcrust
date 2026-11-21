@@ -1,6 +1,7 @@
 //! Shared dictation mechanics. No capture device, UI, tray, paste or downloads.
 pub mod audio;
 pub mod correction;
+pub mod lexicon;
 pub mod model;
 #[cfg(feature = "asr")]
 pub mod nemotron;

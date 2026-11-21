@@ -3,18 +3,14 @@
 **transcrust** is licensed under the **GNU Affero General Public License v3.0 or later** (see
 `LICENSE`), as of 2026-11-17.
 
-## Why AGPL
+## History
 
-Earlier transcrust revisions carried two parts derived from **murmure**
-(© Kieirra and contributors, AGPL-3.0-or-later,
-https://github.com/Kieirra/murmure, read at `8c7a07c`).
-The old `crates/core/src/dictionary.rs` used Beider-Morse phonetic vocabulary
-correction. The old `crates/core/src/boost.rs` used near-miss gates and alpha
-calibration documented against murmure.
-
-The contextual implementation in [design-vocab-gate.md](design-vocab-gate.md)
-replaced those two runtime mechanisms in November 2026. The project remains
-AGPL and the earlier implementation remains in its history.
+Revisions before November 2026 contained `crates/core/src/dictionary.rs` and
+`crates/core/src/boost.rs`, derived from **murmure** (© Kieirra and contributors,
+AGPL-3.0-or-later, https://github.com/Kieirra/murmure). Both were removed in
+November 2026 and remain AGPL in this repository's history. The current tree
+contains no murmure-derived code (checked 2026-11-20, including the direct
+Parakeet decode). `murmure-reference.md` keeps research notes only.
 
 ## Libraries
 

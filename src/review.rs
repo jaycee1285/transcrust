@@ -101,6 +101,7 @@ pub fn run_window() -> Result<(), String> {
                 caret_confirmed: false,
                 pending: None,
                 pairs: Vec::new(),
+                known: Vec::new(),
                 error: None,
                 result: result_for_app,
             }))
@@ -120,6 +121,8 @@ struct Editor {
     caret_confirmed: bool,
     pending: Option<Action>,
     pairs: Vec<(Change, Pair, bool)>,
+    /// Entry names in the vocabulary, read when the review opens.
+    known: Vec<String>,
     error: Option<String>,
     result: Arc<Mutex<Option<Response>>>,
 }
@@ -133,6 +136,7 @@ impl Editor {
                 (change, pair, false)
             })
             .collect();
+        self.known = transcrust_core::vocabulary::canonicals(&self.request.vocabulary_path);
         self.pending = Some(action);
         if self.pairs.is_empty() {
             self.finish(ctx);
@@ -163,6 +167,24 @@ impl Editor {
     }
 }
 
+/// "Matches ## Bluey: Learn adds Blooie under distinct" when the corrected text is exactly
+/// an existing entry name (case included) and the pair could be learned.
+fn known_entry_note(known: &[String], pair: &Pair) -> Option<String> {
+    if !crate::correction::valid_pair(pair) || !known.iter().any(|k| *k == pair.canonical) {
+        return None;
+    }
+    let field = transcrust_core::vocabulary::alias_field(&pair.heard);
+    let why = match field {
+        "distinct" => "not an English word, so it will always become the name",
+        "homophones" => "a real word, so context will still decide",
+        _ => "a phrase the rules will check",
+    };
+    Some(format!(
+        "Matches ## {} in your vocabulary. Learn adds \u{201c}{}\u{201d} under {field}: ({why}).",
+        pair.canonical, pair.heard
+    ))
+}
+
 impl eframe::App for Editor {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         if ctx.input_mut(|i| i.consume_key(egui::Modifiers::NONE, egui::Key::Escape)) {
@@ -188,6 +210,11 @@ impl eframe::App for Editor {
                             ui.label(if change.before.is_empty() { "Added" } else if change.after.is_empty() { "Removed" } else { "Changed" });
                             if !change.before.is_empty() { ui.label(egui::RichText::new(&change.before).strikethrough()); }
                             if !change.after.is_empty() { ui.label(egui::RichText::new(&change.after).strong()); }
+                            // A correction to an existing entry is a known failure for that name:
+                            // say where Learn would file it. Learn stays unchecked (John, 2026-11-20).
+                            if let Some(note) = known_entry_note(&self.known, pair) {
+                                ui.colored_label(ui.visuals().warn_fg_color, note);
+                            }
                             ui.checkbox(keep, "Learn a name or phrase from this change");
                             if *keep {
                                 ui.label("Heard"); ui.text_edit_singleline(&mut pair.heard);
@@ -355,6 +382,20 @@ fn append_correction(
 #[cfg(test)]
 mod history_tests {
     use super::*;
+
+    #[test]
+    fn known_entry_note_names_the_entry_and_field() {
+        let known = vec!["Bluey".to_string(), "Bingo".to_string()];
+        let pair = |h: &str, c: &str| Pair { heard: h.into(), canonical: c.into() };
+        let note = known_entry_note(&known, &pair("Blooie", "Bluey")).unwrap();
+        assert!(note.contains("## Bluey") && note.contains("under distinct:"), "{note}");
+        let note = known_entry_note(&known, &pair("Louie", "Bluey")).unwrap();
+        assert!(note.contains("under homophones:"), "{note}");
+        // not an entry (case counts), or not a learnable pair: no badge
+        assert!(known_entry_note(&known, &pair("Blooie", "bluey")).is_none());
+        assert!(known_entry_note(&known, &pair("Blooie", "Chilli")).is_none());
+        assert!(known_entry_note(&known, &pair("bingo", "Bingo")).is_none());
+    }
     #[test]
     fn new_takes_retain_previous_text_and_every_correction() {
         let dir =

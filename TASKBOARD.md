@@ -35,17 +35,19 @@ smoke: [Smoke-Human-transcrust.md](Smoke-Human-transcrust.md).
 ## Next, in order
 
 ### Rules-first contextual decisions (decided 2026-11-18)
-John's call, after the real-audio rules-then-model run
-([results](decision-model-results.md#rules-first-on-real-audio-2026-11-18)). The glossary belongs
-to the rules; the model judges grammar only.
+Use the November 19 desktop smoke behavior as the Mopvox and Swiftype parity
+baseline. Freeze current-sentence fixtures for the Gambol/gamble pair, ordinary
+homophones, technical names, model failure, edit reasons and proposal persistence.
+Then build the Android adapter and complete-take review described below.
 - [x] **One sentence (built 2026-11-18):** `context_range` in `crates/decision/src/lib.rs`
       now returns the current sentence only. Every model wrongly named an ordinary "lightning"
       when it could see the neighbouring sentence. Unit tests pass. The ignored
       `ultra_native_matches_research_and_cancels` compares against saved two-sentence fixtures,
-      so expect it to differ if run. Live dictation smoke: John.
-- [ ] **No glossary:** keep the stripped glossary for UltraBERT, which it already uses. Do not
-      pass the real glossary descriptions: with them, it names ordinary "chili"/"bingo" at up to
-      0.98.
+      so expect it to differ if run. John passed live dictation November 19.
+- [ ] **Prompt experiment:** UltraBERT currently receives the marked sentence and
+      per-term answer descriptions. Keep that for adapter parity. Compare a
+      grammar-only prompt separately on the frozen repair and preservation probes
+      before changing the production prompt.
 - [x] **Confirm on fresh audio (2026-11-18):** `~/syncthing/11-18.md`, 17 spans, key written
       before recording. v3 rules + Ultra (stripped, one sentence): **0 unwanted**, 2/10 missed (a
       list of Bluey names, which the model kept as ordinary words). D1 in the same slot named an
@@ -109,6 +111,22 @@ shape to read once:
   nothing launched).
 
 No ASR, vocabulary or correction ideas there. John's verdict: "haven't seen it in two months".
+
+### Crate contract for keyboard correction (2026-11-20)
+
+Mopvox's in-keyboard Edit/Confirm flow, and swiftype's later, use these. Change them
+with care.
+- **Built:** `tc_text` `review` (every change, `learnable`, Learn `field`, `entry`);
+  `tc_process` `learn` (works on a vocabulary-only handle, no model);
+  `vocabulary::alias_field` (`distinct` / `homophones` / `heard`);
+  `vocabulary::canonicals`.
+- **Candidate, not built:** a `tc_text` op that exports the swipe word list
+  (vocabulary canonicals and aliases first, then wordninja's Wikipedia-ranked 126k
+  list, MIT, commit `0421d148cd`), so Android and iOS swipe against one list. The
+  LDC 20k list can't ship. The same ranks could later replace the splitter's
+  "fewest pieces" tie-break with wordninja's Zipf cost, `log((rank+1)·log N)`.
+- Desktop equivalent: correct-last review with the "Matches ## Entry" badge
+  (`src/review.rs`, smoke passed 2026-11-20).
 
 ### Family correction pipeline — built November 14
 
@@ -183,19 +201,19 @@ retirement is decided; removing its desktop wiring is not yet implemented.
 
 ### New dictionary-decision candidates — 2026-11-10
 
-November 8 card review triage accepted by John's November 10 “Okay”; these are
-unmeasured candidates, not replacement backends. [Review and pinned Git cards](decision-model-review-2026-11-08.md).
+November 8 card review triage accepted by John's November 10 “Okay.”
+[Review and pinned Git cards](decision-model-review-2026-11-08.md).
 
-1. [ ] **MNN-Pocket-0.3B-Dec:** native Qwen3/LoRA/pointer-head correctness probe,
-   then frozen phone/synthetic correction cases. Keep trained adapter and head;
-   the separate 173 MB INT4 base is not the complete decision model.
-2. [ ] **GLiDE-0.4B:** first-tier probe alongside Pocket for the private offline
+1. [x] **MNN-Pocket-0.3B-Dec:** tested November 18 and parked. F32 repaired 19/28
+   versus UltraBERT's 28/28 and made 21/64 unwanted edits versus 12/64.
+   [Probe and rerun](tools/pocket-probe/README.md).
+2. [ ] **GLiDE-0.4B:** next decision-model research probe for the private offline
    family app. John clarified this non-commercial scope on November 10;
    licensing is not a reason to park this trial. Adapt the existing ModernBERT
    research path with exact two-tokenizer rendering, last-token pooling and
    trained readout; validate native parity, ordinary-word preservation and
    packed CPU RAM/latency. [Review](decision-model-review-2026-11-10-glide.md).
-3. [ ] **hs-decide-1-flash:** typed-choice probe after Pocket/GLiDE. Requires hybrid
+3. [ ] **hs-decide-1-flash:** typed-choice probe after GLiDE. Requires hybrid
    Qwen3.5 backbone and native formatter/slot-readout parity; no Python runtime.
 4. [ ] **joey-1:** later larger quality baseline. Published 5.44 GB payload includes
    vision; text-only packed CPU RAM and latency remain unmeasured. Preserve
@@ -410,6 +428,40 @@ The ordered product work below remains tracked here.
    APK with combined ASR+decision RAM, cold/warm/end-to-end timing and field-change
    cancellation measured internally and synced back. The PRD owns this plan;
    mopvox's board links it. Android success does not waive Apple acceptance.
+   **November 19 JNI gate:** ARM64 cross-build and separate Mopvox Decision
+   Test APK built. Setup selects a glossary folder and profile. Existing
+   Parakeet supplies complete takes to Rust for editable review, explicit
+   learning and acceptance into an in-app test field. John's two screenshots
+   verify typed JNI/model decisions and acceptance into the test field, and
+   Parakeet microphone capture through Rust review. Both opened a cold decision
+   worker. Warm timing remains useful for later comparisons. John passed
+   the functional IME smoke on the updated test APK. Mopvox resolves the
+   selected glossary and passes its absolute path through JNI to
+   `transcrust-ffi`. Rust owns text decisions and edits. Mopvox owns the
+   review and delivery to the focused field. The preview foreground now uses
+   the existing system-theme roles; phone confirmation remains open.
+   **Long Nemotron follow-up:** John reported 84.4 s audio and an empty result,
+   then a shorter take with badly recognized names. The FFI confused its 15 s
+   decision deadline with explicit take cancellation, causing Android to drop
+   retained fallback text. The cancellation flags are now independent, with
+   a regression check. Nemotron already loops over 1120 ms chunks; a saved
+   49.7 s clip returned text with phone-sized 30 ms inputs on the JVM. The
+   updated APK adds raw/final text and stream counters to synced diagnostic
+   reports. Phone root-cause confirmation and name accuracy remain open.
+   **63.3 s exact-phone-WAV replay completed:** sample counts and PCM hash
+   match. The shared Rust crate reproduces the phone's delivered text exactly.
+   Whole/6/12 s runs cover Nemotron, Ultra and retained community v3. Repeating
+   the first six seconds failed to repair the opening in all tested arms.
+   Whole Ultra has 9 script-word differences, 6 s has 14 and 12 s has 11.
+   Dictionary failures include missing `Nelland` segmentation, case-only
+   character-name regressions and a phrase rule naming ordinary lightning.
+   Next evaluate phonetic/boundary candidates with dependency relations and
+   capitalization as lexical evidence. [Methods and results](~/syncthing/transcrust-work/window-study/README.md).
+   **Fixed-0.8 prefix trial completed:** the original 14 gain one correct
+   accepted Nelland repair. Ten correct proposals in additional fusion fixtures
+   are all blocked by the sentence score. Plain prefix matching damages Flow,
+   Flowing and Nellie; protecting known whole words preserves all 16 controls.
+   Two additional fusions remain unproposed. [Coverage and gate results](~/syncthing/transcrust-work/window-study/prefix-trial.md).
    *Placement: alongside extraction, before family delivery, to exercise mobile
    behavior on the device John can dogfood now.*
    **Phonon continues in parallel for Android and Apple.** Compare Parakeet and

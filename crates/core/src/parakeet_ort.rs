@@ -20,7 +20,9 @@
 //!
 //! The joint's 8198 outputs are 8193 vocabulary logits (blank = 8192) followed
 //! by 5 duration logits — the TDT head that says how many encoder frames to
-//! skip. Reference for the decode: `murmure/src-tauri/src/engine/engine.rs`.
+//! skip. The decode is NeMo's TDT greedy loop; the closest Rust relative is
+//! `parakeet-rs` `model_tdt.rs` (MIT/Apache-2.0). Compared 2026-11-20 against
+//! murmure's engine.rs at 8c7a07c: no murmure-specific code here.
 
 use std::path::Path;
 

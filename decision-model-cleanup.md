@@ -1,5 +1,40 @@
 # Decision-model cache cleanup
 
+## November 19 model and build inventory on Zed
+
+Proposed dispositions below. Sizes are allocated bytes from `du -B1`. The live
+loaders, local launchers, shared model paths and research callers were checked.
+
+| Path | Allocated bytes | Disposition and rerun cost |
+|---|---:|---|
+| `~/.cache/transcrust/pocket-dec/` | 758,554,624 (723.4 MiB) | **Remove when approved.** Pocket F32 was tested November 18 and parked. The [probe](tools/pocket-probe/README.md) can fetch the [pinned Apache-2.0 checkpoint](https://huggingface.co/taobao-mnn/MNN-Pocket-0.3B-Dec/tree/dfbe0aed3abd4caed175b883a4b462ed35184fad) again with `bash tools/pocket-probe/run.sh` and verify [checksums](tools/pocket-probe/SHA256SUMS). Keep the runner, report and ignored `tools/pocket-probe/results/` (2.4 MiB, contains local evidence). |
+| `~/.cache/transcrust/pocket-target/` | 366,616,576 (349.6 MiB) | **Remove when approved.** Dedicated standalone probe build tree. Cargo recompiles it on the next Pocket run. The saved five-arm probe took about four minutes after its build. |
+| `~/syncthing/models/paraback/` | 409,370,624 (390.4 MiB) | **Remove if the v3 rollback is no longer wanted.** No current loader or config reference found. Syncthing propagates removal. Restoring it costs the [community v3 download](https://huggingface.co/efederici/parakeet-tdt-0.6b-v3-onnx-int4) and copying the shared preprocessor. |
+| `~/syncthing/models/whistle/` | 16,924,672 (16.1 MiB) | **Low priority.** Phonon 2.5 replaced it in the IME. The Mopvox parity/command research still points here. Removing it would require restoring [Whistle's `whistle.cact` and config](https://huggingface.co/Cactus-Compute/whistle/tree/main) before those reruns. |
+| `~/.local/share/transcrust/models/s1-mini-gguf/` | 484,220,928 (461.8 MiB) | **Keep while long-form polish is wanted.** Live long-form mode and `--normalise` load it. Restore the [Q4_K_M GGUF](https://huggingface.co/superwhisper/s1-mini-GGUF/tree/main) if retired and later needed. |
+| `target/debug/` | 4,039,004,160 (3.76 GiB) | **Rebuildable.** Clear separately if disk is the priority. The next debug build or test pays recompilation. |
+| `target/release/` | 3,348,119,552 (3.12 GiB) | **Keep the accepted executable through any cleanup.** The November 19 checkout smoke uses this build. The installed launcher points to an older executable under `~/.local/libexec/transcrust/`. A fresh release build and test suite cost several minutes each. |
+| `~/syncthing/mopvox/mopvox-phonon25-ime.apk` | 106,508,288 (101.6 MiB) | **Optional duplicate.** SHA256 matches `mopvox.apk` byte for byte. Keep the standard filename. The two comparison APKs have separate hashes and remain available for their trials. |
+
+Pocket weights plus build cache total **1.05 GiB**. Adding `paraback` brings
+that to **1.43 GiB**, or **1.44 GiB** including Whistle. Cargo and APK savings
+are outside those totals.
+
+Retain installed UltraBERT Q4, the selectable D1 Q8 reference, Parakeet Ultra,
+Nemotron and Granite. Keep both Phonon 2.5 formats. Mopvox uses the converted C
+bundle today and mobile/Apple work still needs the original packed bundle.
+GLiDE remains queued and Laya remains a watch item. No local weights for
+either were found in the surveyed model/cache paths. UltraBERT FP32 and the
+previously removed rejected-model caches were absent.
+
+`paraback/parakeet-tdt-0.6b-v3-int4/` carries encoder SHA256
+`df4f1e5ff7a3af4e9d4b7078055164b11005e5d8a4c100e67f583c23975f7a31`
+and decoder SHA256
+`eea7483ee3d1a30375daedc8ed83e3960c91b098812127a0d99d1c8977667a70`.
+Both match upstream large-file metadata. The backup `nemo128.onnx` is
+`a9fde1486ebfcc08f328d75ad4610c67835fea58c73ba57e3209a6f6cf019e9f`,
+identical to the active preprocessor.
+
 ## November14 pipeline build artifacts
 
 No model payload downloaded or relocated. Audio replays read original corpus

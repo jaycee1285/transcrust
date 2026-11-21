@@ -12,6 +12,7 @@ use std::{
 pub struct TcEngine {
     state: Mutex<State>,
     cancel: Arc<AtomicBool>,
+    cancel_requested: AtomicBool,
 }
 struct State {
     vocabulary: PathBuf,
@@ -106,6 +107,7 @@ pub unsafe extern "C" fn tc_create(
                 asr,
             }),
             cancel: Arc::new(AtomicBool::new(false)),
+            cancel_requested: AtomicBool::new(false),
         })
     })();
     match result {
@@ -120,7 +122,7 @@ pub unsafe extern "C" fn tc_create(
 }
 
 impl State {
-    fn process(&mut self, raw: &str, cancel: Arc<AtomicBool>) -> Value {
+    fn process(&mut self, raw: &str, cancel: Arc<AtomicBool>, cancel_requested: &AtomicBool) -> Value {
         let cleaned = transcrust_core::postprocess::fix_transcription(raw);
         let mut out = json!({"raw":raw,"cleaned":cleaned,"text":cleaned});
         #[cfg(feature = "decision")]
@@ -133,7 +135,9 @@ impl State {
             out["text"] = json!(result.text);
             out["audit"] = result.audit;
         }
-        out["cancelled"] = json!(cancel.load(Ordering::Relaxed));
+        // An inference deadline also stops the worker. Only an explicit native
+        // cancellation discards the take; deadlines retain text and rule edits.
+        out["cancelled"] = json!(cancel_requested.load(Ordering::Relaxed));
         out
     }
 }
@@ -149,6 +153,7 @@ pub unsafe extern "C" fn tc_process(engine: *mut TcEngine, request: *const c_cha
             .try_lock()
             .map_err(|_| "engine busy or poisoned")?;
         engine.cancel.store(false, Ordering::Relaxed);
+        engine.cancel_requested.store(false, Ordering::Relaxed);
         match value["op"].as_str() {
             Some("learn") => {
                 let pairs: Vec<transcrust_core::correction::Pair> =
@@ -156,7 +161,11 @@ pub unsafe extern "C" fn tc_process(engine: *mut TcEngine, request: *const c_cha
                 transcrust_core::vocabulary::save_pairs(&state.vocabulary, &pairs)?;
                 Ok(json!({"saved":pairs.len()}))
             }
-            Some("process") => Ok(state.process(required(&value, "text")?, engine.cancel.clone())),
+            Some("process") => Ok(state.process(
+                required(&value, "text")?,
+                engine.cancel.clone(),
+                &engine.cancel_requested,
+            )),
             _ => Err("op must be process or learn".into()),
         }
     })();
@@ -188,6 +197,7 @@ pub unsafe extern "C" fn tc_transcribe(
             .try_lock()
             .map_err(|_| "engine busy or poisoned")?;
         engine.cancel.store(false, Ordering::Relaxed);
+        engine.cancel_requested.store(false, Ordering::Relaxed);
         #[cfg(feature = "asr")]
         {
             let audio = std::slice::from_raw_parts(pcm, samples);
@@ -209,7 +219,7 @@ pub unsafe extern "C" fn tc_transcribe(
                     model.stream_finish(&mut stream)?.0
                 }
             };
-            Ok(state.process(&raw, engine.cancel.clone()))
+            Ok(state.process(&raw, engine.cancel.clone(), &engine.cancel_requested))
         }
         #[cfg(not(feature = "asr"))]
         {
@@ -227,6 +237,7 @@ pub unsafe extern "C" fn tc_transcribe(
 #[no_mangle]
 pub unsafe extern "C" fn tc_cancel(engine: *mut TcEngine) {
     if let Some(engine) = engine.as_ref() {
+        engine.cancel_requested.store(true, Ordering::Relaxed);
         engine.cancel.store(true, Ordering::Relaxed);
     }
 }
@@ -264,7 +275,34 @@ pub unsafe extern "C" fn tc_text(request: *const c_char) -> *mut c_char {
             Some("proposals") => Ok(
                 json!({"pairs": transcrust_core::correction::proposals(value["before"].as_str().ok_or("before required")?, value["after"].as_str().ok_or("after required")?)}),
             ),
-            _ => Err("op must be clean or proposals".into()),
+            // Correct-last review on mobile, parity with the desktop window: every change,
+            // whether it can be learned, where Learn would file it, and whether the
+            // corrected text is already an entry ("Matches ## Bluey").
+            Some("review") => {
+                let before = value["before"].as_str().ok_or("before required")?;
+                let after = value["after"].as_str().ok_or("after required")?;
+                let known = value["vocabulary_path"]
+                    .as_str()
+                    .map(|p| transcrust_core::vocabulary::canonicals(std::path::Path::new(p)))
+                    .unwrap_or_default();
+                let changes: Vec<Value> = transcrust_core::correction::changes(before, after)
+                    .into_iter()
+                    .map(|change| {
+                        let pair = change.pair();
+                        json!({
+                            "before": change.before,
+                            "after": change.after,
+                            "heard": pair.heard,
+                            "canonical": pair.canonical,
+                            "learnable": transcrust_core::correction::valid_pair(&pair),
+                            "field": transcrust_core::vocabulary::alias_field(&pair.heard),
+                            "entry": known.iter().any(|k| *k == pair.canonical),
+                        })
+                    })
+                    .collect();
+                Ok(json!({ "changes": changes }))
+            }
+            _ => Err("op must be clean, proposals or review".into()),
         }
     })();
     match result {
@@ -284,6 +322,36 @@ pub unsafe extern "C" fn tc_free(value: *mut c_char) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn worker_stop_preserves_text_unless_native_caller_cancelled() {
+        unsafe {
+            let config = CString::new(r#"{"vocabulary_path":"/unused/test-vocab.md"}"#).unwrap();
+            let mut error = std::ptr::null_mut();
+            let handle = tc_create(config.as_ptr(), &mut error);
+            assert!(error.is_null());
+            let engine = handle.as_ref().unwrap();
+            // A deadline stops inference, while its fallback text stays deliverable.
+            engine.cancel.store(true, Ordering::Relaxed);
+            let response = engine.state.lock().unwrap().process(
+                "My dog Gambol is here.",
+                engine.cancel.clone(),
+                &engine.cancel_requested,
+            );
+            assert_eq!(response["text"], "My dog Gambol is here.");
+            assert_eq!(response["cancelled"], false);
+            tc_cancel(handle);
+            let response = engine.state.lock().unwrap().process(
+                "Discard this take.",
+                engine.cancel.clone(),
+                &engine.cancel_requested,
+            );
+            assert_eq!(response["cancelled"], true);
+            let request = CString::new(r#"{"op":"process","text":"The next take."}"#).unwrap();
+            assert_eq!(take(tc_process(handle, request.as_ptr()))["cancelled"], false);
+            tc_destroy(handle);
+        }
+    }
+
     unsafe fn take(p: *mut c_char) -> Value {
         assert!(!p.is_null());
         let v = serde_json::from_str(CStr::from_ptr(p).to_str().unwrap()).unwrap();
@@ -305,6 +373,20 @@ mod tests {
             let handle = tc_create(config.as_ptr(), &mut error);
             assert!(error.is_null());
             assert!(!handle.is_null());
+            let review = CString::new(json!({"op":"review","vocabulary_path":vocab,
+                "before":"My dog Gamble is here. I like Louis.","after":"My dog Gambol is here. I like Bluey!"}).to_string()).unwrap();
+            let changes = take(tc_text(review.as_ptr()))["changes"].clone();
+            assert_eq!(changes[0]["heard"], "Gamble");
+            assert_eq!(changes[0]["canonical"], "Gambol");
+            assert_eq!((changes[0]["entry"].as_bool(), changes[0]["learnable"].as_bool()), (Some(true), Some(true)));
+            assert_eq!(changes[0]["field"], "homophones");
+            // not an entry in this vocabulary
+            assert_eq!(changes[1]["entry"], false);
+            // a punctuation-only edit is listed but cannot be learned
+            let punct = CString::new(r#"{"op":"review","before":"Hello there.","after":"Hello there!"}"#).unwrap();
+            let punct = take(tc_text(punct.as_ptr()))["changes"].clone();
+            assert_eq!(punct.as_array().unwrap().len(), 1);
+            assert_eq!(punct[0]["learnable"], false);
             let proposals=CString::new(r#"{"op":"proposals","before":"My dog Gamble is here.","after":"My dog Gambol is here."}"#).unwrap();
             let pairs = take(tc_text(proposals.as_ptr()))["pairs"].clone();
             let learn = CString::new(json!({"op":"learn","pairs":pairs}).to_string()).unwrap();

@@ -17,13 +17,9 @@ postprocessing:
     - clean_repetitions        # stutter / duplicated phrase collapse
     - remove_fillers           # uh, um, you know
     - spoken_punctuation       # "period" -> ".", "new line" -> "\n"
-    - phonetic_dictionary      # LAST: Beider-Morse rare-vocab correction
-  phonetic_dictionary:
-    crate: rphonetic 3.0.6 (feature "embedded_bm", rules compiled into binary)
-    rules: generic name type, plain language-agnostic encode() — English-only, no language set
-    user_file: ~/.config/transcrust/dictionary.txt  # one term/line, '#' comments; no-op if absent
-    source: ported from murmure leg 3 (see murmure.md)
-    behavior: whole-token phonetic swap; preserves all whitespace/punctuation; min token len 3
+  # The Beider-Morse phonetic_dictionary leg (murmure-derived) was removed 2026-11-19.
+  # Vocabulary correction now runs under --dec in crates/decision: fused-name split,
+  # rules (incl. rule 0 capitals) and UltraBERT; see traverse/decision-worker.md.
   harper:
     in_pipeline: false
     reason: >
