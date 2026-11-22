@@ -13,15 +13,7 @@ linker="$ndk/aarch64-linux-android30-clang"
 export CARGO_TARGET_DIR="$repo/target/android-ffi"
 ort_dir="$CARGO_TARGET_DIR/ort-link"
 mkdir -p "$ort_dir" "$output/arm64-v8a"
-python3 - "$ORT_ANDROID_AAR" "$ort_dir/libonnxruntime.so" <<'PY'
-import shutil
-import sys
-from zipfile import ZipFile
-
-with ZipFile(sys.argv[1]) as aar:
-    with aar.open("jni/arm64-v8a/libonnxruntime.so") as library, open(sys.argv[2], "wb") as out:
-        shutil.copyfileobj(library, out)
-PY
+unzip -p "$ORT_ANDROID_AAR" jni/arm64-v8a/libonnxruntime.so > "$ort_dir/libonnxruntime.so"
 
 export CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER="$linker"
 export CC_aarch64_linux_android="$linker"
