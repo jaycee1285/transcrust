@@ -34,8 +34,18 @@ it in its own punctuation: "milk, comma, eggs". So `postprocess.rs` does all the
 - Nemotron gave no punctuation at all on plain speech, so for it spoken commands are the only
   punctuation.
 
+- **Course correction cut to triggers that don't occur in ordinary speech (11-23).** It deletes
+  everything before the trigger. "hold on", "i mean", "not X but", "never mind" and "forget/ignore
+  that" all ate real sentences under `--fix`; "hold on" did it on a real take. They are gone.
+  - Kept: "scratch that" (also in dayshade now), "no wait", "delete that", "or rather", "let me
+    rephrase", and the rest.
+  - Table and John's calls: `~/syncthing/transcrust-work/command-language-11-23/table.md`.
+  - mopvox's Kotlin port has the same cut.
+- Later: spoken edit commands (`design-dictation-as-control.md`).
+
 - [ ] **Human smoke after the next `release.sh`:** dictate "note colon …", "open quote …
-  close quote", "a period of time … period".
+  close quote", "a period of time … period", "we hold on to the receipts" (all of it stays),
+  "send it Monday scratch that send it Tuesday".
 
 The IPA proposer (TASKBOARD notes below about position-tiered and plosive-early checks) has been
 **built and on by default since 2a24dd5**, whenever `polyg2p-en` is installed.

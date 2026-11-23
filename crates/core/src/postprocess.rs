@@ -9,24 +9,25 @@ use std::sync::LazyLock;
 /// Regex patterns for mid-sentence corrections. Everything before (and
 /// including) the trigger phrase is discarded, keeping only what follows.
 ///
-/// Ported from VoiceAI's CourseCorrector.java.
+/// Ported from VoiceAI's CourseCorrector.java, then cut to the triggers that
+/// don't occur in ordinary speech (John, 2026-11-23). Dropped, each with the
+/// sentence it ate: "hold on" ("we hold on to the receipts", and a real take),
+/// "i mean" ("I mean it, we leave at five"), "not X but" ("it was not cheap,
+/// but we bought it anyway"), "never mind" ("never mind the rain, we went
+/// anyway"), "forget/ignore that" ("don't forget that the vet is at five").
+/// A missed command leaves a word to delete; a false one silently deletes the
+/// front of the sentence. Table: transcrust-work/command-language-11-23/.
 static CORRECTION_PATTERNS: LazyLock<Vec<Regex>> = LazyLock::new(|| {
     [
         // "no wait" / "no actually" / "no sorry"
         r"(?i)^.*\bno,?\s+wait,?\s+",
         r"(?i)^.*\bno,?\s+actually,?\s+",
         r"(?i)^.*\bno,?\s+sorry,?\s+",
-        // "actually never mind" / "never mind"
-        r"(?i)^.*\bactually,?\s+never\s*mind,?\s+",
-        r"(?i)^.*\bnever\s*mind,?\s+",
-        // "I mean" / "what I meant was"
-        r"(?i)^.*\bi\s+mean,?\s+",
+        // "what I meant was"
         r"(?i)^.*\bwhat\s+i\s+meant\s+(was|is),?\s+",
-        // "scratch/delete/forget/ignore that"
+        // "scratch/delete that"
         r"(?i)^.*\bscratch\s+that,?\s+",
         r"(?i)^.*\bdelete\s+that,?\s+",
-        r"(?i)^.*\bforget\s+that,?\s+",
-        r"(?i)^.*\bignore\s+that,?\s+",
         // "or rather" / "or actually" / "or better yet"
         r"(?i)^.*\bor\s+rather,?\s+",
         r"(?i)^.*\bor\s+actually,?\s+",
@@ -34,11 +35,8 @@ static CORRECTION_PATTERNS: LazyLock<Vec<Regex>> = LazyLock::new(|| {
         // "let me rephrase" / "let me start over"
         r"(?i)^.*\blet\s+me\s+rephrase,?\s+",
         r"(?i)^.*\blet\s+me\s+start\s+over,?\s+",
-        // "wait no" / "hold on"
+        // "wait no"
         r"(?i)^.*\bwait,?\s+no,?\s+",
-        r"(?i)^.*\bhold\s+on,?\s+",
-        // "not X but Y" → keep Y
-        r"(?i)^.*\bnot\s+\w+,?\s+but\s+",
     ]
     .iter()
     .map(|p| Regex::new(p).unwrap())
@@ -452,11 +450,19 @@ mod tests {
     }
 
     #[test]
-    fn course_correction_i_mean() {
-        assert_eq!(
-            apply_course_correction("it costs ten i mean twenty dollars"),
-            "twenty dollars"
-        );
+    fn course_correction_dropped_triggers_keep_ordinary_speech() {
+        // Each of these lost its front half before 2026-11-23 ("hold on" also on a real take).
+        for text in [
+            "Hold on my porch the paint is bright blue and white.",
+            "we hold on to the receipts",
+            "I mean it, we leave at five",
+            "it was not cheap, but we bought it anyway",
+            "never mind the rain, we went anyway",
+            "don't forget that the vet is at five",
+            "just ignore that noise outside",
+        ] {
+            assert_eq!(apply_course_correction(text), text);
+        }
     }
 
     #[test]
@@ -464,14 +470,6 @@ mod tests {
         assert_eq!(
             apply_course_correction("we should go left or rather right"),
             "right"
-        );
-    }
-
-    #[test]
-    fn course_correction_not_but() {
-        assert_eq!(
-            apply_course_correction("not tomorrow but friday"),
-            "friday"
         );
     }
 
