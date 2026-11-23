@@ -40,8 +40,9 @@ vocabularies, phone takes and the logs or fixtures derived from them.
 
 The point is that a later agent asked to `git add`/commit cannot sweep household data
 in. Do not depend on remembering `.gitignore` entries. The 11-19 window study now lives at
-`~/syncthing/transcrust-work/window-study/` (logs in `logs-20261119/`). Older
-gitignored `logs/` and `private/` contents predate this rule.
+`~/syncthing/transcrust-work/window-study/` (logs in `logs-20261119/`). The older
+gitignored `logs/`, `fixtures/` and `tools/rules-probe/private/` were moved to
+`~/syncthing/transcrust-work/repo-leftovers-2026-11-23/` on 2026-11-23.
 
 ## Read in this order
 
