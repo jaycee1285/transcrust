@@ -4,9 +4,41 @@ Model identities, source URLs, installed artifacts and recurring upstream
 checks are maintained in [Models.md](Models.md). Read that registry before
 selecting or downloading a model. GLiDE and Laya have explicit update watches.
 
-Linux pipeline updated **2026-11-14**. Phone/Apple observations retain their
+Linux pipeline updated **2026-11-23**. Phone/Apple observations retain their
 recorded measurement dates. This is the only live board. Older phase rationale and
 timing tables below retain their measurement dates; they are not fresh test runs.
+
+## Spoken punctuation (2026-11-22/23)
+
+Measured on Kale-spoken test takes, then on John's read-aloud
+(`~/syncthing/transcrust-work/punctuation-commands-11-23/`).
+
+**In John's voice, Parakeet never acts on a spoken command itself.** It writes the word and wraps
+it in its own punctuation: "milk, comma, eggs". So `postprocess.rs` does all the work. Commits:
+
+- **6b993fa: a spoken mark beats the model's own punctuation beside it.** "bread period." →
+  "bread."; "eggs, comma and" → "eggs, and". Also accepts Phonon's "exclamation pointer".
+- **4333fff: after a determiner, a command word is the noun.** "over a period of time", "a dash of
+  salt" and "a new line of code" are left alone. Accepts Phonon's "coma".
+  - **Gap:** compound nouns ("trial period") still convert. Telling those apart needs the decision
+    crate's grammar.
+- **d2064c2: quotes and brackets hug what they enclose.** Also, a spoken comma, colon or semicolon
+  lowers the model's sentence capital on an ordinary word.
+  - Vocabulary names keep their capital. Exception: `tc_text clean` has no vocabulary, so there only
+    the English word list protects them.
+
+**Engines:**
+- The models' own vocabulary has only `. , ? ! : - ' % / $`. Semicolons, quotes, brackets and
+  ellipses can only come from the cleanup.
+- Phonon heard "colon" as "Colin".
+- Nemotron gave no punctuation at all on plain speech, so for it spoken commands are the only
+  punctuation.
+
+- [ ] **Human smoke after the next `release.sh`:** dictate "note colon …", "open quote …
+  close quote", "a period of time … period".
+
+The IPA proposer (TASKBOARD notes below about position-tiered and plosive-early checks) has been
+**built and on by default since 2a24dd5**, whenever `polyg2p-en` is installed.
 
 ## Engine decision (John, 2026-11-20)
 
@@ -195,13 +227,13 @@ with care.
 
 ### Zed human smoke regressions — November 13
 
-- [ ] **Tray watcher timeout can abort the app (November 14).** Restart hit
+- [x] **Closed 2026-11-23: not seen since (John); likely his bar, not transcrust.** **Tray watcher timeout can abort the app (November 14).** Restart hit
   ksni0.2.2 service.rs:95 unwrap on D-Bus NoReply while the desktop watcher
   was unavailable. Relaunch after watcher recovery worked. Keep tray lifecycle
   failures from taking down dictation; preserve the library panic evidence in
   the user journal around 2026-11-14 11:57. No dependency change made here.
 
-- [ ] **Replace leaves original prefix.** User supplied `We'rWe're gonna...`;
+- [x] **Closed 2026-11-23: not seen in later smokes (John).** **Replace leaves original prefix.** User supplied `We'rWe're gonna...`;
   full saved correction starts correctly. Initial focus-settle patch failed
   human smoke (`MMy son...`). New patch in `src/inject.rs` reads selection back
   against persisted `buffer_text`, extends verified short suffixes, and requires

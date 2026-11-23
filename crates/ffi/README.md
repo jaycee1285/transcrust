@@ -52,11 +52,11 @@ with an Android Rust target installed. Set `ANDROID_NDK_HOME` and
 - `tc_cancel`: request discard of in-flight work. Ultra cooperatively stops at
   layer boundaries. D1/native ASR may finish their current native call; the
   returned cancellation flag prevents delivery. A cancelled decision does not
-  disable the model. The 15-second failure budget still disables until reopen.
-  That deadline retains the transcript, rule edits and audit warning for review.
-  Only an explicit `tc_cancel` sets the response's `cancelled` flag.
-  **The fixed deadline is a known footgun.** It covers the complete candidate
-  batch and can disable decisions on healthy long speech. See the
+  disable the model. Since 2026-11-21 the decision budget scales with the batch
+  (10 s plus 1.5 s per model-bound occurrence, capped at 60 s), and expiry no
+  longer disables the instance: it retains the transcript, rule edits and audit
+  warning for review, and the next request runs. Only an explicit `tc_cancel`
+  sets the response's `cancelled` flag. See the
   [decision worker boundary](../../traverse/decision-worker.md).
 - `tc_free` each returned string exactly once; `tc_destroy` only after active
   calls return. Input memory remains caller-owned throughout each call.

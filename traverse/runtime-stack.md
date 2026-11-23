@@ -14,12 +14,13 @@ optional direct ASR), `crates/decision` (UltraBERT/D1 and decision policy), and
 Root `src/` retains capture, tray, review, delivery and resident worker lifecycles.
 Linux tests/linkage pass; Android JNI and Apple builds remain separate gates.
 
-**Known footgun, confirmed November 19.** `Decision::request` gives the entire
-model-bound candidate batch a fixed 15-second wall-clock deadline. Expiry
-stops inference, disables model decisions until the instance is recreated,
-and returns retained text/rule edits with an audit warning. A 64.4 s Nemotron
-phone take hit this deadline with 17 model-bound occurrences. This policy can
-defeat long dictation even when ASR streamed successfully. The FFI now reserves
+**Decision deadline, fixed November 21.** `Decision::request` used to give the
+whole model-bound batch a fixed 15-second deadline whose expiry disabled model
+decisions until the instance was recreated; a 64.4 s Nemotron phone take with 17
+model-bound occurrences hit it. It is now `decision_budget`: 10 s plus 1.5 s per
+model-bound occurrence, capped at 60 s, and expiry stops inference, returns the
+retained text/rule edits with an audit warning, and leaves the instance usable
+for the next request. The FFI reserves
 its response cancellation flag for explicit native cancellation, allowing the
 deadline fallback to reach review. Read the
 [decision worker boundary](decision-worker.md) before changing streaming,

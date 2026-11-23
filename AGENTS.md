@@ -66,7 +66,7 @@ direct Parakeet/Nemotron, resampler and correction/glossary) and
 Android JNI and Apple target builds remain pending. Do not recreate deleted
 `src/ultra.rs`, `src/d1.rs`, etc. Native Rust Phonon 2.5 was implemented and
 compared with C. Desktop evaluation is retired; retain the crate/evidence for
-Android/Apple work. Pocket and GLiDE are queued dictionary-decision trials.
+Android/Apple work. Pocket was parked on 2026-11-18 (Models.md); GLiDE remains a queued dictionary-decision trial.
 New Nemotron packing still needs the checkpoint link. `Models.md` records
 model identities; `TASKBOARD.md` owns the current work order.
 
@@ -117,7 +117,7 @@ Recently built and worth knowing about:
   selectable via `--dec-backend d1`, retaining its full-glossary padded ORT batch.
   Run optimized: `nix develop -c cargo run --release -- --dec --smoke`.
   No runtime Python. John accepted desktop D1 Q8 as-is on 2026-10-29; UltraBERT's
-  new live human smoke is pending. Mobile latency/RAM remain separate gates.
+  live human smoke passed on 2026-11-19. Mobile latency/RAM remain separate gates.
   Both descriptions and learned aliases
   belong in `~/syncthing/john-vocab.md` (or `[vocabulary].path`).
 - Phonon 2.5 is live in mopvox's Android IME. Its native Rust crate and desktop
