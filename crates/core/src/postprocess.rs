@@ -184,6 +184,9 @@ const PUNCTUATION_KEYWORDS: &[(&str, &str)] = &[
     ("ellipsis", "..."),
     ("period", "."),
     ("comma", ","),
+    // Phonon's spelling of "comma" (2026-11-22). Safe only because "a coma" / "in a
+    // coma" fall to the determiner rule; a bare "coma" in dictation is read as the mark.
+    ("coma", ","),
     ("colon", ":"),
     ("semicolon", ";"),
     ("hyphen", "-"),
@@ -196,16 +199,42 @@ const PUNCTUATION_KEYWORDS: &[(&str, &str)] = &[
 /// matched (it needs whitespace after the keyword). A sentence terminator
 /// already before the command is kept; none is invented, so a list dictated
 /// with "new line" stays a list.
-/// The punctuation a model writes on its own, next to a spoken mark it should give way to.
-const MODEL_MARKS: &[u8] = b".,!?;:";
-
 static LINE_BREAK: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"(?i)[ \t,;:]*([.!?])?[ \t,;:.]*\bnew (paragraph|line)\b[ \t,;:.!?]*").unwrap()
 });
 
+/// The punctuation a model writes on its own, next to a spoken mark it should give way to.
+const MODEL_MARKS: &[u8] = b".,!?;:";
+
+/// After one of these, a command word is the ordinary noun: "over a period of
+/// time", "a dash of salt", "a new line of code", "in a coma". The same reading
+/// dayshade's grammar and the decision crate's determiner rule give a name slot
+/// (M5), kept to a word list here so core stays small (2026-11-22). Only the
+/// word straight before counts: two words back would also swallow commands
+/// ("I sent the email period"), so compound nouns ("trial period", "grace
+/// period") still convert. Telling those apart needs the decision crate's grammar.
+const DETERMINERS: &[&str] = &[
+    "a", "an", "the", "this", "that", "these", "those", "each", "every", "another", "any", "some",
+    "no", "my", "your", "his", "her", "its", "our", "their", "which", "what", "whose",
+];
+
+/// Whether the word just before byte `pos` is a determiner.
+fn after_determiner(text: &str, pos: usize) -> bool {
+    let before = text[..pos].trim_end();
+    // The run of letters ending the text before `pos`; punctuation there means no word.
+    let word = &before[before.trim_end_matches(|c: char| c.is_alphabetic() || c == '\'').len()..];
+    DETERMINERS.contains(&word.to_lowercase().as_str())
+}
+
 fn replace_line_breaks(text: &str) -> String {
     LINE_BREAK
         .replace_all(text, |caps: &regex::Captures| {
+            let whole = caps.get(0).expect("match");
+            // "a new line of code" is a noun phrase, not a command.
+            let new_at = whole.start() + whole.as_str().to_lowercase().find("new").unwrap_or(0);
+            if after_determiner(text, new_at) {
+                return whole.as_str().to_string();
+            }
             let terminator = caps.get(1).map_or("", |m| m.as_str());
             let brk = if caps[2].eq_ignore_ascii_case("paragraph") { "\n\n" } else { "\n" };
             format!("{terminator}{brk}")
@@ -241,7 +270,8 @@ fn replace_spoken_punctuation(text: &str) -> String {
                 || bytes[end].is_ascii_whitespace()
                 || (is_mark && MODEL_MARKS.contains(&bytes[end]));
 
-            if !at_word_start || !at_word_end {
+            // "a period", "the dash": the noun, not the command.
+            if !at_word_start || !at_word_end || after_determiner(&result, abs_pos) {
                 search_from = end;
                 continue;
             }
@@ -502,6 +532,31 @@ mod tests {
     #[test]
     fn a_keyword_inside_a_word_is_still_left_alone() {
         assert_eq!(replace_spoken_punctuation("periodic commas"), "periodic commas");
+    }
+
+    // -- After a determiner a command word is the noun (2026-11-22) --
+
+    #[test]
+    fn determiner_makes_the_noun() {
+        for text in [
+            "over a period of time",
+            "add a dash of salt",
+            "write a new line of code",
+            "she was in a coma",
+            "the colon is part of the gut",
+            "put a comma here",
+        ] {
+            assert_eq!(replace_spoken_punctuation(text), text, "{text}");
+        }
+    }
+
+    #[test]
+    fn commands_still_fire_without_a_determiner() {
+        assert_eq!(replace_spoken_punctuation("call the vet period"), "call the vet.");
+        assert_eq!(replace_spoken_punctuation("one new line two"), "one\ntwo");
+        assert_eq!(replace_spoken_punctuation("milk coma eggs"), "milk, eggs");
+        // A command after a full stop is not after a determiner.
+        assert_eq!(replace_spoken_punctuation("Done. New paragraph. Next"), "Done.\n\nNext");
     }
 
     #[test]
