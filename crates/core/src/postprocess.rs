@@ -169,6 +169,8 @@ fn remove_fillers(text: &str) -> String {
 /// Spoken punctuation keywords mapped to their symbols.
 /// Order matters: longer phrases must come before shorter ones to avoid partial matches.
 const PUNCTUATION_KEYWORDS: &[(&str, &str)] = &[
+    // Phonon writes "exclamation point" this way (2026-11-22 Kale test take).
+    ("exclamation pointer", "!"),
     ("exclamation point", "!"),
     ("exclamation mark", "!"),
     ("question mark", "?"),
@@ -194,6 +196,9 @@ const PUNCTUATION_KEYWORDS: &[(&str, &str)] = &[
 /// matched (it needs whitespace after the keyword). A sentence terminator
 /// already before the command is kept; none is invented, so a list dictated
 /// with "new line" stays a list.
+/// The punctuation a model writes on its own, next to a spoken mark it should give way to.
+const MODEL_MARKS: &[u8] = b".,!?;:";
+
 static LINE_BREAK: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"(?i)[ \t,;:]*([.!?])?[ \t,;:.]*\bnew (paragraph|line)\b[ \t,;:.!?]*").unwrap()
 });
@@ -223,30 +228,45 @@ fn replace_spoken_punctuation(text: &str) -> String {
             let abs_pos = search_from + pos;
             let end = abs_pos + keyword.len();
 
-            // Check word boundaries: must be at start/end or adjacent to whitespace
-            let at_word_start =
-                abs_pos == 0 || result.as_bytes()[abs_pos - 1].is_ascii_whitespace();
-            let at_word_end =
-                end == result.len() || result.as_bytes()[end].is_ascii_whitespace();
+            // A spoken mark is an explicit command, and it wins over the model's own
+            // guess beside it (2026-11-22, Kale test takes): "bread period." is
+            // "bread.", and Parakeet's "eggs, comma and" is "eggs, and", not "eggs,,".
+            let is_mark = matches!(symbol, "." | "," | "!" | "?" | ":" | ";" | "...");
+            let bytes = result.as_bytes();
+
+            // Check word boundaries: start/end, whitespace, or (for a mark) the
+            // model's own punctuation straight after the keyword.
+            let at_word_start = abs_pos == 0 || bytes[abs_pos - 1].is_ascii_whitespace();
+            let at_word_end = end == result.len()
+                || bytes[end].is_ascii_whitespace()
+                || (is_mark && MODEL_MARKS.contains(&bytes[end]));
 
             if !at_word_start || !at_word_end {
                 search_from = end;
                 continue;
             }
 
-            // Remove space before punctuation that attaches to previous word
-            let trim_start = if abs_pos > 0 && result.as_bytes()[abs_pos - 1] == b' ' {
+            // Remove space before punctuation that attaches to previous word, and,
+            // for a mark, the mark the model already put there.
+            let mut trim_start = if abs_pos > 0 && bytes[abs_pos - 1] == b' ' {
                 abs_pos - 1
             } else {
                 abs_pos
             };
+            if is_mark && trim_start > 0 && MODEL_MARKS.contains(&bytes[trim_start - 1]) {
+                trim_start -= 1;
+            }
 
-            // Remove space after keyword
-            let trim_end = if end < result.len() && result.as_bytes()[end] == b' ' {
-                end + 1
-            } else {
-                end
-            };
+            // Remove the model's marks straight after a spoken mark, then a space.
+            let mut trim_end = end;
+            if is_mark {
+                while trim_end < result.len() && MODEL_MARKS.contains(&bytes[trim_end]) {
+                    trim_end += 1;
+                }
+            }
+            if trim_end < result.len() && bytes[trim_end] == b' ' {
+                trim_end += 1;
+            }
 
             // Build replacement: symbol + space after (unless end-of-string or newline)
             let needs_space_after = trim_end <= result.len()
@@ -453,6 +473,35 @@ mod tests {
             replace_spoken_punctuation("first comma second"),
             "first, second"
         );
+    }
+
+    // -- A spoken mark beats the model's own punctuation beside it (2026-11-22) --
+    // Raw engine output on Kale-spoken test takes, not household speech.
+
+    #[test]
+    fn spoken_mark_at_the_end_absorbs_the_models_stop() {
+        // Parakeet and Phonon both end the take with their own full stop.
+        assert_eq!(replace_spoken_punctuation("and bread period."), "and bread.");
+        assert_eq!(replace_spoken_punctuation("feed the dog exclamation point."), "feed the dog!");
+    }
+
+    #[test]
+    fn spoken_comma_after_the_models_comma_is_one_comma() {
+        // Parakeet acted on two spoken commas itself and left the third as a word.
+        assert_eq!(
+            replace_spoken_punctuation("Buy milk, eggs, comma and bread period."),
+            "Buy milk, eggs, and bread."
+        );
+    }
+
+    #[test]
+    fn phonons_exclamation_pointer() {
+        assert_eq!(replace_spoken_punctuation("feed the dog exclamation pointer."), "feed the dog!");
+    }
+
+    #[test]
+    fn a_keyword_inside_a_word_is_still_left_alone() {
+        assert_eq!(replace_spoken_punctuation("periodic commas"), "periodic commas");
     }
 
     #[test]
