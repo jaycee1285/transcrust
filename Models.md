@@ -87,7 +87,7 @@ Installed artifact SHA256 values, checked 2026-11-11:
 | Phonon 2.5 converted C layout | Android asset at `~/syncthing/models/phonon-2.5-english-c`. | Same pinned original checkpoint, Rust conversion and converted-weight hashes in `SOURCE.json`. Phone C runtime is distinct from the native Rust implementation. |
 | Whistle | Historical phone trial assets under `~/syncthing/models/whistle`. | Replaced by Phonon 2.5 in the live IME. Shared files may still support research. |
 | s1-mini | Optional text normalization model under `~/.local/share/transcrust/models/s1-mini-gguf`. | Used by `--normalise` and live long-form polish. [Actual GGUF source](https://huggingface.co/superwhisper/s1-mini-GGUF). |
-| Parakeet community v3 rollback | `~/syncthing/models/paraback/parakeet-tdt-0.6b-v3-int4`. | Encoder and decoder SHA256 match the [efederici community export](https://huggingface.co/efederici/parakeet-tdt-0.6b-v3-onnx-int4). The `nemo128.onnx` hash matches active Parakeet Ultra. No current loader path found. |
+| Parakeet community v3 rollback | **Deleted 2026-11-23** (was `~/syncthing/models/paraback/parakeet-tdt-0.6b-v3-int4`). To restore, download the efederici export below and check its SHA256 against this note. | Encoder and decoder SHA256 match the [efederici community export](https://huggingface.co/efederici/parakeet-tdt-0.6b-v3-onnx-int4). The `nemo128.onnx` hash matches active Parakeet Ultra. No current loader path found. |
 
 ## ASR sources, exports and historical candidates
 
