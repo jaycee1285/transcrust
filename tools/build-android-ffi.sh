@@ -21,6 +21,6 @@ export AR_aarch64_linux_android="$ndk/llvm-ar"
 export ORT_LIB_PATH="$ort_dir"
 export ORT_PREFER_DYNAMIC_LINK=1
 cd "$repo"
-cargo rustc --release --locked --target aarch64-linux-android -p transcrust-ffi --features decision --lib \
+cargo rustc --release --locked --target aarch64-linux-android -p transcrust-ffi --features asr,decision --lib \
     -- -C link-arg=-Wl,-z,max-page-size=16384
 cp "$CARGO_TARGET_DIR/aarch64-linux-android/release/libtranscrust_ffi.so" "$output/arm64-v8a/"

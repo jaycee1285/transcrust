@@ -91,7 +91,10 @@ pub unsafe extern "C" fn tc_create(
             let dir = std::path::Path::new(required(&v, "asr_model_path")?);
             Some(match required(&v, "asr")? {
                 "parakeet" => Asr::Parakeet(Box::new(
-                    transcrust_core::parakeet_ort::LoadedParakeet::load(dir)?,
+                    transcrust_core::parakeet_ort::LoadedParakeet::load_with_threads(
+                        dir,
+                        v["asr_threads"].as_u64().filter(|&n| n > 0).map(|n| n as usize),
+                    )?,
                 )),
                 "nemotron" => Asr::Nemotron(Box::new(transcrust_core::nemotron::Nemotron::load(
                     dir,

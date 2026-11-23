@@ -204,28 +204,41 @@ fn piece_mask(vocab_width: usize) -> Result<Vec<usize>, String> {
         .collect()
 }
 
-fn build_session(path: &Path) -> Result<Session, String> {
-    Session::builder()
+fn build_session(path: &Path, intra_threads: Option<usize>) -> Result<Session, String> {
+    let builder = Session::builder()
         .map_err(|e| format!("failed to create ONNX session builder: {e}"))?
         .with_optimization_level(GraphOptimizationLevel::Level3)
         .map_err(|e| format!("failed to set ONNX optimization level: {e}"))?
         .with_inter_threads(1)
-        .map_err(|e| format!("failed to set ONNX inter-op threads: {e}"))?
+        .map_err(|e| format!("failed to set ONNX inter-op threads: {e}"))?;
+    let mut builder = match intra_threads {
+        Some(n) => builder
+            .with_intra_threads(n)
+            .map_err(|e| format!("failed to set ONNX intra-op threads: {e}"))?,
+        None => builder,
+    };
+    builder
         .commit_from_file(path)
         .map_err(|e| format!("failed to load {}: {e}", path.display()))
 }
 
 impl LoadedParakeet {
     pub fn load(model_dir: &Path) -> Result<Self, String> {
+        Self::load_with_threads(model_dir, None)
+    }
+
+    /// `intra_threads` pins ORT's intra-op pool. On a phone the default spans the
+    /// little cores too; mopvox's Kotlin engine ran with 4 (2026-11-23).
+    pub fn load_with_threads(model_dir: &Path, intra_threads: Option<usize>) -> Result<Self, String> {
         let graphs = crate::model::parakeet_direct_graphs(model_dir).ok_or_else(|| {
             format!(
                 "no direct-drive Parakeet graph set in {} (needs nemo128*.onnx)",
                 model_dir.display()
             )
         })?;
-        let preprocessor = build_session(&graphs.preprocessor)?;
-        let encoder = build_session(&graphs.encoder)?;
-        let joint = build_session(&graphs.decoder_joint)?;
+        let preprocessor = build_session(&graphs.preprocessor, intra_threads)?;
+        let encoder = build_session(&graphs.encoder, intra_threads)?;
+        let joint = build_session(&graphs.decoder_joint, intra_threads)?;
         let vocab = Vocabulary::load(&model_dir.join("vocab.txt"))?;
 
         // The joint emits vocabulary logits followed by the duration head. Read

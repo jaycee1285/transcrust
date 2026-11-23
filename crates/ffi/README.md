@@ -35,7 +35,8 @@ with an Android Rust target installed. Set `ANDROID_NDK_HOME` and
 - `tc_create`: config `{"vocabulary_path":"/synced/john-vocab.md"}`;
   optionally `"decision_backend":"ultra"` (or `d1`) plus
   `"decision_model_path":"/synced/models/ultra-q4"`; optionally
-  `"asr":"parakeet"` (or `nemotron`) plus `"asr_model_path":"..."`.
+  `"asr":"parakeet"` (or `nemotron`) plus `"asr_model_path":"..."`; optional
+  `"asr_threads":4` pins Parakeet's ORT intra-op pool (mopvox uses 4 on the phone).
   Optional `"ipa_data_path"` is a directory with `en.lex` and `en.g2p` for the IPA-similars proposer.
   Returns a handle or null plus allocated error JSON. Model load/warm is blocking.
   Model failure preserves rule edits and leaves unresolved spans as heard.
