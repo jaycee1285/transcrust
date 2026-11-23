@@ -174,10 +174,7 @@ const PUNCTUATION_KEYWORDS: &[(&str, &str)] = &[
     ("exclamation point", "!"),
     ("exclamation mark", "!"),
     ("question mark", "?"),
-    ("open quote", "\""),
-    ("close quote", "\""),
-    ("open paren", "("),
-    ("close paren", ")"),
+    // Quotes and brackets: see replace_enclosers, which runs first.
     ("full stop", "."),
     ("new line", "\n"),
     ("new paragraph", "\n\n"),
@@ -242,10 +239,40 @@ fn replace_line_breaks(text: &str) -> String {
         .into_owned()
 }
 
+/// "open quote" / "open paren", with the model's own mark straight after it:
+/// Parakeet writes "Open quote, not today", where the comma is its guess.
+static OPENER: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"(?i)\bopen (quote|paren)\b[,;:.]?[ \t]*").unwrap()
+});
+
+/// "close quote" / "close paren", with the model's mark straight before it:
+/// "not today, close quote".
+static CLOSER: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"(?i)[ \t]*[,;:]?[ \t]*\bclose (quote|paren)\b").unwrap()
+});
+
+/// Quotes and brackets hug what they enclose (2026-11-23, John's read-aloud):
+/// "she said open quote, not today, close quote." is `she said "not today."`.
+/// An opener drops the model's mark after it and the space before the next
+/// word; a closer drops the model's mark and space before it and keeps what
+/// follows. Before this they were only ever matched with a space on both sides.
+fn replace_enclosers(text: &str) -> String {
+    let opened = OPENER.replace_all(text, |caps: &regex::Captures| {
+        if caps[1].eq_ignore_ascii_case("quote") { "\"" } else { "(" }.to_string()
+    });
+    CLOSER
+        .replace_all(&opened, |caps: &regex::Captures| {
+            if caps[1].eq_ignore_ascii_case("quote") { "\"" } else { ")" }.to_string()
+        })
+        .into_owned()
+}
+
 /// Replace spoken punctuation keywords with their symbols.
 /// Handles surrounding whitespace so "hello period goodbye" becomes "hello. goodbye".
 fn replace_spoken_punctuation(text: &str) -> String {
-    let mut result = replace_line_breaks(text);
+    let mut result = replace_enclosers(&replace_line_breaks(text));
+    // The vocabulary's names, read only if a capital needs judging (see below).
+    let mut names: Option<Vec<String>> = None;
 
     for &(keyword, symbol) in PUNCTUATION_KEYWORDS {
         let mut search_from = 0;
@@ -288,9 +315,12 @@ fn replace_spoken_punctuation(text: &str) -> String {
             }
 
             // Remove the model's marks straight after a spoken mark, then a space.
+            // A sentence break among them ("colon. The") also capitalised the next word.
             let mut trim_end = end;
+            let mut model_broke_sentence = false;
             if is_mark {
                 while trim_end < result.len() && MODEL_MARKS.contains(&bytes[trim_end]) {
+                    model_broke_sentence |= matches!(bytes[trim_end], b'.' | b'!' | b'?');
                     trim_end += 1;
                 }
             }
@@ -311,6 +341,28 @@ fn replace_spoken_punctuation(text: &str) -> String {
 
             result.replace_range(trim_start..trim_end, &replacement);
             search_from = trim_start + replacement.len();
+
+            // The model heard a sentence end at a spoken comma, colon or semicolon and
+            // capitalised the next word ("Note colon. The meeting", "Wait. Comma. Not
+            // yet"). Mid-sentence again, an ordinary word goes back to lower case;
+            // a vocabulary name, "I" or an acronym keeps its capital (2026-11-23).
+            if model_broke_sentence && matches!(symbol, "," | ";" | ":") {
+                let rest = &result[search_from..];
+                let word: String = rest.chars().take_while(|c| c.is_alphabetic() || *c == '\'').collect();
+                let mut chars = word.chars();
+                let ordinary = match (chars.next(), chars.clone().next()) {
+                    (Some(first), Some(second)) => first.is_uppercase() && second.is_lowercase(),
+                    _ => false,
+                } && crate::lexicon::contains(&word.to_lowercase());
+                if ordinary {
+                    let known = names.get_or_insert_with(|| crate::vocabulary::canonicals(&crate::vocabulary::path()));
+                    if !known.iter().any(|n| n.split_whitespace().any(|part| part == word)) {
+                        let first = word.chars().next().expect("non-empty");
+                        let lowered: String = first.to_lowercase().collect();
+                        result.replace_range(search_from..search_from + first.len_utf8(), &lowered);
+                    }
+                }
+            }
         }
     }
 
@@ -557,6 +609,34 @@ mod tests {
         assert_eq!(replace_spoken_punctuation("milk coma eggs"), "milk, eggs");
         // A command after a full stop is not after a determiner.
         assert_eq!(replace_spoken_punctuation("Done. New paragraph. Next"), "Done.\n\nNext");
+    }
+
+    // -- John's read-aloud, 2026-11-23: Parakeet's raw lines, generic script --
+
+    #[test]
+    fn quotes_hug_what_they_enclose() {
+        assert_eq!(
+            replace_spoken_punctuation("Open quote, not today, close quote. She said, period."),
+            "\"not today\". She said."
+        );
+        assert_eq!(replace_spoken_punctuation("see open paren page two close paren now"), "see (page two) now");
+    }
+
+    #[test]
+    fn a_spoken_mark_undoes_the_models_sentence_capital() {
+        assert_eq!(
+            replace_spoken_punctuation("Note colon. The meeting moved semicolon. Bring the slides. Period."),
+            "Note: the meeting moved; bring the slides."
+        );
+        assert_eq!(replace_spoken_punctuation("Wait. Comma. Not yet. Period."), "Wait, not yet.");
+    }
+
+    #[test]
+    fn a_name_keeps_its_capital_after_a_spoken_comma() {
+        // Not an ordinary English word, so not lowered.
+        assert_eq!(replace_spoken_punctuation("Hi. Comma. Bluey is here."), "Hi, Bluey is here.");
+        // "I" always keeps its capital.
+        assert_eq!(replace_spoken_punctuation("Wait. Comma. I know."), "Wait, I know.");
     }
 
     #[test]
