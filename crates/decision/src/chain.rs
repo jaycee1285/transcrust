@@ -73,6 +73,10 @@ const VERB_PREV: &[&str] = &[
     "can't", "don't", "didn't", "doesn't", "wouldn't", "couldn't", "shouldn't", "wont", "cant",
     "dont", "didnt", "doesnt", "wouldnt", "couldnt", "shouldnt", "gonna",
 ];
+/// Not "just" or "please": "Just Bingo came", "Please, Bingo" are names.
+const IMPERATIVE_OPENERS: &[&str] = &["never"];
+/// Only with an adverb between ("do not gamble"): bare "does Flo" is a question about a name.
+const DO_AUX: &[&str] = &["do", "does", "did"];
 const ADVERBS: &[&str] = &[
     "not", "never", "always", "just", "also", "really", "quickly", "slowly", "often", "still",
     "even", "only",
@@ -270,7 +274,14 @@ fn prev_verb_cue(c: &Ctx) -> Option<&str> {
             return Some(l);
         }
     }
-    if p.len() >= 2 && has(ADVERBS, &p[p.len() - 1]) && has(VERB_PREV, &p[p.len() - 2]) {
+    // An imperative opener alone before the span: "Never gamble with rent".
+    if p.len() == 1 && has(IMPERATIVE_OPENERS, &p[0]) {
+        return Some(&p[0]);
+    }
+    if p.len() >= 2
+        && has(ADVERBS, &p[p.len() - 1])
+        && (has(VERB_PREV, &p[p.len() - 2]) || has(DO_AUX, &p[p.len() - 2]))
+    {
         return Some(&p[p.len() - 2]);
     }
     None
@@ -604,6 +615,17 @@ mod tests {
         }
         // Python parity entry point is untouched
         assert_ne!(decide_rules("Come on, \u{ab}Bingo\u{bb}.", "Bingo", "a person").rule, Some(R0));
+    }
+
+    #[test]
+    fn do_not_and_never_open_a_verb_slot_but_bare_do_is_a_question() {
+        // John's read 11-24: "Do not gamble with her health" was named by the bare-count-noun rule.
+        for t in ["Do not «gamble» with her health.", "Never «gamble» with rent.", "We did not «gamble» much."] {
+            assert_eq!(decide(t, "Gambol", "pet dog").label, Label::Keep, "{t}");
+        }
+        for t in ["Where does «Flo» live?", "Did «Gambol» eat?", "Just «Bingo» came."] {
+            assert_ne!(decide(t, if t.contains("Flo") { "Flo" } else if t.contains("Gambol") { "Gambol" } else { "Bingo" }, "a person").label, Label::Keep, "{t}");
+        }
     }
 
     #[test]
