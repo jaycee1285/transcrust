@@ -50,6 +50,45 @@ it in its own punctuation: "milk, comma, eggs". So `postprocess.rs` does all the
 The IPA proposer (TASKBOARD notes below about position-tiered and plosive-early checks) has been
 **built and on by default since 2a24dd5**, whenever `polyg2p-en` is installed.
 
+## Nearby context words as a name tie-breaker (John, 2026-11-23/24): open code, not wired in
+
+Sparked by TextTeaser's keyword-proximity score (`~/repos/dz/textteaser`, otherwise a summarizer with
+nothing for matching). A homophone entry ("Gambol" / "gamble") leans to the name when one of its
+context words is **next to it, or within 2–4 words, and in the same sentence**. The sentence boundary
+is what keeps the verb: "never gamble with the grocery money" in a paragraph about the dog stays a
+verb. A whole-take "keep the same sense" rule would get that wrong (see `NELLAND_TAKE`).
+
+- **Hand count on John's corpus:** 20 real sentences with "gamble".
+  - Dog sense (18): 16 have "dog", "puppy" or "shepherd" within 4 words. The misses are at 5 words,
+    and in a sentence with no dog word.
+  - Verb sense (2): no context word, so both stay a verb.
+  - Sentences stay in `~/syncthing`, not here.
+- **Where context words come from:** today an entry has none (Gambol is `kind: person` plus
+  `heard:`).
+  - Harvest: the words within 4 of the canonical in delivered and corrected text, like dayshade's
+    `UsageLabels`.
+  - Then John approves them into a `context:` field beside `distinct:` and `homophones:`.
+- **Role:** a cheap tie-breaker under UltraBERT, for when it is unsure. It doesn't replace UltraBERT.
+- **First measurement (11-23):** 25 model calls on homophone entries, 9 wrong.
+  - With words within 4, harvested leave-one-take-out from delivered text, it fixed 5 and broke 0.
+  - The fixes are mostly repeat readings of the same script, so this is not yet evidence that the
+    rule generalizes.
+  - The harvest picks up junk ("love" for Gambol would break "I love to gamble"), and it can't learn
+    names the model never delivered.
+  - So: harvest from corrections and Learn, with John's approval.
+  - Study: `~/syncthing/transcrust-work/context-tiebreaker-11-23/`.
+- **Fresh read (11-24, 24 lines, 27 senses):** UltraBERT plus the grammar rules got 26 of 27. The
+  miss was a grammar bug, not context: "Do not gamble with her health" was named by the
+  bare-count-noun rule. Fixed in `chain.rs`: "do / does / did" + adverb, and a lone clause-opening
+  "never", now mark a verb slot. Bare "does Flo" and "Just Bingo" stay names. Now 27 of 27. Line 1's
+  "gambling" is an ASR miss.
+- **So the tie-breaker had nothing to fix.** It stays as open code (`decision::context::{near,
+  harvest, Options}`, window and sentence bound as data), not wired into decisions. John: "it's not
+  dead code, it's open code". It's for when context comes from a knowledge graph, not a
+  part-of-speech pair.
+- (Was next:) score the fresh read-aloud (`~/syncthing/mopvox/read-aloud/context-tiebreaker.md`, 24
+  lines with decoys) with an approved context list, before building anything.
+
 ## Engine decision (John, 2026-11-20)
 
 **His engine is Parakeet Ultra INT4, and only Parakeet, for consistency.** Nemotron
