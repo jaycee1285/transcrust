@@ -52,6 +52,12 @@ repeated-opening arms preserve those identities. Weights are unchanged.
 
 ### Parakeet Ultra is installed under the legacy v3 directory name
 
+**Lineage (John, 2026-11-24):** Ultra is a post-train of Parakeet TDT 0.6B v3, NVIDIA's
+multilingual release, not the English-only v2. That is deliberate. Community post-training
+(Ultra, FluidVoice's Fluid Speech Pro, itself a post-train of Ultra) happens on v3; nobody does it
+on the English-only line, so v3 is where improvements land. John has a separate plan for other
+languages. Don't re-raise "use an English-only base".
+
 The active Parakeet directory is
 `~/.local/share/transcrust/models/parakeet-tdt-0.6b-v3-int4`, a symlink to
 `~/syncthing/models/parakeet-tdt-0.6b-v3-int4`. Its encoder is our local

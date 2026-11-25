@@ -57,6 +57,21 @@ gitignored `logs/`, `fixtures/` and `tools/rules-probe/private/` were moved to
 | `murmure-reference.md` | notes from an AGPL reference app that was read and removed — calibrated constants, and the licence caveat before copying any of it |
 | `design-dictation-as-control.md` | the unbuilt half: dictation as a command channel |
 | `design-long-form-routes.md` | the four long-form dictation routes, their acceptance gates, and the fuzzel picker |
+| `~/syncthing/transcrust-work/glossary.md` | John's spoken shorthand ("keet", "6/7", "13 plus check", "the lockpoint"). Private, outside the repo. Read it before guessing a terse term. |
+
+## The thesis (John, 2026-11-24)
+
+"We can do the most damage with minimal post-transcription code and model work if we're careful
+and steady." The biggest headway is deterministic, Dragon-style user dictionaries and commands
+around a few fixed engines: Parakeet Ultra, Nemotron, and Silero VAD beside them. New engines are
+dissected to learn what their training did, not to switch. Prefer a list, rule or guard with a
+test over a model change. Model work stays at export and quantization that make the fixed engines
+cheaper. Training and post-training are his, and out of scope.
+
+The evidence through 11-24: every gain was deterministic. The course-correction cut, the "do not"
+verb slot (a fresh read went to 27/27), the learned-repair amount guard, VAD endpointing. A
+year-later post-train (Fluid) changed only casing on his voice, and the context tie-breaker found
+nothing to fix.
 
 ## State reconciled 2026-11-11
 
